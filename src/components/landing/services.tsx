@@ -98,7 +98,7 @@ export default function Services({ activeServiceIndex, setActiveServiceIndex }: 
                     return (
                         <motion.div
                             key={index}
-                            className="relative flex-1"
+                            className="relative"
                             onHoverStart={() => setActiveServiceIndex(index)}
                             animate={{
                                 height: isActive ? expandedHeight : collapsedHeights[index],
@@ -109,6 +109,9 @@ export default function Services({ activeServiceIndex, setActiveServiceIndex }: 
                             <Link href={service.href} className="block w-full h-full">
                                 <motion.div 
                                     className="relative w-full h-full bg-card border-t border-x rounded-t-2xl flex flex-col justify-end"
+                                    style={{
+                                        overflow: 'hidden',
+                                    }}
                                     animate={{ 
                                         boxShadow: isActive ? '0px 0px 30px hsl(var(--primary) / 0.5)' : '0px 0px 0px hsla(var(--primary), 0)',
                                         borderColor: isActive ? 'hsl(var(--primary))' : 'hsla(var(--primary), 0.2)'
