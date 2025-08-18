@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -59,6 +60,20 @@ const iconMap: Record<string, React.ElementType> = {
     ShieldCheck,
     Vote,
 };
+
+const toolUrlMap: Record<string, string> = {
+    'dApp Builder': '/dashboard/dapp-builder',
+    'Token Launcher': '/dashboard/token-launcher',
+    'Trading Bot Platform': '/dashboard/trading-bots',
+    'AI Agents': '/dashboard/ai-agents',
+    'Custom Wallets': '/dashboard/wallets',
+    'Smart Contract Templates': '/dashboard/smart-contracts',
+    'Manual Transactions': '/dashboard/transactions',
+    'On-chain Analytics': '/dashboard/analytics',
+    'Decentralized Storage': '/dashboard/storage',
+    'Security Audits': '/dashboard/audits',
+    'DAO Governance': '/dashboard/governance',
+  };
 
 export default function AiAgentsPage() {
   const [recommendationsResult, setRecommendationsResult] = useState<recommendations.BusinessToolRecommendationOutput | null>(null);
@@ -138,18 +153,21 @@ export default function AiAgentsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {recommendationsResult.recommendations.map((tool) => {
                 const LucideIcon = iconMap[tool.icon] || Puzzle;
+                const toolUrl = toolUrlMap[tool.name] || '/dashboard';
                 return (
-                    <Card key={tool.name}>
-                        <CardHeader>
-                            <div className="flex items-center gap-4">
-                                <LucideIcon className="w-8 h-8 text-primary" />
-                                <CardTitle>{tool.name}</CardTitle>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-muted-foreground">{tool.description}</p>
-                        </CardContent>
-                    </Card>
+                    <Link href={toolUrl} key={tool.name} className="block hover:scale-105 transition-transform duration-200">
+                        <Card className="h-full">
+                            <CardHeader>
+                                <div className="flex items-center gap-4">
+                                    <LucideIcon className="w-8 h-8 text-primary" />
+                                    <CardTitle>{tool.name}</CardTitle>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-muted-foreground">{tool.description}</p>
+                            </CardContent>
+                        </Card>
+                    </Link>
                 )
             })}
           </div>
