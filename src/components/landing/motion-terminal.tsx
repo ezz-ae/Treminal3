@@ -7,28 +7,24 @@ import { Button } from '../ui/button';
 import { motion } from 'framer-motion';
 
 const codeLines = [
-  { text: 'npx create-web3-app my-dapp', type: 'command' },
-  { text: 'Creating a new Web3 app in ./my-dapp.', type: 'info' },
-  { text: '✔ Installing packages...', type: 'success' },
-  { text: '✔ Initializing Git repository.', type: 'success' },
-  { text: 'Success! Created my-dapp at ./my-dapp', type: 'info' },
-  { text: 'cd my-dapp', type: 'command' },
-  { text: 'treminal3 add contract NftToken', type: 'command' },
-  { text: '✔ Fetching contract template from registry...', type: 'success' },
-  { text: '✔ Adding contract to contracts/NftToken.sol', type: 'success' },
-  { text: '✔ Updating configuration...', type: 'success' },
-  { text: 'Added NftToken contract to your project.', type: 'info' },
-  { text: 'treminal3 compile', type: 'command' },
-  { text: 'Compiling 10 contracts with Solidity 0.8.20', type: 'info' },
-  { text: '✔ Compilation successful.', type: 'success' },
-  { text: 'treminal3 deploy --network sepolia', type: 'command' },
-  { text: 'Deploying contracts to Sepolia test network...', type: 'info' },
-  { text: 'Submitting transaction to the network...', type: 'info' },
-  { text: 'Transaction hash: 0x123...abc', type: 'info' },
-  { text: 'Waiting for confirmations...', type: 'info' },
-  { text: 'Error: Transaction failed. Reason: Out of gas.', type: 'error' },
-  { text: 'Execution reverted. Check your gas limit and try again.', type: 'error' },
-  { text: 'Build failed.', type: 'error' },
+  { text: 'treminal3 create:bot --name=arbitrage-bot --template=uniswap-arbitrage', type: 'command' },
+  { text: '✔ Creating new trading bot from template...', type: 'success' },
+  { text: '✔ Bot configuration created at ./bots/arbitrage-bot/config.js', type: 'success' },
+  { text: 'Configuration:', type: 'info' },
+  { text: '{\n  "exchange": "Uniswap_v3",\n  "assets": ["WETH", "USDC"],\n  "minProfitThreshold": 0.005,\n  "maxTradeSize": 10\n}', type: 'info' },
+  { text: 'treminal3 backtest --name=arbitrage-bot --from=2023-01-01', type: 'command' },
+  { text: 'Running backtest on Uniswap v3 data...', type: 'info' },
+  { text: '✔ Backtest complete.', type: 'success' },
+  { text: 'Results:\n  Trades: 1,254\n  Win Rate: 78.2%\n  Total PnL: 23.45 WETH', type: 'success' },
+  { text: 'treminal3 deploy:bot --name=arbitrage-bot --live', type: 'command' },
+  { text: 'Deploying arbitrage-bot to live environment...', type: 'info' },
+  { text: '✔ Bot deployed successfully. Instance ID: arb-bot-live-xyz', type: 'success' },
+  { text: 'Listening for arbitrage opportunities...', type: 'info' },
+  { text: 'Opportunity found: Swapping 10 WETH for 25,000 USDC...', type: 'info' },
+  { text: 'Submitting transaction...', type: 'info' },
+  { text: 'Error: Exchange rate limit exceeded. Retrying in 5s...', type: 'error' },
+  { text: 'Error: Liquidity insufficient for this trade size.', type: 'error' },
+  { text: 'Bot stopped due to repeated errors.', type: 'error' },
 ];
 
 const lineDelay = 100;
@@ -120,7 +116,7 @@ export default function MotionTerminal() {
                     <div key={index} className="flex items-start">
                         {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
                         <p
-                        className={cn('text-white', {
+                        className={cn('text-white whitespace-pre-wrap', {
                             'text-green-400': line.type === 'success',
                             'text-red-400': line.type === 'error',
                             'text-yellow-400': line.type === 'info',
