@@ -220,15 +220,28 @@ export default function AiAgentsPage() {
                                 const LucideIcon = iconMap[line.recommendation.icon] || Puzzle;
                                 const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard';
                                 return (
-                                    <Link href={toolUrl} className="block group -ml-2">
-                                        <div className="border border-gray-700 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
-                                            <div className="flex items-center gap-3">
-                                                <LucideIcon className="w-5 h-5 text-green-400" />
-                                                <h3 className="font-bold text-base">{line.recommendation.name}</h3>
+                                    <>
+                                        <Link href={toolUrl} className="block group -ml-2">
+                                            <div className="border border-gray-700 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
+                                                <div className="flex items-center gap-3">
+                                                    <LucideIcon className="w-5 h-5 text-green-400" />
+                                                    <h3 className="font-bold text-base">{line.recommendation.name}</h3>
+                                                </div>
+                                                <p className="mt-1 ml-8 text-gray-400">{line.recommendation.description}</p>
                                             </div>
-                                            <p className="mt-1 ml-8 text-gray-400">{line.recommendation.description}</p>
+                                        </Link>
+                                        <div className="ml-8 mt-2 pl-4 border-l-2 border-gray-700">
+                                            <p className="text-purple-400 font-bold mb-1">Recommended Flow:</p>
+                                            <ul className="space-y-1">
+                                                {line.recommendation.flow.map((step, i) => (
+                                                    <li key={i} className="text-gray-400 flex items-start">
+                                                        <span className="mr-2">&rarr;</span>
+                                                        <span>{step}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
-                                    </Link>
+                                    </>
                                 )
                             })()}
                         </div>

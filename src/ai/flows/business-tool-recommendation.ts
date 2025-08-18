@@ -20,6 +20,7 @@ const BusinessToolRecommendationOutputSchema = z.object({
     name: z.string().describe('The name of the recommended tool.'),
     description: z.string().describe('A description of why the tool is recommended for the business.'),
     icon: z.string().describe('The name of a lucide-react icon for the tool. Must be one of: AppWindow, Bot, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, ShieldCheck, Vote'),
+    flow: z.array(z.string()).describe('A step-by-step flow of actions to take to use the tool for their business.'),
   })),
 });
 export type BusinessToolRecommendationOutput = z.infer<typeof BusinessToolRecommendationOutputSchema>;
@@ -36,7 +37,7 @@ const businessToolRecommendationFlow = ai.defineFlow(
     outputSchema: BusinessToolRecommendationOutputSchema,
   },
   async (input) => {
-    const prompt = `You are an expert business consultant specializing in Web3. Based on the following business description, recommend up to 3 tools from the list provided that would be most beneficial for the user. For each tool, provide a brief explanation of how it would help their specific business.
+    const prompt = `You are an expert business consultant specializing in Web3. Based on the following business description, recommend up to 3 tools from the list provided that would be most beneficial for the user. For each tool, provide a brief explanation of how it would help their specific business. For each recommendation, also provide a step-by-step "flow" of actions the user should take to utilize the tool effectively for their business.
 
 Business Description:
 ${input.business_description}
