@@ -141,7 +141,7 @@ export default function AiAgentsPage() {
     }, [displayLines]);
 
   return (
-    <div className="h-full w-full">
+    <>
        <div className="sr-only">
         <h1 className="text-3xl font-bold font-headline">AI Business Agent</h1>
         <p className="text-muted-foreground">
@@ -223,6 +223,6 @@ export default function AiAgentsPage() {
                 </Form>
             </div>
         </div>
-    </div>
+    </>
   );
 }

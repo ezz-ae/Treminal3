@@ -153,18 +153,20 @@ export default function DashboardLayout({
              </SidebarMenu>
           </SidebarFooter>
         </Sidebar>
-        <SidebarInset>
-          <header className="flex items-center justify-between p-4 border-b">
+        <div className="flex flex-col flex-1">
+          <header className="flex items-center justify-between p-4 border-b h-[65px]">
               <SidebarTrigger/>
               <p className="text-sm text-muted-foreground">The all-in-one text-to-code platform.</p>
           </header>
-          <main className={cn(
-            "flex-1 bg-gray-50/50 h-[calc(100vh-65px)]",
-            !isAiAgentsPage && "p-6"
+          <main className="flex-1 bg-gray-50/50">
+            <div className={cn(
+              "h-full w-full",
+              !isAiAgentsPage && "p-6"
             )}>
               {children}
-            </main>
-          </SidebarInset>
+            </div>
+          </main>
+          </div>
       </div>
     </SidebarProvider>
   );
