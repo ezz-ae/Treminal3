@@ -86,7 +86,7 @@ export default function Services() {
                         >
                             <Link href={service.href} className="block w-full h-full">
                                 <motion.div 
-                                    className="relative w-full h-full p-6 flex flex-col justify-end bg-card border border-primary/20"
+                                    className="relative w-full h-full p-6 flex flex-col justify-center bg-card border border-primary/20"
                                     animate={{ 
                                         boxShadow: isActive ? '0px 0px 30px hsl(var(--primary))' : '0px 0px 0px hsla(var(--primary), 0)',
                                         borderColor: isActive ? 'hsl(var(--primary))' : 'hsla(var(--primary), 0.2)'
@@ -96,8 +96,8 @@ export default function Services() {
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
                                     <div className="relative z-10">
                                         <h3 className={cn(
-                                            "font-headline text-2xl font-bold transition-all text-white",
-                                        )} style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', transform: 'rotate(180deg)'}}>
+                                            "font-headline text-2xl font-bold transition-all text-white text-center",
+                                        )}>
                                             {service.title}
                                         </h3>
                                     </div>
