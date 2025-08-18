@@ -37,13 +37,15 @@ export default function MotionTerminal() {
   const [lines, setLines] = useState<{ text: string; type: string; fullText: string }[]>([]);
   const [isComplete, setIsComplete] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const [isRestarting, setIsRestarting] = useState(false);
 
-  useEffect(() => {
+  const runAnimation = () => {
     let lineIndex = 0;
     
     const typeLine = () => {
       if (lineIndex >= codeLines.length) {
         setIsComplete(true);
+        setIsRestarting(false);
         return;
       }
 
@@ -72,6 +74,10 @@ export default function MotionTerminal() {
     };
 
     typeLine();
+  }
+  
+  useEffect(() => {
+    runAnimation();
   }, []);
 
   useEffect(() => {
@@ -81,45 +87,55 @@ export default function MotionTerminal() {
   }, [lines]);
 
   const handleRestart = () => {
+    setIsRestarting(true);
     setLines([]);
     setIsComplete(false);
+    setTimeout(() => {
+        runAnimation();
+    }, 100)
   }
 
   return (
-    <div className="font-code bg-black text-white h-full flex flex-col text-sm rounded-lg border border-border">
-      <div className="flex-shrink-0 bg-gray-800 px-4 py-2 flex items-center justify-between rounded-t-lg">
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-red-500"></span>
-          <span className="h-3 w-3 rounded-full bg-yellow-500"></span>
-          <span className="h-3 w-3 rounded-full bg-green-500"></span>
-        </div>
-        <p className="text-xs text-gray-400">/bin/bash</p>
-      </div>
-      <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto">
-        {lines.map((line, index) => (
-          <div key={index} className="flex items-start">
-            {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
-            <p
-              className={cn({
-                'text-green-400': line.type === 'success',
-                'text-red-400': line.type === 'error',
-                'text-yellow-400': line.type === 'info',
-                'text-white': line.type === 'command',
-              })}
-            >
-              {line.text}
-              {index === lines.length - 1 && !isComplete && (
-                 <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
-              )}
-            </p>
-          </div>
-        ))}
-         {isComplete && (
-            <div className="mt-4">
-                <Button onClick={handleRestart}>Re-run Build</Button>
+    <section className="bg-background text-foreground py-12 md:py-24">
+    <div className="container mx-auto px-4">
+        <div className="font-code bg-black text-white h-[60vh] max-h-[700px] flex flex-col text-sm rounded-lg border border-border shadow-2xl">
+        <div className="flex-shrink-0 bg-gray-800 px-4 py-2 flex items-center justify-between rounded-t-lg">
+            <div className="flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full bg-red-500"></span>
+            <span className="h-3 w-3 rounded-full bg-yellow-500"></span>
+            <span className="h-3 w-3 rounded-full bg-green-500"></span>
             </div>
-         )}
-      </div>
+            <p className="text-xs text-gray-400">/bin/bash</p>
+        </div>
+        <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto">
+            {lines.map((line, index) => (
+            <div key={index} className="flex items-start">
+                {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
+                <p
+                className={cn({
+                    'text-green-400': line.type === 'success',
+                    'text-red-400': line.type === 'error',
+                    'text-yellow-400': line.type === 'info',
+                    'text-white': line.type === 'command',
+                })}
+                >
+                {line.text}
+                {index === lines.length - 1 && !isComplete && (
+                    <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
+                )}
+                </p>
+            </div>
+            ))}
+            {isComplete && (
+                <div className="mt-4">
+                    <Button onClick={handleRestart} disabled={isRestarting}>
+                        {isRestarting ? 'Restarting...' : 'Re-run Build'}
+                    </Button>
+                </div>
+            )}
+        </div>
+        </div>
     </div>
+    </section>
   );
 }
