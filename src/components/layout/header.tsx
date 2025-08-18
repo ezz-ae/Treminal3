@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const navItems = [
-  { href: '/#services', label: 'Services' },
-  { href: '/#solutions', label: 'Solutions' },
+  { href: '/web3#services', label: 'Services' },
+  { href: '/web3#solutions', label: 'Solutions' },
   { href: '/payments', label: 'Payments' },
-  { href: '/#for-developers', label: 'For Developers' },
-  { href: '/#start', label: 'Get Started' },
+  { href: '/web3#for-developers', label: 'For Developers' },
+  { href: '/web3#start', label: 'Get Started' },
 ];
 
 export default function Header() {

@@ -1,25 +1,15 @@
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
-import Hero from '@/components/landing/hero';
-import Services from '@/components/landing/services';
-import FinancialSolutions from '@/components/landing/financial-solutions';
-import Web3DevTools from '@/components/landing/web3-dev-tools';
-import InteractiveGuides from '@/components/landing/interactive-guides';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <Header />
-      <main>
-        <Hero />
-        <div className="flex-grow">
-          <Services />
-          <FinancialSolutions />
-          <Web3DevTools />
-          <InteractiveGuides />
-        </div>
-      </main>
-      <Footer />
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-4xl font-bold mb-4">Welcome to Your Project</h1>
+      <p className="text-lg mb-8">
+        The landing page content has been moved.
+      </p>
+      <Link href="/web3" className="text-primary hover:underline text-xl">
+        View the new Web3 Landing Page
+      </Link>
     </div>
   );
 }
