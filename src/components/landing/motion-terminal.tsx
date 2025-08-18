@@ -11,7 +11,7 @@ const codeLines = [
   { text: 'Creating a new Web3 app in ./my-dapp.', type: 'info' },
   { text: '✔ Installing packages...', type: 'success' },
   { text: '✔ Initializing Git repository.', type: 'success' },
-  { text: 'Success! Created my-dapp at ./my-dapp', type: 'success' },
+  { text: 'Success! Created my-dapp at ./my-dapp', type: 'info' },
   { text: 'cd my-dapp', type: 'command' },
   { text: 'treminal3 add contract NftToken', type: 'command' },
   { text: '✔ Fetching contract template from registry...', type: 'success' },
@@ -108,8 +108,8 @@ export default function MotionTerminal() {
       transition={{ duration: 0.8, ease: "easeOut" }}
       onAnimationComplete={runAnimation}
     >
-        <div className="relative font-code text-sm rounded-lg border border-border/20 bg-black/80 after:absolute after:inset-0 after:-z-10 after:animate-border-beam after:[background:conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)] after:[mask-composite:clear] after:[mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)]">
-            <div className="h-[60vh] max-h-[700px] flex flex-col">
+        <div className="relative font-code text-sm rounded-lg border border-border/20 bg-black/80 p-1 before:absolute before:inset-0 before:-z-10 before:bg-black/80 before:rounded-lg after:absolute after:inset-0 after:-z-10 after:animate-border-beam after:[background:conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)] after:[mask-composite:clear] after:[mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)]">
+            <div className="h-[60vh] max-h-[700px] flex flex-col bg-black/80 rounded-md">
                 <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto">
                     {lines.map((line, index) => (
                     <div key={index} className="flex items-start">
