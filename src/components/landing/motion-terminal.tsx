@@ -4,6 +4,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
+import { motion } from 'framer-motion';
 
 const codeLines = [
   { text: 'npx create-web3-app my-dapp', type: 'command' },
@@ -38,13 +39,17 @@ export default function MotionTerminal() {
   const [isComplete, setIsComplete] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const [isRestarting, setIsRestarting] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const runAnimation = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
     let lineIndex = 0;
     
     const typeLine = () => {
       if (lineIndex >= codeLines.length) {
         setIsComplete(true);
+        setIsAnimating(false);
         setIsRestarting(false);
         return;
       }
@@ -62,7 +67,9 @@ export default function MotionTerminal() {
 
         setLines(prev => {
           const newLines = [...prev];
-          newLines[newLines.length - 1].text += currentLine.text[charIndex];
+          if (newLines[newLines.length-1]) {
+            newLines[newLines.length - 1].text += currentLine.text[charIndex];
+          }
           return newLines;
         });
 
@@ -76,10 +83,6 @@ export default function MotionTerminal() {
     typeLine();
   }
   
-  useEffect(() => {
-    runAnimation();
-  }, []);
-
   useEffect(() => {
     if (terminalRef.current) {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
@@ -97,7 +100,14 @@ export default function MotionTerminal() {
 
   return (
     <section className="bg-background text-foreground py-12 md:py-24">
-    <div className="container mx-auto px-4">
+    <motion.div 
+      className="container mx-auto px-4"
+      initial={{ opacity: 0, scale: 0.8 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      onAnimationComplete={runAnimation}
+    >
         <div className="font-code bg-black text-white h-[60vh] max-h-[700px] flex flex-col text-sm rounded-lg border border-border shadow-2xl">
         <div className="flex-shrink-0 bg-gray-800 px-4 py-2 flex items-center justify-between rounded-t-lg">
             <div className="flex items-center gap-2">
@@ -135,7 +145,7 @@ export default function MotionTerminal() {
             )}
         </div>
         </div>
-    </div>
+    </motion.div>
     </section>
   );
 }
