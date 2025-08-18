@@ -78,7 +78,7 @@ export default function Services({ activeServiceIndex, setActiveServiceIndex }: 
   return (
     <section 
       id="services" 
-      className="py-12 md:py-24 h-screen w-full"
+      className="py-12 md:py-24"
     >
       <div className="container mx-auto px-4 h-full flex flex-col justify-center">
         <div className="text-center mb-12">
