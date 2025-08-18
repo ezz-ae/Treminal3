@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   AppWindow,
@@ -87,8 +88,12 @@ const services = [
     },
   ];
 
+const expandedWidth = 400;
+const collapsedWidth = 150;
 
 export default function Services() {
+  const [activeKey, setActiveKey] = useState<number | null>(0);
+
   return (
     <section id="services" className="py-12 md:py-24">
       <div className="container mx-auto px-4">
@@ -98,27 +103,51 @@ export default function Services() {
             Treminal3 provides everything you need to succeed in the new digital economy.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-                <motion.div
-                    key={index}
-                    whileHover={{ y: -5, scale: 1.02 }}
-                    className="h-full"
-                >
-                    <Link href={service.href} className="block h-full">
-                        <div className="flex flex-col text-left p-6 border border-primary/20 shadow-lg h-full bg-card rounded-lg">
-                            <div className="bg-primary/10 text-primary p-3 rounded-full mb-4 inline-flex w-fit">
-                                <service.icon className="w-6 h-6" />
-                            </div>
-                            <h3 className="font-headline text-xl font-bold">{service.title}</h3>
-                            <p className="text-muted-foreground mt-2 flex-grow">{service.description}</p>
-                            <div className="flex items-center text-sm text-primary mt-4">
-                                Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                            </div>
-                        </div>
-                    </Link>
-                </motion.div>
-            ))}
+        <div className="w-full overflow-x-auto pb-4">
+            <motion.div
+                className="flex w-max"
+                onMouseLeave={() => setActiveKey(null)}
+            >
+                {services.map((service, index) => {
+                    const isActive = activeKey === index;
+                    return (
+                        <motion.div
+                            key={index}
+                            className="relative h-[450px] rounded-2xl overflow-hidden"
+                            onHoverStart={() => setActiveKey(index)}
+                            style={{
+                                flexBasis: isActive ? expandedWidth : collapsedWidth,
+                                flexGrow: isActive ? 1 : 0,
+                                flexShrink: 0,
+                            }}
+                            animate={{ width: isActive ? expandedWidth : collapsedWidth }}
+                            transition={{ duration: 0.5, ease: 'easeInOut' }}
+                        >
+                            <Link href={service.href} className="block w-full h-full">
+                                <div className="relative w-full h-full p-6 flex flex-col justify-end bg-card border border-primary/20">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+                                    <div className="relative z-10">
+                                        <div className="mb-4">
+                                            <service.icon className="w-8 h-8 text-primary" />
+                                        </div>
+                                        <h3 className="font-headline text-2xl font-bold text-white vertical-text">
+                                            {service.title}
+                                        </h3>
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
+                                            transition={{ duration: 0.3, delay: 0.2 }}
+                                            className="text-muted-foreground mt-2"
+                                        >
+                                            {service.description}
+                                        </motion.div>
+                                    </div>
+                                </div>
+                            </Link>
+                        </motion.div>
+                    );
+                })}
+            </motion.div>
         </div>
       </div>
     </section>
