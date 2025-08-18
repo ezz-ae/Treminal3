@@ -7,22 +7,43 @@ import { Button } from '../ui/button';
 import { motion } from 'framer-motion';
 
 const codeLines = [
-  { text: 'treminal3 create:bot --name=arbitrage-bot --template=uniswap-arbitrage', type: 'command' },
-  { text: '✔ Creating new trading bot from template...', type: 'success' },
-  { text: '✔ Bot configuration created at ./bots/arbitrage-bot/config.js', type: 'success' },
-  { text: 'Configuration:', type: 'info' },
-  { text: '{\n  "exchange": "Uniswap_v3",\n  "assets": ["WETH", "USDC"],\n  "minProfitThreshold": 0.005,\n  "maxTradeSize": 10\n}', type: 'info' },
+  { text: 'treminal3 create:bot --name=arbitrage-bot --template=uniswap-v3', type: 'command' },
+  { text: '✔ Bot created at ./bots/arbitrage-bot.js', type: 'success' },
+  { text: 'treminal3 edit ./bots/arbitrage-bot.js', type: 'command'},
+  { text: `
+import { BaseBot, Exchange } from 'treminal3-sdk';
+
+class ArbitrageBot extends BaseBot {
+  async execute() {
+    const { WETH, USDC } = this.assets;
+    const market = await Exchange.getMarket('Uniswap_v3', WETH, USDC);
+    
+    if (market.price < this.config.buyThreshold) {
+      await this.buy(WETH, 10);
+      console.log('Executed buy order for 10 WETH');
+    }
+  }
+}
+`, type: 'info' },
   { text: 'treminal3 backtest --name=arbitrage-bot --from=2023-01-01', type: 'command' },
-  { text: 'Running backtest on Uniswap v3 data...', type: 'info' },
-  { text: '✔ Backtest complete.', type: 'success' },
-  { text: 'Results:\n  Trades: 1,254\n  Win Rate: 78.2%\n  Total PnL: 23.45 WETH', type: 'success' },
+  { text: 'Running backtest on Uniswap v3 data from 2023-01-01 to now...', type: 'info' },
+  { text: 'Processed 1,254,320 blocks.', type: 'info' },
+  { text: `
+Backtest Results:
+-----------------
+  Total Trades: 1,254
+  Winning Trades: 981 (78.2%)
+  Losing Trades: 273 (21.8%)
+  Total PnL: 23.45 WETH
+  Sharpe Ratio: 1.87
+`, type: 'success' },
   { text: 'treminal3 deploy:bot --name=arbitrage-bot --live', type: 'command' },
   { text: 'Deploying arbitrage-bot to live environment...', type: 'info' },
   { text: '✔ Bot deployed successfully. Instance ID: arb-bot-live-xyz', type: 'success' },
-  { text: 'Listening for arbitrage opportunities...', type: 'info' },
+  { text: 'Listening for arbitrage opportunities on Uniswap_v3...', type: 'info' },
   { text: 'Opportunity found: Swapping 10 WETH for 25,000 USDC...', type: 'info' },
-  { text: 'Submitting transaction...', type: 'info' },
-  { text: 'Error: Exchange rate limit exceeded. Retrying in 5s...', type: 'error' },
+  { text: 'Submitting transaction to mempool...', type: 'info' },
+  { text: 'Error: Transaction failed. Reason: Slippage exceeds 0.5%. Retrying...', type: 'error' },
 ];
 
 const lineDelay = 100;
