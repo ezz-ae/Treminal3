@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Blocks, Waypoints, Landmark, ArrowRight } from 'lucide-react';
+import { Blocks, Bot, AreaChart, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
@@ -11,23 +11,23 @@ import { Button } from '@/components/ui/button';
 const services = [
   {
     icon: Blocks,
-    title: 'Web3 & Blockchain Development',
-    description: 'The full-stack platform to build, launch, and manage any Web3 project with ease.',
-    details: 'From custom dApps and smart contracts to full-scale decentralized exchanges, our tools provide the infrastructure you need to build robust Web3 applications. Utilize our audited templates and intuitive SDK to accelerate your development cycle.',
+    title: 'dApp & Contract Development',
+    description: 'Build, launch, and manage decentralized applications and smart contracts.',
+    details: 'Utilize our intuitive dApp Builder, audited Smart Contract Templates, and custom Wallet solutions to accelerate your Web3 development cycle from idea to launch.',
     color: 'from-blue-500/10 to-transparent'
   },
   {
-    icon: Waypoints,
-    title: 'Web3 Marketing & Smart Payments',
-    description: 'Grow your audience and streamline revenue with our integrated marketing and payment tools.',
-    details: 'Launch targeted airdrops, create NFT-based loyalty programs, and accept global crypto payments with our seamless invoicing system. Our analytics dashboard gives you the insights to optimize your campaigns and maximize ROI.',
+    icon: Bot,
+    title: 'AI & Automation',
+    description: 'Deploy autonomous AI agents and powerful trading bots with ease.',
+    details: 'Leverage our AI Agent platform to automate dApp interactions and complex workflows. Build and backtest sophisticated strategies with our Trading Bot Platform for major exchanges.',
     color: 'from-purple-500/10 to-transparent'
   },
   {
-    icon: Landmark,
-    title: 'Freelancers Banking System',
-    description: 'A modern financial stack for the independent workforce. Manage your crypto and fiat seamlessly.',
-    details: 'Get a unified view of your finances. Our banking system allows you to hold, convert, and spend both fiat and cryptocurrencies from a single interface. Generate invoices, track expenses, and prepare for tax season with specialized tools.',
+    icon: AreaChart,
+    title: 'Analytics & Governance',
+    description: 'Gain deep on-chain insights and manage your DAO with powerful tools.',
+    details: 'Make data-driven decisions with our On-chain Analytics engine. Manage your decentralized autonomous organization effectively with our comprehensive DAO Governance tools.',
     color: 'from-green-500/10 to-transparent'
   },
 ];
