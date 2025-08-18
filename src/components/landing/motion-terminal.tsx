@@ -46,7 +46,7 @@ Backtest Results:
   { text: 'Error: Transaction failed. Reason: Slippage exceeds 0.5%. Retrying...', type: 'error' },
 ];
 
-const typingDelay = 500; // Slower, more readable speed
+const typingDelay = 500;
 const linePause = 1000;
 
 export default function MotionTerminal() {
@@ -54,7 +54,6 @@ export default function MotionTerminal() {
   const [isComplete, setIsComplete] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
 
-  // Refs to manage animation state without causing re-renders
   const lineIndexRef = useRef(0);
   const charIndexRef = useRef(0);
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
@@ -68,29 +67,28 @@ export default function MotionTerminal() {
     const currentLineData = codeLines[lineIndexRef.current];
 
     if (charIndexRef.current === 0) {
-      // Add a new line
       setLines(prev => [...prev, { text: '', type: currentLineData.type }]);
     }
-    
+
     if (charIndexRef.current < currentLineData.text.length) {
-       // Append a character to the last line
-       setLines(prev => {
+      setLines(prev => {
         const newLines = [...prev];
-        if (newLines[lineIndexRef.current]) {
-          newLines[lineIndexRef.current].text += currentLineData.text[charIndexRef.current];
+        const currentLine = newLines[lineIndexRef.current];
+        if (currentLine) {
+          currentLine.text += currentLineData.text[charIndexRef.current];
         }
         return newLines;
       });
+
       charIndexRef.current++;
       animationTimeoutRef.current = setTimeout(runAnimation, typingDelay);
     } else {
-       // Move to the next line after a pause
       lineIndexRef.current++;
       charIndexRef.current = 0;
       animationTimeoutRef.current = setTimeout(runAnimation, linePause);
     }
   };
-  
+
   const startAnimation = () => {
     lineIndexRef.current = 0;
     charIndexRef.current = 0;
@@ -101,19 +99,16 @@ export default function MotionTerminal() {
     }
     runAnimation();
   };
-
+  
   useEffect(() => {
     if (terminalRef.current) {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }
   }, [lines]);
 
-  const handleRestart = () => {
-    startAnimation();
-  }
 
-  // Cleanup on unmount
   useEffect(() => {
+    // Cleanup on unmount
     return () => {
       if (animationTimeoutRef.current) {
         clearTimeout(animationTimeoutRef.current);
@@ -146,7 +141,7 @@ export default function MotionTerminal() {
                     className={cn('text-white whitespace-pre-wrap font-code', {
                       'text-green-400': line.type === 'success',
                       'text-red-400': line.type === 'error',
-                      'text-gray-400': line.type === 'info', // Changed to gray for better readability
+                      'text-gray-400': line.type === 'info',
                     })}
                   >
                     {line.text}
@@ -158,7 +153,7 @@ export default function MotionTerminal() {
               ))}
               {isComplete && (
                 <div className="mt-4">
-                  <Button onClick={handleRestart}>
+                  <Button onClick={startAnimation}>
                     Re-run Build
                   </Button>
                 </div>
