@@ -121,7 +121,7 @@ export default function Services({ activeServiceIndex, setActiveServiceIndex }: 
                                     <div className="p-6">
                                         <div className="w-full text-center">
                                             <h3 className={cn(
-                                                "font-headline text-lg font-bold transition-all"
+                                                "font-headline text-lg font-bold transition-all truncate"
                                             )}>
                                                 {service.title}
                                             </h3>
