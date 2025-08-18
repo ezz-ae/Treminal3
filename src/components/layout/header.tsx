@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const navItems = [
-  { href: '#services', label: 'Services' },
-  { href: '#solutions', label: 'Solutions' },
+  { href: '/#services', label: 'Services' },
+  { href: '/#solutions', label: 'Solutions' },
   { href: '/payments', label: 'Payments' },
-  { href: '#for-developers', label: 'For Developers' },
-  { href: '#start', label: 'Get Started' },
+  { href: '/#for-developers', label: 'For Developers' },
+  { href: '/#start', label: 'Get Started' },
 ];
 
 export default function Header() {
@@ -34,7 +34,9 @@ export default function Header() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <Button variant="ghost">Sign In</Button>
-          <Button>Get Started</Button>
+          <Button asChild>
+            <Link href="/dashboard">Get Started</Link>
+          </Button>
         </div>
         <Sheet>
           <SheetTrigger asChild>
