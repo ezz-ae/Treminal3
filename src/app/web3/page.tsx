@@ -13,9 +13,9 @@ export default function Web3Page() {
       <Header />
       <main>
         <Hero />
+        <Services />
         <MotionTerminal />
         <div className="flex-grow">
-          <Services />
           <FinancialSolutions />
           <Web3DevTools />
           <InteractiveGuides />
