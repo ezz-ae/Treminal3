@@ -110,6 +110,11 @@ export default function MotionTerminal() {
     >
         <div className="relative font-code text-sm rounded-lg border border-border/20 bg-black/80 p-1 before:absolute before:inset-0 before:-z-10 before:bg-black/80 before:rounded-lg after:absolute after:inset-0 after:-z-10 after:animate-border-beam after:[background:conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)] after:[mask-composite:clear] after:[mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)]">
             <div className="h-[60vh] max-h-[700px] flex flex-col bg-black/80 rounded-md">
+                 <div className="flex items-center gap-2 p-3 border-b border-white/10">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
                 <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto">
                     {lines.map((line, index) => (
                     <div key={index} className="flex items-start">
