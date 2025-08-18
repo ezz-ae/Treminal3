@@ -46,61 +46,60 @@ Backtest Results:
   { text: 'Error: Transaction failed. Reason: Slippage exceeds 0.5%. Retrying...', type: 'error' },
 ];
 
-const typingDelay = 15;
+const typingDelay = 50; // Slower, more readable speed
 const linePause = 1000;
 
 export default function MotionTerminal() {
   const [lines, setLines] = useState<{ text: string; type: string; }[]>([]);
   const [isComplete, setIsComplete] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
-  const animationIntervalRef = useRef<NodeJS.Timeout>();
+
+  // Refs to manage animation state without causing re-renders
+  const lineIndexRef = useRef(0);
+  const charIndexRef = useRef(0);
+  const animationTimeoutRef = useRef<NodeJS.Timeout>();
 
   const runAnimation = () => {
-    let lineIndex = 0;
-    let charIndex = 0;
-    let isPaused = false;
-    let pauseTimeout: NodeJS.Timeout;
-
-    setLines([]);
-    setIsComplete(false);
-    
-    if (animationIntervalRef.current) {
-        clearInterval(animationIntervalRef.current);
+    if (lineIndexRef.current >= codeLines.length) {
+      setIsComplete(true);
+      return;
     }
 
-    animationIntervalRef.current = setInterval(() => {
-        if (isPaused) return;
+    const currentLineData = codeLines[lineIndexRef.current];
 
-        if (lineIndex >= codeLines.length) {
-            if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
-            setIsComplete(true);
-            return;
+    if (charIndexRef.current === 0) {
+      // Add a new line
+      setLines(prev => [...prev, { text: '', type: currentLineData.type }]);
+    }
+    
+    if (charIndexRef.current < currentLineData.text.length) {
+       // Append a character to the last line
+       setLines(prev => {
+        const newLines = [...prev];
+        if (newLines[lineIndexRef.current]) {
+          newLines[lineIndexRef.current].text += currentLineData.text[charIndexRef.current];
         }
-
-        const currentLineData = codeLines[lineIndex];
-
-        if (charIndex === 0) {
-            setLines(prev => [...prev, { text: '', type: currentLineData.type }]);
-        }
-
-        if (charIndex < currentLineData.text.length) {
-            setLines(prev => {
-                const newLines = [...prev];
-                if (newLines[lineIndex]) {
-                    newLines[lineIndex].text += currentLineData.text[charIndex];
-                }
-                return newLines;
-            });
-            charIndex++;
-        } else {
-            lineIndex++;
-            charIndex = 0;
-            isPaused = true;
-            pauseTimeout = setTimeout(() => {
-                isPaused = false;
-            }, linePause);
-        }
-    }, typingDelay);
+        return newLines;
+      });
+      charIndexRef.current++;
+      animationTimeoutRef.current = setTimeout(runAnimation, typingDelay);
+    } else {
+       // Move to the next line after a pause
+      lineIndexRef.current++;
+      charIndexRef.current = 0;
+      animationTimeoutRef.current = setTimeout(runAnimation, linePause);
+    }
+  };
+  
+  const startAnimation = () => {
+    lineIndexRef.current = 0;
+    charIndexRef.current = 0;
+    setLines([]);
+    setIsComplete(false);
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+    runAnimation();
   };
 
   useEffect(() => {
@@ -110,14 +109,14 @@ export default function MotionTerminal() {
   }, [lines]);
 
   const handleRestart = () => {
-    runAnimation();
+    startAnimation();
   }
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (animationIntervalRef.current) {
-        clearInterval(animationIntervalRef.current);
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
       }
     };
   }, []);
@@ -130,7 +129,7 @@ export default function MotionTerminal() {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        onAnimationComplete={runAnimation}
+        onAnimationComplete={startAnimation}
       >
         <div className="font-code text-sm rounded-lg border border-border/20 bg-black/80 shadow-2xl">
           <div className="h-[60vh] max-h-[700px] flex flex-col bg-black/80 rounded-md">
@@ -147,11 +146,11 @@ export default function MotionTerminal() {
                     className={cn('text-white whitespace-pre-wrap font-code', {
                       'text-green-400': line.type === 'success',
                       'text-red-400': line.type === 'error',
-                      'text-yellow-400': line.type === 'info',
+                      'text-gray-400': line.type === 'info', // Changed to gray for better readability
                     })}
                   >
                     {line.text}
-                    {index === lines.length - 1 && !isComplete && (
+                    {index === lineIndexRef.current && !isComplete && (
                       <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
                     )}
                   </pre>
