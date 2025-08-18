@@ -25,7 +25,6 @@ export default function Web3Page() {
 
   const handleServiceClick = (index: number) => {
     setActiveServiceIndex(index);
-    // Smooth scroll to the terminal, but with a slight offset to ensure it's in view
     if(terminalRef.current) {
       const yOffset = -150; 
       const y = terminalRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -72,7 +71,7 @@ export default function Web3Page() {
             />
           <FinancialSolutions />
           <Web3DevTools />
-          <InteractiveGuides />
+          <InteractiveGuides activeServiceIndex={activeServiceIndex} />
         </div>
       </main>
       <Footer />
