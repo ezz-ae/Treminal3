@@ -1,19 +1,19 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import AnimatedText from './animated-text';
 
 export default function Hero() {
+  const words = ["Web3", "dApp", "token", "trading bot", "platform"];
+  
   return (
     <section className="bg-white">
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="text-center md:text-left">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight font-headline mb-6">
-              Build anything in Web3 with one terminal.
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight font-headline mb-10">
+              Build, manage, and grow your <AnimatedText words={words} className="text-primary" /> project at any scale.
             </h1>
-            <p className="max-w-xl mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground mb-10">
-              The all-in-one platform to develop, manage, and grow your Web3 projects. Create dApps, tokens, trading bots, and more with minimal knowledge.
-            </p>
             <div className="flex justify-center md:justify-start items-center gap-4">
               <Button size="lg">
                 Start Building <ArrowRight className="ml-2 h-5 w-5" />
