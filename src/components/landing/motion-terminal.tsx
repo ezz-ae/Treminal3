@@ -90,17 +90,24 @@ export default function MotionTerminal() {
   }, []);
 
   return (
-    <section className="bg-background text-foreground py-12 md:py-24">
+    <section className="relative bg-background text-foreground py-12 md:py-24 overflow-hidden">
+        <div className="absolute inset-0">
+            <div
+                className={cn(
+                    "absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,hsl(var(--primary)/0.2),rgba(255,255,255,0))] animate-aurora"
+                )}
+            ></div>
+        </div>
       <motion.div
-        className="container mx-auto px-4"
+        className="container mx-auto px-4 relative z-10"
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         onAnimationComplete={startAnimation}
       >
-        <div className="font-code text-sm rounded-lg border border-border/20 bg-black/80 shadow-2xl">
-          <div className="h-[60vh] max-h-[700px] flex flex-col bg-black/80 rounded-md">
+        <div className="font-code text-sm rounded-lg border border-white/10 bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm">
+          <div className="h-[60vh] max-h-[700px] flex flex-col rounded-md">
             <div className="flex items-center gap-2 p-3 border-b border-white/10">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
               <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
