@@ -46,7 +46,7 @@ export default function Web3DevTools() {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {tools.map((tool) => (
-            <Card key={tool.title} className="bg-white border-0 shadow-lg">
+            <Card key={tool.title} className="bg-card border-border shadow-lg">
               <CardHeader>
                 <tool.icon className="w-8 h-8 mb-4 text-primary" />
                 <CardTitle className="font-headline text-lg">{tool.title}</CardTitle>
