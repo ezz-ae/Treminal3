@@ -76,10 +76,15 @@ interface ServicesProps {
 
 
 export default function Services({ scrollYProgress, activeServiceIndex, setActiveServiceIndex }: ServicesProps) {
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const filter = useTransform(scrollYProgress, [0, 0.5], ['blur(0px)', 'blur(10px)']);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -100]);
+
   return (
     <motion.section 
       id="services" 
-      className="py-12 md:py-24 h-full w-full absolute top-0 left-0"
+      className="py-12 md:py-24 h-screen w-full sticky top-0"
+      style={{ opacity, filter, y }}
     >
       <div className="container mx-auto px-4 h-full flex flex-col justify-center">
         <div className="text-center mb-12">
@@ -96,9 +101,6 @@ export default function Services({ scrollYProgress, activeServiceIndex, setActiv
                 {services.map((service, index) => {
                     const isActive = activeServiceIndex === index;
                     
-                    const scaleY = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-                    const scaleX = useTransform(scrollYProgress, [0.5, 1], [0, 1]);
-
                     return (
                         <motion.div
                             key={index}
@@ -106,45 +108,23 @@ export default function Services({ scrollYProgress, activeServiceIndex, setActiv
                             onHoverStart={() => setActiveServiceIndex(index)}
                             animate={{
                                 height: isActive ? expandedHeight : collapsedHeights[index],
-                                flexGrow: isActive ? 3 : 1
                             }}
                             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                            style={{ flexGrow: isActive ? 3 : 1 }}
                         >
                             <Link href={service.href} className="block w-full h-full">
                                 <motion.div 
-                                    className="relative w-full h-full bg-card border-t border-x rounded-t-2xl flex items-center justify-center"
+                                    className="relative w-full h-full bg-card border-t border-x rounded-t-2xl"
                                     animate={{ 
                                         boxShadow: isActive ? '0px 0px 30px hsl(var(--primary) / 0.5)' : '0px 0px 0px hsla(var(--primary), 0)',
                                         borderColor: isActive ? 'hsl(var(--primary))' : 'hsla(var(--primary), 0.2)'
                                     }}
                                     transition={{ duration: 0.5, ease: 'easeInOut' }}
                                 >
-                                  
-                                    {/* Vertical Lines */}
-                                    <motion.div 
-                                      className="absolute left-0 top-0 h-full w-px bg-primary origin-bottom"
-                                      style={{ scaleY: isActive ? scaleY: 0, transition: 'transform 0.3s ease-out' }}
-                                    />
-                                    <motion.div 
-                                      className="absolute right-0 top-0 h-full w-px bg-primary origin-bottom"
-                                      style={{ scaleY: isActive ? scaleY: 0, transition: 'transform 0.3s ease-out' }}
-                                    />
-
-                                    {/* Bottom Horizontal Lines */}
-                                    <motion.div 
-                                      className="absolute bottom-0 left-0 w-1/2 h-px bg-primary origin-right"
-                                      style={{ scaleX: isActive ? scaleX: 0, transition: 'transform 0.3s ease-out' }}
-                                    />
-                                     <motion.div 
-                                      className="absolute bottom-0 right-0 w-1/2 h-px bg-primary origin-left"
-                                      style={{ scaleX: isActive ? scaleX: 0, transition: 'transform 0.3s ease-out' }}
-                                    />
-
-
-                                    <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end h-full">
+                                    <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-center h-full">
                                         <div className="w-full text-center">
                                             <h3 className={cn(
-                                                "font-headline text-2xl font-bold transition-all"
+                                                "font-headline text-lg font-bold transition-all"
                                             )}>
                                                 {service.title}
                                             </h3>

@@ -18,9 +18,15 @@ export default function Web3Page() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: scrollRef,
-    offset: ['start start', 'end end'],
+    offset: ['start end', 'end start'],
   });
   const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null);
+
+  const terminalRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress: terminalScrollYProgress } = useScroll({
+        target: terminalRef,
+        offset: ['start end', 'start start'],
+    });
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -37,15 +43,18 @@ export default function Web3Page() {
             )}
         />
         <Hero />
-        <div ref={scrollRef} className="relative z-10 w-full h-[200vh]">
-          <div className="sticky top-0 h-screen">
-            <Services 
-              scrollYProgress={scrollYProgress} 
-              activeServiceIndex={activeServiceIndex}
-              setActiveServiceIndex={setActiveServiceIndex}
+        <div ref={scrollRef}>
+             <Services 
+                scrollYProgress={scrollYProgress} 
+                activeServiceIndex={activeServiceIndex}
+                setActiveServiceIndex={setActiveServiceIndex}
+             />
+        </div>
+        <div ref={terminalRef} className="relative z-10 w-full h-screen">
+             <MotionTerminal 
+                scrollYProgress={terminalScrollYProgress} 
+                activeServiceIndex={activeServiceIndex} 
             />
-            <MotionTerminal scrollYProgress={scrollYProgress} activeServiceIndex={activeServiceIndex} />
-          </div>
         </div>
         <div className="flex-grow">
           <FinancialSolutions />

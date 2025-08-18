@@ -97,7 +97,14 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
   const terminalRef = useRef<HTMLDivElement>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
   
-  const opacity = useTransform(scrollYProgress, [0.5, 1], [0, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
+  
+  const topBorderScaleX = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const rightBorderScaleY = useTransform(scrollYProgress, [0.2, 0.7], [0, 1]);
+  const bottomBorderScaleX = useTransform(scrollYProgress, [0.4, 0.9], [0, 1]);
+  const leftBorderScaleY = useTransform(scrollYProgress, [0.6, 1], [0, 1]);
+
 
   const startAnimation = (codeLines: { text: string; type: string; }[]) => {
     if (animationTimeoutRef.current) {
@@ -147,10 +154,16 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
 
   return (
     <motion.div
-        className="container mx-auto px-4 absolute top-0 left-1/2 -translate-x-1/2 w-full h-full flex items-center justify-center pointer-events-none"
-        style={{ opacity }}
+        className="container mx-auto px-4 sticky top-0 h-screen flex items-center justify-center pointer-events-none"
+        style={{ opacity, scale }}
       >
-        <div className="font-code text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm pointer-events-auto w-full max-w-5xl">
+        <div className="relative font-code text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm pointer-events-auto w-full max-w-5xl">
+          {/* Borders */}
+          <motion.div className="absolute top-0 left-0 w-full h-px bg-primary origin-left" style={{ scaleX: topBorderScaleX }} />
+          <motion.div className="absolute top-0 right-0 w-px h-full bg-primary origin-top" style={{ scaleY: rightBorderScaleY }}/>
+          <motion.div className="absolute bottom-0 right-0 w-full h-px bg-primary origin-right" style={{ scaleX: bottomBorderScaleX }}/>
+          <motion.div className="absolute top-0 left-0 w-px h-full bg-primary origin-bottom" style={{ scaleY: leftBorderScaleY }} />
+
           <div className="h-[60vh] max-h-[700px] flex flex-col rounded-md">
             <div className="flex items-center gap-2 p-3 border-b border-white/10">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
