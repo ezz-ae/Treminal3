@@ -53,8 +53,8 @@ const services = [
     },
   ];
 
-const expandedHeight = 450;
-const collapsedHeights = [150, 120, 170, 140, 180, 130, 160, 125, 175, 145, 155];
+const expandedHeight = 500;
+const collapsedHeights = [180, 150, 200, 170, 210, 160, 190, 155, 205, 175, 185];
 
 
 export default function Services() {
@@ -69,7 +69,7 @@ export default function Services() {
             Treminal3 provides everything you need to succeed in the new digital economy.
           </p>
         </div>
-        <div className="w-full flex justify-center items-end h-[500px]">
+        <div className="w-full flex justify-center items-end h-[550px]">
             <motion.div
                 className="flex items-end w-full max-w-7xl"
                 onMouseLeave={() => setActiveKey(null)}
@@ -88,7 +88,7 @@ export default function Services() {
                                 <motion.div 
                                     className="relative w-full h-full p-6 flex flex-col justify-end bg-card border border-primary/20"
                                     animate={{ 
-                                        boxShadow: isActive ? '0px 0px 15px hsl(var(--primary))' : '0px 0px 0px hsla(var(--primary), 0)',
+                                        boxShadow: isActive ? '0px 0px 30px hsl(var(--primary))' : '0px 0px 0px hsla(var(--primary), 0)',
                                         borderColor: isActive ? 'hsl(var(--primary))' : 'hsla(var(--primary), 0.2)'
                                     }}
                                     transition={{ duration: 0.5, ease: 'easeInOut' }}

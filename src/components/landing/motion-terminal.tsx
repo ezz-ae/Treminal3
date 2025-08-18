@@ -91,13 +91,6 @@ export default function MotionTerminal() {
 
   return (
     <section className="relative bg-background text-foreground py-12 md:py-24 overflow-hidden">
-        <div className="absolute inset-0">
-            <div
-                className={cn(
-                    "absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,hsl(var(--primary)/0.2),rgba(255,255,255,0))] animate-aurora"
-                )}
-            ></div>
-        </div>
       <motion.div
         className="container mx-auto px-4 relative z-10"
         initial={{ opacity: 0, scale: 0.8 }}

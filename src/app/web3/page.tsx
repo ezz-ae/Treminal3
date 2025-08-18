@@ -21,7 +21,7 @@ export default function Web3Page() {
             y={-1}
             className={cn(
               '[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)]',
-              'absolute inset-0 h-full w-full skew-y-12'
+              'absolute inset-0 h-full w-full skew-y-12 animate-aurora'
             )}
         />
         <Hero />
