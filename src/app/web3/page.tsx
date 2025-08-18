@@ -1,3 +1,7 @@
+
+'use client';
+
+import { useRef } from 'react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import Hero from '@/components/landing/hero';
@@ -8,8 +12,15 @@ import Web3DevTools from '@/components/landing/web3-dev-tools';
 import InteractiveGuides from '@/components/landing/interactive-guides';
 import GridPattern from '@/components/landing/grid-pattern';
 import { cn } from '@/lib/utils';
+import { useScroll } from 'framer-motion';
 
 export default function Web3Page() {
+  const scrollRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: scrollRef,
+    offset: ['start start', 'end start'],
+  });
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
@@ -25,8 +36,12 @@ export default function Web3Page() {
             )}
         />
         <Hero />
-        <Services />
-        <MotionTerminal />
+        <div ref={scrollRef} className="relative z-10 w-full h-[200vh]">
+          <div className="sticky top-0 h-screen">
+            <Services scrollYProgress={scrollYProgress} />
+            <MotionTerminal />
+          </div>
+        </div>
         <div className="flex-grow">
           <FinancialSolutions />
           <Web3DevTools />

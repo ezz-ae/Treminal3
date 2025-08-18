@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -90,7 +91,7 @@ export default function MotionTerminal() {
   }, []);
 
   return (
-    <section className="relative bg-background text-foreground py-12 md:py-24 overflow-hidden">
+    <section className="absolute inset-0 flex items-center justify-center">
       <motion.div
         className="container mx-auto px-4 relative z-10"
         initial={{ opacity: 0, scale: 0.8 }}

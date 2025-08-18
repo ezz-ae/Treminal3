@@ -2,10 +2,9 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useTransform, MotionValue } from 'framer-motion';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { AppWindow, Bot, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, ShieldCheck, Vote } from 'lucide-react';
 
 const services = [
     {
@@ -66,15 +65,23 @@ const services = [
   ];
 
 const expandedHeight = 400;
-const collapsedHeights = [120, 150, 100, 170, 110, 160, 130, 155, 105, 175, 125];
+const collapsedHeights = [120, 150, 100, 170, 110, 160, 130, 155, 105, 175, 125].map(h => h * 1.5);
 
-
-export default function Services() {
+export default function Services({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
   const [activeKey, setActiveKey] = useState<number | null>(null);
 
+  const translateY = useTransform(scrollYProgress, [0, 1], [0, -window.innerHeight]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1, 0]);
+  const filter = useTransform(scrollYProgress, [0, 0.7, 1], ['blur(0px)', 'blur(0px)', 'blur(20px)']);
+
+
   return (
-    <section id="services" className="py-12 md:py-24">
-      <div className="container mx-auto px-4">
+    <motion.section 
+      id="services" 
+      className="py-12 md:py-24 h-full w-full absolute top-0 left-0"
+      style={{ y: translateY, opacity, filter }}
+    >
+      <div className="container mx-auto px-4 h-full flex flex-col justify-center">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold font-headline">The all-in-one Web3 platform</h2>
           <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
@@ -109,11 +116,10 @@ export default function Services() {
                                     transition={{ duration: 0.5, ease: 'easeInOut' }}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
-                                    <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col items-center justify-end h-full">
+                                    <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col items-center justify-center h-full">
                                         <div className="w-full text-center">
                                             <h3 className={cn(
-                                                "font-headline text-2xl font-bold transition-all",
-                                                isActive ? "text-white" : "text-white/50"
+                                                "font-headline text-2xl font-bold transition-all"
                                             )}>
                                                 {service.title}
                                             </h3>
@@ -133,6 +139,6 @@ export default function Services() {
             </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
