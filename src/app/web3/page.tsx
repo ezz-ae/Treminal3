@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import Hero from '@/components/landing/hero';
@@ -20,6 +20,7 @@ export default function Web3Page() {
     target: scrollRef,
     offset: ['start start', 'end start'],
   });
+  const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -37,9 +38,13 @@ export default function Web3Page() {
         />
         <Hero />
         <div ref={scrollRef} className="relative z-10 w-full h-[200vh]">
-          <div className="sticky top-0 h-screen">
-            <Services scrollYProgress={scrollYProgress} />
-            <MotionTerminal />
+          <div className="sticky top-0 h-screen flex flex-col">
+            <Services 
+              scrollYProgress={scrollYProgress} 
+              activeServiceIndex={activeServiceIndex}
+              setActiveServiceIndex={setActiveServiceIndex}
+            />
+            <MotionTerminal activeServiceIndex={activeServiceIndex} />
           </div>
         </div>
         <div className="flex-grow">

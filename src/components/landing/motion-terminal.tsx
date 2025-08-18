@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -7,55 +6,96 @@ import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { motion } from 'framer-motion';
 
-const codeLines = [
-  { text: 'treminal3 create:bot --name=arbitrage-bot --template=uniswap-v3', type: 'command' },
-  { text: '✔ Bot created successfully at ./bots/arbitrage-bot.js', type: 'success' },
-  { text: 'treminal3 edit ./bots/arbitrage-bot.js', type: 'command'},
-  { text: `
-import { BaseBot, Exchange } from 'treminal3-sdk';
+const scripts: Record<string, { text: string; type: string }[]> = {
+  default: [
+    { text: 'Welcome to Treminal3.', type: 'info' },
+    { text: 'Hover over a service above and scroll down to see its execution.', type: 'info' },
+    { text: 'treminal3 --version', type: 'command' },
+    { text: 'v1.0.0', type: 'success' },
+  ],
+  '0': [
+    { text: 'treminal3 create:dapp --name=my-awesome-dapp --template=nft-marketplace', type: 'command' },
+    { text: '✔ dApp created successfully from template: nft-marketplace.', type: 'success' },
+    { text: 'treminal3 deploy:dapp --name=my-awesome-dapp --network=mainnet', type: 'command' },
+    { text: 'Deploying to mainnet...', type: 'info' },
+    { text: '✔ dApp deployed. URL: https://my-awesome-dapp.t3.app', type: 'success' },
+  ],
+  '1': [
+    { text: 'treminal3 create:token --name="My Token" --symbol=TKN --supply=1000000', type: 'command' },
+    { text: '✔ Token contract generated successfully.', type: 'success' },
+    { text: 'treminal3 deploy:token --network=polygon', type: 'command' },
+    { text: 'Deploying token to Polygon network...', type: 'info' },
+    { text: '✔ Token deployed. Contract address: 0x123...abc', type: 'success' },
+  ],
+  '2': [
+    { text: 'treminal3 create:bot --name=arbitrage-bot --template=uniswap-v3', type: 'command' },
+    { text: '✔ Bot created successfully at ./bots/arbitrage-bot.js', type: 'success' },
+    { text: 'treminal3 backtest --name=arbitrage-bot --from=2023-01-01', type: 'command' },
+    { text: 'Running backtest... Total PnL: 23.45 WETH', type: 'info' },
+    { text: 'treminal3 deploy:bot --name=arbitrage-bot --live', type: 'command' },
+    { text: '✔ Bot deployed successfully. Listening for opportunities...', type: 'success' },
+  ],
+    '3': [
+    { text: 'treminal3 create:agent --name=oracle-updater --trigger=on-chain-event', type: 'command' },
+    { text: '✔ AI Agent created. Listening for PriceUpdate events...', type: 'success' },
+    { text: 'treminal3 agent:logs --name=oracle-updater', type: 'command' },
+    { text: 'Event triggered. Agent executing logic...', type: 'info' },
+    { text: 'Price updated on-chain via agent.', type: 'success' },
+  ],
+  '4': [
+    { text: 'treminal3 create:wallet --brand=my-brand --type=smart-contract', type: 'command' },
+    { text: '✔ Custom branded wallet SDK generated.', type: 'success' },
+    { text: 'treminal3 publish:wallet --name=my-brand-wallet', type: 'command' },
+    { text: 'Publishing wallet to app stores...', type: 'info' },
+    { text: '✔ Wallet published successfully.', type: 'success' },
+  ],
+  '5': [
+    { text: 'treminal3 list:templates', type: 'command' },
+    { text: 'Available templates: ERC20, ERC721, DAO, Vesting...', type: 'info' },
+    { text: 'treminal3 use:template --name=DAO --output=./contracts/MyDAO.sol', type: 'command' },
+    { text: '✔ Smart contract MyDAO.sol created successfully.', type: 'success' },
+  ],
+  '6': [
+    { text: 'treminal3 tx:send --to=0xabc...123 --value=1.5ETH --network=sepolia', type: 'command' },
+    { text: 'Submitting transaction on Sepolia testnet...', type: 'info' },
+    { text: '✔ Transaction confirmed. Hash: 0x456...def', type: 'success' },
+  ],
+  '7': [
+    { text: 'treminal3 analytics:query --dataset=uniswap_v3_mainnet --query="SELECT * FROM swaps LIMIT 5"', type: 'command' },
+    { text: 'Running query on on-chain data...', type: 'info' },
+    { text: 'Results:\n- Swap 1: 10 ETH for 30,000 USDC\n- Swap 2: 5 ETH for 15,000 USDC', type: 'success' },
+  ],
+  '8': [
+    { text: 'treminal3 storage:upload ./my-dapp-assets --network=ipfs', type: 'command' },
+    { text: 'Uploading files to IPFS...', type: 'info' },
+    { text: '✔ Upload complete. CID: QmXo...pA', type: 'success' },
+  ],
+  '9': [
+    { text: 'treminal3 audit:contract ./contracts/MyToken.sol', type: 'command' },
+    { text: 'Running automated security audit...', type: 'info' },
+    { text: '✔ Audit complete. No critical vulnerabilities found. 2 recommendations.', type: 'success' },
+  ],
+  '10': [
+    { text: 'treminal3 dao:create-proposal --title="New Partnership" --description="..."', type: 'command' },
+    { text: '✔ Proposal created. Voting starts now and ends in 3 days.', type: 'success' },
+    { text: 'treminal3 dao:vote --proposal-id=5 --vote=yes', type: 'command' },
+    { text: '✔ Vote cast successfully.', type: 'success' },
+  ],
+};
 
-class ArbitrageBot extends BaseBot {
-  async execute() {
-    const { WETH, USDC } = this.assets;
-    const market = await Exchange.getMarket('Uniswap_v3', WETH, USDC);
-    
-    if (market.price < this.config.buyThreshold) {
-      await this.buy(WETH, 10);
-      console.log('Executed buy order for 10 WETH');
-    }
-  }
-}
-`, type: 'info' },
-  { text: 'treminal3 backtest --name=arbitrage-bot --from=2023-01-01', type: 'command' },
-  { text: 'Running backtest on Uniswap v3 data from 2023-01-01 to now...', type: 'info' },
-  { text: 'Processed 1,254,320 blocks.', type: 'info' },
-  { text: `
-Backtest Results:
------------------
-  Total Trades: 1,254
-  Winning Trades: 981 (78.2%)
-  Losing Trades: 273 (21.8%)
-  Total PnL: 23.45 WETH
-  Sharpe Ratio: 1.87
-`, type: 'success' },
-  { text: 'treminal3 deploy:bot --name=arbitrage-bot --live', type: 'command' },
-  { text: 'Deploying arbitrage-bot to live environment...', type: 'info' },
-  { text: '✔ Bot deployed successfully. Instance ID: arb-bot-live-xyz', type: 'success' },
-  { text: 'Listening for arbitrage opportunities on Uniswap_v3...', type: 'info' },
-  { text: 'Opportunity found: Swapping 10 WETH for 25,000 USDC...', type: 'info' },
-  { text: 'Submitting transaction to mempool...', type: 'info' },
-  { text: 'Error: Transaction failed. Reason: Slippage exceeds 0.5%. Retrying...', type: 'error' },
-];
 
 const linePause = 1000;
 
-export default function MotionTerminal() {
+export default function MotionTerminal({ activeServiceIndex }: { activeServiceIndex: number | null }) {
   const [lines, setLines] = useState<{ text: string; type: string; }[]>([]);
   const [isComplete, setIsComplete] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
 
-  const startAnimation = () => {
+  const startAnimation = (codeLines: { text: string; type: string; }[]) => {
+    if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+    }
     setLines([]);
     setIsComplete(false);
     let lineIndex = 0;
@@ -80,6 +120,12 @@ export default function MotionTerminal() {
     }
   }, [lines]);
 
+  useEffect(() => {
+    const scriptKey = activeServiceIndex !== null ? activeServiceIndex.toString() : 'default';
+    const scriptToRun = scripts[scriptKey] || scripts['default'];
+    startAnimation(scriptToRun);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeServiceIndex]);
 
   useEffect(() => {
     // Cleanup on unmount
@@ -90,17 +136,18 @@ export default function MotionTerminal() {
     };
   }, []);
 
+  const currentScript = scripts[activeServiceIndex?.toString() ?? 'default'];
+
   return (
-    <section className="absolute inset-0 flex items-center justify-center">
+    <section className="flex-grow flex items-center justify-center -mt-24">
       <motion.div
         className="container mx-auto px-4 relative z-10"
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        onAnimationComplete={startAnimation}
       >
-        <div className="font-code text-sm rounded-lg border border-white/10 bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm">
+        <div className="font-code text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm">
           <div className="h-[60vh] max-h-[700px] flex flex-col rounded-md">
             <div className="flex items-center gap-2 p-3 border-b border-white/10">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -131,7 +178,7 @@ export default function MotionTerminal() {
 
               {isComplete && (
                 <div className="mt-4">
-                  <Button onClick={startAnimation}>
+                  <Button onClick={() => startAnimation(currentScript)}>
                     Re-run Build
                   </Button>
                 </div>

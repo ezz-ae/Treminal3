@@ -1,10 +1,10 @@
 
 'use client';
 
-import { useState } from 'react';
 import { motion, useTransform, MotionValue } from 'framer-motion';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import React from 'react';
 
 const services = [
     {
@@ -65,12 +65,18 @@ const services = [
   ];
 
 const expandedHeight = 400;
-const collapsedHeights = [120, 150, 100, 170, 110, 160, 130, 155, 105, 175, 125].map(h => h * 1.5);
+const collapsedHeights = [120, 150, 100, 170, 110, 160, 130, 155, 105, 175, 125];
 
-export default function Services({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const [activeKey, setActiveKey] = useState<number | null>(null);
+interface ServicesProps {
+  scrollYProgress: MotionValue<number>;
+  activeServiceIndex: number | null;
+  setActiveServiceIndex: (index: number | null) => void;
+}
 
-  const translateY = useTransform(scrollYProgress, [0, 1], [0, -window.innerHeight]);
+
+export default function Services({ scrollYProgress, activeServiceIndex, setActiveServiceIndex }: ServicesProps) {
+
+  const translateY = useTransform(scrollYProgress, [0, 1], [0, -window.innerHeight / 2]);
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1, 0]);
   const filter = useTransform(scrollYProgress, [0, 0.7, 1], ['blur(0px)', 'blur(0px)', 'blur(20px)']);
 
@@ -91,32 +97,42 @@ export default function Services({ scrollYProgress }: { scrollYProgress: MotionV
         <div className="w-full flex justify-center items-end h-[450px]">
             <motion.div
                 className="flex items-end w-full max-w-7xl"
-                onMouseLeave={() => setActiveKey(null)}
+                onMouseLeave={() => setActiveServiceIndex(null)}
             >
                 {services.map((service, index) => {
-                    const isActive = activeKey === index;
+                    const isActive = activeServiceIndex === index;
+                    const scaleY = useTransform(scrollYProgress, [0.5, 1], [1, 25]);
+                    
                     return (
                         <motion.div
                             key={index}
-                            className="relative rounded-t-2xl overflow-hidden"
-                            onHoverStart={() => setActiveKey(index)}
+                            className="relative flex-1"
+                            onHoverStart={() => setActiveServiceIndex(index)}
                             animate={{
                                 height: isActive ? expandedHeight : collapsedHeights[index % collapsedHeights.length],
-                                flexGrow: isActive ? 3 : 1
                             }}
                             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
                         >
                             <Link href={service.href} className="block w-full h-full">
                                 <motion.div 
-                                    className="relative w-full h-full bg-card border-t border-x border-primary/20"
+                                    className="relative w-full h-full bg-card border-t border-x border-primary/20 rounded-t-2xl"
                                     animate={{ 
                                         boxShadow: isActive ? '0px 0px 30px hsl(var(--primary) / 0.5)' : '0px 0px 0px hsla(var(--primary), 0)',
                                         borderColor: isActive ? 'hsl(var(--primary))' : 'hsla(var(--primary), 0.2)'
                                     }}
                                     transition={{ duration: 0.5, ease: 'easeInOut' }}
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
-                                    <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col items-center justify-center h-full">
+                                  
+                                    <motion.div 
+                                      className="absolute left-0 top-0 h-full w-px bg-primary origin-bottom"
+                                      style={{ scaleY: isActive ? scaleY: 0, transition: 'transform 0.3s ease-out' }}
+                                    />
+                                    <motion.div 
+                                      className="absolute right-0 top-0 h-full w-px bg-primary origin-bottom"
+                                      style={{ scaleY: isActive ? scaleY: 0, transition: 'transform 0.3s ease-out' }}
+                                    />
+
+                                    <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-center h-full">
                                         <div className="w-full text-center">
                                             <h3 className={cn(
                                                 "font-headline text-2xl font-bold transition-all"
