@@ -53,8 +53,8 @@ const services = [
     },
   ];
 
-const expandedHeight = 500;
-const collapsedHeights = [180, 150, 200, 170, 210, 160, 190, 155, 205, 175, 185];
+const expandedHeight = 400;
+const collapsedHeights = [120, 150, 100, 170, 110, 160, 130, 155, 105, 175, 125];
 
 
 export default function Services() {
@@ -69,7 +69,7 @@ export default function Services() {
             Treminal3 provides everything you need to succeed in the new digital economy.
           </p>
         </div>
-        <div className="w-full flex justify-center items-end h-[550px]">
+        <div className="w-full flex justify-center items-end h-[450px]">
             <motion.div
                 className="flex items-end w-full max-w-7xl"
                 onMouseLeave={() => setActiveKey(null)}
@@ -79,14 +79,17 @@ export default function Services() {
                     return (
                         <motion.div
                             key={index}
-                            className="relative rounded-t-2xl overflow-hidden flex-1"
+                            className="relative rounded-t-2xl overflow-hidden"
                             onHoverStart={() => setActiveKey(index)}
-                            animate={{ height: isActive ? expandedHeight : collapsedHeights[index % collapsedHeights.length] }}
+                            animate={{ 
+                                height: isActive ? expandedHeight : collapsedHeights[index % collapsedHeights.length],
+                                flexGrow: isActive ? 3 : 1
+                            }}
                             transition={{ duration: 0.5, ease: 'easeInOut' }}
                         >
                             <Link href={service.href} className="block w-full h-full">
                                 <motion.div 
-                                    className="relative w-full h-full p-6 flex flex-col justify-center bg-card border border-primary/20"
+                                    className="relative w-full h-full p-6 flex flex-col justify-center items-center bg-card border border-primary/20"
                                     animate={{ 
                                         boxShadow: isActive ? '0px 0px 30px hsl(var(--primary))' : '0px 0px 0px hsla(var(--primary), 0)',
                                         borderColor: isActive ? 'hsl(var(--primary))' : 'hsla(var(--primary), 0.2)'
@@ -94,9 +97,9 @@ export default function Services() {
                                     transition={{ duration: 0.5, ease: 'easeInOut' }}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
-                                    <div className="relative z-10">
+                                    <div className="relative z-10 text-center">
                                         <h3 className={cn(
-                                            "font-headline text-2xl font-bold transition-all text-white text-center",
+                                            "font-headline text-2xl font-bold transition-all text-white"
                                         )}>
                                             {service.title}
                                         </h3>
