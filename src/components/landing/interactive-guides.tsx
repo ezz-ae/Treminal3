@@ -146,13 +146,6 @@ export default function InteractiveGuides({ activeServiceIndex }: InteractiveGui
   return (
     <section id="start" className="py-12 md:py-24">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold font-headline">From Our Notes</h2>
-          <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
-            A contextual guide based on your selections.
-          </p>
-        </div>
-
         <motion.div 
             className="max-w-4xl mx-auto bg-card p-8 rounded-lg border cursor-pointer hover:border-primary/50 transition-colors duration-300" 
             onClick={() => setSelectedArticle(article)}
