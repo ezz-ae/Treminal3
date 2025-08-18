@@ -120,7 +120,7 @@ export default function DashboardLayout({
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <Link href={item.href} passHref legacyBehavior>
+                  <Link href={item.href}>
                     <SidebarMenuButton isActive={pathname === item.href}>
                       <item.icon />
                       <span>{item.label}</span>
@@ -161,7 +161,7 @@ export default function DashboardLayout({
           <main className="flex-1 bg-gray-50/50">
             <div className={cn(
               "h-full w-full",
-              !isAiAgentsPage && "p-6"
+              isAiAgentsPage ? "" : "p-6"
             )}>
               {children}
             </div>
