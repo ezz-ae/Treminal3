@@ -27,10 +27,10 @@ export default function AnimatedText({ words, className }: AnimatedTextProps) {
   }, [words.length]);
 
   return (
-    <span className="inline-grid text-left h-[calc(1em*1.2)] overflow-hidden">
+    <span className={cn("inline-grid text-center h-[calc(1em*1.2)] overflow-hidden", className)}>
       <span
         key={key}
-        className={cn("transition-transform duration-1000 ease-in-out", className)}
+        className="transition-transform duration-1000 ease-in-out"
         style={{ transform: `translateY(-${index * 100}%)` }}
       >
         {words.map((word, i) => (
