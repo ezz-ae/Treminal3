@@ -25,6 +25,11 @@ import {
   Terminal,
   LogOut,
   Settings,
+  BotMessageSquare,
+  AreaChart,
+  FileArchive,
+  ShieldCheck,
+  Vote,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -51,6 +56,11 @@ const menuItems = [
     icon: Bot,
   },
   {
+    href: '/dashboard/ai-agents',
+    label: 'AI Agents',
+    icon: BotMessageSquare,
+  },
+  {
     href: '/dashboard/wallets',
     label: 'Wallets',
     icon: Wallet,
@@ -64,6 +74,26 @@ const menuItems = [
     href: '/dashboard/transactions',
     label: 'Transactions',
     icon: Network,
+  },
+  {
+    href: '/dashboard/analytics',
+    label: 'On-chain Analytics',
+    icon: AreaChart,
+  },
+    {
+    href: '/dashboard/storage',
+    label: 'Decentralized Storage',
+    icon: FileArchive,
+  },
+  {
+    href: '/dashboard/audits',
+    label: 'Security Audits',
+    icon: ShieldCheck,
+  },
+  {
+    href: '/dashboard/governance',
+    label: 'DAO Governance',
+    icon: Vote,
   },
 ];
 

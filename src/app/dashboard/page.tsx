@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -13,6 +14,11 @@ import {
   FileJson,
   Network,
   ArrowRight,
+  BotMessageSquare,
+  AreaChart,
+  FileArchive,
+  ShieldCheck,
+  Vote,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -38,6 +44,12 @@ const tools = [
     description: 'Develop and deploy automated trading bots on major exchanges.',
   },
   {
+    href: '/dashboard/ai-agents',
+    icon: BotMessageSquare,
+    title: 'AI Agents',
+    description: 'Deploy autonomous AI agents to interact with your dApps and automate tasks.',
+  },
+  {
     href: '/dashboard/wallets',
     icon: Wallet,
     title: 'Custom Wallets',
@@ -56,6 +68,30 @@ const tools = [
     title: 'Manual Transactions',
     description:
       'Interact directly with the blockchain for custom operations and analysis.',
+  },
+   {
+    href: '/dashboard/analytics',
+    icon: AreaChart,
+    title: 'On-chain Analytics',
+    description: 'Get deep insights into on-chain data with our powerful analytics engine.',
+  },
+  {
+    href: '/dashboard/storage',
+    icon: FileArchive,
+    title: 'Decentralized Storage',
+    description: 'Upload and manage files on IPFS and other decentralized storage networks.',
+  },
+  {
+    href: '/dashboard/audits',
+    icon: ShieldCheck,
+    title: 'Security Audits',
+    description: 'Run automated security audits on your smart contracts to find vulnerabilities.',
+  },
+  {
+    href: '/dashboard/governance',
+    icon: Vote,
+    title: 'DAO Governance',
+    description: 'Manage your decentralized autonomous organization with our governance tools.',
   },
 ];
 
