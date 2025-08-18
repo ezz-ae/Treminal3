@@ -15,11 +15,6 @@ import { cn } from '@/lib/utils';
 import { useScroll } from 'framer-motion';
 
 export default function Web3Page() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: scrollRef,
-    offset: ['start end', 'end start'],
-  });
   const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null);
 
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -43,9 +38,8 @@ export default function Web3Page() {
             )}
         />
         <Hero />
-        <div ref={scrollRef}>
+        <div>
              <Services 
-                scrollYProgress={scrollYProgress} 
                 activeServiceIndex={activeServiceIndex}
                 setActiveServiceIndex={setActiveServiceIndex}
              />

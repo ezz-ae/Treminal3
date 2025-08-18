@@ -1,7 +1,7 @@
 
 'use client';
 
-import { motion, useTransform, MotionValue } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import React from 'react';
@@ -69,22 +69,16 @@ const collapsedHeights = [120, 150, 100, 170, 110, 160, 130, 155, 105, 175, 125]
 
 
 interface ServicesProps {
-  scrollYProgress: MotionValue<number>;
   activeServiceIndex: number | null;
   setActiveServiceIndex: (index: number | null) => void;
 }
 
 
-export default function Services({ scrollYProgress, activeServiceIndex, setActiveServiceIndex }: ServicesProps) {
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const filter = useTransform(scrollYProgress, [0, 0.5], ['blur(0px)', 'blur(10px)']);
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, -100]);
-
+export default function Services({ activeServiceIndex, setActiveServiceIndex }: ServicesProps) {
   return (
-    <motion.section 
+    <section 
       id="services" 
-      className="py-12 md:py-24 h-screen w-full sticky top-0"
-      style={{ opacity, filter, y }}
+      className="py-12 md:py-24 h-screen w-full"
     >
       <div className="container mx-auto px-4 h-full flex flex-col justify-center">
         <div className="text-center mb-12">
@@ -108,9 +102,9 @@ export default function Services({ scrollYProgress, activeServiceIndex, setActiv
                             onHoverStart={() => setActiveServiceIndex(index)}
                             animate={{
                                 height: isActive ? expandedHeight : collapsedHeights[index],
+                                flexGrow: isActive ? 3 : 1
                             }}
                             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-                            style={{ flexGrow: isActive ? 3 : 1 }}
                         >
                             <Link href={service.href} className="block w-full h-full">
                                 <motion.div 
@@ -144,6 +138,6 @@ export default function Services({ scrollYProgress, activeServiceIndex, setActiv
             </motion.div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 }
