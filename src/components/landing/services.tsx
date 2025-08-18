@@ -67,6 +67,7 @@ const services = [
 const expandedHeight = 400;
 const collapsedHeights = [120, 150, 100, 170, 110, 160, 130, 155, 105, 175, 125];
 
+
 interface ServicesProps {
   scrollYProgress: MotionValue<number>;
   activeServiceIndex: number | null;
@@ -76,7 +77,6 @@ interface ServicesProps {
 
 export default function Services({ scrollYProgress, activeServiceIndex, setActiveServiceIndex }: ServicesProps) {
 
-  const translateY = useTransform(scrollYProgress, [0, 1], [0, -window.innerHeight / 2]);
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1, 0]);
   const filter = useTransform(scrollYProgress, [0, 0.7, 1], ['blur(0px)', 'blur(0px)', 'blur(20px)']);
 
@@ -85,7 +85,7 @@ export default function Services({ scrollYProgress, activeServiceIndex, setActiv
     <motion.section 
       id="services" 
       className="py-12 md:py-24 h-full w-full absolute top-0 left-0"
-      style={{ y: translateY, opacity, filter }}
+      style={{ opacity, filter }}
     >
       <div className="container mx-auto px-4 h-full flex flex-col justify-center">
         <div className="text-center mb-12">
@@ -106,16 +106,17 @@ export default function Services({ scrollYProgress, activeServiceIndex, setActiv
                     return (
                         <motion.div
                             key={index}
-                            className="relative flex-1"
+                            className="relative"
                             onHoverStart={() => setActiveServiceIndex(index)}
                             animate={{
                                 height: isActive ? expandedHeight : collapsedHeights[index % collapsedHeights.length],
+                                flexGrow: isActive ? 3 : 1
                             }}
                             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
                         >
                             <Link href={service.href} className="block w-full h-full">
                                 <motion.div 
-                                    className="relative w-full h-full bg-card border-t border-x border-primary/20 rounded-t-2xl"
+                                    className="relative w-full h-full bg-card border-t border-x rounded-t-2xl"
                                     animate={{ 
                                         boxShadow: isActive ? '0px 0px 30px hsl(var(--primary) / 0.5)' : '0px 0px 0px hsla(var(--primary), 0)',
                                         borderColor: isActive ? 'hsl(var(--primary))' : 'hsla(var(--primary), 0.2)'
@@ -132,7 +133,7 @@ export default function Services({ scrollYProgress, activeServiceIndex, setActiv
                                       style={{ scaleY: isActive ? scaleY: 0, transition: 'transform 0.3s ease-out' }}
                                     />
 
-                                    <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-center h-full">
+                                    <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end h-full">
                                         <div className="w-full text-center">
                                             <h3 className={cn(
                                                 "font-headline text-2xl font-bold transition-all"

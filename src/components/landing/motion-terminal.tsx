@@ -139,9 +139,8 @@ export default function MotionTerminal({ activeServiceIndex }: { activeServiceIn
   const currentScript = scripts[activeServiceIndex?.toString() ?? 'default'];
 
   return (
-    <section className="flex-grow flex items-center justify-center -mt-24">
-      <motion.div
-        className="container mx-auto px-4 relative z-10"
+    <motion.div
+        className="container mx-auto px-4 absolute top-[100vh] left-1/2 -translate-x-1/2 w-full z-10"
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.2 }}
@@ -187,6 +186,5 @@ export default function MotionTerminal({ activeServiceIndex }: { activeServiceIn
           </div>
         </div>
       </motion.div>
-    </section>
   );
 }

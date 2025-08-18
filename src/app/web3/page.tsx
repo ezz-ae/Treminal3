@@ -38,7 +38,7 @@ export default function Web3Page() {
         />
         <Hero />
         <div ref={scrollRef} className="relative z-10 w-full h-[200vh]">
-          <div className="sticky top-0 h-screen flex flex-col">
+          <div className="sticky top-0 h-screen">
             <Services 
               scrollYProgress={scrollYProgress} 
               activeServiceIndex={activeServiceIndex}
