@@ -28,7 +28,7 @@ const codingModes = [
   },
   {
     icon: Zap,
-    title: 'Hyper Coding mode',
+    title: 'Hyper-Coding mode',
     description: 'Use our library of pre-built components and functions to assemble your project at lightning speed.',
   },
   {

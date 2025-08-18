@@ -16,7 +16,7 @@ const modes = [
   {
     icon: Zap,
     value: 'hyper',
-    title: 'Hidromatic',
+    title: 'Hyper-Coding',
     description: 'Use pre-built components and templates for rapid development.',
   },
   {

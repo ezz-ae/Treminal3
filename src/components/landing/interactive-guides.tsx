@@ -33,7 +33,7 @@ const articles = [
         excerpt: 'Learn how to use our extensive library of pre-built components and templates to construct your dApp visually.',
         image: 'https://placehold.co/600x400.png',
         aiHint: 'visual programming interface',
-        content: 'For those who want more control without writing code from scratch, "Hidromatic" or Hyper-Coding mode is the perfect fit. This guide teaches you how to use our drag-and-drop interface to assemble your dApp. You\'ll learn how to connect data sources, configure user authentication flows, and style your UI using our robust component library. We\'ll build a complete decentralized voting application in minutes, giving you a solid understanding of this powerful, rapid-development workflow.',
+        content: 'For those who want more control without writing code from scratch, "Hyper-Coding" mode is the perfect fit. This guide teaches you how to use our drag-and-drop interface to assemble your dApp. You\'ll learn how to connect data sources, configure user authentication flows, and style your UI using our robust component library. We\'ll build a complete decentralized voting application in minutes, giving you a solid understanding of this powerful, rapid-development workflow.',
       },
       pro: {
         title: 'dApp Development in Pro-Mode',
