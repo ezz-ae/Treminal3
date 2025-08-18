@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -144,10 +145,10 @@ export default function RecommendationForm() {
           <h3 className="text-2xl font-bold text-center mb-8 font-headline">Your Personalized Recommendations</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {recommendations.recommendations.map((rec) => (
-              <Card key={rec.toolName}>
+              <Card key={rec.toolName} className="shadow-lg">
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
-                    <Lightbulb className="h-6 w-6 text-accent"/>
+                    <Lightbulb className="h-6 w-6 text-primary"/>
                     <CardTitle className="font-headline">{rec.toolName}</CardTitle>
                   </div>
                    <p className="text-sm font-medium text-muted-foreground">{rec.toolCategory}</p>

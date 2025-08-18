@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Button } from '../ui/button';
 
 const guides = [
   {
@@ -23,27 +24,30 @@ const guides = [
   },
 ];
 
-export default function InteractiveGuides() {
+export default function Start() {
   return (
-    <section id="guides" className="py-12 md:py-24 bg-background">
+    <section id="start" className="py-12 md:py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold font-headline">Getting Started Is Easy</h2>
+          <h2 className="text-3xl md:text-4xl font-bold font-headline">Get started with Treminal3</h2>
           <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
-            Follow our simple guides to get the most out of Treminal3.
+            Explore our solutions or create an account to get started.
           </p>
         </div>
         <div className="max-w-3xl mx-auto">
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion type="single" collapsible className="w-full mb-8">
             {guides.map((guide) => (
               <AccordionItem key={guide.value} value={guide.value}>
-                <AccordionTrigger className="font-headline">{guide.title}</AccordionTrigger>
+                <AccordionTrigger className="font-headline text-lg">{guide.title}</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   {guide.content}
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
+          <div className="text-center">
+            <Button size="lg">Create Account</Button>
+          </div>
         </div>
       </div>
     </section>

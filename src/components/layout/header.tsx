@@ -4,15 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const navItems = [
-  { href: '#services', label: 'Solutions' },
-  { href: '#web3', label: 'Developers' },
-  { href: '#guides', label: 'Guides' },
-  { href: '#recommendations', label: 'AI Tools' },
+  { href: '#for-business', label: 'For Business' },
+  { href: '#platform', label: 'Platform' },
+  { href: '#for-developers', label: 'For Developers' },
+  { href: '#start', label: 'Resources' },
 ];
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <div className="mr-4 flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -32,7 +32,7 @@ export default function Header() {
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <Button variant="outline">Sign In</Button>
+          <Button variant="ghost">Sign In</Button>
           <Button>Get Started</Button>
         </div>
         <Sheet>

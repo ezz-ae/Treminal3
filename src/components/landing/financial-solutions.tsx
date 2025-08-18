@@ -20,16 +20,27 @@ const solutions = [
   },
 ];
 
-export default function FinancialSolutions() {
+export default function Platform() {
   return (
-    <section id="financial" className="py-12 md:py-24 bg-background">
+    <section id="platform" className="py-12 md:py-24 bg-white">
       <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold font-headline">The Platform for your Business</h2>
+          <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
+            From day-to-day banking to pioneering crypto investments, Treminal3 provides the tools you need to take control of your company's financial future.
+          </p>
+        </div>
         <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="relative h-96 rounded-lg overflow-hidden order-last md:order-first">
+             <Image
+                src="https://placehold.co/600x400.png"
+                alt="Financial dashboard"
+                data-ai-hint="financial dashboard"
+                fill
+                className="object-cover"
+              />
+          </div>
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 font-headline">Your Financial Command Center</h2>
-            <p className="text-muted-foreground mb-8">
-              From day-to-day banking to pioneering crypto investments, Treminal3 provides the tools you need to take control of your company's financial future.
-            </p>
             <div className="space-y-6">
               {solutions.map((solution) => (
                 <div key={solution.title} className="flex items-start gap-4">
@@ -43,15 +54,6 @@ export default function FinancialSolutions() {
                 </div>
               ))}
             </div>
-          </div>
-          <div className="relative h-96 rounded-lg overflow-hidden">
-             <Image
-                src="https://placehold.co/600x400.png"
-                alt="Financial dashboard"
-                data-ai-hint="financial dashboard"
-                fill
-                className="object-cover"
-              />
           </div>
         </div>
       </div>

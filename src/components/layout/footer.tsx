@@ -10,21 +10,35 @@ const socialLinks = [
 const footerLinks = [
   {
     title: 'Products',
-    links: ['Banking', 'Software', 'Marketing', 'Web3', 'Blockchain'],
+    links: [
+      { text: 'In-Person Payments', href: '#' },
+      { text: 'Online Payments', href: '#' },
+      { text: 'Invoices', href: '#' },
+      { text: 'Virtual Terminal', href: '#' },
+    ],
   },
   {
     title: 'Resources',
-    links: ['Docs', 'Guides', 'API Status', 'Pricing'],
+    links: [
+      { text: 'Pricing', href: '#' },
+      { text: 'Contact Sales', href: '#' },
+      { text: 'Support', href: '#' },
+      { text: 'Docs', href: '#' },
+    ],
   },
   {
     title: 'Company',
-    links: ['About', 'Careers', 'Blog', 'Contact Us'],
+    links: [
+      { text: 'About', href: '#' },
+      { text: 'Careers', href: '#' },
+      { text: 'Blog', href: '#' },
+    ],
   },
 ];
 
 export default function Footer() {
   return (
-    <footer className="border-t py-12">
+    <footer className="border-t py-12 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
           <div className="col-span-2 md:col-span-4 lg:col-span-1">
@@ -41,9 +55,9 @@ export default function Footer() {
               <h3 className="font-semibold mb-4 font-headline">{section.title}</h3>
               <ul className="space-y-2">
                 {section.links.map((link) => (
-                  <li key={link}>
-                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      {link}
+                  <li key={link.text}>
+                    <Link href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      {link.text}
                     </Link>
                   </li>
                 ))}
