@@ -160,7 +160,7 @@ export default function InteractiveGuides({ activeServiceIndex }: InteractiveGui
                     <h3 className="font-headline text-3xl font-bold">{article.title}</h3>
                 </div>
                 <p className="text-muted-foreground text-lg mb-6 ml-14">{article.excerpt}</p>
-                <Button variant="link" className="p-0 text-lg ml-14">Read Note &rarr;</Button>
+                <Button variant="link" className="p-0 text-lg ml-14">Read Page &rarr;</Button>
             </div>
         </motion.div>
 
