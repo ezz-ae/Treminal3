@@ -46,7 +46,7 @@ Backtest Results:
   { text: 'Error: Transaction failed. Reason: Slippage exceeds 0.5%. Retrying...', type: 'error' },
 ];
 
-const typingDelay = 50; // Slower, more readable speed
+const typingDelay = 500; // Slower, more readable speed
 const linePause = 1000;
 
 export default function MotionTerminal() {
