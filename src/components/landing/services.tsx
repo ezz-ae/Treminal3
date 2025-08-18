@@ -1,118 +1,124 @@
 
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Blocks, Bot, AreaChart, ArrowRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
+import {
+  AppWindow,
+  Bot,
+  Puzzle,
+  Wallet,
+  FileJson,
+  Network,
+  BotMessageSquare,
+  AreaChart,
+  FileArchive,
+  ShieldCheck,
+  Vote,
+  ArrowRight
+} from 'lucide-react';
+import Link from 'next/link';
 
 const services = [
-  {
-    icon: Blocks,
-    title: 'dApp & Contract Development',
-    description: 'Build, launch, and manage decentralized applications and smart contracts.',
-    details: 'Utilize our intuitive dApp Builder, audited Smart Contract Templates, and custom Wallet solutions to accelerate your Web3 development cycle from idea to launch.',
-    color: 'from-blue-500/10 to-transparent'
-  },
-  {
-    icon: Bot,
-    title: 'AI & Automation',
-    description: 'Deploy autonomous AI agents and powerful trading bots with ease.',
-    details: 'Leverage our AI Agent platform to automate dApp interactions and complex workflows. Build and backtest sophisticated strategies with our Trading Bot Platform for major exchanges.',
-    color: 'from-purple-500/10 to-transparent'
-  },
-  {
-    icon: AreaChart,
-    title: 'Analytics & Governance',
-    description: 'Gain deep on-chain insights and manage your DAO with powerful tools.',
-    details: 'Make data-driven decisions with our On-chain Analytics engine. Manage your decentralized autonomous organization effectively with our comprehensive DAO Governance tools.',
-    color: 'from-green-500/10 to-transparent'
-  },
-];
+    {
+      href: '/dashboard/dapp-builder',
+      icon: AppWindow,
+      title: 'dApp Builder',
+      description: 'Create and deploy decentralized applications with our intuitive builder.',
+    },
+    {
+      href: '/dashboard/token-launcher',
+      icon: Puzzle,
+      title: 'Token Launcher',
+      description: 'Design and launch your own custom cryptocurrency tokens in minutes.',
+    },
+    {
+      href: '/dashboard/trading-bots',
+      icon: Bot,
+      title: 'Trading Bot Platform',
+      description: 'Develop and deploy automated trading bots on major exchanges.',
+    },
+    {
+      href: '/dashboard/ai-agents',
+      icon: BotMessageSquare,
+      title: 'AI Agents',
+      description: 'Deploy autonomous AI agents to interact with your dApps and automate tasks.',
+    },
+    {
+      href: '/dashboard/wallets',
+      icon: Wallet,
+      title: 'Custom Wallets',
+      description: 'Build and brand your own secure crypto wallets for your users.',
+    },
+    {
+      href: '/dashboard/smart-contracts',
+      icon: FileJson,
+      title: 'Smart Contract Templates',
+      description: 'Use our audited templates to create secure smart contracts without the hassle.',
+    },
+    {
+      href: '/dashboard/transactions',
+      icon: Network,
+      title: 'Manual Transactions',
+      description: 'Interact directly with the blockchain for custom operations and analysis.',
+    },
+     {
+      href: '/dashboard/analytics',
+      icon: AreaChart,
+      title: 'On-chain Analytics',
+      description: 'Get deep insights into on-chain data with our powerful analytics engine.',
+    },
+    {
+      href: '/dashboard/storage',
+      icon: FileArchive,
+      title: 'Decentralized Storage',
+      description: 'Upload and manage files on IPFS and other decentralized storage networks.',
+    },
+    {
+      href: '/dashboard/audits',
+      icon: ShieldCheck,
+      title: 'Security Audits',
+      description: 'Run automated security audits on your smart contracts to find vulnerabilities.',
+    },
+    {
+      href: '/dashboard/governance',
+      icon: Vote,
+      title: 'DAO Governance',
+      description: 'Manage your decentralized autonomous organization with our governance tools.',
+    },
+  ];
+
 
 export default function Services() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const isMobile = useIsMobile();
-
-  if (isMobile) {
-    return (
-      <section id="services" className="py-12 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold font-headline">The all-in-one Web3 platform</h2>
-            <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
-              Treminal3 provides everything you need to succeed in the new digital economy.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service) => (
-              <div key={service.title} className="flex flex-col text-center items-center p-6 border-0 shadow-lg h-full bg-card rounded-lg">
-                <div className="p-0">
-                  <div className="bg-primary/10 text-primary p-4 rounded-full mb-4 inline-block">
-                    <service.icon className="w-8 h-8" />
-                  </div>
-                  <h3 className="font-headline text-xl font-bold">{service.title}</h3>
-                </div>
-                <div className="p-0 mt-2">
-                  <p className="text-muted-foreground">{service.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section id="services" className="py-12 md:py-24">
       <div className="container mx-auto px-4">
-         <div className="text-center mb-12">
+        <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold font-headline">The all-in-one Web3 platform</h2>
           <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
-            Treminal3 provides everything you need to succeed in the new digital economy. Hover to explore.
+            Treminal3 provides everything you need to succeed in the new digital economy.
           </p>
         </div>
-        <div 
-          className="flex h-[30rem] w-full max-w-5xl mx-auto"
-          onMouseLeave={() => setHoveredIndex(null)}
-        >
-          {services.map((service, index) => (
-            <motion.div
-              key={service.title}
-              className="relative group h-full"
-              onMouseEnter={() => setHoveredIndex(index)}
-              animate={{ width: hoveredIndex === index ? '40%' : '20%' }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="h-full w-full bg-background border border-primary/20 rounded-2xl overflow-hidden relative">
-                <div className={cn("absolute inset-0 bg-gradient-to-b", service.color)}></div>
-                 <div className="h-full w-full flex flex-col justify-end p-8 relative">
-                    <service.icon className="w-10 h-10 text-primary mb-4" />
-                    <h3 className="text-2xl font-bold font-headline mb-2">{service.title}</h3>
-                    <p className="text-muted-foreground">{service.description}</p>
-
-                     <AnimatePresence>
-                      {hoveredIndex === index && (
-                        <motion.div 
-                          className="mt-6 space-y-4"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0, transition: { delay: 0.3 } }}
-                          exit={{ opacity: 0, y: 20 }}
-                        >
-                          <p className="text-sm">{service.details}</p>
-                           <Button variant="outline" size="sm">
-                              Learn More <ArrowRight />
-                           </Button>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                 </div>
-              </div>
-            </motion.div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+                <motion.div
+                    key={index}
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    className="h-full"
+                >
+                    <Link href={service.href} className="block h-full">
+                        <div className="flex flex-col text-left p-6 border border-primary/20 shadow-lg h-full bg-card rounded-lg">
+                            <div className="bg-primary/10 text-primary p-3 rounded-full mb-4 inline-flex w-fit">
+                                <service.icon className="w-6 h-6" />
+                            </div>
+                            <h3 className="font-headline text-xl font-bold">{service.title}</h3>
+                            <p className="text-muted-foreground mt-2 flex-grow">{service.description}</p>
+                            <div className="flex items-center text-sm text-primary mt-4">
+                                Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                            </div>
+                        </div>
+                    </Link>
+                </motion.div>
+            ))}
         </div>
       </div>
     </section>
