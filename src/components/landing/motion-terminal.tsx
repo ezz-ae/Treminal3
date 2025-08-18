@@ -94,16 +94,17 @@ interface MotionTerminalProps {
 export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: MotionTerminalProps) {
   const [lines, setLines] = useState<{ text: string; type: string; }[]>([]);
   const [isComplete, setIsComplete] = useState(false);
+  const [scriptKey, setScriptKey] = useState('default');
   const terminalRef = useRef<HTMLDivElement>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
   
-  const opacity = useTransform(scrollYProgress, [0.4, 0.6], [0, 1]);
-  const scale = useTransform(scrollYProgress, [0.4, 0.6], [0.95, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+  const scale = useTransform(scrollYProgress, [0, 0.2], [0.9, 1]);
   
-  const topBorderScaleX = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-  const rightBorderScaleY = useTransform(scrollYProgress, [0.2, 0.7], [0, 1]);
-  const bottomBorderScaleX = useTransform(scrollYProgress, [0.4, 0.9], [0, 1]);
-  const leftBorderScaleY = useTransform(scrollYProgress, [0.6, 1], [0, 1]);
+  const topBorderScaleX = useTransform(scrollYProgress, [0.1, 0.4], [0, 1]);
+  const rightBorderScaleY = useTransform(scrollYProgress, [0.3, 0.6], [0, 1]);
+  const bottomBorderScaleX = useTransform(scrollYProgress, [0.5, 0.8], [0, 1]);
+  const leftBorderScaleY = useTransform(scrollYProgress, [0.7, 1], [0, 1]);
 
   const startAnimation = (codeLines: { text: string; type: string; }[]) => {
     if (animationTimeoutRef.current) {
@@ -134,11 +135,26 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
   }, [lines]);
 
   useEffect(() => {
-    const scriptKey = activeServiceIndex !== null ? activeServiceIndex.toString() : 'default';
-    const scriptToRun = scripts[scriptKey] || scripts['default'];
-    startAnimation(scriptToRun);
+    let newKey = 'default';
+    if (activeServiceIndex !== null) {
+      newKey = activeServiceIndex.toString();
+    } else {
+      // If no service is selected, pick a random one to showcase on scroll, but not the default
+      const randomKey = Math.floor(Math.random() * 11).toString();
+      newKey = randomKey;
+    }
+
+    if(newKey !== scriptKey) {
+        setScriptKey(newKey);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeServiceIndex]);
+
+  useEffect(() => {
+    const scriptToRun = scripts[scriptKey] || scripts['default'];
+    startAnimation(scriptToRun);
+  }, [scriptKey]);
+
 
   useEffect(() => {
     // Cleanup on unmount
@@ -149,11 +165,11 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
     };
   }, []);
 
-  const currentScript = scripts[activeServiceIndex?.toString() ?? 'default'];
+  const currentScript = scripts[scriptKey];
 
   return (
-    <motion.div
-        className="container mx-auto px-4 py-24 flex items-center justify-center"
+    <div
+        className="container mx-auto px-4 py-24 flex items-center justify-center min-h-[80vh]"
       >
         <motion.div 
             className="relative font-code text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm pointer-events-auto w-full max-w-5xl"
@@ -203,7 +219,6 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
             </div>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
   );
 }
-

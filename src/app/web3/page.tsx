@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import Hero from '@/components/landing/hero';
@@ -20,12 +20,17 @@ export default function Web3Page() {
   const terminalRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: terminalScrollYProgress } = useScroll({
       target: terminalRef,
-      offset: ['start end', 'start start'],
+      offset: ['start end', 'end start'],
   });
 
   const handleServiceClick = (index: number) => {
     setActiveServiceIndex(index);
-    terminalRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Smooth scroll to the terminal, but with a slight offset to ensure it's in view
+    if(terminalRef.current) {
+      const yOffset = -150; 
+      const y = terminalRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    }
   };
 
   return (
@@ -43,9 +48,12 @@ export default function Web3Page() {
             )}
         />
         <Hero />
-        <ServiceGrid onServiceClick={handleServiceClick} />
+        <ServiceGrid 
+          activeServiceIndex={activeServiceIndex} 
+          onServiceClick={handleServiceClick} 
+        />
         
-        <div ref={terminalRef} className="relative z-10">
+        <div ref={terminalRef}>
              <MotionTerminal 
                 scrollYProgress={terminalScrollYProgress} 
                 activeServiceIndex={activeServiceIndex} 

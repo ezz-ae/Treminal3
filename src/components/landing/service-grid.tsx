@@ -3,6 +3,7 @@
 
 import { motion } from 'framer-motion';
 import { AppWindow, Bot, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, ShieldCheck, Vote } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const services = [
     {
@@ -75,9 +76,10 @@ const services = [
 
 interface ServiceGridProps {
     onServiceClick: (index: number) => void;
+    activeServiceIndex: number | null;
 }
 
-export default function ServiceGrid({ onServiceClick }: ServiceGridProps) {
+export default function ServiceGrid({ onServiceClick, activeServiceIndex }: ServiceGridProps) {
   return (
     <section id="services" className="py-12 md:py-24">
       <div className="container mx-auto px-4">
@@ -95,7 +97,10 @@ export default function ServiceGrid({ onServiceClick }: ServiceGridProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               onClick={() => onServiceClick(index)}
-              className="bg-card p-6 rounded-lg border border-transparent hover:border-primary hover:bg-primary/5 cursor-pointer transition-all duration-300"
+              className={cn(
+                "bg-card p-6 rounded-lg border border-transparent hover:border-primary hover:bg-primary/5 cursor-pointer transition-all duration-300",
+                activeServiceIndex === index && "border-primary bg-primary/10"
+              )}
             >
               <div className="flex items-center gap-4 mb-4">
                 <service.icon className="w-8 h-8 text-primary" />
