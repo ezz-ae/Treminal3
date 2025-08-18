@@ -6,7 +6,6 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import Hero from '@/components/landing/hero';
 import MotionTerminal from '@/components/landing/motion-terminal';
-import FinancialSolutions from '@/components/landing/financial-solutions';
 import Web3DevTools from '@/components/landing/web3-dev-tools';
 import InteractiveGuides from '@/components/landing/interactive-guides';
 import GridPattern from '@/components/landing/grid-pattern';
@@ -74,7 +73,6 @@ export default function Web3Page() {
             />
           <Web3DevTools activeServiceIndex={activeServiceIndex} />
           <CodingModes />
-          <FinancialSolutions />
           <InteractiveGuides activeServiceIndex={activeServiceIndex} />
         </div>
       </main>
