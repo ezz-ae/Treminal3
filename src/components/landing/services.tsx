@@ -97,9 +97,10 @@ export default function Services() {
                                     transition={{ duration: 0.5, ease: 'easeInOut' }}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
-                                    <div className="relative z-10 text-center">
+                                    <div className="relative z-10 w-full text-center">
                                         <h3 className={cn(
-                                            "font-headline text-2xl font-bold transition-all text-white"
+                                            "font-headline text-2xl font-bold transition-all",
+                                            isActive ? "text-white" : "text-white/50"
                                         )}>
                                             {service.title}
                                         </h3>
