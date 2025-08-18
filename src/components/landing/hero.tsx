@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import AnimatedText from './animated-text';
 
 export default function Hero() {
-  const animatedWords = ["dApp", "token", "trading bot", "DeFi", "GameFi"];
+  const animatedWords = ["dApps", "tokens", "wallets", "DeFi", "GameFi"];
   
   return (
     <section className="bg-background text-foreground">
