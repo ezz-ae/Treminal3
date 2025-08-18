@@ -153,22 +153,23 @@ export default function InteractiveGuides({ activeServiceIndex }: InteractiveGui
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center cursor-pointer" onClick={() => setSelectedArticle(article)}>
-            <motion.div 
-                className="relative h-96 rounded-lg flex items-center justify-center p-8 bg-card border order-last md:order-first group"
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-            >
-                <LucideIcon className="w-32 h-32 text-primary/50 group-hover:text-primary transition-colors duration-300" />
-            </motion.div>
+        <motion.div 
+            className="max-w-4xl mx-auto bg-card p-8 rounded-lg border cursor-pointer hover:border-primary/50 transition-colors duration-300" 
+            onClick={() => setSelectedArticle(article)}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+        >
             <div className="flex flex-col items-start">
-                <h3 className="font-headline text-3xl font-bold mb-4">{article.title}</h3>
-                <p className="text-muted-foreground text-lg mb-6">{article.excerpt}</p>
-                <Button variant="link" className="p-0 text-lg">Read Note &rarr;</Button>
+                 <div className="flex items-center gap-4 mb-4">
+                    <LucideIcon className="w-10 h-10 text-primary" />
+                    <h3 className="font-headline text-3xl font-bold">{article.title}</h3>
+                </div>
+                <p className="text-muted-foreground text-lg mb-6 ml-14">{article.excerpt}</p>
+                <Button variant="link" className="p-0 text-lg ml-14">Read Note &rarr;</Button>
             </div>
-        </div>
+        </motion.div>
 
         <Dialog open={!!selectedArticle} onOpenChange={() => setSelectedArticle(null)}>
           <DialogContent className="max-w-3xl w-full bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm p-0 border-0 flex flex-col">
