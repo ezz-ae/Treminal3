@@ -3,96 +3,71 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
-  ArrowRight
-} from 'lucide-react';
 import Link from 'next/link';
 
 const services = [
     {
       href: '/dashboard/dapp-builder',
-      icon: AppWindow,
       title: 'dApp Builder',
       description: 'Create and deploy decentralized applications with our intuitive builder.',
     },
     {
       href: '/dashboard/token-launcher',
-      icon: Puzzle,
       title: 'Token Launcher',
       description: 'Design and launch your own custom cryptocurrency tokens in minutes.',
     },
     {
       href: '/dashboard/trading-bots',
-      icon: Bot,
       title: 'Trading Bot Platform',
       description: 'Develop and deploy automated trading bots on major exchanges.',
     },
     {
       href: '/dashboard/ai-agents',
-      icon: BotMessageSquare,
       title: 'AI Agents',
       description: 'Deploy autonomous AI agents to interact with your dApps and automate tasks.',
     },
     {
       href: '/dashboard/wallets',
-      icon: Wallet,
       title: 'Custom Wallets',
       description: 'Build and brand your own secure crypto wallets for your users.',
     },
     {
       href: '/dashboard/smart-contracts',
-      icon: FileJson,
       title: 'Smart Contract Templates',
       description: 'Use our audited templates to create secure smart contracts without the hassle.',
     },
     {
       href: '/dashboard/transactions',
-      icon: Network,
       title: 'Manual Transactions',
       description: 'Interact directly with the blockchain for custom operations and analysis.',
     },
      {
       href: '/dashboard/analytics',
-      icon: AreaChart,
       title: 'On-chain Analytics',
       description: 'Get deep insights into on-chain data with our powerful analytics engine.',
     },
     {
       href: '/dashboard/storage',
-      icon: FileArchive,
       title: 'Decentralized Storage',
       description: 'Upload and manage files on IPFS and other decentralized storage networks.',
     },
     {
       href: '/dashboard/audits',
-      icon: ShieldCheck,
       title: 'Security Audits',
       description: 'Run automated security audits on your smart contracts to find vulnerabilities.',
     },
     {
       href: '/dashboard/governance',
-      icon: Vote,
       title: 'DAO Governance',
       description: 'Manage your decentralized autonomous organization with our governance tools.',
     },
   ];
 
-const expandedWidth = 400;
-const collapsedWidth = 150;
+const expandedHeight = 450;
+const collapsedHeight = 150;
 
 export default function Services() {
-  const [activeKey, setActiveKey] = useState<number | null>(0);
+  const [activeKey, setActiveKey] = useState<number | null>(null);
 
   return (
     <section id="services" className="py-12 md:py-24">
@@ -103,9 +78,9 @@ export default function Services() {
             Treminal3 provides everything you need to succeed in the new digital economy.
           </p>
         </div>
-        <div className="w-full overflow-x-auto pb-4">
+        <div className="w-full flex justify-center items-end h-[500px]">
             <motion.div
-                className="flex w-max"
+                className="flex items-end w-full max-w-7xl"
                 onMouseLeave={() => setActiveKey(null)}
             >
                 {services.map((service, index) => {
@@ -113,33 +88,25 @@ export default function Services() {
                     return (
                         <motion.div
                             key={index}
-                            className="relative h-[450px] rounded-2xl overflow-hidden"
+                            className="relative rounded-t-2xl overflow-hidden flex-1"
                             onHoverStart={() => setActiveKey(index)}
-                            style={{
-                                flexBasis: isActive ? expandedWidth : collapsedWidth,
-                                flexGrow: isActive ? 1 : 0,
-                                flexShrink: 0,
-                            }}
-                            animate={{ width: isActive ? expandedWidth : collapsedWidth }}
+                            animate={{ height: isActive ? expandedHeight : collapsedHeight }}
                             transition={{ duration: 0.5, ease: 'easeInOut' }}
                         >
                             <Link href={service.href} className="block w-full h-full">
                                 <div className="relative w-full h-full p-6 flex flex-col justify-end bg-card border border-primary/20">
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
                                     <div className="relative z-10">
-                                        <div className="mb-4">
-                                            <service.icon className="w-8 h-8 text-primary" />
-                                        </div>
-                                        <h3 className="font-headline text-2xl font-bold text-white vertical-text">
+                                        <h3 className="font-headline text-2xl font-bold text-white" style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', transform: 'rotate(180deg)'}}>
                                             {service.title}
                                         </h3>
                                         <motion.div
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
                                             transition={{ duration: 0.3, delay: 0.2 }}
-                                            className="text-muted-foreground mt-2"
+                                            className="text-muted-foreground mt-2 absolute bottom-6 left-6 right-6"
                                         >
-                                            {service.description}
+                                            <p className="text-sm">{service.description}</p>
                                         </motion.div>
                                     </div>
                                 </div>
