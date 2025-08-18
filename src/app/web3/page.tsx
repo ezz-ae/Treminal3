@@ -69,8 +69,8 @@ export default function Web3Page() {
                 '[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)]',
               )}
             />
+          <Web3DevTools activeServiceIndex={activeServiceIndex} />
           <FinancialSolutions />
-          <Web3DevTools />
           <InteractiveGuides activeServiceIndex={activeServiceIndex} />
         </div>
       </main>
