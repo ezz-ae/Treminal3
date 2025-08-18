@@ -13,65 +13,40 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { motion } from 'framer-motion';
-import type { CodingMode } from '@/app/web3/page';
 import { BookPlus, FilePenLine } from 'lucide-react';
 
 const articles = [
   // Corresponds to Service index 0: dApp Builder
   {
     serviceIndex: 0,
-    modes: {
-      auto: {
-        title: 'Building a dApp with Natural Language',
-        excerpt: 'Discover how to describe your desired decentralized application and let Treminal3 AI generate the foundational code for you.',
-        image: 'https://placehold.co/600x400.png',
-        aiHint: 'ai code generation',
-        content: 'Building a dApp is now as easy as describing it. With Treminal3\'s "Full Automatic" mode, you can simply write a prompt like "Create an NFT marketplace for digital artists with a 5% royalty fee." Our AI will interpret your request, select the appropriate smart contract templates, generate the front-end components, and present you with a functional baseline. This article walks you through the process, from crafting the perfect prompt to making minor tweaks to the AI-generated output. It\'s the fastest way to go from idea to MVP.',
-      },
-      hyper: {
-        title: 'Assembling Your dApp with Hyper-Coding',
-        excerpt: 'Learn how to use our extensive library of pre-built components and templates to construct your dApp visually.',
-        image: 'https://placehold.co/600x400.png',
-        aiHint: 'visual programming interface',
-        content: 'For those who want more control without writing code from scratch, "Hyper-Coding" mode is the perfect fit. This guide teaches you how to use our drag-and-drop interface to assemble your dApp. You\'ll learn how to connect data sources, configure user authentication flows, and style your UI using our robust component library. We\'ll build a complete decentralized voting application in minutes, giving you a solid understanding of this powerful, rapid-development workflow.',
-      },
-      pro: {
-        title: 'dApp Development in Pro-Mode',
-        excerpt: 'A deep-dive for experienced developers on leveraging the Treminal3 CLI and SDK for maximum control.',
-        image: 'https://placehold.co/600x400.png',
-        aiHint: 'code on screen',
-        content: 'When you need ultimate control, "Manual" or Pro-Mode is your command center. This technical article covers the Treminal3 workflow for professional developers. You\'ll learn how to scaffold a new project using our CLI, integrate the Treminal3 SDK into your existing workflow, and write custom smart contracts that interface with our platform services. We\'ll cover advanced topics like local development environments, automated testing, and CI/CD deployment pipelines. This is your guide to building production-grade dApps at scale.',
-      },
-    }
+    title: 'Building a dApp with Natural Language',
+    excerpt: 'Discover how to describe your desired decentralized application and let Treminal3 AI generate the foundational code for you.',
+    image: 'https://placehold.co/600x400.png',
+    aiHint: 'ai code generation',
+    content: 'Building a dApp is now as easy as describing it. With Treminal3\'s "Full Automatic" mode, you can simply write a prompt like "Create an NFT marketplace for digital artists with a 5% royalty fee." Our AI will interpret your request, select the appropriate smart contract templates, generate the front-end components, and present you with a functional baseline. This article walks you through the process, from crafting the perfect prompt to making minor tweaks to the AI-generated output. It\'s the fastest way to go from idea to MVP.',
   },
   // Add more articles for other service indexes...
+  // Default article for index 7 or null
   {
-    serviceIndex: 7, // Default article
-    modes: {
-      auto: {
-        title: 'The Future of Decentralized Finance (DeFi)',
-        excerpt: 'Explore the cutting-edge of finance and learn how Treminal3 provides the tools to participate in the DeFi revolution.',
-        image: 'https://placehold.co/600x400.png',
-        aiHint: 'decentralized finance crypto',
-        content: 'Decentralized Finance (DeFi) is rebuilding the entire financial system on the blockchain. From lending and borrowing to trading and insurance, DeFi protocols are creating a more open, efficient, and accessible global economy. Treminal3 is your gateway to this revolution. Use our Trading Bot Platform to execute complex strategies across multiple decentralized exchanges, or launch your own financial instrument with our Token Launcher. Our On-chain Analytics engine gives you the deep insights needed to navigate the market, while our audited Smart Contract Templates provide the security required for financial applications. With Treminal3, you\'re not just observing the future of finance—you\'re building it.',
-      },
-       hyper: {
-        title: 'The Future of Decentralized Finance (DeFi)',
-        excerpt: 'Explore the cutting-edge of finance and learn how Treminal3 provides the tools to participate in the DeFi revolution.',
-        image: 'https://placehold.co/600x400.png',
-        aiHint: 'decentralized finance crypto',
-        content: 'Decentralized Finance (DeFi) is rebuilding the entire financial system on the blockchain. From lending and borrowing to trading and insurance, DeFi protocols are creating a more open, efficient, and accessible global economy. Treminal3 is your gateway to this revolution. Use our Trading Bot Platform to execute complex strategies across multiple decentralized exchanges, or launch your own financial instrument with our Token Launcher. Our On-chain Analytics engine gives you the deep insights needed to navigate the market, while our audited Smart Contract Templates provide the security required for financial applications. With Treminal3, you\'re not just observing the future of finance—you\'re building it.',
-      },
-       pro: {
-        title: 'The Future of Decentralized Finance (DeFi)',
-        excerpt: 'Explore the cutting-edge of finance and learn how Treminal3 provides the tools to participate in the DeFi revolution.',
-        image: 'https://placehold.co/600x400.png',
-        aiHint: 'decentralized finance crypto',
-        content: 'Decentralized Finance (DeFi) is rebuilding the entire financial system on the blockchain. From lending and borrowing to trading and insurance, DeFi protocols are creating a more open, efficient, and accessible global economy. Treminal3 is your gateway to this revolution. Use our Trading Bot Platform to execute complex strategies across multiple decentralized exchanges, or launch your own financial instrument with our Token Launcher. Our On-chain Analytics engine gives you the deep insights needed to navigate the market, while our audited Smart Contract Templates provide the security required for financial applications. With Treminal3, you\'re not just observing the future of finance—you\'re building it.',
-      },
-    }
+    serviceIndex: 7,
+    title: 'The Future of Decentralized Finance (DeFi)',
+    excerpt: 'Explore the cutting-edge of finance and learn how Treminal3 provides the tools to participate in the DeFi revolution.',
+    image: 'https://placehold.co/600x400.png',
+    aiHint: 'decentralized finance crypto',
+    content: 'Decentralized Finance (DeFi) is rebuilding the entire financial system on the blockchain. From lending and borrowing to trading and insurance, DeFi protocols are creating a more open, efficient, and accessible global economy. Treminal3 is your gateway to this revolution. Use our Trading Bot Platform to execute complex strategies across multiple decentralized exchanges, or launch your own financial instrument with our Token Launcher. Our On-chain Analytics engine gives you the deep insights needed to navigate the market, while our audited Smart Contract Templates provide the security required for financial applications. With Treminal3, you\'re not just observing the future of finance—you\'re building it.',
   },
 ];
+
+
+// A catch-all default article
+const defaultArticle = {
+    serviceIndex: -1, // Indicates it's a default
+    title: 'Welcome to the Knowledge Hub',
+    excerpt: 'Select a service above to see a relevant guide, or explore our general documentation to learn more about the platform.',
+    image: 'https://placehold.co/600x400.png',
+    aiHint: 'knowledge base library',
+    content: 'Our platform is a comprehensive suite of tools designed to take you from idea to launch and beyond. Whether you are a developer, a founder, or a marketer, you\'ll find the resources you need to succeed in the Web3 space. Explore our dApp builder, launch your own token, deploy AI agents, and so much more. This is your command center for the new digital economy. Select a service from the grid above to see a specific guide related to it.'
+};
 
 type Article = {
     title: string;
@@ -83,27 +58,16 @@ type Article = {
 
 interface InteractiveGuidesProps {
     activeServiceIndex: number | null;
-    selectedMode: CodingMode;
 }
 
-export default function InteractiveGuides({ activeServiceIndex, selectedMode }: InteractiveGuidesProps) {
+export default function InteractiveGuides({ activeServiceIndex }: InteractiveGuidesProps) {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
-  const [article, setArticle] = useState<Article>(articles.find(a => a.serviceIndex === 7)!.modes.auto);
+  const [article, setArticle] = useState<Article>(defaultArticle);
 
   useEffect(() => {
-    const serviceIndex = activeServiceIndex ?? 7; // Default to service 7
-    const articleData = articles.find(a => a.serviceIndex === serviceIndex) || articles.find(a => a.serviceIndex === 7);
-    
-    if (articleData) {
-        const modeArticle = articleData.modes[selectedMode];
-        if (modeArticle) {
-            setArticle(modeArticle);
-        } else {
-            // Fallback to auto mode if the selected mode doesn't exist for that service
-            setArticle(articleData.modes.auto);
-        }
-    }
-  }, [activeServiceIndex, selectedMode]);
+    const articleData = articles.find(a => a.serviceIndex === activeServiceIndex) || defaultArticle;
+    setArticle(articleData);
+  }, [activeServiceIndex]);
 
   return (
     <section id="start" className="py-12 md:py-24">
