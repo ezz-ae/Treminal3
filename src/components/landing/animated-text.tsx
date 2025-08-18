@@ -10,34 +10,30 @@ interface AnimatedTextProps {
 
 export default function AnimatedText({ words, className }: AnimatedTextProps) {
   const [index, setIndex] = useState(0);
-  const [key, setKey] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prevIndex) => {
-        const newIndex = (prevIndex + 1) % words.length;
-        if (newIndex === 0) {
-          setKey(prevKey => prevKey + 1);
-        }
-        return newIndex;
-      });
+      setIndex((prevIndex) => (prevIndex + 1) % words.length);
     }, 2500);
 
     return () => clearInterval(interval);
   }, [words.length]);
 
   return (
-    <span className={cn("inline-grid h-[calc(1em*1.2)] overflow-hidden align-bottom text-left", className)}>
-      <span
-        key={key}
-        className="transition-transform duration-1000 ease-in-out"
-        style={{ transform: `translateY(-${index * 100}%)` }}
-      >
+    <span className={cn("inline-block text-left transition-all duration-300 ease-in-out", className)}>
+       <span className="inline-block relative text-center">
         {words.map((word, i) => (
-          <span key={i} className="block h-[calc(1em*1.2)]">
+          <span
+            key={i}
+            className={cn(
+              "absolute left-1/2 -translate-x-1/2 transition-all duration-500 ease-in-out",
+              index === i ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+            )}
+          >
             {word}
           </span>
         ))}
+        <span className="invisible">{words[index]}</span>
       </span>
     </span>
   );
