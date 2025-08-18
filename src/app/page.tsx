@@ -10,12 +10,14 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
-      <main className="flex-grow">
+      <main>
         <Hero />
-        <Services />
-        <FinancialSolutions />
-        <Web3DevTools />
-        <InteractiveGuides />
+        <div className="flex-grow">
+          <Services />
+          <FinancialSolutions />
+          <Web3DevTools />
+          <InteractiveGuides />
+        </div>
       </main>
       <Footer />
     </div>

@@ -10,11 +10,18 @@ interface AnimatedTextProps {
 
 export default function AnimatedText({ words, className }: AnimatedTextProps) {
   const [index, setIndex] = useState(0);
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % words.length);
-    }, 2000); // Change word every 2 seconds
+      setIndex((prevIndex) => {
+        const newIndex = (prevIndex + 1) % words.length;
+        if (newIndex === 0) {
+          setKey(prevKey => prevKey + 1);
+        }
+        return newIndex;
+      });
+    }, 2500); // Change word every 2.5 seconds
 
     return () => clearInterval(interval);
   }, [words.length]);
@@ -22,7 +29,8 @@ export default function AnimatedText({ words, className }: AnimatedTextProps) {
   return (
     <span className="inline-grid text-left h-[calc(1em*1.2)] overflow-hidden">
       <span
-        className={cn("transition-transform duration-700 ease-in-out", className)}
+        key={key}
+        className={cn("transition-transform duration-1000 ease-in-out", className)}
         style={{ transform: `translateY(-${index * 100}%)` }}
       >
         {words.map((word, i) => (
