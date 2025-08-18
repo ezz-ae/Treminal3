@@ -41,6 +41,8 @@ import {
   Icon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useSidebar } from '@/components/ui/sidebar';
+
 
 const FormSchema = z.object({
   business_description: z.string().min(10, {
@@ -88,6 +90,11 @@ export default function AiAgentsPage() {
     const [displayLines, setDisplayLines] = useState<DisplayLine[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [history, setHistory] = useState<string[]>([]);
+    const { setOpen } = useSidebar();
+
+    useEffect(() => {
+        setOpen(false);
+    }, [setOpen]);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -134,17 +141,17 @@ export default function AiAgentsPage() {
     }, [displayLines]);
 
   return (
-    <div className="space-y-4">
-       <div>
+    <div className="space-y-4 h-full">
+       <div className="sr-only">
         <h1 className="text-3xl font-bold font-headline">AI Business Agent</h1>
         <p className="text-muted-foreground">
           Describe your business, and our AI agent will recommend the best tools to help you grow.
         </p>
       </div>
 
-       <Card className="font-code bg-gray-900/50 border-gray-700 text-white overflow-hidden">
-            <CardContent className="p-0">
-                <div id="terminal-output" className="h-[500px] overflow-y-auto p-4 space-y-2 text-sm">
+       <Card className="font-code bg-black border-0 text-white overflow-hidden h-full flex flex-col">
+            <CardContent className="p-0 flex flex-col flex-grow">
+                <div id="terminal-output" className="flex-grow overflow-y-auto p-4 space-y-2 text-sm">
                     <p className="text-green-400">AI-Agent v1.0.0 ready.</p>
                     <p>Enter a description of your business to get started.</p>
                     <AnimatePresence>
@@ -169,7 +176,7 @@ export default function AiAgentsPage() {
                                 const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard';
                                 return (
                                     <Link href={toolUrl} className="block group">
-                                        <div className="border border-gray-600 rounded-md p-3 my-2 bg-gray-800/50 hover:bg-gray-700/50 transition-colors duration-200">
+                                        <div className="border border-gray-600 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
                                             <div className="flex items-center gap-3">
                                                 <LucideIcon className="w-5 h-5 text-green-400" />
                                                 <h3 className="font-bold text-base">{line.recommendation.name}</h3>
@@ -189,7 +196,7 @@ export default function AiAgentsPage() {
                         </div>
                     )}
                 </div>
-                 <div className="p-2 border-t border-gray-700 bg-gray-900/80">
+                 <div className="p-2 border-t border-gray-700 bg-black">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
                             <span className="text-blue-400 font-bold">&gt;</span>

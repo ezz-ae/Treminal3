@@ -156,7 +156,7 @@ export default function DashboardLayout({
               <SidebarTrigger/>
               <p className="text-sm text-muted-foreground">The all-in-one text-to-code platform.</p>
           </header>
-          <main className="flex-1 p-6 bg-gray-50/50">{children}</main>
+          <main className="flex-1 p-6 bg-gray-50/50 h-[calc(100vh-65px)]">{children}</main>
           </SidebarInset>
       </div>
     </SidebarProvider>
