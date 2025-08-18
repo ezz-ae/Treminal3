@@ -1,33 +1,33 @@
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wallet, Landmark, ShieldCheck } from 'lucide-react';
-import Image from 'next/image';
 
 const solutions = [
   {
     icon: Wallet,
     title: 'Freelancer Banking',
-    description: 'Online banking built for the independent workforce. Manage your finances with ease.',
+    description: 'Online banking built for the independent workforce. Manage your fiat and crypto finances with ease.',
   },
   {
     icon: Landmark,
-    title: 'Crypto Loans & Investments',
-    description: 'Access capital or grow your assets with our secure crypto financial services.',
+    title: 'Crypto Payments & Invoicing',
+    description: 'Accept cryptocurrency payments from clients worldwide with our secure, automated invoicing system.',
   },
   {
     icon: ShieldCheck,
-    title: 'Blockchain Infrastructure',
-    description: 'Reliable and scalable blockchain infrastructure to power your business\'s core functions.',
+    title: 'Web3 Marketing Suite',
+    description: 'Launch token airdrops, manage NFT campaigns, and engage your community with our Web3-native marketing tools.',
   },
 ];
 
-export default function Platform() {
+export default function FinancialSolutions() {
   return (
-    <section id="platform" className="py-12 md:py-24 bg-white">
+    <section id="solutions" className="py-12 md:py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold font-headline">The Platform for your Business</h2>
+          <h2 className="text-3xl md:text-4xl font-bold font-headline">Payments, Banking, and Marketing for the new economy.</h2>
           <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
-            From day-to-day banking to pioneering crypto investments, Treminal3 provides the tools you need to take control of your company's financial future.
+            From day-to-day banking to pioneering Web3 marketing campaigns, Treminal3 provides the tools you need to grow.
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -35,7 +35,7 @@ export default function Platform() {
              <Image
                 src="https://placehold.co/600x400.png"
                 alt="Financial dashboard"
-                data-ai-hint="financial dashboard"
+                data-ai-hint="financial dashboard crypto"
                 fill
                 className="object-cover"
               />

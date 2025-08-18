@@ -9,22 +9,22 @@ import { Button } from '../ui/button';
 const guides = [
   {
     value: 'item-1',
-    title: 'How do I set up my online banking?',
-    content: 'Start by creating your Treminal3 account. Once verified, navigate to the "Banking" tab and follow the on-screen instructions to open your business checking account. The whole process takes less than 10 minutes.',
+    title: 'How do I build my first dApp?',
+    content: 'Start by selecting a network in the Treminal3 dashboard. Then, navigate to the dApp Builder, choose a template, and follow the on-screen instructions. You can have a simple dApp running in less than 15 minutes.',
   },
   {
     value: 'item-2',
-    title: 'How can I integrate the payment API?',
-    content: 'Head to the "Developers" section in your dashboard to generate your API keys. Our comprehensive documentation provides code examples in multiple languages to help you integrate payments into your website or app quickly.',
+    title: 'How do I launch a new token?',
+    content: 'Head to the "Token Launcher" section. Define your token\'s name, symbol, total supply, and other parameters. Treminal3 handles the smart contract creation and deployment for you.',
   },
   {
     value: 'item-3',
-    title: 'How do I use the smart contract system?',
-    content: 'Our smart contract system uses pre-built templates for common freelance and business agreements. Select a template from the "Contracts" section, fill in the details, and send it to your client. The system handles deployment and execution on the blockchain automatically.',
+    title: 'How do I set up banking for my freelance business?',
+    content: 'In the "Banking" tab, you can create a new account that handles both fiat and cryptocurrencies. Connect your external wallets and bank accounts to get a consolidated view of your finances.',
   },
 ];
 
-export default function Start() {
+export default function InteractiveGuides() {
   return (
     <section id="start" className="py-12 md:py-24 bg-white">
       <div className="container mx-auto px-4">

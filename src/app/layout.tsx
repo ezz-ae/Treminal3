@@ -4,7 +4,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Treminal3',
-  description: 'The future of business solutions.',
+  description: 'The all-in-one platform for Web3 development, marketing, and finance.',
 };
 
 export default function RootLayout({

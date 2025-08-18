@@ -1,10 +1,10 @@
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import Hero from '@/components/landing/hero';
-import ForBusiness from '@/components/landing/for-business';
-import Platform from '@/components/landing/platform';
-import ForDevelopers from '@/components/landing/for-developers';
-import Start from '@/components/landing/start';
+import Services from '@/components/landing/services';
+import FinancialSolutions from '@/components/landing/financial-solutions';
+import Web3DevTools from '@/components/landing/web3-dev-tools';
+import InteractiveGuides from '@/components/landing/interactive-guides';
 
 export default function Home() {
   return (
@@ -12,10 +12,10 @@ export default function Home() {
       <Header />
       <main className="flex-grow">
         <Hero />
-        <ForBusiness />
-        <Platform />
-        <ForDevelopers />
-        <Start />
+        <Services />
+        <FinancialSolutions />
+        <Web3DevTools />
+        <InteractiveGuides />
       </main>
       <Footer />
     </div>

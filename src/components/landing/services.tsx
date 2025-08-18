@@ -1,42 +1,42 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Briefcase, Banknote, Megaphone } from 'lucide-react';
+import { Blocks, Waypoints, Landmark } from 'lucide-react';
 
 const services = [
   {
-    icon: Briefcase,
-    title: 'Business Software',
-    description: 'Integrated software solutions to manage your operations, sales, and team with efficiency.',
+    icon: Blocks,
+    title: 'Web3 & Blockchain Development',
+    description: 'The full-stack platform to build, launch, and manage any Web3 project with ease.',
   },
   {
-    icon: Banknote,
-    title: 'Banking Solutions',
-    description: 'Modern banking services designed for speed and flexibility, tailored for today\'s businesses.',
+    icon: Waypoints,
+    title: 'Web3 Marketing & Smart Payments',
+    description: 'Grow your audience and streamline revenue with our integrated marketing and payment tools.',
   },
   {
-    icon: Megaphone,
-    title: 'Marketing Automation',
-    description: 'Powerful tools to reach your customers, automate campaigns, and grow your brand.',
+    icon: Landmark,
+    title: 'Freelancers Banking System',
+    description: 'A modern financial stack for the independent workforce. Manage your crypto and fiat seamlessly.',
   },
 ];
 
-export default function ForBusiness() {
+export default function Services() {
   return (
-    <section id="for-business" className="py-12 md:py-24 bg-gray-50">
+    <section id="services" className="py-12 md:py-24 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold font-headline">For every side of your business</h2>
+          <h2 className="text-3xl md:text-4xl font-bold font-headline">The all-in-one Web3 platform</h2>
           <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
-            We have the tools to help you run and grow your business, no matter the size.
+            Treminal3 provides everything you need to succeed in the new digital economy.
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
           {services.map((service) => (
-            <Card key={service.title} className="flex flex-col text-center items-center p-6 border-0 shadow-lg">
+            <Card key={service.title} className="flex flex-col text-center items-center p-6 border-0 shadow-lg h-full">
               <CardHeader className="p-0">
                 <div className="bg-primary/10 text-primary p-4 rounded-full mb-4">
                   <service.icon className="w-8 h-8" />
                 </div>
-                <CardTitle className="font-headline">{service.title}</CardTitle>
+                <CardTitle className="font-headline text-xl">{service.title}</CardTitle>
               </CardHeader>
               <CardContent className="p-0 mt-2">
                 <p className="text-muted-foreground">{service.description}</p>
