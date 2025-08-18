@@ -21,13 +21,13 @@ export default function AnimatedText({ words, className }: AnimatedTextProps) {
         }
         return newIndex;
       });
-    }, 2500); // Change word every 2.5 seconds
+    }, 2500);
 
     return () => clearInterval(interval);
   }, [words.length]);
 
   return (
-    <span className={cn("inline-grid h-[calc(1em*1.2)] overflow-hidden align-bottom", className)}>
+    <span className={cn("inline-grid h-[calc(1em*1.2)] overflow-hidden align-bottom text-left", className)}>
       <span
         key={key}
         className="transition-transform duration-1000 ease-in-out"
