@@ -54,7 +54,8 @@ const services = [
   ];
 
 const expandedHeight = 450;
-const collapsedHeight = 150;
+const collapsedHeights = [150, 120, 170, 140, 180, 130, 160, 125, 175, 145, 155];
+
 
 export default function Services() {
   const [activeKey, setActiveKey] = useState<number | null>(null);
@@ -80,21 +81,27 @@ export default function Services() {
                             key={index}
                             className="relative rounded-t-2xl overflow-hidden flex-1"
                             onHoverStart={() => setActiveKey(index)}
-                            animate={{ height: isActive ? expandedHeight : collapsedHeight }}
+                            animate={{ height: isActive ? expandedHeight : collapsedHeights[index % collapsedHeights.length] }}
                             transition={{ duration: 0.5, ease: 'easeInOut' }}
                         >
                             <Link href={service.href} className="block w-full h-full">
-                                <div className="relative w-full h-full p-6 flex flex-col justify-end bg-card border border-primary/20">
+                                <motion.div 
+                                    className="relative w-full h-full p-6 flex flex-col justify-end bg-card border border-primary/20"
+                                    animate={{ 
+                                        boxShadow: isActive ? '0px 0px 15px hsl(var(--primary))' : '0px 0px 0px hsla(var(--primary), 0)',
+                                        borderColor: isActive ? 'hsl(var(--primary))' : 'hsla(var(--primary), 0.2)'
+                                    }}
+                                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                >
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
                                     <div className="relative z-10">
                                         <h3 className={cn(
-                                            "font-headline text-2xl font-bold transition-all",
-                                            isActive ? "text-primary [text-shadow:0_0_5px_hsl(var(--primary)),0_0_10px_hsl(var(--primary))]" : "text-white",
+                                            "font-headline text-2xl font-bold transition-all text-white",
                                         )} style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', transform: 'rotate(180deg)'}}>
                                             {service.title}
                                         </h3>
                                     </div>
-                                </div>
+                                </motion.div>
                             </Link>
                         </motion.div>
                     );
