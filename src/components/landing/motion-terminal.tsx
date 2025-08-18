@@ -114,7 +114,7 @@ export default function MotionTerminal() {
               <div className="w-3 h-3 rounded-full bg-green-500"></div>
             </div>
             <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto">
-              {lines.map((line, index) => (
+              {lines.filter(Boolean).map((line, index) => (
                 <div key={index} className="flex items-start">
                   {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
                   <pre
