@@ -26,7 +26,9 @@ export default function InteractiveHero() {
 
   useEffect(() => {
     setIsClient(true);
-    setPaddleX(window.innerWidth / 2);
+    if (typeof window !== 'undefined') {
+      setPaddleX(window.innerWidth / 2);
+    }
   }, []);
 
   const handleMouseMove = useCallback((event: MouseEvent) => {
@@ -39,68 +41,65 @@ export default function InteractiveHero() {
   }, []);
 
   useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [handleMouseMove]);
+    if (isClient) {
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+    }
+  }, [isClient, handleMouseMove]);
 
   useEffect(() => {
+    if (!isClient) return;
+
     const gameLoop = setInterval(() => {
       setFallingWords(prevWords => {
-        const newWords = prevWords
+        const updatedWords = prevWords
           .map(word => ({ ...word, y: word.y + 2 }))
-          .filter(word => word.y < (heroRef.current?.clientHeight || 800));
+          .filter(word => word.y < (heroRef.current?.clientHeight || 800) && !word.caught);
 
         // Collision detection
-        const paddleRect = { x: paddleX, y: (heroRef.current?.clientHeight || 800) - 100, width: PADDLE_WIDTH, height: 50 };
+        const paddleRect = { x: paddleX, y: (heroRef.current?.clientHeight || 800) - 64 - 50, width: PADDLE_WIDTH, height: 50 };
         
-        newWords.forEach(word => {
-          if (!word.caught) {
-            const wordRect = { x: word.x, y: word.y, width: 80, height: 40 };
-            if (
-              wordRect.x < paddleRect.x + paddleRect.width &&
-              wordRect.x + wordRect.width > paddleRect.x &&
-              wordRect.y < paddleRect.y + paddleRect.height &&
-              wordRect.y + wordRect.height > paddleRect.y
-            ) {
-              word.caught = true;
-              if (TARGET_SENTENCE[caughtWords.length] === word.text) {
-                setCaughtWords(prev => [...prev, word.text]);
-              }
+        updatedWords.forEach(word => {
+          const wordRect = { x: word.x, y: word.y, width: 80, height: 40 };
+          if (
+            wordRect.x < paddleRect.x + paddleRect.width &&
+            wordRect.x + wordRect.width > paddleRect.x &&
+            wordRect.y < paddleRect.y + paddleRect.height &&
+            wordRect.y + wordRect.height > paddleRect.y
+          ) {
+            word.caught = true;
+            if (TARGET_SENTENCE[caughtWords.length] === word.text) {
+              setCaughtWords(prev => [...prev, word.text]);
             }
           }
         });
 
-        return newWords;
+        return updatedWords;
       });
     }, 16); // ~60fps
 
     return () => clearInterval(gameLoop);
-  }, [paddleX, caughtWords.length]);
+  }, [isClient, paddleX, caughtWords.length]);
   
   useEffect(() => {
+    if (!isClient) return;
+
      const wordSpawner = setInterval(() => {
       if (caughtWords.length >= TARGET_SENTENCE.length) {
         clearInterval(wordSpawner);
         return;
       }
       
-      const nextWordIndex = caughtWords.length + Math.floor(Math.random() * 3);
-      if(nextWordIndex >= TARGET_SENTENCE.length) {
-         const targetWord = TARGET_SENTENCE[caughtWords.length];
-         const newWord: FallingWord = {
-            id: Date.now() + Math.random(),
-            text: targetWord,
-            x: Math.random() * ((heroRef.current?.clientWidth || 800) - 100),
-            y: -50,
-            caught: false,
-          };
-          setFallingWords(prev => [...prev, newWord]);
-          return;
-      };
+      const shouldSpawnTarget = Math.random() > 0.4;
+      let text = '';
 
-      const text = TARGET_SENTENCE[nextWordIndex] || TARGET_SENTENCE[Math.floor(Math.random() * TARGET_SENTENCE.length)];
+      if (shouldSpawnTarget) {
+          text = TARGET_SENTENCE[caughtWords.length];
+      } else {
+          text = TARGET_SENTENCE[Math.floor(Math.random() * TARGET_SENTENCE.length)];
+      }
 
       const newWord: FallingWord = {
         id: Date.now() + Math.random(),
@@ -109,15 +108,24 @@ export default function InteractiveHero() {
         y: -50,
         caught: false,
       };
+
       setFallingWords(prev => [...prev, newWord]);
-    }, 1500);
+    }, 1200);
 
     return () => clearInterval(wordSpawner);
-  }, [caughtWords.length]);
+  }, [isClient, caughtWords.length]);
 
 
   if (!isClient) {
-    return null; 
+    return (
+        <section className="relative h-[calc(100vh-4rem)] w-full overflow-hidden bg-background flex items-center justify-center">
+             <div className="text-center z-10 p-4">
+                <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4">
+                    Loading Game...
+                </h1>
+            </div>
+        </section>
+    );
   }
 
   const isComplete = caughtWords.length === TARGET_SENTENCE.length;
@@ -126,26 +134,21 @@ export default function InteractiveHero() {
     <section ref={heroRef} className="relative h-[calc(100vh-4rem)] w-full overflow-hidden bg-background">
       <AnimatePresence>
         {fallingWords.map(word => (
-          !word.caught && (
             <motion.div
               key={word.id}
               initial={{ y: word.y, x: word.x }}
-              animate={{ y: heroRef.current?.clientHeight }}
-              transition={{ duration: 5, ease: 'linear' }}
+              animate={{ y: word.y + 5 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ duration: 0.5, ease: 'linear' }}
               className="absolute text-xl font-bold text-foreground"
-              style={{ x: word.x, y: word.y }}
             >
               {word.text}
             </motion.div>
-          )
         ))}
       </AnimatePresence>
 
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-4xl text-center z-10 p-4">
-        <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4">
-          Catch the words to build the future of payments.
-        </h1>
-        <div className="mt-8 h-20 text-3xl md:text-5xl font-bold font-headline text-primary flex items-center justify-center gap-4 flex-wrap">
+        <div className="mt-8 h-20 text-3xl md:text-5xl font-bold font-headline text-primary flex items-center justify-center gap-x-4 flex-wrap">
          {TARGET_SENTENCE.map((word, index) => (
             <span
               key={index}
@@ -158,25 +161,32 @@ export default function InteractiveHero() {
             </span>
           ))}
         </div>
+        
+        <AnimatePresence>
         {isComplete && (
             <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} transition={{delay: 0.5}}>
                 <Button size="lg" className="mt-8">Explore Payment Solutions</Button>
             </motion.div>
         )}
+        </AnimatePresence>
       </div>
 
-      <div
+      <motion.div
         className="absolute bottom-16 z-20"
         style={{
           left: paddleX,
           width: PADDLE_WIDTH,
-          height: '50px',
         }}
+        animate={{
+            y: isComplete ? 100 : 0,
+            opacity: isComplete ? 0 : 1,
+        }}
+        transition={{duration: 0.5}}
       >
         <div className="w-full h-12 bg-primary rounded-lg shadow-2xl flex items-center justify-center text-primary-foreground font-bold">
             Catch!
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
