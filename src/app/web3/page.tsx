@@ -13,9 +13,13 @@ import GridPattern from '@/components/landing/grid-pattern';
 import { cn } from '@/lib/utils';
 import { useScroll } from 'framer-motion';
 import ServiceGrid from '@/components/landing/service-grid';
+import CodingModes from '@/components/landing/coding-modes';
+
+export type CodingMode = 'auto' | 'hyper' | 'pro';
 
 export default function Web3Page() {
   const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null);
+  const [selectedMode, setSelectedMode] = useState<CodingMode>('auto');
 
   const terminalRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: terminalScrollYProgress } = useScroll({
@@ -70,8 +74,9 @@ export default function Web3Page() {
               )}
             />
           <Web3DevTools activeServiceIndex={activeServiceIndex} />
+          <CodingModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} />
           <FinancialSolutions />
-          <InteractiveGuides activeServiceIndex={activeServiceIndex} />
+          <InteractiveGuides activeServiceIndex={activeServiceIndex} selectedMode={selectedMode} />
         </div>
       </main>
       <Footer />
