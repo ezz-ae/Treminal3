@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import Hero from '@/components/landing/hero';
@@ -37,17 +37,24 @@ export default function Web3Page() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
-      <main className="relative">
-        <GridPattern
-            width={40}
-            height={40}
-            x={-1}
-            y={-1}
-            className={cn(
-              '[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)]',
-              'absolute inset-0 h-full w-full skew-y-12 animate-aurora'
-            )}
-        />
+      <main className="relative isolate overflow-hidden">
+        <div className="absolute inset-0 -z-10 h-full w-full">
+            <GridPattern
+                width={40}
+                height={40}
+                x={-1}
+                y={-1}
+                className={cn(
+                    '[mask-image:linear-gradient(to_bottom,white,transparent,transparent)]',
+                )}
+            />
+            <div
+                className={cn(
+                    'absolute inset-0 -z-10 bg-gradient-to-r from-primary/10 via-primary/20 to-primary/10 opacity-50',
+                    'animate-aurora'
+                )}
+            />
+        </div>
         <Hero />
         <ServiceGrid 
           activeServiceIndex={activeServiceIndex} 
@@ -62,15 +69,6 @@ export default function Web3Page() {
         </div>
 
         <div className="relative">
-           <GridPattern
-              width={40}
-              height={40}
-              x={-1}
-              y={-1}
-              className={cn(
-                '[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)]',
-              )}
-            />
           <Web3DevTools activeServiceIndex={activeServiceIndex} />
           <CodingModes />
           <InteractiveGuides activeServiceIndex={activeServiceIndex} />
