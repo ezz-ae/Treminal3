@@ -87,9 +87,20 @@ export default function InteractiveHero() {
       }
       
       const nextWordIndex = caughtWords.length + Math.floor(Math.random() * 3);
-      if(nextWordIndex >= TARGET_SENTENCE.length) return;
+      if(nextWordIndex >= TARGET_SENTENCE.length) {
+         const targetWord = TARGET_SENTENCE[caughtWords.length];
+         const newWord: FallingWord = {
+            id: Date.now() + Math.random(),
+            text: targetWord,
+            x: Math.random() * ((heroRef.current?.clientWidth || 800) - 100),
+            y: -50,
+            caught: false,
+          };
+          setFallingWords(prev => [...prev, newWord]);
+          return;
+      };
 
-      const text = TARGET_SENTENCE[nextWordIndex];
+      const text = TARGET_SENTENCE[nextWordIndex] || TARGET_SENTENCE[Math.floor(Math.random() * TARGET_SENTENCE.length)];
 
       const newWord: FallingWord = {
         id: Date.now() + Math.random(),
@@ -99,7 +110,7 @@ export default function InteractiveHero() {
         caught: false,
       };
       setFallingWords(prev => [...prev, newWord]);
-    }, 2000);
+    }, 1500);
 
     return () => clearInterval(wordSpawner);
   }, [caughtWords.length]);
