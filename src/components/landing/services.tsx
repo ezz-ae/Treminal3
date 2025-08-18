@@ -98,7 +98,7 @@ export default function Services({ activeServiceIndex, setActiveServiceIndex }: 
                     return (
                         <motion.div
                             key={index}
-                            className="relative"
+                            className="relative flex-1"
                             onHoverStart={() => setActiveServiceIndex(index)}
                             animate={{
                                 height: isActive ? expandedHeight : collapsedHeights[index],
@@ -108,14 +108,14 @@ export default function Services({ activeServiceIndex, setActiveServiceIndex }: 
                         >
                             <Link href={service.href} className="block w-full h-full">
                                 <motion.div 
-                                    className="relative w-full h-full bg-card border-t border-x rounded-t-2xl"
+                                    className="relative w-full h-full bg-card border-t border-x rounded-t-2xl flex flex-col justify-end"
                                     animate={{ 
                                         boxShadow: isActive ? '0px 0px 30px hsl(var(--primary) / 0.5)' : '0px 0px 0px hsla(var(--primary), 0)',
                                         borderColor: isActive ? 'hsl(var(--primary))' : 'hsla(var(--primary), 0.2)'
                                     }}
                                     transition={{ duration: 0.5, ease: 'easeInOut' }}
                                 >
-                                    <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-center h-full">
+                                    <div className="p-6">
                                         <div className="w-full text-center">
                                             <h3 className={cn(
                                                 "font-headline text-lg font-bold transition-all"
