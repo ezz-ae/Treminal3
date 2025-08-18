@@ -12,7 +12,7 @@ export default function Hero() {
               Build anything in Web3 with one terminal.
             </h1>
             <p className="max-w-xl mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground mb-10">
-              Treminal3 is the all-in-one platform to develop, manage, and grow your Web3 projects. Create dApps, tokens, trading bots, and more with minimal knowledge.
+              The all-in-one platform to develop, manage, and grow your Web3 projects. Create dApps, tokens, trading bots, and more with minimal knowledge.
             </p>
             <div className="flex justify-center md:justify-start items-center gap-4">
               <Button size="lg">
