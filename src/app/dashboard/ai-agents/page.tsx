@@ -141,7 +141,7 @@ export default function AiAgentsPage() {
     }, [displayLines]);
 
   return (
-    <div className="space-y-4 h-full">
+    <div className="h-full w-full">
        <div className="sr-only">
         <h1 className="text-3xl font-bold font-headline">AI Business Agent</h1>
         <p className="text-muted-foreground">
@@ -149,82 +149,80 @@ export default function AiAgentsPage() {
         </p>
       </div>
 
-       <Card className="font-code bg-black border-0 text-white overflow-hidden h-full flex flex-col">
-            <CardContent className="p-0 flex flex-col flex-grow">
-                <div id="terminal-output" className="flex-grow overflow-y-auto p-4 space-y-2 text-sm">
-                    <p className="text-green-400">AI-Agent v1.0.0 ready.</p>
-                    <p>Enter a description of your business to get started.</p>
-                    <AnimatePresence>
-                    {displayLines.map((line) => (
-                        <motion.div 
-                            key={line.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            {line.type === 'input' && (
-                                <p><span className="text-blue-400">&gt;</span> {line.text}</p>
-                            )}
-                            {line.type === 'status' && (
-                                <p className="text-yellow-400">{line.text}</p>
-                            )}
-                             {line.type === 'output' && (
-                                <p className="text-red-400">{line.text}</p>
-                            )}
-                            {line.type === 'recommendation' && line.recommendation && (() => {
-                                const LucideIcon = iconMap[line.recommendation.icon] || Puzzle;
-                                const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard';
-                                return (
-                                    <Link href={toolUrl} className="block group">
-                                        <div className="border border-gray-600 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
-                                            <div className="flex items-center gap-3">
-                                                <LucideIcon className="w-5 h-5 text-green-400" />
-                                                <h3 className="font-bold text-base">{line.recommendation.name}</h3>
-                                            </div>
-                                            <p className="mt-1 ml-8 text-gray-400">{line.recommendation.description}</p>
+       <div className="font-code bg-black text-white overflow-hidden h-full flex flex-col">
+            <div id="terminal-output" className="flex-grow overflow-y-auto p-4 space-y-2 text-sm">
+                <p className="text-green-400">AI-Agent v1.0.0 ready.</p>
+                <p>Enter a description of your business to get started.</p>
+                <AnimatePresence>
+                {displayLines.map((line) => (
+                    <motion.div 
+                        key={line.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        {line.type === 'input' && (
+                            <p><span className="text-blue-400">&gt;</span> {line.text}</p>
+                        )}
+                        {line.type === 'status' && (
+                            <p className="text-yellow-400">{line.text}</p>
+                        )}
+                            {line.type === 'output' && (
+                            <p className="text-red-400">{line.text}</p>
+                        )}
+                        {line.type === 'recommendation' && line.recommendation && (() => {
+                            const LucideIcon = iconMap[line.recommendation.icon] || Puzzle;
+                            const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard';
+                            return (
+                                <Link href={toolUrl} className="block group">
+                                    <div className="border border-gray-600 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
+                                        <div className="flex items-center gap-3">
+                                            <LucideIcon className="w-5 h-5 text-green-400" />
+                                            <h3 className="font-bold text-base">{line.recommendation.name}</h3>
                                         </div>
-                                    </Link>
-                                )
-                            })()}
-                        </motion.div>
-                    ))}
-                    </AnimatePresence>
-                     {isLoading && (
-                        <div className="flex items-center gap-2">
-                           <Loader2 className="w-4 h-4 animate-spin text-yellow-400" />
-                           <p className="text-yellow-400">Thinking...</p>
-                        </div>
-                    )}
-                </div>
-                 <div className="p-2 border-t border-gray-700 bg-black">
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
-                            <span className="text-blue-400 font-bold">&gt;</span>
-                            <FormField
-                                control={form.control}
-                                name="business_description"
-                                render={({ field }) => (
-                                <FormItem className="flex-grow">
-                                    <FormControl>
-                                    <Input
-                                        placeholder="e.g., 'A decentralized NFT marketplace for artists...'"
-                                        className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500"
-                                        disabled={isLoading}
-                                        {...field}
-                                    />
-                                    </FormControl>
-                                </FormItem>
-                                )}
-                            />
-                             <Button type="submit" size="sm" variant="ghost" className="text-blue-400 hover:bg-blue-900/50 hover:text-white" disabled={isLoading}>
-                                Run
-                                <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
-                        </form>
-                    </Form>
-                </div>
-            </CardContent>
-        </Card>
+                                        <p className="mt-1 ml-8 text-gray-400">{line.recommendation.description}</p>
+                                    </div>
+                                </Link>
+                            )
+                        })()}
+                    </motion.div>
+                ))}
+                </AnimatePresence>
+                    {isLoading && (
+                    <div className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-yellow-400" />
+                        <p className="text-yellow-400">Thinking...</p>
+                    </div>
+                )}
+            </div>
+                <div className="p-2 border-t border-gray-700 bg-black">
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
+                        <span className="text-blue-400 font-bold">&gt;</span>
+                        <FormField
+                            control={form.control}
+                            name="business_description"
+                            render={({ field }) => (
+                            <FormItem className="flex-grow">
+                                <FormControl>
+                                <Input
+                                    placeholder="e.g., 'A decentralized NFT marketplace for artists...'"
+                                    className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500"
+                                    disabled={isLoading}
+                                    {...field}
+                                />
+                                </FormControl>
+                            </FormItem>
+                            )}
+                        />
+                            <Button type="submit" size="sm" variant="ghost" className="text-blue-400 hover:bg-blue-900/50 hover:text-white" disabled={isLoading}>
+                            Run
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                    </form>
+                </Form>
+            </div>
+        </div>
     </div>
   );
 }

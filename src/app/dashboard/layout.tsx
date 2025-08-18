@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
 
 const menuItems = [
   {
@@ -103,6 +104,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const isAiAgentsPage = pathname === '/dashboard/ai-agents';
 
   return (
     <SidebarProvider>
@@ -156,7 +158,12 @@ export default function DashboardLayout({
               <SidebarTrigger/>
               <p className="text-sm text-muted-foreground">The all-in-one text-to-code platform.</p>
           </header>
-          <main className="flex-1 p-6 bg-gray-50/50 h-[calc(100vh-65px)]">{children}</main>
+          <main className={cn(
+            "flex-1 bg-gray-50/50 h-[calc(100vh-65px)]",
+            !isAiAgentsPage && "p-6"
+            )}>
+              {children}
+            </main>
           </SidebarInset>
       </div>
     </SidebarProvider>
