@@ -1,6 +1,10 @@
+
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import AnimatedText from './animated-text';
+import { motion } from 'framer-motion';
 
 export default function Hero() {
   const animatedWords = ["dApps", "tokens", "wallets", "DeFi", "GameFi"];
@@ -15,9 +19,25 @@ export default function Hero() {
             &nbsp;project at any scale with the all-in-one text-to-code platform.
           </h1>
           <div className="flex justify-center items-center gap-4 mt-20">
-            <Button size="lg">
-              Start for Free <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+             <motion.div
+                animate={{
+                    boxShadow: [
+                        '0 0 0 0 hsl(var(--primary) / 0.7)',
+                        '0 0 20px 5px hsl(var(--primary) / 0)',
+                        '0 0 0 0 hsl(var(--primary) / 0.7)',
+                    ],
+                }}
+                transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                }}
+                className="rounded-md"
+            >
+                <Button size="lg">
+                    Start for Free <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+            </motion.div>
           </div>
         </div>
       </div>
