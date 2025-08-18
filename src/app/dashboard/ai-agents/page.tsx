@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -79,22 +79,34 @@ const toolUrlMap: Record<string, string> = {
 };
 
 type DisplayLine = {
-    id: number;
-    type: 'input' | 'output' | 'status' | 'recommendation';
+    id: string;
+    type: 'prompt' | 'input' | 'output' | 'status' | 'recommendation' | 'guidance';
     text?: string;
     recommendation?: recommendations.BusinessToolRecommendationOutput['recommendations'][0];
+    isComplete?: boolean;
 };
 
+const initialLines: DisplayLine[] = [
+    { id: 'guidance-1', type: 'guidance', text: 'Welcome to the AI Business Agent.' },
+    { id: 'guidance-2', type: 'guidance', text: "Describe your business, and our AI agent will recommend the best tools for you." },
+    { id: 'guidance-3', type: 'guidance', text: 'Type your business description below and press Enter to start.'},
+];
 
 export default function AiAgentsPage() {
-    const [displayLines, setDisplayLines] = useState<DisplayLine[]>([]);
+    const [lines, setLines] = useState<DisplayLine[]>(initialLines);
     const [isLoading, setIsLoading] = useState(false);
-    const [history, setHistory] = useState<string[]>([]);
     const { setOpen } = useSidebar();
+    const terminalOutputRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setOpen(false);
     }, [setOpen]);
+    
+    useEffect(() => {
+      if (terminalOutputRef.current) {
+        terminalOutputRef.current.scrollTop = terminalOutputRef.current.scrollHeight;
+      }
+    }, [lines]);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -103,42 +115,45 @@ export default function AiAgentsPage() {
         },
     });
 
-    const printLine = (line: Omit<DisplayLine, 'id'>, delay: number = 0) => {
-        setTimeout(() => {
-            setDisplayLines(prev => [...prev, { ...line, id: Date.now() + Math.random() }]);
-        }, delay);
+    const addLine = (line: Omit<DisplayLine, 'id'>) => {
+        setLines(prev => [...prev, { ...line, id: self.crypto.randomUUID() }]);
     };
-
+    
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         setIsLoading(true);
-        setHistory(prev => [...prev, data.business_description]);
-        printLine({ type: 'input', text: data.business_description });
-
-        printLine({ type: 'status', text: 'Analyzing business needs...' }, 200);
+        setLines(prev => prev.map(l => l.type === 'input' ? { ...l, text: data.business_description, isComplete: true } : l));
+        
+        addLine({ type: 'status', text: 'Analyzing business needs...' });
 
         try {
             const result = await recommendations.recommendBusinessTools(data);
-            printLine({ type: 'status', text: 'Found recommendations:' }, 1000);
             
-            result.recommendations.forEach((rec, index) => {
-                printLine({ type: 'recommendation', recommendation: rec }, 1200 + index * 300);
-            });
+            // This timeout is to simulate the AI thinking before showing results
+            setTimeout(() => {
+                setLines(prev => prev.map(l => l.type === 'status' ? {...l, text: 'Found recommendations:'} : l));
+                result.recommendations.forEach((rec, index) => {
+                    addLine({ type: 'recommendation', recommendation: rec });
+                });
+                setIsLoading(false);
+                form.reset();
+            }, 1000);
 
         } catch (error) {
             console.error('Error getting recommendations:', error);
-            printLine({ type: 'output', text: 'Error: Could not get recommendations.' });
-        } finally {
+            addLine({ type: 'output', text: 'Error: Could not get recommendations.' });
             setIsLoading(false);
             form.reset();
         }
     }
 
+    const currentPromptLine = lines.find(l => l.type === 'input' && !l.isComplete);
+
     useEffect(() => {
-        const terminalOutput = document.getElementById('terminal-output');
-        if (terminalOutput) {
-            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        if (!isLoading && !currentPromptLine) {
+            addLine({ type: 'input', text: '', isComplete: false });
         }
-    }, [displayLines]);
+    }, [isLoading, currentPromptLine]);
+
 
   return (
     <>
@@ -149,78 +164,86 @@ export default function AiAgentsPage() {
         </p>
       </div>
 
-       <div className="font-code bg-black text-white overflow-hidden h-full flex flex-col">
-            <div id="terminal-output" className="flex-grow overflow-y-auto p-4 space-y-2 text-sm">
-                <p className="text-green-400">AI-Agent v1.0.0 ready.</p>
-                <p>Enter a description of your business to get started.</p>
+       <div className="font-code bg-black text-white h-full flex flex-col p-4 text-sm">
+            <div ref={terminalOutputRef} id="terminal-output" className="flex-grow overflow-y-auto">
                 <AnimatePresence>
-                {displayLines.map((line) => (
+                {lines.map((line, index) => (
                     <motion.div 
                         key={line.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }}
+                        className="flex gap-4"
                     >
-                        {line.type === 'input' && (
-                            <p><span className="text-blue-400">&gt;</span> {line.text}</p>
-                        )}
-                        {line.type === 'status' && (
-                            <p className="text-yellow-400">{line.text}</p>
-                        )}
+                        <span className="text-gray-500 w-6 text-right select-none">{index + 1}</span>
+                        <div className="flex-1">
+                            {line.type === 'input' && (
+                                <div className="flex gap-2 items-center">
+                                    <span className="text-blue-400">&gt;</span>
+                                    {line.isComplete ? (
+                                        <span>{line.text}</span>
+                                    ) : (
+                                        <Form {...form}>
+                                            <form onSubmit={form.handleSubmit(onSubmit)} className="flex-grow">
+                                                <FormField
+                                                    control={form.control}
+                                                    name="business_description"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormControl>
+                                                                <Input
+                                                                    placeholder="e.g., 'A decentralized NFT marketplace for artists...'"
+                                                                    className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
+                                                                    disabled={isLoading}
+                                                                    autoFocus
+                                                                    {...field}
+                                                                />
+                                                            </FormControl>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            </form>
+                                        </Form>
+                                    )}
+                                </div>
+                            )}
+                            {line.type === 'guidance' && (
+                                <p className="text-green-400">{line.text}</p>
+                            )}
+                            {line.type === 'status' && (
+                                <p className="text-yellow-400">{line.text}</p>
+                            )}
                             {line.type === 'output' && (
-                            <p className="text-red-400">{line.text}</p>
-                        )}
-                        {line.type === 'recommendation' && line.recommendation && (() => {
-                            const LucideIcon = iconMap[line.recommendation.icon] || Puzzle;
-                            const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard';
-                            return (
-                                <Link href={toolUrl} className="block group">
-                                    <div className="border border-gray-600 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
-                                        <div className="flex items-center gap-3">
-                                            <LucideIcon className="w-5 h-5 text-green-400" />
-                                            <h3 className="font-bold text-base">{line.recommendation.name}</h3>
+                                <p className="text-red-400">{line.text}</p>
+                            )}
+                            {line.type === 'recommendation' && line.recommendation && (() => {
+                                const LucideIcon = iconMap[line.recommendation.icon] || Puzzle;
+                                const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard';
+                                return (
+                                    <Link href={toolUrl} className="block group -ml-2">
+                                        <div className="border border-gray-700 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
+                                            <div className="flex items-center gap-3">
+                                                <LucideIcon className="w-5 h-5 text-green-400" />
+                                                <h3 className="font-bold text-base">{line.recommendation.name}</h3>
+                                            </div>
+                                            <p className="mt-1 ml-8 text-gray-400">{line.recommendation.description}</p>
                                         </div>
-                                        <p className="mt-1 ml-8 text-gray-400">{line.recommendation.description}</p>
-                                    </div>
-                                </Link>
-                            )
-                        })()}
+                                    </Link>
+                                )
+                            })()}
+                        </div>
                     </motion.div>
                 ))}
                 </AnimatePresence>
-                    {isLoading && (
-                    <div className="flex items-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-yellow-400" />
-                        <p className="text-yellow-400">Thinking...</p>
+                {isLoading && (
+                    <div className="flex gap-4">
+                       <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
+                        <div className="flex-1 flex items-center gap-2">
+                            <Loader2 className="w-4 h-4 animate-spin text-yellow-400" />
+                            <p className="text-yellow-400">Thinking...</p>
+                        </div>
                     </div>
                 )}
-            </div>
-                <div className="p-2 border-t border-gray-700 bg-black">
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
-                        <span className="text-blue-400 font-bold">&gt;</span>
-                        <FormField
-                            control={form.control}
-                            name="business_description"
-                            render={({ field }) => (
-                            <FormItem className="flex-grow">
-                                <FormControl>
-                                <Input
-                                    placeholder="e.g., 'A decentralized NFT marketplace for artists...'"
-                                    className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500"
-                                    disabled={isLoading}
-                                    {...field}
-                                />
-                                </FormControl>
-                            </FormItem>
-                            )}
-                        />
-                            <Button type="submit" size="sm" variant="ghost" className="text-blue-400 hover:bg-blue-900/50 hover:text-white" disabled={isLoading}>
-                            Run
-                            <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                    </form>
-                </Form>
             </div>
         </div>
     </>
