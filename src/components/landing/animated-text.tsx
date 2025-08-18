@@ -27,7 +27,7 @@ export default function AnimatedText({ words, className }: AnimatedTextProps) {
   }, [words.length]);
 
   return (
-    <span className={cn("inline-grid text-center h-[calc(1em*1.2)] overflow-hidden", className)}>
+    <span className={cn("inline-grid h-[calc(1em*1.2)] overflow-hidden align-bottom", className)}>
       <span
         key={key}
         className="transition-transform duration-1000 ease-in-out"
