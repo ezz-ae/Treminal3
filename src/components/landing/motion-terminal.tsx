@@ -46,58 +46,31 @@ Backtest Results:
   { text: 'Error: Transaction failed. Reason: Slippage exceeds 0.5%. Retrying...', type: 'error' },
 ];
 
-const typingDelay = 500;
 const linePause = 1000;
 
 export default function MotionTerminal() {
   const [lines, setLines] = useState<{ text: string; type: string; }[]>([]);
   const [isComplete, setIsComplete] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
-
-  const lineIndexRef = useRef(0);
-  const charIndexRef = useRef(0);
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
 
-  const runAnimation = () => {
-    if (lineIndexRef.current >= codeLines.length) {
-      setIsComplete(true);
-      return;
-    }
-
-    const currentLineData = codeLines[lineIndexRef.current];
-
-    if (charIndexRef.current === 0) {
-      setLines(prev => [...prev, { text: '', type: currentLineData.type }]);
-    }
-
-    if (charIndexRef.current < currentLineData.text.length) {
-      setLines(prev => {
-        const newLines = [...prev];
-        const currentLine = newLines[lineIndexRef.current];
-        if (currentLine) {
-          currentLine.text += currentLineData.text[charIndexRef.current];
-        }
-        return newLines;
-      });
-
-      charIndexRef.current++;
-      animationTimeoutRef.current = setTimeout(runAnimation, typingDelay);
-    } else {
-      lineIndexRef.current++;
-      charIndexRef.current = 0;
-      animationTimeoutRef.current = setTimeout(runAnimation, linePause);
-    }
-  };
-
   const startAnimation = () => {
-    lineIndexRef.current = 0;
-    charIndexRef.current = 0;
     setLines([]);
     setIsComplete(false);
-    if (animationTimeoutRef.current) {
-      clearTimeout(animationTimeoutRef.current);
-    }
-    runAnimation();
+    let lineIndex = 0;
+
+    const animateLine = () => {
+      if (lineIndex >= codeLines.length) {
+        setIsComplete(true);
+        return;
+      }
+      
+      setLines(prev => [...prev, codeLines[lineIndex]]);
+      lineIndex++;
+      animationTimeoutRef.current = setTimeout(animateLine, linePause);
+    };
+
+    animateLine();
   };
   
   useEffect(() => {
@@ -145,12 +118,16 @@ export default function MotionTerminal() {
                     })}
                   >
                     {line.text}
-                    {index === lineIndexRef.current && !isComplete && (
-                      <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
-                    )}
                   </pre>
                 </div>
               ))}
+              {!isComplete && (
+                 <div className="flex items-start">
+                    <span className="text-blue-400 mr-2 shrink-0">$</span>
+                    <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
+                 </div>
+              )}
+
               {isComplete && (
                 <div className="mt-4">
                   <Button onClick={startAnimation}>
