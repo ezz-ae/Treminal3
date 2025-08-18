@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
-import { motion } from 'framer-motion';
+import { motion, useTransform, MotionValue } from 'framer-motion';
 
 const scripts: Record<string, { text: string; type: string }[]> = {
   default: [
@@ -86,11 +86,18 @@ const scripts: Record<string, { text: string; type: string }[]> = {
 
 const linePause = 1000;
 
-export default function MotionTerminal({ activeServiceIndex }: { activeServiceIndex: number | null }) {
+interface MotionTerminalProps {
+  activeServiceIndex: number | null;
+  scrollYProgress: MotionValue<number>;
+}
+
+export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: MotionTerminalProps) {
   const [lines, setLines] = useState<{ text: string; type: string; }[]>([]);
   const [isComplete, setIsComplete] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
+  
+  const opacity = useTransform(scrollYProgress, [0.5, 1], [0, 1]);
 
   const startAnimation = (codeLines: { text: string; type: string; }[]) => {
     if (animationTimeoutRef.current) {
@@ -140,13 +147,10 @@ export default function MotionTerminal({ activeServiceIndex }: { activeServiceIn
 
   return (
     <motion.div
-        className="container mx-auto px-4 absolute top-[100vh] left-1/2 -translate-x-1/2 w-full z-10"
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="container mx-auto px-4 absolute top-0 left-1/2 -translate-x-1/2 w-full h-full flex items-center justify-center pointer-events-none"
+        style={{ opacity }}
       >
-        <div className="font-code text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm">
+        <div className="font-code text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm pointer-events-auto w-full max-w-5xl">
           <div className="h-[60vh] max-h-[700px] flex flex-col rounded-md">
             <div className="flex items-center gap-2 p-3 border-b border-white/10">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>

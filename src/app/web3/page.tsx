@@ -15,10 +15,10 @@ import { cn } from '@/lib/utils';
 import { useScroll } from 'framer-motion';
 
 export default function Web3Page() {
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: scrollRef,
-    offset: ['start start', 'end start'],
+    offset: ['start start', 'end end'],
   });
   const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null);
 
@@ -44,7 +44,7 @@ export default function Web3Page() {
               activeServiceIndex={activeServiceIndex}
               setActiveServiceIndex={setActiveServiceIndex}
             />
-            <MotionTerminal activeServiceIndex={activeServiceIndex} />
+            <MotionTerminal scrollYProgress={scrollYProgress} activeServiceIndex={activeServiceIndex} />
           </div>
         </div>
         <div className="flex-grow">
