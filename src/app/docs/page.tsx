@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
@@ -152,6 +153,23 @@ export default function DocsPage() {
             </p>
           </div>
           
+          <Card className="mb-12">
+            <CardHeader>
+                <CardTitle>Table of Contents</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <ul className="space-y-2">
+                    {commandSections.map((section) => (
+                        <li key={section.service}>
+                            <a href={`#${section.service.toLowerCase().replace(/ /g, '-')}`} className="text-primary hover:underline">
+                                {section.service}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </CardContent>
+          </Card>
+          
           <div className="space-y-12">
             {commandSections.map((section) => (
               <section key={section.service} id={section.service.toLowerCase().replace(/ /g, '-')}>
@@ -159,10 +177,10 @@ export default function DocsPage() {
                 <div className="space-y-6">
                   {section.commands.map((cmd) => (
                     <Card key={cmd.command} className="font-code overflow-hidden">
-                      <CardHeader className="bg-muted/50">
-                        <CardTitle className="text-lg bg-muted p-4 rounded-md text-card-foreground overflow-x-auto">
+                      <CardHeader className="bg-muted/50 p-4">
+                        <div className="bg-muted p-4 rounded-md text-card-foreground overflow-x-auto">
                           <code>{cmd.command}</code>
-                        </CardTitle>
+                        </div>
                       </CardHeader>
                       <CardContent className="p-6 space-y-4">
                         <div className="font-sans">
