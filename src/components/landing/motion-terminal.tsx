@@ -43,7 +43,7 @@ const scripts: Record<string, { text: string; type: string }[]> = {
     { text: 'Price updated on-chain via agent.', type: 'success' },
   ],
   '4': [
-    { text: 'treminal3 create:wallet --brand=my-brand --type=smart-contract', type: 'command' },
+    { text: 'treminal3 create:wallet --brand=my-brand --template=multi-sig', type: 'command' },
     { text: '✔ Custom branded wallet SDK generated.', type: 'success' },
     { text: 'treminal3 publish:wallet --name=my-brand-wallet', type: 'command' },
     { text: 'Publishing wallet to app stores...', type: 'info' },
@@ -61,7 +61,7 @@ const scripts: Record<string, { text: string; type: string }[]> = {
     { text: '✔ Transaction confirmed. Hash: 0x456...def', type: 'success' },
   ],
   '7': [
-    { text: 'treminal3 analytics:query --dataset=uniswap_v3_mainnet --query="SELECT * FROM swaps LIMIT 5"', type: 'command' },
+    { text: 'treminal3 analytics:query --dataset=uniswap_v3 --query="SELECT * FROM swaps LIMIT 5"', type: 'command' },
     { text: 'Running query on on-chain data...', type: 'info' },
     { text: 'Results:\n- Swap 1: 10 ETH for 30,000 USDC\n- Swap 2: 5 ETH for 15,000 USDC', type: 'success' },
   ],
@@ -138,11 +138,7 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
     let newKey = 'default';
     if (activeServiceIndex !== null) {
       newKey = activeServiceIndex.toString();
-    } else {
-      // If no service is selected, pick a random one to showcase on scroll, but not the default
-      const randomKey = Math.floor(Math.random() * 11).toString();
-      newKey = randomKey;
-    }
+    } 
 
     if(newKey !== scriptKey) {
         setScriptKey(newKey);
@@ -165,7 +161,7 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
     };
   }, []);
 
-  const currentScript = scripts[scriptKey];
+  const currentScript = scripts[scriptKey] || scripts['default'];
 
   return (
     <div
