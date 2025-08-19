@@ -89,6 +89,25 @@ const commandSections = [
         ]
     },
     {
+        service: "Custom Wallets",
+        commands: [
+            {
+                command: 'treminal3 create:wallet --brand=<brand-name> --template=multi-sig',
+                description: "Generates the SDK for a custom, branded crypto wallet.",
+                whatYouNeed: ["A brand name for your wallet.", "A valid wallet template (e.g., 'simple', 'multi-sig')."],
+                whatToExpect: "A downloadable SDK and boilerplate code for creating your own branded wallet applications.",
+                aiCapability: "Describe your desired wallet features and target audience, and the AI will recommend a template and configuration."
+            },
+            {
+                command: "treminal3 publish:wallet --name=<wallet-name>",
+                description: "Guides you through the process of publishing your wallet to app stores.",
+                whatYouNeed: ["A generated wallet SDK.", "Developer accounts for the target app stores."],
+                whatToExpect: "A guided checklist and automated scripts to help you package and submit your wallet for review.",
+                aiCapability: "This is primarily a guided workflow, not a direct code generation service."
+            }
+        ]
+    },
+    {
         service: "Smart Contracts",
         commands: [
             {
@@ -104,6 +123,49 @@ const commandSections = [
                 whatYouNeed: ["A valid template name.", "A path for the output file."],
                 whatToExpect: "A new Solidity file created at the specified path, pre-filled with the template code.",
                 aiCapability: "This is a manual command, but the AI uses this capability in the background for 'Text to Code' mode."
+            }
+        ]
+    },
+    {
+        service: "Manual Transactions",
+        commands: [
+            {
+                command: "treminal3 tx:send --to=<address> --value=<amount> --network=<network>",
+                description: "Sends a specified amount of native currency to an address.",
+                whatYouNeed: ["A recipient address.", "The amount to send (e.g., '1.5ETH').", "The target network."],
+                whatToExpect: "The transaction is broadcasted to the network, and a transaction hash is returned upon confirmation.",
+                aiCapability: "This is a manual action to ensure user intent and security."
+            },
+            {
+                command: "treminal3 tx:call --to=<address> --data=<calldata> --network=<network>",
+                description: "Calls a function on a smart contract with custom calldata.",
+                whatYouNeed: ["The smart contract address.", "The encoded function calldata.", "The target network."],
+                whatToExpect: "The contract function is executed, and the transaction hash is returned.",
+                aiCapability: "Advanced use; primarily a manual tool for developers."
+            }
+        ]
+    },
+    {
+        service: "On-chain Analytics",
+        commands: [
+            {
+                command: 'treminal3 analytics:query --dataset=uniswap_v3 --query="<sql-query>"',
+                description: "Queries indexed on-chain data using SQL-like syntax.",
+                whatYouNeed: ["A valid dataset name (e.g., 'uniswap_v3').", "A valid SQL query for that dataset."],
+                whatToExpect: "The query results are returned in a tabular format or as a JSON object.",
+                aiCapability: "You can ask for data in natural language (e.g., 'show me the 10 largest swaps on Uniswap today'), and the AI will construct the SQL query for you."
+            }
+        ]
+    },
+    {
+        service: "Decentralized Storage",
+        commands: [
+            {
+                command: "treminal3 storage:upload <filepath> --network=ipfs",
+                description: "Uploads a file or directory to a decentralized storage network.",
+                whatYouNeed: ["The local path to the file or directory.", "The target storage network (e.g., 'ipfs', 'arweave')."],
+                whatToExpect: "The content is uploaded, and a unique content identifier (CID) or transaction ID is returned.",
+                aiCapability: "This is an automated process initiated by the command."
             }
         ]
     },
