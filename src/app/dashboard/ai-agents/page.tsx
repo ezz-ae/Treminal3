@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { recommendBusinessTools } from '@/ai/flows/business-tool-recommendation';
+import { recommendBusinessTools } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -86,15 +86,19 @@ export default function AiAgentsPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         setOpen(false);
     }, [setOpen]);
     
     useEffect(() => {
-      if (terminalOutputRef.current) {
-        terminalOutputRef.current.scrollTop = terminalOutputRef.current.scrollHeight;
-      }
+        if (terminalOutputRef.current) {
+            terminalOutputRef.current.scrollTop = terminalOutputRef.current.scrollHeight;
+        }
+        if (!isLoading) {
+            inputRef.current?.focus();
+        }
     }, [lines, isLoading]);
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -115,11 +119,11 @@ export default function AiAgentsPage() {
         addLine({ type: 'status', text: 'Analyzing business needs...' });
 
         try {
-            const result = await recommendBusinessTools(data);
+            const result = await recommendBusinessTools({ business_description: data.business_description });
             
-            // This timeout is to simulate the AI thinking before showing results
             setTimeout(() => {
-                setLines(prev => prev.map(l => l.type === 'status' ? {...l, text: 'Found recommendations:'} : l));
+                setLines(prev => prev.filter(l => l.type !== 'status'));
+                addLine({ type: 'guidance', text: 'Found recommendations:'})
                 result.recommendations.forEach((rec, index) => {
                     addLine({ type: 'recommendation', recommendation: rec });
                 });
@@ -144,7 +148,7 @@ export default function AiAgentsPage() {
         </p>
       </div>
 
-       <div className="font-code bg-black text-white h-full flex flex-col text-sm">
+       <div className="font-code bg-black text-white h-full flex flex-col text-sm" onClick={() => inputRef.current?.focus()}>
             <div ref={terminalOutputRef} id="terminal-output" className="flex-grow overflow-y-auto p-4">
                 <AnimatePresence>
                 {lines.map((line, index) => (
@@ -167,7 +171,10 @@ export default function AiAgentsPage() {
                                 <p className="text-green-400">{line.text}</p>
                             )}
                             {line.type === 'status' && (
-                                <p className="text-yellow-400">{line.text}</p>
+                                <p className="text-yellow-400 flex items-center gap-2">
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                  {line.text}
+                                </p>
                             )}
                             {line.type === 'output' && (
                                 <p className="text-red-400">{line.text}</p>
@@ -204,44 +211,40 @@ export default function AiAgentsPage() {
                     </motion.div>
                 ))}
                 </AnimatePresence>
-                {isLoading && (
-                    <div className="flex gap-4">
-                       <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
-                        <div className="flex-1 flex items-center gap-2">
-                            <Loader2 className="w-4 h-4 animate-spin text-yellow-400" />
-                            <p className="text-yellow-400">Thinking...</p>
-                        </div>
-                    </div>
+                {!isLoading && (
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                             <div className="flex gap-4">
+                                <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
+                                <div className="flex-1 flex gap-2 items-center">
+                                    <span className="text-blue-400">&gt;</span>
+                                    <FormField
+                                        control={form.control}
+                                        name="business_description"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-grow">
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        ref={inputRef}
+                                                        placeholder="Describe your business and press Enter..."
+                                                        className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
+                                                        autoComplete="off"
+                                                        disabled={isLoading}
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                    </Form>
                 )}
             </div>
-             <div className="border-t border-gray-700 p-4">
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
-                        <span className="text-blue-400">&gt;</span>
-                        <FormField
-                            control={form.control}
-                            name="business_description"
-                            render={({ field }) => (
-                                <FormItem className="flex-grow">
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Describe your business and press Enter..."
-                                            className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
-                                            disabled={isLoading}
-                                            autoFocus
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                         <Button type="submit" size="sm" disabled={isLoading}>
-                           {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send'}
-                         </Button>
-                    </form>
-                </Form>
-             </div>
-        </div>
+       </div>
     </>
   );
 }
+
+    
