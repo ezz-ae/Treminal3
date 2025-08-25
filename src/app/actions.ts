@@ -3,6 +3,7 @@
 
 import { generateDapp as genDapp } from '@/ai/flows/dapp-builder';
 import { generateToken as genToken } from '@/ai/flows/token-launcher';
+import { recommendBusinessTools as recTools } from '@/ai/flows/business-tool-recommendation';
 
 import type { DappBuilderInput, DappBuilderOutput } from '@/ai/schemas/dapp-builder';
 import type { TokenLauncherInput, TokenLauncherOutput } from '@/ai/schemas/token-launcher';
@@ -20,6 +21,13 @@ export async function generateToken(input: TokenLauncherInput): Promise<TokenLau
     console.log("Generating token with input:", input);
     const result = await genToken(input);
     console.log("Token generation result:", result);
+    return result;
+}
+
+export async function recommendBusinessTools(input: BusinessToolRecommendationInput): Promise<BusinessToolRecommendationOutput> {
+    console.log("Getting recommendations with input:", input);
+    const result = await recTools(input);
+    console.log("Recommendation result:", result);
     return result;
 }
 
