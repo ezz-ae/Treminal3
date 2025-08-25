@@ -1,8 +1,13 @@
 
 'use server';
 
-import { generateDapp as genDapp, DappBuilderInput, DappBuilderOutput } from '@/ai/flows/dapp-builder';
-import { generateToken as genToken, TokenLauncherInput, TokenLauncherOutput } from '@/ai/flows/token-launcher';
+import { generateDapp as genDapp } from '@/ai/flows/dapp-builder';
+import { generateToken as genToken } from '@/ai/flows/token-launcher';
+
+import type { DappBuilderInput, DappBuilderOutput } from '@/ai/schemas/dapp-builder';
+import type { TokenLauncherInput, TokenLauncherOutput } from '@/ai/schemas/token-launcher';
+import type { BusinessToolRecommendationInput, BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
+
 
 export async function generateDapp(input: DappBuilderInput): Promise<DappBuilderOutput> {
     console.log("Generating dApp with input:", input);
@@ -19,4 +24,4 @@ export async function generateToken(input: TokenLauncherInput): Promise<TokenLau
 }
 
 
-export type { DappBuilderOutput, TokenLauncherOutput };
+export type { DappBuilderOutput, TokenLauncherOutput, BusinessToolRecommendationInput, BusinessToolRecommendationOutput };

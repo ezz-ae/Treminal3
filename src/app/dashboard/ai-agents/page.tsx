@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { recommendBusinessTools } from '@/ai/flows/business-tool-recommendation';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import * as recommendations from '@/ai/flows/business-tool-recommendation';
+import { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
 import {
   AppWindow,
   Bot,
@@ -73,7 +73,7 @@ type DisplayLine = {
     id: string;
     type: 'prompt' | 'input' | 'output' | 'status' | 'recommendation' | 'guidance';
     text?: string;
-    recommendation?: recommendations.BusinessToolRecommendationOutput['recommendations'][0];
+    recommendation?: BusinessToolRecommendationOutput['recommendations'][0];
 };
 
 const initialLines: DisplayLine[] = [
@@ -115,7 +115,7 @@ export default function AiAgentsPage() {
         addLine({ type: 'status', text: 'Analyzing business needs...' });
 
         try {
-            const result = await recommendations.recommendBusinessTools(data);
+            const result = await recommendBusinessTools(data);
             
             // This timeout is to simulate the AI thinking before showing results
             setTimeout(() => {

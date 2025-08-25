@@ -4,25 +4,10 @@
  * @fileOverview An AI agent that plans dApp construction.
  *
  * - generateDapp - A function that handles the dApp building process.
- * - DappBuilderInput - The input type for the generateDapp function.
- * - DappBuilderOutput - The return type for the generateDapp function.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'zod';
-
-export const DappBuilderInputSchema = z.object({
-  description: z.string().describe('The description of the dApp to build.'),
-});
-export type DappBuilderInput = z.infer<typeof DappBuilderInputSchema>;
-
-export const DappBuilderOutputSchema = z.object({
-  name: z.string().describe("A creative and fitting name for the dApp."),
-  description: z.string().describe("A short, one-sentence description of the dApp."),
-  components: z.array(z.string()).describe("A list of front-end components needed for the dApp (e.g., 'NFT Grid', 'Connect Wallet Button', 'Minting Form')."),
-  contracts: z.array(z.string()).describe("A list of smart contracts required for the dApp (e.g., 'ERC721', 'Marketplace', 'RoyaltyContract')."),
-});
-export type DappBuilderOutput = z.infer<typeof DappBuilderOutputSchema>;
+import { DappBuilderInput, DappBuilderInputSchema, DappBuilderOutput, DappBuilderOutputSchema } from '@/ai/schemas/dapp-builder';
 
 
 export async function generateDapp(input: DappBuilderInput): Promise<DappBuilderOutput> {
