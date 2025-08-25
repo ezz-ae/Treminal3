@@ -33,9 +33,6 @@ export default function Header() {
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <Button variant="ghost" asChild>
-            <Link href="/auth">Sign In</Link>
-          </Button>
           <Button asChild>
             <Link href="/dashboard">Get Started</Link>
           </Button>
