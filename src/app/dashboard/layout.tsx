@@ -105,7 +105,20 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isAiAgentsPage = pathname === '/dashboard/ai-agents';
+  const isTerminalPage = [
+    '/dashboard/ai-agents',
+    '/dashboard/dapp-builder',
+    '/dashboard/token-launcher',
+    '/dashboard/trading-bots',
+    '/dashboard/wallets',
+    '/dashboard/smart-contracts',
+    '/dashboard/transactions',
+    '/dashboard/analytics',
+    '/dashboard/storage',
+    '/dashboard/audits',
+    '/dashboard/governance'
+  ].includes(pathname);
+
 
   return (
     <SidebarProvider>
@@ -164,10 +177,10 @@ export default function DashboardLayout({
                 </Link>
               </Button>
           </header>
-          <main className="flex-1 bg-gray-50/50 overflow-y-auto">
-            <div className={cn(
+          <main className="flex-1 bg-background overflow-y-auto">
+             <div className={cn(
               "h-full w-full",
-              isAiAgentsPage ? "" : "p-6"
+              isTerminalPage ? "" : "p-6"
             )}>
               {children}
             </div>
