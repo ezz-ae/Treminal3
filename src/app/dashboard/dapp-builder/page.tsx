@@ -5,13 +5,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ServerCrash } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { DappBuilderOutput, generateDapp } from '@/app/actions';
 import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const FormSchema = z.object({
   description: z.string().min(10, {
@@ -39,7 +40,7 @@ export default function DappBuilderPage() {
       const response = await generateDapp({ description: data.description });
       setResult(response);
     } catch (e: any) {
-      setError(e.message || "An error occurred.");
+      setError(e.message || "An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -83,14 +84,13 @@ export default function DappBuilderPage() {
       </Card>
       
       {error && (
-        <Card className="max-w-2xl border-destructive">
-            <CardHeader>
-                <CardTitle className="text-destructive">Error</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p>{error}</p>
-            </CardContent>
-        </Card>
+        <Alert variant="destructive" className="max-w-2xl">
+          <ServerCrash className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>
+            {error}
+          </AlertDescription>
+        </Alert>
       )}
 
       {result && (

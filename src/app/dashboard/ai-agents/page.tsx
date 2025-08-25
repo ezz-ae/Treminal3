@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, ArrowRight } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -18,13 +18,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from '@/components/ui/card';
 import * as recommendations from '@/ai/flows/business-tool-recommendation';
 import {
   AppWindow,
@@ -38,9 +31,7 @@ import {
   FileArchive,
   ShieldCheck,
   Vote,
-  Icon,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { useSidebar } from '@/components/ui/sidebar';
 
 
@@ -83,13 +74,11 @@ type DisplayLine = {
     type: 'prompt' | 'input' | 'output' | 'status' | 'recommendation' | 'guidance';
     text?: string;
     recommendation?: recommendations.BusinessToolRecommendationOutput['recommendations'][0];
-    isComplete?: boolean;
 };
 
 const initialLines: DisplayLine[] = [
     { id: 'guidance-1', type: 'guidance', text: 'Welcome to the AI Business Agent.' },
     { id: 'guidance-2', type: 'guidance', text: "Describe your business, and our AI agent will recommend the best tools for you." },
-    { id: 'guidance-3', type: 'guidance', text: 'Type your business description below and press Enter to start.'},
 ];
 
 export default function AiAgentsPage() {
@@ -106,7 +95,7 @@ export default function AiAgentsPage() {
       if (terminalOutputRef.current) {
         terminalOutputRef.current.scrollTop = terminalOutputRef.current.scrollHeight;
       }
-    }, [lines]);
+    }, [lines, isLoading]);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -121,7 +110,7 @@ export default function AiAgentsPage() {
     
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         setIsLoading(true);
-        setLines(prev => prev.map(l => l.type === 'input' ? { ...l, text: data.business_description, isComplete: true } : l));
+        addLine({ type: 'prompt', text: data.business_description });
         
         addLine({ type: 'status', text: 'Analyzing business needs...' });
 
@@ -146,15 +135,6 @@ export default function AiAgentsPage() {
         }
     }
 
-    const currentPromptLine = lines.find(l => l.type === 'input' && !l.isComplete);
-
-    useEffect(() => {
-        if (!isLoading && !currentPromptLine) {
-            addLine({ type: 'input', text: '', isComplete: false });
-        }
-    }, [isLoading, currentPromptLine]);
-
-
   return (
     <>
        <div className="sr-only">
@@ -164,8 +144,8 @@ export default function AiAgentsPage() {
         </p>
       </div>
 
-       <div className="font-code bg-black text-white h-full flex flex-col p-4 text-sm">
-            <div ref={terminalOutputRef} id="terminal-output" className="flex-grow overflow-y-auto">
+       <div className="font-code bg-black text-white h-full flex flex-col text-sm">
+            <div ref={terminalOutputRef} id="terminal-output" className="flex-grow overflow-y-auto p-4">
                 <AnimatePresence>
                 {lines.map((line, index) => (
                     <motion.div 
@@ -177,36 +157,12 @@ export default function AiAgentsPage() {
                     >
                         <span className="text-gray-500 w-6 text-right select-none">{index + 1}</span>
                         <div className="flex-1">
-                            {line.type === 'input' && (
+                             {line.type === 'prompt' && (
                                 <div className="flex gap-2 items-center">
                                     <span className="text-blue-400">&gt;</span>
-                                    {line.isComplete ? (
-                                        <span>{line.text}</span>
-                                    ) : (
-                                        <Form {...form}>
-                                            <form onSubmit={form.handleSubmit(onSubmit)} className="flex-grow">
-                                                <FormField
-                                                    control={form.control}
-                                                    name="business_description"
-                                                    render={({ field }) => (
-                                                        <FormItem>
-                                                            <FormControl>
-                                                                <Input
-                                                                    placeholder="e.g., 'A decentralized NFT marketplace for artists...'"
-                                                                    className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
-                                                                    disabled={isLoading}
-                                                                    autoFocus
-                                                                    {...field}
-                                                                />
-                                                            </FormControl>
-                                                        </FormItem>
-                                                    )}
-                                                />
-                                            </form>
-                                        </Form>
-                                    )}
+                                    <span>{line.text}</span>
                                 </div>
-                            )}
+                             )}
                             {line.type === 'guidance' && (
                                 <p className="text-green-400">{line.text}</p>
                             )}
@@ -258,6 +214,33 @@ export default function AiAgentsPage() {
                     </div>
                 )}
             </div>
+             <div className="border-t border-gray-700 p-4">
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
+                        <span className="text-blue-400">&gt;</span>
+                        <FormField
+                            control={form.control}
+                            name="business_description"
+                            render={({ field }) => (
+                                <FormItem className="flex-grow">
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Describe your business and press Enter..."
+                                            className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
+                                            disabled={isLoading}
+                                            autoFocus
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                         <Button type="submit" size="sm" disabled={isLoading}>
+                           {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send'}
+                         </Button>
+                    </form>
+                </Form>
+             </div>
         </div>
     </>
   );

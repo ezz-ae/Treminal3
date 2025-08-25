@@ -12,7 +12,6 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
-  SidebarInset,
 } from '@/components/ui/sidebar';
 import {
   AppWindow,
@@ -155,8 +154,8 @@ export default function DashboardLayout({
              </SidebarMenu>
           </SidebarFooter>
         </Sidebar>
-        <div className="flex flex-col flex-1">
-          <header className="flex items-center justify-between p-4 border-b h-[65px]">
+        <div className="flex flex-col flex-1 h-screen">
+          <header className="flex items-center justify-between p-4 border-b h-[65px] shrink-0">
               <SidebarTrigger/>
               <Button asChild>
                 <Link href="/auth">
@@ -165,7 +164,7 @@ export default function DashboardLayout({
                 </Link>
               </Button>
           </header>
-          <main className="flex-1 bg-gray-50/50">
+          <main className="flex-1 bg-gray-50/50 overflow-y-auto">
             <div className={cn(
               "h-full w-full",
               isAiAgentsPage ? "" : "p-6"
