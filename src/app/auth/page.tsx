@@ -29,6 +29,7 @@ export default function AuthPage() {
                                 By connecting your wallet, you agree to our Terms of Service and Privacy Policy.
                             </p>
                             <Button size="lg" className="w-full" onClick={handleConnect}>
+                                <WalletCards className="mr-2" />
                                 Connect Wallet
                             </Button>
                         </div>

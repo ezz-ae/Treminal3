@@ -37,7 +37,7 @@ function useBoundedScroll(threshold: number): MotionValue<number> {
 }
 
 export default function Home() {
-  const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null);
+  const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(0);
   const terminalRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: terminalRef,
@@ -66,10 +66,10 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <ServiceGrid onServiceClick={handleServiceClick} activeServiceIndex={activeServiceIndex} />
-        <div ref={terminalRef}>
+         <div ref={terminalRef}>
             <MotionTerminal activeServiceIndex={activeServiceIndex} scrollYProgress={scrollYProgress} />
         </div>
+        <ServiceGrid onServiceClick={handleServiceClick} activeServiceIndex={activeServiceIndex} />
         <Web3DevTools activeServiceIndex={activeServiceIndex} />
         <CodingModes />
         <InteractiveGuides activeServiceIndex={activeServiceIndex} />
