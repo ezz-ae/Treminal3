@@ -30,10 +30,12 @@ import {
   FileArchive,
   ShieldCheck,
   Vote,
+  WalletCards
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 const menuItems = [
   {
@@ -156,7 +158,12 @@ export default function DashboardLayout({
         <div className="flex flex-col flex-1">
           <header className="flex items-center justify-between p-4 border-b h-[65px]">
               <SidebarTrigger/>
-              <p className="text-sm text-muted-foreground">The all-in-one text-to-code platform.</p>
+              <Button asChild>
+                <Link href="/auth">
+                    <WalletCards className="mr-2" />
+                    Connect Wallet
+                </Link>
+              </Button>
           </header>
           <main className="flex-1 bg-gray-50/50">
             <div className={cn(

@@ -1,3 +1,4 @@
+
 import { Terminal, Twitter, Github, Linkedin } from 'lucide-react';
 import Link from 'next/link';
 
@@ -23,7 +24,7 @@ const footerLinks = [
       { text: 'Pricing', href: '#' },
       { text: 'Contact Sales', href: '#' },
       { text: 'Support', href: '#' },
-      { text: 'Docs', href: '#' },
+      { text: 'Docs', href: '/docs' },
     ],
   },
   {
@@ -32,6 +33,7 @@ const footerLinks = [
       { text: 'About', href: '#' },
       { text: 'Careers', href: '#' },
       { text: 'Blog', href: '#' },
+      { text: 'Privacy Policy', href: '/privacy' },
     ],
   },
 ];

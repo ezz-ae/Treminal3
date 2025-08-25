@@ -1,12 +1,13 @@
+
 import { Terminal, Menu } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const navItems = [
-  { href: '/web3#services', label: 'Services' },
-  { href: '/web3#for-developers', label: 'Developers' },
-  { href: '/web3#start', label: 'Start' },
+  { href: '/#services', label: 'Services' },
+  { href: '/#for-developers', label: 'Developers' },
+  { href: '/#start', label: 'Start' },
   { href: '/docs', label: 'Docs' },
 ];
 
