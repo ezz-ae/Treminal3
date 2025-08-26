@@ -15,6 +15,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
@@ -36,7 +37,7 @@ import { useSidebar } from '@/components/ui/sidebar';
 
 const FormSchema = z.object({
   business_description: z.string().min(10, {
-    message: 'Description must be at least 10 characters.',
+    message: 'Business description must be at least 10 characters.',
   }),
 });
 
@@ -76,25 +77,27 @@ type DisplayLine = {
 };
 
 export default function DappBuilderPage() {
+    const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    
+    const inputRef = useRef<HTMLInputElement>(null);
     const initialLines: DisplayLine[] = [
         { id: 'guidance-1', type: 'guidance', text: 'Welcome to the dApp Builder.' },
         { id: 'guidance-2', type: 'guidance', text: "Describe the decentralized application you want to build." },
     ];
     const [lines, setLines] = useState<DisplayLine[]>(initialLines);
 
-
     useEffect(() => {
         setOpen(false);
     }, [setOpen]);
     
     useEffect(() => {
-      if (terminalOutputRef.current) {
-        terminalOutputRef.current.scrollTop = terminalOutputRef.current.scrollHeight;
-      }
+        if (terminalOutputRef.current) {
+            terminalOutputRef.current.scrollTop = terminalOutputRef.current.scrollHeight;
+        }
+        if (!isLoading) {
+            inputRef.current?.focus();
+        }
     }, [lines, isLoading]);
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -112,14 +115,15 @@ export default function DappBuilderPage() {
         setIsLoading(true);
         addLine({ type: 'prompt', text: data.business_description });
         
-        addLine({ type: 'status', text: 'Generating dApp plan...' });
+        addLine({ type: 'status', text: 'Analyzing business needs...' });
 
         try {
-            const result = await recommendBusinessTools(data);
+            const result = await recommendBusinessTools({ business_description: data.business_description });
             
             setTimeout(() => {
-                setLines(prev => prev.map(l => l.type === 'status' ? {...l, text: 'Found recommendations:'} : l));
-                result.recommendations.forEach((rec) => {
+                setLines(prev => prev.filter(l => l.type !== 'status'));
+                addLine({ type: 'guidance', text: 'Found recommendations:'})
+                result.recommendations.forEach((rec, index) => {
                     addLine({ type: 'recommendation', recommendation: rec });
                 });
                 setIsLoading(false);
@@ -128,7 +132,7 @@ export default function DappBuilderPage() {
 
         } catch (error) {
             console.error('Error getting recommendations:', error);
-            addLine({ type: 'output', text: 'Error: Could not generate dApp plan.' });
+            addLine({ type: 'output', text: 'Error: Could not get recommendations.' });
             setIsLoading(false);
             form.reset();
         }
@@ -143,7 +147,7 @@ export default function DappBuilderPage() {
         </p>
       </div>
 
-       <div className="font-code bg-black text-white h-full flex flex-col text-sm">
+       <div className="font-code bg-black text-white h-full flex flex-col text-sm" onClick={() => inputRef.current?.focus()}>
             <div ref={terminalOutputRef} id="terminal-output" className="flex-grow overflow-y-auto p-4">
                 <AnimatePresence>
                 {lines.map((line, index) => (
@@ -166,7 +170,10 @@ export default function DappBuilderPage() {
                                 <p className="text-green-400">{line.text}</p>
                             )}
                             {line.type === 'status' && (
-                                <p className="text-yellow-400">{line.text}</p>
+                                <p className="text-yellow-400 flex items-center gap-2">
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                  {line.text}
+                                </p>
                             )}
                             {line.type === 'output' && (
                                 <p className="text-red-400">{line.text}</p>
@@ -203,44 +210,38 @@ export default function DappBuilderPage() {
                     </motion.div>
                 ))}
                 </AnimatePresence>
-                {isLoading && (
-                    <div className="flex gap-4">
-                       <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
-                        <div className="flex-1 flex items-center gap-2">
-                            <Loader2 className="w-4 h-4 animate-spin text-yellow-400" />
-                            <p className="text-yellow-400">Thinking...</p>
-                        </div>
-                    </div>
+                {!isLoading && (
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                             <div className="flex gap-4">
+                                <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
+                                <div className="flex-1 flex gap-2 items-center">
+                                    <span className="text-blue-400">&gt;</span>
+                                    <FormField
+                                        control={form.control}
+                                        name="business_description"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-grow">
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        ref={inputRef}
+                                                        placeholder="e.g., 'An NFT marketplace for digital art with a 5% royalty fee...'"
+                                                        className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
+                                                        autoComplete="off"
+                                                        disabled={isLoading}
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                    </Form>
                 )}
             </div>
-             <div className="border-t border-gray-700 p-4">
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
-                        <span className="text-blue-400">&gt;</span>
-                        <FormField
-                            control={form.control}
-                            name="business_description"
-                            render={({ field }) => (
-                                <FormItem className="flex-grow">
-                                    <FormControl>
-                                        <Input
-                                            placeholder="e.g., 'An NFT marketplace for digital art with a 5% royalty fee...'"
-                                            className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
-                                            disabled={isLoading}
-                                            autoFocus
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                         <Button type="submit" size="sm" disabled={isLoading}>
-                           {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send'}
-                         </Button>
-                    </form>
-                </Form>
-             </div>
-        </div>
+       </div>
     </>
   );
 }
