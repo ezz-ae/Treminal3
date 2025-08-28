@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import {
   AppWindow,
@@ -99,6 +100,20 @@ const menuItems = [
   },
 ];
 
+const MenuLink = ({ href, children }: { href: string, children: React.ReactNode }) => {
+    const { setOpenMobile } = useSidebar();
+    const pathname = usePathname();
+    const isActive = pathname === href;
+
+    return (
+        <Link href={href} onClick={() => setOpenMobile(false)}>
+            <SidebarMenuButton isActive={isActive}>
+                {children}
+            </SidebarMenuButton>
+        </Link>
+    )
+}
+
 export default function DashboardLayout({
   children,
 }: {
@@ -134,12 +149,10 @@ export default function DashboardLayout({
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <Link href={item.href}>
-                    <SidebarMenuButton isActive={pathname === item.href}>
+                    <MenuLink href={item.href}>
                       <item.icon />
                       <span>{item.label}</span>
-                    </SidebarMenuButton>
-                  </Link>
+                    </MenuLink>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

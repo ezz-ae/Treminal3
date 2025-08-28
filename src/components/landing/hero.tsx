@@ -11,7 +11,7 @@ export default function Hero() {
   
   return (
     <section className="bg-background text-foreground">
-      <div className="container mx-auto px-4 h-screen flex flex-col justify-center items-center">
+      <div className="container mx-auto px-4 py-24 sm:py-32 flex flex-col justify-center items-center min-h-[calc(100vh-64px)]">
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight font-headline mb-10">
             Build, manage, and grow your&nbsp;

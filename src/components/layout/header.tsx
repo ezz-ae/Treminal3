@@ -33,7 +33,7 @@ export default function Header() {
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <Button asChild>
+           <Button asChild>
             <Link href="/dashboard">Get Started</Link>
           </Button>
         </div>
