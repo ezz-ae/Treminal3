@@ -24,7 +24,6 @@ const footerLinks = [
       { text: 'Pricing', href: '#' },
       { text: 'Contact Sales', href: '#' },
       { text: 'Support', href: '#' },
-      { text: 'Docs', href: '/docs' },
     ],
   },
   {
@@ -33,7 +32,6 @@ const footerLinks = [
       { text: 'About', href: '#' },
       { text: 'Careers', href: '#' },
       { text: 'Blog', href: '#' },
-      { text: 'Privacy Policy', href: '/privacy' },
     ],
   },
 ];
@@ -69,7 +67,7 @@ export default function Footer() {
         </div>
         <div className="mt-8 pt-8 border-t flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Treminal3, Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Treminal3, Inc. All rights reserved. Treminal3 is part of <a href="https://mtcmartech.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">mtc'</a>.
           </p>
           <div className="flex items-center space-x-4 mt-4 sm:mt-0">
             {socialLinks.map((social, index) => (
