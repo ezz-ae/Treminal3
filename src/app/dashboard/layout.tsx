@@ -193,7 +193,7 @@ export default function DashboardLayout({
           <main className="flex-1 bg-background overflow-y-auto">
              <div className={cn(
               "h-full w-full",
-              isTerminalPage ? "" : "p-6"
+              isTerminalPage ? "p-0" : "p-6"
             )}>
               {children}
             </div>
