@@ -5,75 +5,31 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
-import Link from 'next/link';
+import { Loader2, AppWindow, FileJson } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { recommendBusinessTools } from '@/app/actions';
-import { Button } from '@/components/ui/button';
+import { generateDapp } from '@/app/actions';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
-import {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
-} from 'lucide-react';
+import { DappBuilderOutput } from '@/ai/schemas/dapp-builder';
 import { useSidebar } from '@/components/ui/sidebar';
 
 
 const FormSchema = z.object({
-  business_description: z.string().min(10, {
-    message: 'Business description must be at least 10 characters.',
+  description: z.string().min(10, {
+    message: 'dApp description must be at least 10 characters.',
   }),
 });
 
-const iconMap: Record<string, React.ElementType> = {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
-};
-
-const toolUrlMap: Record<string, string> = {
-  'dApp Builder': '/dashboard/dapp-builder',
-  'Token Launcher': '/dashboard/token-launcher',
-  'Trading Bot Platform': '/dashboard/trading-bots',
-  'AI Agents': '/dashboard/ai-agents',
-  'Custom Wallets': '/dashboard/wallets',
-  'Smart Contract Templates': '/dashboard/smart-contracts',
-  'Manual Transactions': '/dashboard/transactions',
-  'On-chain Analytics': '/dashboard/analytics',
-  'Decentralized Storage': '/dashboard/storage',
-  'Security Audits': '/dashboard/audits',
-  'DAO Governance': '/dashboard/governance',
-};
-
 type DisplayLine = {
     id: string;
-    type: 'prompt' | 'input' | 'output' | 'status' | 'recommendation' | 'guidance';
+    type: 'prompt' | 'output' | 'status' | 'guidance' | 'plan';
     text?: string;
-    recommendation?: BusinessToolRecommendationOutput['recommendations'][0];
+    plan?: DappBuilderOutput;
 };
 
 export default function DappBuilderPage() {
@@ -103,7 +59,7 @@ export default function DappBuilderPage() {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            business_description: "",
+            description: "",
         },
     });
 
@@ -113,26 +69,24 @@ export default function DappBuilderPage() {
     
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         setIsLoading(true);
-        addLine({ type: 'prompt', text: data.business_description });
+        addLine({ type: 'prompt', text: data.description });
         
-        addLine({ type: 'status', text: 'Analyzing business needs...' });
+        addLine({ type: 'status', text: 'Generating dApp plan...' });
 
         try {
-            const result = await recommendBusinessTools({ business_description: data.business_description });
+            const result = await generateDapp({ description: data.description });
             
             setTimeout(() => {
                 setLines(prev => prev.filter(l => l.type !== 'status'));
-                addLine({ type: 'guidance', text: 'Found recommendations:'})
-                result.recommendations.forEach((rec, index) => {
-                    addLine({ type: 'recommendation', recommendation: rec });
-                });
+                addLine({ type: 'guidance', text: 'Generated Plan:'})
+                addLine({ type: 'plan', plan: result });
                 setIsLoading(false);
                 form.reset();
             }, 1000);
 
         } catch (error) {
-            console.error('Error getting recommendations:', error);
-            addLine({ type: 'output', text: 'Error: Could not get recommendations.' });
+            console.error('Error generating dApp plan:', error);
+            addLine({ type: 'output', text: 'Error: Could not generate dApp plan.' });
             setIsLoading(false);
             form.reset();
         }
@@ -178,34 +132,33 @@ export default function DappBuilderPage() {
                             {line.type === 'output' && (
                                 <p className="text-red-400">{line.text}</p>
                             )}
-                            {line.type === 'recommendation' && line.recommendation && (() => {
-                                const LucideIcon = iconMap[line.recommendation.icon] || Puzzle;
-                                const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard';
-                                return (
-                                    <>
-                                        <Link href={toolUrl} className="block group -ml-2">
-                                            <div className="border border-gray-700 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
-                                                <div className="flex items-center gap-3">
-                                                    <LucideIcon className="w-5 h-5 text-green-400" />
-                                                    <h3 className="font-bold text-base">{line.recommendation.name}</h3>
-                                                </div>
-                                                <p className="mt-1 ml-8 text-gray-400">{line.recommendation.description}</p>
+                            {line.type === 'plan' && line.plan && (
+                                <div className="border border-gray-700 rounded-md p-4 my-2 bg-gray-900/50">
+                                    <h3 className="font-bold text-base text-purple-400">{line.plan.name}</h3>
+                                    <p className="text-gray-400 italic mb-4">{line.plan.description}</p>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <AppWindow className="w-4 h-4 text-green-400"/>
+                                                <h4 className="font-bold text-green-400">UI Components</h4>
                                             </div>
-                                        </Link>
-                                        <div className="ml-8 mt-2 pl-4 border-l-2 border-gray-700">
-                                            <p className="text-purple-400 font-bold mb-1">Recommended Flow:</p>
-                                            <ul className="space-y-1">
-                                                {line.recommendation.flow.map((step, i) => (
-                                                    <li key={i} className="text-gray-400 flex items-start">
-                                                        <span className="mr-2">&rarr;</span>
-                                                        <span>{step}</span>
-                                                    </li>
-                                                ))}
+                                            <ul className="space-y-1 list-disc list-inside text-gray-400">
+                                                {line.plan.components.map((item, i) => <li key={i}>{item}</li>)}
                                             </ul>
                                         </div>
-                                    </>
-                                )
-                            })()}
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <FileJson className="w-4 h-4 text-green-400"/>
+                                                <h4 className="font-bold text-green-400">Smart Contracts</h4>
+                                            </div>
+                                            <ul className="space-y-1 list-disc list-inside text-gray-400">
+                                                {line.plan.contracts.map((item, i) => <li key={i}>{item}</li>)}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </motion.div>
                 ))}
@@ -219,7 +172,7 @@ export default function DappBuilderPage() {
                                     <span className="text-blue-400">&gt;</span>
                                     <FormField
                                         control={form.control}
-                                        name="business_description"
+                                        name="description"
                                         render={({ field }) => (
                                             <FormItem className="flex-grow">
                                                 <FormControl>

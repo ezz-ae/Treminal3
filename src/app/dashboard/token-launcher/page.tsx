@@ -5,80 +5,38 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
-import Link from 'next/link';
+import { Loader2, Copy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { recommendBusinessTools } from '@/app/actions';
+import { generateToken } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
-import {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
-} from 'lucide-react';
+import { TokenLauncherOutput } from '@/ai/schemas/token-launcher';
 import { useSidebar } from '@/components/ui/sidebar';
-
+import { useToast } from '@/hooks/use-toast';
 
 const FormSchema = z.object({
-  business_description: z.string().min(10, {
-    message: 'Business description must be at least 10 characters.',
+  description: z.string().min(10, {
+    message: 'Token description must be at least 10 characters.',
   }),
 });
 
-const iconMap: Record<string, React.ElementType> = {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
-};
-
-const toolUrlMap: Record<string, string> = {
-  'dApp Builder': '/dashboard/dapp-builder',
-  'Token Launcher': '/dashboard/token-launcher',
-  'Trading Bot Platform': '/dashboard/trading-bots',
-  'AI Agents': '/dashboard/ai-agents',
-  'Custom Wallets': '/dashboard/wallets',
-  'Smart Contract Templates': '/dashboard/smart-contracts',
-  'Manual Transactions': '/dashboard/transactions',
-  'On-chain Analytics': '/dashboard/analytics',
-  'Decentralized Storage': '/dashboard/storage',
-  'Security Audits': '/dashboard/audits',
-  'DAO Governance': '/dashboard/governance',
-};
-
 type DisplayLine = {
     id: string;
-    type: 'prompt' | 'input' | 'output' | 'status' | 'recommendation' | 'guidance';
+    type: 'prompt' | 'output' | 'status' | 'guidance' | 'code';
     text?: string;
-    recommendation?: BusinessToolRecommendationOutput['recommendations'][0];
+    code?: TokenLauncherOutput;
 };
 
 export default function TokenLauncherPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
+    const { toast } = useToast();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const initialLines: DisplayLine[] = [
@@ -103,7 +61,7 @@ export default function TokenLauncherPage() {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            business_description: "",
+            description: "",
         },
     });
 
@@ -111,28 +69,34 @@ export default function TokenLauncherPage() {
         setLines(prev => [...prev, { ...line, id: self.crypto.randomUUID() }]);
     };
     
+    const handleCopy = (code: string) => {
+        navigator.clipboard.writeText(code);
+        toast({
+            title: "Copied to clipboard!",
+            description: "The Solidity code has been copied to your clipboard.",
+        });
+    }
+
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         setIsLoading(true);
-        addLine({ type: 'prompt', text: data.business_description });
+        addLine({ type: 'prompt', text: data.description });
         
-        addLine({ type: 'status', text: 'Analyzing business needs...' });
+        addLine({ type: 'status', text: 'Generating ERC-20 Smart Contract...' });
 
         try {
-            const result = await recommendBusinessTools({ business_description: data.business_description });
+            const result = await generateToken({ description: data.description });
             
             setTimeout(() => {
                 setLines(prev => prev.filter(l => l.type !== 'status'));
-                addLine({ type: 'guidance', text: 'Found recommendations:'})
-                result.recommendations.forEach((rec, index) => {
-                    addLine({ type: 'recommendation', recommendation: rec });
-                });
+                addLine({ type: 'guidance', text: 'Generated Contract:'})
+                addLine({ type: 'code', code: result });
                 setIsLoading(false);
                 form.reset();
             }, 1000);
 
         } catch (error) {
-            console.error('Error getting recommendations:', error);
-            addLine({ type: 'output', text: 'Error: Could not get recommendations.' });
+            console.error('Error generating token contract:', error);
+            addLine({ type: 'output', text: 'Error: Could not generate token contract.' });
             setIsLoading(false);
             form.reset();
         }
@@ -143,7 +107,7 @@ export default function TokenLauncherPage() {
        <div className="sr-only">
         <h1 className="text-3xl font-bold font-headline">Token Launcher</h1>
         <p className="text-muted-foreground">
-          Describe the token you want to launch, and our AI agent will recommend the best tools to help you.
+          Describe the token you want to launch, and our AI agent will generate the smart contract for you.
         </p>
       </div>
 
@@ -178,34 +142,23 @@ export default function TokenLauncherPage() {
                             {line.type === 'output' && (
                                 <p className="text-red-400">{line.text}</p>
                             )}
-                            {line.type === 'recommendation' && line.recommendation && (() => {
-                                const LucideIcon = iconMap[line.recommendation.icon] || Puzzle;
-                                const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard';
-                                return (
-                                    <>
-                                        <Link href={toolUrl} className="block group -ml-2">
-                                            <div className="border border-gray-700 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
-                                                <div className="flex items-center gap-3">
-                                                    <LucideIcon className="w-5 h-5 text-green-400" />
-                                                    <h3 className="font-bold text-base">{line.recommendation.name}</h3>
-                                                </div>
-                                                <p className="mt-1 ml-8 text-gray-400">{line.recommendation.description}</p>
-                                            </div>
-                                        </Link>
-                                        <div className="ml-8 mt-2 pl-4 border-l-2 border-gray-700">
-                                            <p className="text-purple-400 font-bold mb-1">Recommended Flow:</p>
-                                            <ul className="space-y-1">
-                                                {line.recommendation.flow.map((step, i) => (
-                                                    <li key={i} className="text-gray-400 flex items-start">
-                                                        <span className="mr-2">&rarr;</span>
-                                                        <span>{step}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
+                            {line.type === 'code' && line.code && (
+                                <div className="border border-gray-700 rounded-md my-2 bg-gray-900/50">
+                                    <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+                                        <div>
+                                            <h3 className="font-bold text-base text-purple-400">{line.code.name} ({line.code.symbol})</h3>
+                                            <p className="text-gray-400 text-xs">Total Supply: {line.code.supply.toLocaleString()}</p>
                                         </div>
-                                    </>
-                                )
-                            })()}
+                                        <Button variant="ghost" size="sm" onClick={() => handleCopy(line.code.solidityCode)}>
+                                            <Copy className="w-4 h-4 mr-2"/>
+                                            Copy Code
+                                        </Button>
+                                    </div>
+                                    <pre className="p-4 overflow-x-auto text-xs">
+                                        <code>{line.code.solidityCode}</code>
+                                    </pre>
+                                </div>
+                            )}
                         </div>
                     </motion.div>
                 ))}
@@ -219,7 +172,7 @@ export default function TokenLauncherPage() {
                                     <span className="text-blue-400">&gt;</span>
                                     <FormField
                                         control={form.control}
-                                        name="business_description"
+                                        name="description"
                                         render={({ field }) => (
                                             <FormItem className="flex-grow">
                                                 <FormControl>
