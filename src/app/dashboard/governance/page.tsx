@@ -33,6 +33,12 @@ import {
   Vote,
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'DAO Governance | Treminal3',
+    description: 'Manage your decentralized autonomous organization with our governance tools.',
+};
 
 
 const FormSchema = z.object({

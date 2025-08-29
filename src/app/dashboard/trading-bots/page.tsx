@@ -33,6 +33,12 @@ import {
   Vote,
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Trading Bot Platform | Treminal3',
+    description: 'Develop and deploy automated trading bots on major exchanges.',
+};
 
 
 const FormSchema = z.object({

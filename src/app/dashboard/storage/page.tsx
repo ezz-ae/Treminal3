@@ -33,6 +33,12 @@ import {
   Vote,
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Decentralized Storage | Treminal3',
+    description: 'Upload and manage files on IPFS and other decentralized storage networks.',
+};
 
 
 const FormSchema = z.object({

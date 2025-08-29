@@ -33,6 +33,12 @@ import {
   Vote,
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Custom Wallets | Treminal3',
+    description: 'Build and brand your own secure crypto wallets for your users.',
+};
 
 
 const FormSchema = z.object({

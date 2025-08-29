@@ -33,6 +33,12 @@ import {
   Vote,
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Manual Transactions | Treminal3',
+    description: 'Interact directly with the blockchain for custom operations and analysis.',
+};
 
 
 const FormSchema = z.object({

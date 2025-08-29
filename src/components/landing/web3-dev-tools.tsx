@@ -5,81 +5,20 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Lightbulb, Zap, Code } from 'lucide-react';
 import React from 'react';
-
-const DAppBuilderVector = () => (
-    <svg width="100%" height="100%" viewBox="0 0 600 400" className="bg-card rounded-lg border overflow-hidden">
-        <defs>
-            <linearGradient id="dapp-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style={{ stopColor: 'hsl(var(--primary))', stopOpacity: 0.2 }} />
-                <stop offset="100%" style={{ stopColor: 'hsl(var(--primary))', stopOpacity: 0 }} />
-            </linearGradient>
-        </defs>
-        
-        {/* Main Window */}
-        <rect x="1" y="1" width="598" height="398" rx="8" fill="hsl(var(--card))" />
-
-        {/* Header */}
-        <rect x="1" y="1" width="598" height="40" fill="hsl(var(--secondary))" />
-        <circle cx="20" cy="20" r="6" fill="hsl(var(--muted))" />
-        <circle cx="40" cy="20" r="6" fill="hsl(var(--muted))" />
-        <circle cx="60" cy="20" r="6" fill="hsl(var(--muted))" />
-
-        {/* Sidebar */}
-        <rect x="1" y="41" width="120" height="358" fill="hsl(var(--secondary))" />
-        <rect x="15" y="60" width="90" height="20" rx="4" fill="hsl(var(--muted))" />
-        <rect x="15" y="90" width="90" height="8" rx="2" fill="hsl(var(--muted))" />
-        <rect x="15" y="105" width="70" height="8" rx="2" fill="hsl(var(--muted))" />
-        
-        <rect x="15" y="140" width="90" height="20" rx="4" fill="hsl(var(--primary))" opacity="0.5" />
-        <rect x="15" y="170" width="90" height="8" rx="2" fill="hsl(var(--muted))" />
-        <rect x="15" y="185" width="70" height="8" rx="2" fill="hsl(var(--muted))" />
-
-        <rect x="15" y="220" width="90" height="20" rx="4" fill="hsl(var(--muted))" />
-        <rect x="15" y="250" width="90" height="8" rx="2" fill="hsl(var(--muted))" />
-        <rect x="15" y="265" width="70" height="8" rx="2" fill="hsl(var(--muted))" />
-
-        {/* Canvas */}
-        <g>
-            <rect x="150" y="70" width="220" height="120" rx="8" fill="hsl(var(--secondary))" stroke="hsl(var(--border))" strokeWidth="1"/>
-            <rect x="165" y="85" width="50" height="50" rx="4" fill="hsl(var(--primary))" />
-            <rect x="230" y="85" width="125" height="12" rx="2" fill="hsl(var(--muted))" />
-            <rect x="230" y="105" width="95" height="8" rx="2" fill="hsl(var(--muted))" />
-            <rect x="230" y="121" width="95" height="8" rx="2" fill="hsl(var(--muted))" />
-
-
-            <rect x="400" y="70" width="160" height="280" rx="8" fill="hsl(var(--secondary))" stroke="hsl(var(--border))" strokeWidth="1"/>
-            <rect x="415" y="85" width="130" height="12" rx="2" fill="hsl(var(--muted))" />
-            <rect x="415" y="105" width="95" height="8" rx="2" fill="hsl(var(--muted))" />
-            <circle cx="430" cy="140" r="15" fill="hsl(var(--primary))" />
-            <rect x="455" y="132" width="70" height="16" rx="3" fill="hsl(var(--muted))" />
-
-            <rect x="150" y="220" width="220" height="130" rx="8" fill="hsl(var(--secondary))" stroke="hsl(var(--border))" strokeWidth="1"/>
-            <rect x="165" y="235" width="190" height="12" rx="2" fill="hsl(var(--muted))" />
-            <rect x="165" y="255" width="150" height="8" rx="2" fill="hsl(var(--muted))" />
-            <rect x="165" y="275" width="190" height="25" rx="4" fill="hsl(var(--primary))" />
-
-
-            {/* Connection Lines */}
-            <path d="M 370 130 C 400 130, 400 190, 400 190" stroke="hsl(var(--primary))" strokeWidth="2" fill="none" strokeDasharray="4" />
-            <path d="M 260 190 L 260 220" stroke="hsl(var(--primary))" strokeWidth="2" fill="none" strokeDasharray="4" />
-
-        </g>
-    </svg>
-);
-
+import { DAppBuilderVector, TokenLauncherVector, TradingBotVector, AIVector, DefaultVector } from './web3-dev-tools-graphics';
 
 const serviceContent = [
   { title: 'dApp Builder', image: DAppBuilderVector, aiHint: 'dApp builder interface' },
-  { title: 'Token Launcher', image: 'https://placehold.co/600x400.png', aiHint: 'cryptocurrency token creation' },
-  { title: 'Trading Bot Platform', image: 'https://placehold.co/600x400.png', aiHint: 'trading bot algorithm' },
-  { title: 'AI Agents', image: 'https://placehold.co/600x400.png', aiHint: 'artificial intelligence network' },
-  { title: 'Custom Wallets', image: 'https://placehold.co/600x400.png', aiHint: 'secure crypto wallet' },
-  { title: 'Smart Contract Templates', image: 'https://placehold.co/600x400.png', aiHint: 'smart contract code' },
-  { title: 'Manual Transactions', image: 'https://placehold.co/600x400.png', aiHint: 'blockchain transaction' },
-  { title: 'On-chain Analytics', image: 'https://placehold.co/600x400.png', aiHint: 'data analytics dashboard' },
-  { title: 'Decentralized Storage', image: 'https://placehold.co/600x400.png', aiHint: 'decentralized network nodes' },
-  { title: 'Security Audits', image: 'https://placehold.co/600x400.png', aiHint: 'cyber security analysis' },
-  { title: 'DAO Governance', image: 'https://placehold.co/600x400.png', aiHint: 'community governance vote' },
+  { title: 'Token Launcher', image: TokenLauncherVector, aiHint: 'cryptocurrency token creation' },
+  { title: 'Trading Bot Platform', image: TradingBotVector, aiHint: 'trading bot algorithm' },
+  { title: 'AI Agents', image: AIVector, aiHint: 'artificial intelligence network' },
+  { title: 'Custom Wallets', image: DefaultVector, aiHint: 'secure crypto wallet' },
+  { title: 'Smart Contract Templates', image: DefaultVector, aiHint: 'smart contract code' },
+  { title: 'Manual Transactions', image: DefaultVector, aiHint: 'blockchain transaction' },
+  { title: 'On-chain Analytics', image: DefaultVector, aiHint: 'data analytics dashboard' },
+  { title: 'Decentralized Storage', image: DefaultVector, aiHint: 'decentralized network nodes' },
+  { title: 'Security Audits', image: DefaultVector, aiHint: 'cyber security analysis' },
+  { title: 'DAO Governance', image: DefaultVector, aiHint: 'community governance vote' },
 ];
 
 const codingModes = [

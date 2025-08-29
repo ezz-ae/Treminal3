@@ -9,9 +9,17 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
 
+const title = 'Treminal3: AI-Native Code Editor for Web3';
+const description = 'Go from idea to deployed dApp with an AI-powered terminal. Generate smart contracts, build front-ends, and manage your entire Web3 project with natural language.';
+
 export const metadata: Metadata = {
-  title: 'Treminal3',
-  description: 'The all-in-one platform for Web3 development, marketing, and finance.',
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    type: 'website',
+  }
 };
 
 export default function RootLayout({

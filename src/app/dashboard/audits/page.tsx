@@ -33,6 +33,12 @@ import {
   Vote,
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Security Audits | Treminal3',
+    description: 'Run automated security audits on your smart contracts to find vulnerabilities.',
+};
 
 
 const FormSchema = z.object({

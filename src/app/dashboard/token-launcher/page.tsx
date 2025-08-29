@@ -19,6 +19,13 @@ import { Input } from '@/components/ui/input';
 import { TokenLauncherOutput } from '@/ai/schemas/token-launcher';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Token Launcher | Treminal3',
+    description: 'Design and launch your own custom cryptocurrency tokens in minutes.',
+};
+
 
 const FormSchema = z.object({
   description: z.string().min(10, {

@@ -33,6 +33,12 @@ import {
   Vote,
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'On-chain Analytics | Treminal3',
+    description: 'Get deep insights into on-chain data with our powerful analytics engine.',
+};
 
 
 const FormSchema = z.object({
