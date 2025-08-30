@@ -33,13 +33,6 @@ import {
   Vote,
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'AI Agents | Treminal3',
-    description: 'Deploy autonomous AI agents to interact with your dApps and automate tasks.',
-};
-
 
 const FormSchema = z.object({
   business_description: z.string().min(10, {

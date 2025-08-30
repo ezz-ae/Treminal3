@@ -17,13 +17,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { DappBuilderOutput } from '@/ai/schemas/dapp-builder';
 import { useSidebar } from '@/components/ui/sidebar';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'dApp Builder | Treminal3',
-    description: 'Create and deploy decentralized applications with our intuitive builder.',
-};
-
 
 const FormSchema = z.object({
   description: z.string().min(10, {

@@ -33,13 +33,6 @@ import {
   Vote,
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'Smart Contract Templates | Treminal3',
-    description: 'Use our audited templates to create secure smart contracts without the hassle.',
-};
-
 
 const FormSchema = z.object({
   business_description: z.string().min(10, {
