@@ -5,10 +5,10 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Copy } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { recommendBusinessTools } from '@/app/actions';
+import { recommendBusinessTools, generateDapp, generateToken } from '@/app/actions';
 import {
   Form,
   FormControl,
@@ -16,7 +16,10 @@ import {
   FormItem,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
+import { Button } from '@/components/ui/button';
+import { useSidebar } from '@/components/ui/sidebar';
+import { useToast } from '@/hooks/use-toast';
+import type { DappBuilderOutput, TokenLauncherOutput, BusinessToolRecommendationOutput } from '@/app/actions';
 import {
   AppWindow,
   Bot,
@@ -30,26 +33,15 @@ import {
   ShieldCheck,
   Vote,
 } from 'lucide-react';
-import { useSidebar } from '@/components/ui/sidebar';
 
 const FormSchema = z.object({
-  business_description: z.string().min(10, {
-    message: 'Business description must be at least 10 characters.',
+  prompt: z.string().min(10, {
+    message: 'Please enter a more detailed prompt.',
   }),
 });
 
 const iconMap: Record<string, React.ElementType> = {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
+  AppWindow, Bot, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, ShieldCheck, Vote,
 };
 
 const toolUrlMap: Record<string, string> = {
@@ -68,20 +60,44 @@ const toolUrlMap: Record<string, string> = {
 
 type DisplayLine = {
     id: string;
-    type: 'prompt' | 'input' | 'output' | 'status' | 'recommendation' | 'guidance';
+    type: 'prompt' | 'output' | 'status' | 'recommendation' | 'guidance' | 'plan' | 'code';
     text?: string;
     recommendation?: BusinessToolRecommendationOutput['recommendations'][0];
+    plan?: DappBuilderOutput;
+    code?: TokenLauncherOutput;
 };
 
 const initialLines: DisplayLine[] = [
-    { id: 'guidance-1', type: 'guidance', text: 'Welcome to the AI Business Agent.' },
-    { id: 'guidance-2', type: 'guidance', text: "Describe your business, and our AI agent will recommend the best tools for you." },
+    { id: 'guidance-1', type: 'guidance', text: 'Welcome to your AI Command Center.' },
+    { id: 'guidance-2', type: 'guidance', text: "Describe what you want to build, and I'll generate a plan or recommend the right tools." },
 ];
+
+enum AgentTask {
+  Recommend,
+  BuildDapp,
+  LaunchToken,
+  Unknown
+}
+
+function determineTask(prompt: string): AgentTask {
+    const lowerCasePrompt = prompt.toLowerCase();
+    if (lowerCasePrompt.includes('dapp') || lowerCasePrompt.includes('application')) {
+        return AgentTask.BuildDapp;
+    }
+    if (lowerCasePrompt.includes('token') || lowerCasePrompt.includes('crypto') || lowerCasePrompt.includes('coin')) {
+        return AgentTask.LaunchToken;
+    }
+    if (lowerCasePrompt.includes('business') || lowerCasePrompt.includes('help') || lowerCasePrompt.includes('tool')) {
+        return AgentTask.Recommend;
+    }
+    return AgentTask.Unknown;
+}
 
 export default function AiAgentsPage() {
     const [lines, setLines] = useState<DisplayLine[]>(initialLines);
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
+    const { toast } = useToast();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -101,7 +117,7 @@ export default function AiAgentsPage() {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            business_description: "",
+            prompt: "",
         },
     });
 
@@ -109,39 +125,65 @@ export default function AiAgentsPage() {
         setLines(prev => [...prev, { ...line, id: self.crypto.randomUUID() }]);
     };
     
+    const handleCopy = (code: string) => {
+        navigator.clipboard.writeText(code);
+        toast({
+            title: "Copied to clipboard!",
+            description: "The Solidity code has been copied to your clipboard.",
+        });
+    }
+
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         setIsLoading(true);
-        addLine({ type: 'prompt', text: data.business_description });
+        addLine({ type: 'prompt', text: data.prompt });
         
-        addLine({ type: 'status', text: 'Analyzing business needs...' });
+        const task = determineTask(data.prompt);
 
         try {
-            const result = await recommendBusinessTools({ business_description: data.business_description });
-            
-            setTimeout(() => {
-                setLines(prev => prev.filter(l => l.type !== 'status'));
-                addLine({ type: 'guidance', text: 'Found recommendations:'})
-                result.recommendations.forEach((rec, index) => {
-                    addLine({ type: 'recommendation', recommendation: rec });
-                });
+            if (task === AgentTask.Recommend || task === AgentTask.Unknown) {
+                addLine({ type: 'status', text: 'Analyzing business needs...' });
+                const result = await recommendBusinessTools({ business_description: data.prompt });
+                setTimeout(() => {
+                    setLines(prev => prev.filter(l => l.type !== 'status'));
+                    addLine({ type: 'guidance', text: 'Found recommendations:'})
+                    result.recommendations.forEach((rec) => {
+                        addLine({ type: 'recommendation', recommendation: rec });
+                    });
+                }, 1000);
+            } else if (task === AgentTask.BuildDapp) {
+                addLine({ type: 'status', text: 'Generating dApp plan...' });
+                const result = await generateDapp({ description: data.prompt });
+                setTimeout(() => {
+                    setLines(prev => prev.filter(l => l.type !== 'status'));
+                    addLine({ type: 'guidance', text: 'Generated Plan:'})
+                    addLine({ type: 'plan', plan: result });
+                }, 1000);
+            } else if (task === AgentTask.LaunchToken) {
+                 addLine({ type: 'status', text: 'Generating ERC-20 Smart Contract...' });
+                const result = await generateToken({ description: data.prompt });
+                 setTimeout(() => {
+                    setLines(prev => prev.filter(l => l.type !== 'status'));
+                    addLine({ type: 'guidance', text: 'Generated Contract:'})
+                    addLine({ type: 'code', code: result });
+                }, 1000);
+            }
+        } catch (error) {
+            console.error('Error processing prompt:', error);
+            addLine({ type: 'output', text: 'Error: Could not process your request.' });
+        } finally {
+             setTimeout(() => {
                 setIsLoading(false);
                 form.reset();
             }, 1000);
-
-        } catch (error) {
-            console.error('Error getting recommendations:', error);
-            addLine({ type: 'output', text: 'Error: Could not get recommendations.' });
-            setIsLoading(false);
-            form.reset();
         }
     }
 
   return (
     <>
        <div className="sr-only">
-        <h1 className="text-3xl font-bold font-headline">AI Business Agent</h1>
+        <h1 className="text-3xl font-bold font-headline">AI Command Center</h1>
         <p className="text-muted-foreground">
-          Describe your business, and our AI agent will recommend the best tools to help you grow.
+          Your unified interface for building and managing Web3 projects with AI.
         </p>
       </div>
 
@@ -204,6 +246,50 @@ export default function AiAgentsPage() {
                                     </>
                                 )
                             })()}
+                             {line.type === 'plan' && line.plan && (
+                                <div className="border border-gray-700 rounded-md p-4 my-2 bg-gray-900/50">
+                                    <h3 className="font-bold text-base text-purple-400">{line.plan.name}</h3>
+                                    <p className="text-gray-400 italic mb-4">{line.plan.description}</p>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <AppWindow className="w-4 h-4 text-green-400"/>
+                                                <h4 className="font-bold text-green-400">UI Components</h4>
+                                            </div>
+                                            <ul className="space-y-1 list-disc list-inside text-gray-400">
+                                                {line.plan.components.map((item, i) => <li key={i}>{item}</li>)}
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <FileJson className="w-4 h-4 text-green-400"/>
+                                                <h4 className="font-bold text-green-400">Smart Contracts</h4>
+                                            </div>
+                                            <ul className="space-y-1 list-disc list-inside text-gray-400">
+                                                {line.plan.contracts.map((item, i) => <li key={i}>{item}</li>)}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                             {line.type === 'code' && line.code && (
+                                <div className="border border-gray-700 rounded-md my-2 bg-gray-900/50">
+                                    <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+                                        <div>
+                                            <h3 className="font-bold text-base text-purple-400">{line.code.name} ({line.code.symbol})</h3>
+                                            <p className="text-gray-400 text-xs">Total Supply: {line.code.supply.toLocaleString()}</p>
+                                        </div>
+                                        <Button variant="ghost" size="sm" onClick={() => handleCopy(line.code!.solidityCode)}>
+                                            <Copy className="w-4 h-4 mr-2"/>
+                                            Copy Code
+                                        </Button>
+                                    </div>
+                                    <pre className="p-4 overflow-x-auto text-xs">
+                                        <code>{line.code.solidityCode}</code>
+                                    </pre>
+                                </div>
+                            )}
                         </div>
                     </motion.div>
                 ))}
@@ -217,14 +303,14 @@ export default function AiAgentsPage() {
                                     <span className="text-blue-400">&gt;</span>
                                     <FormField
                                         control={form.control}
-                                        name="business_description"
+                                        name="prompt"
                                         render={({ field }) => (
                                             <FormItem className="flex-grow">
                                                 <FormControl>
                                                     <Input
                                                         {...field}
                                                         ref={inputRef}
-                                                        placeholder="Describe your business and press Enter..."
+                                                        placeholder="e.g., 'Launch a token named...', 'Build a dapp for...', 'I need a tool for...'"
                                                         className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
                                                         autoComplete="off"
                                                         disabled={isLoading}
