@@ -1,12 +1,11 @@
+
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Loader2, Copy, AppWindow, FileJson } from 'lucide-react';
-import Link from 'next/link';
+import { Loader2, AppWindow, FileJson } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateDapp } from '@/app/actions';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
 import type { DappBuilderOutput } from '@/app/actions';

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { BarChart, Wallet, Activity, CreditCard } from 'lucide-react';
+import { BarChart as BarChartIcon, Wallet, Activity, CreditCard } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -10,14 +10,13 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import {
-<<<<<<< HEAD
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
 } from '@/components/ui/chart';
-import { Bar, Pie, Cell, PieChart } from 'recharts';
+import { BarChart, Bar, Pie, Cell, PieChart } from 'recharts';
 
 const chartData = [
   { month: 'January', desktop: 186, mobile: 80 },
@@ -45,62 +44,6 @@ const pieChartData = [
     { name: 'Transfers', value: 200, color: 'hsl(var(--chart-3))' },
     { name: 'Votes', value: 100, color: 'hsl(var(--chart-4))' },
 ]
-=======
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
-} from 'lucide-react';
-import { useSidebar } from '@/components/ui/sidebar';
-
-const FormSchema = z.object({
-  business_description: z.string().min(10, {
-    message: 'Business description must be at least 10 characters.',
-  }),
-});
-
-const iconMap: Record<string, React.ElementType> = {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
-};
-
-const toolUrlMap: Record<string, string> = {
-  'dApp Builder': '/dashboard/dapp-builder',
-  'Token Launcher': '/dashboard/token-launcher',
-  'Trading Bot Platform': '/dashboard/trading-bots',
-  'AI Agents': '/dashboard/ai-agents',
-  'Custom Wallets': '/dashboard/wallets',
-  'Smart Contract Templates': '/dashboard/smart-contracts',
-  'Manual Transactions': '/dashboard/transactions',
-  'On-chain Analytics': '/dashboard/analytics',
-  'Decentralized Storage': '/dashboard/storage',
-  'Security Audits': '/dashboard/audits',
-  'DAO Governance': '/dashboard/governance',
-};
-
-type DisplayLine = {
-    id: string;
-    type: 'prompt' | 'input' | 'output' | 'status' | 'recommendation' | 'guidance';
-    text?: string;
-    recommendation?: BusinessToolRecommendationOutput['recommendations'][0];
-};
->>>>>>> 342abc315c9312f08ffbdae801c299580064c808
 
 export default function AnalyticsPage() {
   return (
@@ -146,7 +89,7 @@ export default function AnalyticsPage() {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Contracts Deployed</CardTitle>
-                <BarChart className="h-4 w-4 text-muted-foreground" />
+                <BarChartIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
                 <div className="text-2xl font-bold">+789</div>

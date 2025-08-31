@@ -33,11 +33,6 @@ import {
   ShieldCheck,
   Vote,
 } from 'lucide-react';
-<<<<<<< HEAD
-=======
-import { useSidebar } from '@/components/ui/sidebar';
-import type { Metadata } from 'next';
->>>>>>> 342abc315c9312f08ffbdae801c299580064c808
 
 const FormSchema = z.object({
   prompt: z.string().min(10, {
@@ -50,8 +45,8 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const toolUrlMap: Record<string, string> = {
-  'dApp Builder': '/dashboard/dapp-builder',
-  'Token Launcher': '/dashboard/token-launcher',
+  'dApp Builder': '/dashboard/ai-agents',
+  'Token Launcher': '/dashboard/ai-agents',
   'Trading Bot Platform': '/dashboard/trading-bots',
   'AI Agents': '/dashboard/ai-agents',
   'Custom Wallets': '/dashboard/wallets',
