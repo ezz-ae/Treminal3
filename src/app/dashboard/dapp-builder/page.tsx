@@ -2,27 +2,12 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Loader2, AppWindow, FileJson } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateDapp } from '@/app/actions';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { DappBuilderOutput } from '@/ai/schemas/dapp-builder';
 import { useSidebar } from '@/components/ui/sidebar';
-
-const FormSchema = z.object({
-  description: z.string().min(10, {
-    message: 'dApp description must be at least 10 characters.',
-  }),
-});
 
 type DisplayLine = {
     id: string;
@@ -41,6 +26,7 @@ export default function DappBuilderPage() {
         { id: 'guidance-2', type: 'guidance', text: "Describe the decentralized application you want to build." },
     ];
     const [lines, setLines] = useState<DisplayLine[]>(initialLines);
+    const [description, setDescription] = useState('');
 
     useEffect(() => {
         setOpen(false);
@@ -55,39 +41,59 @@ export default function DappBuilderPage() {
         }
     }, [lines, isLoading]);
 
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
-        defaultValues: {
-            description: "",
-        },
-    });
-
     const addLine = (line: Omit<DisplayLine, 'id'>) => {
         setLines(prev => [...prev, { ...line, id: self.crypto.randomUUID() }]);
     };
     
-    async function onSubmit(data: z.infer<typeof FormSchema>) {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newDescription = e.target.value;
+        setDescription(newDescription);
+
+        setLines(prev => {
+            const newLines = prev.filter(l => !(l.id === 'validation-error' && l.type === 'guidance'));
+            if (newDescription.length > 0 && newDescription.length < 10) {
+                const errorLine: DisplayLine = { id: 'validation-error', type: 'guidance', text: 'Please provide a more detailed description (at least 10 characters).' };
+                return [...newLines, errorLine];
+            }
+            return newLines;
+        });
+    }
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (description.length < 10) {
+             setLines(prev => {
+                const hasError = prev.some(l => l.id === 'validation-error');
+                if (!hasError) {
+                    const errorLine: DisplayLine = { id: 'validation-error', type: 'guidance', text: 'Please provide a more detailed description (at least 10 characters).' };
+                    return [...prev, errorLine];
+                }
+                return prev;
+            });
+            return;
+        }
+
         setIsLoading(true);
-        addLine({ type: 'prompt', text: data.description });
+        addLine({ type: 'prompt', text: description });
         
         addLine({ type: 'status', text: 'Generating dApp plan...' });
 
         try {
-            const result = await generateDapp({ description: data.description });
+            const result = await generateDapp({ description });
             
             setTimeout(() => {
                 setLines(prev => prev.filter(l => l.type !== 'status'));
                 addLine({ type: 'guidance', text: 'Generated Plan:'})
                 addLine({ type: 'plan', plan: result });
                 setIsLoading(false);
-                form.reset();
+                setDescription('');
             }, 1000);
 
         } catch (error) {
             console.error('Error generating dApp plan:', error);
             addLine({ type: 'output', text: 'Error: Could not generate dApp plan.' });
             setIsLoading(false);
-            form.reset();
+            setDescription('');
         }
     }
 
@@ -120,7 +126,7 @@ export default function DappBuilderPage() {
                                 </div>
                              )}
                             {line.type === 'guidance' && (
-                                <p className="text-green-400">{line.text}</p>
+                                <p className={cn("text-green-400", { "text-yellow-400": line.id === 'validation-error' })}>{line.text}</p>
                             )}
                             {line.type === 'status' && (
                                 <p className="text-yellow-400 flex items-center gap-2">
@@ -163,34 +169,23 @@ export default function DappBuilderPage() {
                 ))}
                 </AnimatePresence>
                 {!isLoading && (
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)}>
-                             <div className="flex gap-4">
-                                <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
-                                <div className="flex-1 flex gap-2 items-center">
-                                    <span className="text-blue-400">&gt;</span>
-                                    <FormField
-                                        control={form.control}
-                                        name="description"
-                                        render={({ field }) => (
-                                            <FormItem className="flex-grow">
-                                                <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        ref={inputRef}
-                                                        placeholder="e.g., 'An NFT marketplace for digital art with a 5% royalty fee...'"
-                                                        className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
-                                                        autoComplete="off"
-                                                        disabled={isLoading}
-                                                    />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
+                    <form onSubmit={handleSubmit}>
+                         <div className="flex gap-4">
+                            <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
+                            <div className="flex-1 flex gap-2 items-center">
+                                <span className="text-blue-400">&gt;</span>
+                                <Input
+                                    ref={inputRef}
+                                    value={description}
+                                    onChange={handleInputChange}
+                                    placeholder="e.g., 'An NFT marketplace for digital art with a 5% royalty fee...'"
+                                    className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
+                                    autoComplete="off"
+                                    disabled={isLoading}
+                                />
                             </div>
-                        </form>
-                    </Form>
+                        </div>
+                    </form>
                 )}
             </div>
        </div>
