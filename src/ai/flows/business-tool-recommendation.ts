@@ -14,17 +14,14 @@ export async function recommendBusinessTools(input: BusinessToolRecommendationIn
   return businessToolRecommendationFlow(input);
 }
 
-const businessToolRecommendationFlow = ai.defineFlow(
-  {
-    name: 'businessToolRecommendationFlow',
-    inputSchema: BusinessToolRecommendationInputSchema,
-    outputSchema: BusinessToolRecommendationOutputSchema,
-  },
-  async (input) => {
-    const prompt = `You are an expert business consultant specializing in Web3. Based on the following business description, recommend up to 3 tools from the list provided that would be most beneficial for the user. For each tool, provide a brief explanation of how it would help their specific business. For each recommendation, also provide a step-by-step "flow" of actions the user should take to utilize the tool effectively for their business.
+const prompt = ai.definePrompt({
+  name: 'businessToolRecommender',
+  input: { schema: BusinessToolRecommendationInputSchema },
+  output: { schema: BusinessToolRecommendationOutputSchema },
+  prompt: `You are an expert business consultant specializing in Web3. Based on the following business description, recommend up to 3 tools from the list provided that would be most beneficial for the user. For each tool, provide a brief explanation of how it would help their specific business. For each recommendation, also provide a step-by-step "flow" of actions the user should take to utilize the tool effectively for their business.
 
 Business Description:
-${input.business_description}
+{{business_description}}
 
 Available Tools:
 - dApp Builder: Create and deploy decentralized applications with our intuitive builder.
@@ -40,16 +37,18 @@ Available Tools:
 - DAO Governance: Manage your decentralized autonomous organization with our governance tools.
 
 Provide your recommendations in the specified JSON format.
-`;
+`,
+});
 
-    const llmResponse = await ai.generate({
-      prompt: prompt,
-      model: 'googleai/gemini-2.0-flash',
-      output: {
-        schema: BusinessToolRecommendationOutputSchema,
-      },
-    });
 
+const businessToolRecommendationFlow = ai.defineFlow(
+  {
+    name: 'businessToolRecommendationFlow',
+    inputSchema: BusinessToolRecommendationInputSchema,
+    outputSchema: BusinessToolRecommendationOutputSchema,
+  },
+  async (input) => {
+    const llmResponse = await prompt(input);
     return llmResponse.output() || { recommendations: [] };
   }
 );
