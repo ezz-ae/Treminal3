@@ -1,73 +1,27 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Loader2, Copy } from 'lucide-react';
+import { Loader2, Copy, AppWindow, FileJson } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { recommendBusinessTools, generateDapp, generateToken } from '@/app/actions';
+import { generateDapp } from '@/app/actions';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
-<<<<<<< HEAD
 import { useToast } from '@/hooks/use-toast';
-import type { DappBuilderOutput, TokenLauncherOutput, BusinessToolRecommendationOutput } from '@/app/actions';
-import {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
-} from 'lucide-react';
-
-const iconMap: Record<string, React.ElementType> = {
-  AppWindow, Bot, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, ShieldCheck, Vote,
-};
-
-const toolUrlMap: Record<string, string> = {
-  'dApp Builder': '/dashboard/dapp-builder',
-  'Token Launcher': '/dashboard/token-launcher',
-  'Trading Bot Platform': '/dashboard/trading-bots',
-  'AI Agents': '/dashboard/ai-agents',
-  'Custom Wallets': '/dashboard/wallets',
-  'Smart Contract Templates': '/dashboard/smart-contracts',
-  'Manual Transactions': '/dashboard/transactions',
-  'On-chain Analytics': '/dashboard/analytics',
-  'Decentralized Storage': '/dashboard/storage',
-  'Security Audits': '/dashboard/audits',
-  'DAO Governance': '/dashboard/governance',
-};
-=======
-
-const FormSchema = z.object({
-  description: z.string().min(10, {
-    message: 'dApp description must be at least 10 characters.',
-  }),
-});
->>>>>>> 342abc315c9312f08ffbdae801c299580064c808
+import type { DappBuilderOutput } from '@/app/actions';
 
 type DisplayLine = {
     id: string;
-    type: 'prompt' | 'output' | 'status' | 'recommendation' | 'guidance' | 'plan' | 'code';
+    type: 'prompt' | 'output' | 'status' | 'guidance' | 'plan';
     text?: string;
-    recommendation?: BusinessToolRecommendationOutput['recommendations'][0];
     plan?: DappBuilderOutput;
-    code?: TokenLauncherOutput;
 };
 
 const initialLines: DisplayLine[] = [
     { id: 'guidance-1', type: 'guidance', text: 'Welcome to your dApp Builder.' },
     { id: 'guidance-2', type: 'guidance', text: "Describe what you want to build, and I'll generate a plan." },
 ];
-
-enum AgentTask {
-  BuildDapp,
-}
 
 export default function DappBuilderPage() {
     const [lines, setLines] = useState<DisplayLine[]>(initialLines);
@@ -106,16 +60,11 @@ export default function DappBuilderPage() {
         }
 
         if (newPrompt.length > 0 && newPrompt.length < 10) {
-            addLine({ id: 'realtime-guidance', type: 'guidance', text: "Keep going, the more detail the better..." });
+            const guidanceLine = { id: 'realtime-guidance', type: 'guidance', text: "Keep going, the more detail the better..." };
+            if(existingGuidanceIndex === -1) {
+                addLine(guidanceLine);
+            }
         }
-    }
-    
-    const handleCopy = (code: string) => {
-        navigator.clipboard.writeText(code);
-        toast({
-            title: "Copied to clipboard!",
-            description: "The Solidity code has been copied to your clipboard.",
-        });
     }
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -136,7 +85,7 @@ export default function DappBuilderPage() {
             addLine({ type: 'status', text: 'Generating dApp plan...' });
             const result = await generateDapp({ description: prompt });
             setTimeout(() => {
-                setLines(prev => prev.filter(l => l.type !== 'status'));
+                setLines(prev => prev.filter(l => l.type !== 'status' && l.id !== 'realtime-guidance'));
                 addLine({ type: 'guidance', text: 'Generated Plan:'})
                 addLine({ type: 'plan', plan: result });
             }, 1000);
@@ -191,34 +140,6 @@ export default function DappBuilderPage() {
                             {line.type === 'output' && (
                                 <p className="text-red-400">{line.text}</p>
                             )}
-                            {line.type === 'recommendation' && line.recommendation && (() => {
-                                const LucideIcon = iconMap[line.recommendation.icon] || Puzzle;
-                                const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard';
-                                return (
-                                    <>
-                                        <Link href={toolUrl} className="block group -ml-2">
-                                            <div className="border border-gray-700 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
-                                                <div className="flex items-center gap-3">
-                                                    <LucideIcon className="w-5 h-5 text-green-400" />
-                                                    <h3 className="font-bold text-base">{line.recommendation.name}</h3>
-                                                </div>
-                                                <p className="mt-1 ml-8 text-gray-400">{line.recommendation.description}</p>
-                                            </div>
-                                        </Link>
-                                        <div className="ml-8 mt-2 pl-4 border-l-2 border-gray-700">
-                                            <p className="text-purple-400 font-bold mb-1">Recommended Flow:</p>
-                                            <ul className="space-y-1">
-                                                {line.recommendation.flow.map((step, i) => (
-                                                    <li key={i} className="text-gray-400 flex items-start">
-                                                        <span className="mr-2">&rarr;</span>
-                                                        <span>{step}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </>
-                                )
-                            })()}
                              {line.type === 'plan' && line.plan && (
                                 <div className="border border-gray-700 rounded-md p-4 my-2 bg-gray-900/50">
                                     <h3 className="font-bold text-base text-purple-400">{line.plan.name}</h3>
@@ -244,23 +165,6 @@ export default function DappBuilderPage() {
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
-                            )}
-                             {line.type === 'code' && line.code && (
-                                <div className="border border-gray-700 rounded-md my-2 bg-gray-900/50">
-                                    <div className="p-4 border-b border-gray-700 flex justify-between items-center">
-                                        <div>
-                                            <h3 className="font-bold text-base text-purple-400">{line.code.name} ({line.code.symbol})</h3>
-                                            <p className="text-gray-400 text-xs">Total Supply: {line.code.supply.toLocaleString()}</p>
-                                        </div>
-                                        <Button variant="ghost" size="sm" onClick={() => handleCopy(line.code!.solidityCode)}>
-                                            <Copy className="w-4 h-4 mr-2"/>
-                                            Copy Code
-                                        </Button>
-                                    </div>
-                                    <pre className="p-4 overflow-x-auto text-xs">
-                                        <code>{line.code.solidityCode}</code>
-                                    </pre>
                                 </div>
                             )}
                         </div>
