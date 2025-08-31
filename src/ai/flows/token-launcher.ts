@@ -45,7 +45,7 @@ ${input.description}
 }
 `;
 
-    const llmResponse = await ai.generate({
+    const { output } = await ai.generate({
       prompt: prompt,
       model: 'googleai/gemini-2.0-flash',
       output: {
@@ -53,7 +53,6 @@ ${input.description}
       },
     });
 
-    const output = llmResponse.output();
     if (!output) {
       throw new Error("Failed to generate token contract. The AI model did not return a valid plan.");
     }

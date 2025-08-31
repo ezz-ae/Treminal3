@@ -8,6 +8,7 @@ import { generateDapp } from '@/app/actions';
 import { Input } from '@/components/ui/input';
 import { DappBuilderOutput } from '@/ai/schemas/dapp-builder';
 import { useSidebar } from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
 
 type DisplayLine = {
     id: string;

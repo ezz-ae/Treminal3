@@ -35,7 +35,7 @@ Your task is to generate:
 Provide your response in the specified JSON format.
 `;
 
-    const llmResponse = await ai.generate({
+    const { output } = await ai.generate({
       prompt: prompt,
       model: 'googleai/gemini-2.0-flash',
       output: {
@@ -43,7 +43,6 @@ Provide your response in the specified JSON format.
       },
     });
 
-    const output = llmResponse.output();
     if (!output) {
       throw new Error("Failed to generate dApp plan.");
     }

@@ -149,7 +149,7 @@ export default function TokenLauncherPage() {
                                             <h3 className="font-bold text-base text-purple-400">{line.code.name} ({line.code.symbol})</h3>
                                             <p className="text-gray-400 text-xs">Total Supply: {line.code.supply.toLocaleString()}</p>
                                         </div>
-                                        <Button variant="ghost" size="sm" onClick={() => handleCopy(line.code.solidityCode)}>
+                                        <Button variant="ghost" size="sm" onClick={() => handleCopy(line.code!.solidityCode)}>
                                             <Copy className="w-4 h-4 mr-2"/>
                                             Copy Code
                                         </Button>
