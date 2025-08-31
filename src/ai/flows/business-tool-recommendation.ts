@@ -48,7 +48,7 @@ const businessToolRecommendationFlow = ai.defineFlow(
     outputSchema: BusinessToolRecommendationOutputSchema,
   },
   async (input) => {
-    const llmResponse = await prompt(input);
-    return llmResponse.output() || { recommendations: [] };
+    const { output } = await prompt(input);
+    return output || { recommendations: [] };
   }
 );
