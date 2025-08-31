@@ -5,12 +5,6 @@ import { Loader2, Copy } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { recommendBusinessTools, generateDapp, generateToken } from '@/app/actions';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
@@ -58,32 +52,15 @@ type DisplayLine = {
 };
 
 const initialLines: DisplayLine[] = [
-    { id: 'guidance-1', type: 'guidance', text: 'Welcome to your AI Command Center.' },
-    { id: 'guidance-2', type: 'guidance', text: "Describe what you want to build, and I'll generate a plan or recommend the right tools." },
+    { id: 'guidance-1', type: 'guidance', text: 'Welcome to your dApp Builder.' },
+    { id: 'guidance-2', type: 'guidance', text: "Describe what you want to build, and I'll generate a plan." },
 ];
 
 enum AgentTask {
-  Recommend,
   BuildDapp,
-  LaunchToken,
-  Unknown
 }
 
-function determineTask(prompt: string): AgentTask {
-    const lowerCasePrompt = prompt.toLowerCase();
-    if (lowerCasePrompt.includes('dapp') || lowerCasePrompt.includes('application')) {
-        return AgentTask.BuildDapp;
-    }
-    if (lowerCasePrompt.includes('token') || lowerCasePrompt.includes('crypto') || lowerCasePrompt.includes('coin')) {
-        return AgentTask.LaunchToken;
-    }
-    if (lowerCasePrompt.includes('business') || lowerCasePrompt.includes('help') || lowerCasePrompt.includes('tool')) {
-        return AgentTask.Recommend;
-    }
-    return AgentTask.Unknown;
-}
-
-export default function AiAgentsPage() {
+export default function DappBuilderPage() {
     const [lines, setLines] = useState<DisplayLine[]>(initialLines);
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
@@ -113,7 +90,7 @@ export default function AiAgentsPage() {
         const newPrompt = e.target.value;
         setPrompt(newPrompt);
 
-        // Remove existing guidance lines
+        // This removes any existing "realtime" guidance message if the user backspaces.
         const existingGuidanceIndex = lines.findIndex(l => l.id === 'realtime-guidance');
         if (existingGuidanceIndex !== -1) {
             setLines(prev => prev.filter(l => l.id !== 'realtime-guidance'));
@@ -146,36 +123,14 @@ export default function AiAgentsPage() {
         setIsLoading(true);
         addLine({ type: 'prompt', text: prompt });
         
-        const task = determineTask(prompt);
-
         try {
-            if (task === AgentTask.Recommend || task === AgentTask.Unknown) {
-                addLine({ type: 'status', text: 'Analyzing business needs...' });
-                const result = await recommendBusinessTools({ business_description: prompt });
-                setTimeout(() => {
-                    setLines(prev => prev.filter(l => l.type !== 'status'));
-                    addLine({ type: 'guidance', text: 'Found recommendations:'})
-                    result.recommendations.forEach((rec) => {
-                        addLine({ type: 'recommendation', recommendation: rec });
-                    });
-                }, 1000);
-            } else if (task === AgentTask.BuildDapp) {
-                addLine({ type: 'status', text: 'Generating dApp plan...' });
-                const result = await generateDapp({ description: prompt });
-                setTimeout(() => {
-                    setLines(prev => prev.filter(l => l.type !== 'status'));
-                    addLine({ type: 'guidance', text: 'Generated Plan:'})
-                    addLine({ type: 'plan', plan: result });
-                }, 1000);
-            } else if (task === AgentTask.LaunchToken) {
-                 addLine({ type: 'status', text: 'Generating ERC-20 Smart Contract...' });
-                const result = await generateToken({ description: prompt });
-                 setTimeout(() => {
-                    setLines(prev => prev.filter(l => l.type !== 'status'));
-                    addLine({ type: 'guidance', text: 'Generated Contract:'})
-                    addLine({ type: 'code', code: result });
-                }, 1000);
-            }
+            addLine({ type: 'status', text: 'Generating dApp plan...' });
+            const result = await generateDapp({ description: prompt });
+            setTimeout(() => {
+                setLines(prev => prev.filter(l => l.type !== 'status'));
+                addLine({ type: 'guidance', text: 'Generated Plan:'})
+                addLine({ type: 'plan', plan: result });
+            }, 1000);
         } catch (error) {
             console.error('Error processing prompt:', error);
             addLine({ type: 'output', text: 'Error: Could not process your request.' });
@@ -190,9 +145,9 @@ export default function AiAgentsPage() {
   return (
     <>
        <div className="sr-only">
-        <h1 className="text-3xl font-bold font-headline">AI Command Center</h1>
+        <h1 className="text-3xl font-bold font-headline">dApp Builder</h1>
         <p className="text-muted-foreground">
-          Your unified interface for building and managing Web3 projects with AI.
+          Your unified interface for building dApps with AI.
         </p>
       </div>
 
@@ -313,7 +268,7 @@ export default function AiAgentsPage() {
                                     value={prompt}
                                     onChange={handleInputChange}
                                     ref={inputRef}
-                                    placeholder="e.g., 'Launch a token named...', 'Build a dapp for...', 'I need a tool for...'"
+                                    placeholder="e.g., 'A decentralized social media platform for artists to mint their work as NFTs...'"
                                     className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
                                     autoComplete="off"
                                     disabled={isLoading}
