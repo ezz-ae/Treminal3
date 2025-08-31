@@ -13,6 +13,8 @@ import {
   SidebarMenuButton,
   SidebarFooter,
   useSidebar,
+  SidebarMenuSub,
+  SidebarMenuSubButton
 } from '@/components/ui/sidebar';
 import {
   Home,
