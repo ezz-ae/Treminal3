@@ -31,7 +31,8 @@ const tools = [
     description:
       'Create and deploy decentralized applications with our intuitive builder.',
     tag: 'Builder',
-    gradient: 'from-blue-500/10 to-transparent'
+    gradient: 'from-blue-500/10 to-transparent',
+    className: 'lg:col-span-2'
   },
   {
     href: '/dashboard/token-launcher',
@@ -54,6 +55,7 @@ const tools = [
     title: 'AI Agents',
     description: 'Deploy autonomous AI agents to interact with your dApps and automate tasks.',
     tag: 'AI',
+    className: 'lg:col-span-2'
   },
   {
     href: '/dashboard/wallets',
@@ -139,7 +141,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tools.map((tool) => (
-          <Card key={tool.title} className={cn("flex flex-col justify-between group bg-card/50 hover:border-primary/50 transition-colors duration-300 relative overflow-hidden", tool.gradient)}>
+          <Card key={tool.title} className={cn("flex flex-col justify-between group bg-card/50 hover:border-primary/50 transition-colors duration-300 relative overflow-hidden", tool.gradient, tool.className)}>
              {tool.gradient && <div className={cn("absolute inset-0 bg-gradient-to-br opacity-50", tool.gradient)} />}
             <CardContent className="pt-6 flex-grow flex flex-col">
               <div className="flex-grow">
