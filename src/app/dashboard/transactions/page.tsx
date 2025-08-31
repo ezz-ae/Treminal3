@@ -2,21 +2,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { recommendBusinessTools } from '@/app/actions';
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
 import {
@@ -34,12 +23,6 @@ import {
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
 
-const FormSchema = z.object({
-  business_description: z.string().min(10, {
-    message: 'Business description must be at least 10 characters.',
-  }),
-});
-
 const iconMap: Record<string, React.ElementType> = {
   AppWindow,
   Bot,
@@ -55,22 +38,22 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const toolUrlMap: Record<string, string> = {
-  'dApp Builder': '/dashboard/dapp-builder',
-  'Token Launcher': '/dashboard/token-launcher',
-  'Trading Bot Platform': '/dashboard/trading-bots',
-  'AI Agents': '/dashboard/ai-agents',
-  'Custom Wallets': '/dashboard/wallets',
-  'Smart Contract Templates': '/dashboard/smart-contracts',
-  'Manual Transactions': '/dashboard/transactions',
-  'On-chain Analytics': '/dashboard/analytics',
-  'Decentralized Storage': '/dashboard/storage',
-  'Security Audits': '/dashboard/audits',
-  'DAO Governance': '/dashboard/governance',
+    'dApp Builder': '/dashboard/ai-agents',
+    'Token Launcher': '/dashboard/ai-agents',
+    'Trading Bot Platform': '/dashboard/trading-bots',
+    'AI Agents': '/dashboard/ai-agents',
+    'Custom Wallets': '/dashboard/wallets',
+    'Smart Contract Templates': '/dashboard/smart-contracts',
+    'Manual Transactions': '/dashboard/transactions',
+    'On-chain Analytics': '/dashboard/analytics',
+    'Decentralized Storage': '/dashboard/storage',
+    'Security Audits': '/dashboard/audits',
+    'DAO Governance': '/dashboard/governance',
 };
 
 type DisplayLine = {
     id: string;
-    type: 'prompt' | 'input' | 'output' | 'status' | 'recommendation' | 'guidance';
+    type: 'prompt' | 'output' | 'status' | 'recommendation' | 'guidance';
     text?: string;
     recommendation?: BusinessToolRecommendationOutput['recommendations'][0];
 };
@@ -82,9 +65,10 @@ export default function TransactionsPage() {
     const inputRef = useRef<HTMLInputElement>(null);
     const initialLines: DisplayLine[] = [
         { id: 'guidance-1', type: 'guidance', text: 'Welcome to Manual Transactions.' },
-        { id: 'guidance-2', type: 'guidance', text: "Describe the transaction you want to execute." },
+        { id: 'guidance-2', type: 'guidance', text: "Describe the transaction you want to execute and I'll recommend the right tools." },
     ];
     const [lines, setLines] = useState<DisplayLine[]>(initialLines);
+    const [prompt, setPrompt] = useState("");
 
     useEffect(() => {
         setOpen(false);
@@ -99,41 +83,36 @@ export default function TransactionsPage() {
         }
     }, [lines, isLoading]);
 
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
-        defaultValues: {
-            business_description: "",
-        },
-    });
-
     const addLine = (line: Omit<DisplayLine, 'id'>) => {
         setLines(prev => [...prev, { ...line, id: self.crypto.randomUUID() }]);
     };
     
-    async function onSubmit(data: z.infer<typeof FormSchema>) {
-        setIsLoading(true);
-        addLine({ type: 'prompt', text: data.business_description });
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        if (prompt.length < 10) return;
         
-        addLine({ type: 'status', text: 'Analyzing business needs...' });
+        setIsLoading(true);
+        addLine({ type: 'prompt', text: prompt });
+        addLine({ type: 'status', text: 'Analyzing transaction needs...' });
 
         try {
-            const result = await recommendBusinessTools({ business_description: data.business_description });
+            const result = await recommendBusinessTools({ business_description: prompt });
             
             setTimeout(() => {
                 setLines(prev => prev.filter(l => l.type !== 'status'));
-                addLine({ type: 'guidance', text: 'Found recommendations:'})
-                result.recommendations.forEach((rec, index) => {
+                addLine({ type: 'guidance', text: 'Found tool recommendations:'})
+                result.recommendations.forEach((rec) => {
                     addLine({ type: 'recommendation', recommendation: rec });
                 });
                 setIsLoading(false);
-                form.reset();
+                setPrompt("");
             }, 1000);
 
         } catch (error) {
             console.error('Error getting recommendations:', error);
             addLine({ type: 'output', text: 'Error: Could not get recommendations.' });
             setIsLoading(false);
-            form.reset();
+            setPrompt("");
         }
     }
 
@@ -210,34 +189,23 @@ export default function TransactionsPage() {
                 ))}
                 </AnimatePresence>
                 {!isLoading && (
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)}>
-                             <div className="flex gap-4">
-                                <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
-                                <div className="flex-1 flex gap-2 items-center">
-                                    <span className="text-blue-400">&gt;</span>
-                                    <FormField
-                                        control={form.control}
-                                        name="business_description"
-                                        render={({ field }) => (
-                                            <FormItem className="flex-grow">
-                                                <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        ref={inputRef}
-                                                        placeholder="e.g., 'Send 1.5 ETH from my primary wallet to address 0x123...abc on the Sepolia testnet.'"
-                                                        className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
-                                                        autoComplete="off"
-                                                        disabled={isLoading}
-                                                    />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
+                    <form onSubmit={handleSubmit}>
+                         <div className="flex gap-4">
+                            <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
+                            <div className="flex-1 flex gap-2 items-center">
+                                <span className="text-blue-400">&gt;</span>
+                                <Input
+                                    value={prompt}
+                                    onChange={(e) => setPrompt(e.target.value)}
+                                    ref={inputRef}
+                                    placeholder="e.g., 'Send 1.5 ETH from my primary wallet to address 0x123...abc on the Sepolia testnet.'"
+                                    className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
+                                    autoComplete="off"
+                                    disabled={isLoading}
+                                />
                             </div>
-                        </form>
-                    </Form>
+                        </div>
+                    </form>
                 )}
             </div>
        </div>

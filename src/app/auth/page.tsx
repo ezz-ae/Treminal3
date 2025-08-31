@@ -1,13 +1,17 @@
+
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { WalletCards } from "lucide-react";
+import { useRouter } from 'next/navigation';
 
 export default function AuthPage() {
+    const router = useRouter();
 
     const handleConnect = () => {
-        // Placeholder for wallet connection logic (e.g., with ethers.js, web3-react, wagmi)
-        alert("Connecting to wallet...");
+        // In a real app, this would handle wallet connection logic.
+        // For this prototype, we'll just navigate to the dashboard.
+        router.push('/dashboard');
     }
 
     return (

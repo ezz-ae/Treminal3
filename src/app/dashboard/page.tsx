@@ -101,7 +101,7 @@ const serviceCategories = [
     description: "Powerful APIs and robust infrastructure to scale your Web3 applications.",
     services: [
       {
-        href: '#',
+        href: '/dashboard/docs/solana',
         icon: Code2,
         title: 'Universal RPC API',
         description:

@@ -45,17 +45,17 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const toolUrlMap: Record<string, string> = {
-  'dApp Builder': '/dashboard/ai-agents',
-  'Token Launcher': '/dashboard/ai-agents',
-  'Trading Bot Platform': '/dashboard/trading-bots',
-  'AI Agents': '/dashboard/ai-agents',
-  'Custom Wallets': '/dashboard/wallets',
-  'Smart Contract Templates': '/dashboard/smart-contracts',
-  'Manual Transactions': '/dashboard/transactions',
-  'On-chain Analytics': '/dashboard/analytics',
-  'Decentralized Storage': '/dashboard/storage',
-  'Security Audits': '/dashboard/audits',
-  'DAO Governance': '/dashboard/governance',
+    'dApp Builder': '/dashboard/ai-agents',
+    'Token Launcher': '/dashboard/ai-agents',
+    'Trading Bot Platform': '/dashboard/trading-bots',
+    'AI Agents': '/dashboard/ai-agents',
+    'Custom Wallets': '/dashboard/wallets',
+    'Smart Contract Templates': '/dashboard/smart-contracts',
+    'Manual Transactions': '/dashboard/transactions',
+    'On-chain Analytics': '/dashboard/analytics',
+    'Decentralized Storage': '/dashboard/storage',
+    'Security Audits': '/dashboard/audits',
+    'DAO Governance': '/dashboard/governance',
 };
 
 type DisplayLine = {
