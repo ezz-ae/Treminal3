@@ -33,18 +33,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const serviceCategories = [
   {
-    category: "Core Services",
-    description: "The foundational tools for building and launching on-chain assets.",
+    category: "Build On-chain Assets",
+    description: "The foundational tools for creating and launching your digital assets.",
     services: [
        {
-        href: '/dashboard/dapp-builder',
-        icon: AppWindow,
-        title: 'dApp Builder',
-        description:
-          'Create and deploy decentralized applications with our intuitive builder, powered by AI.',
-        chains: ["Ethereum", "Polygon", "Solana", "Avalanche"],
-      },
-      {
         href: '/dashboard/token-launcher',
         icon: Puzzle,
         title: 'Token Launcher',
@@ -62,8 +54,51 @@ const serviceCategories = [
     ]
   },
   {
-    category: "Developer APIs",
-    description: "Powerful APIs to integrate blockchain data and functionality into your applications.",
+    category: "Build Your Application",
+    description: "Everything you need to build, brand, and launch your user-facing applications.",
+     services: [
+       {
+        href: '/dashboard/dapp-builder',
+        icon: AppWindow,
+        title: 'dApp Builder',
+        description:
+          'Create and deploy decentralized applications with our intuitive builder, powered by AI.',
+        chains: ["Ethereum", "Polygon", "Solana", "Avalanche"],
+        className: 'lg:col-span-2'
+      },
+      {
+        href: '/dashboard/wallets',
+        icon: Wallet,
+        title: 'Custom Wallets',
+        description: 'Build and brand your own secure crypto wallets for your users.',
+        chains: ["Ethereum", "Solana"],
+      },
+    ]
+  },
+   {
+    category: "Orchestrate & Automate",
+    description: "Deploy autonomous agents and bots to automate complex tasks and strategies.",
+    services: [
+       {
+        href: '/dashboard/ai-agents',
+        icon: BotMessageSquare,
+        title: 'AI Agents',
+        description: 'Deploy autonomous AI agents to interact with your dApps and automate tasks.',
+        chains: ["All EVM", "Solana"],
+        className: 'lg:col-span-2'
+      },
+      {
+        href: '/dashboard/trading-bots',
+        icon: Bot,
+        title: 'Trading Bot Platform',
+        description: 'Develop and deploy automated trading bots on major decentralized exchanges.',
+        chains: ["Ethereum", "Solana", "Arbitrum"],
+      },
+    ]
+  },
+  {
+    category: "Data & Infrastructure",
+    description: "Powerful APIs and robust infrastructure to scale your Web3 applications.",
     services: [
       {
         href: '#',
@@ -73,21 +108,7 @@ const serviceCategories = [
           'Access 50+ chains with a single, reliable RPC endpoint.',
         chains: ["Ethereum", "Solana", "+50 more"],
       },
-      {
-        href: '#',
-        icon: Database,
-        title: 'NFT & Token API',
-        description:
-          'Fetch standardized metadata, pricing, and history for any token or NFT.',
-        chains: ["Ethereum", "Polygon", "Solana"],
-      },
-    ]
-  },
-  {
-    category: "Data & Analytics",
-    description: "Gain deep insights into on-chain data with our powerful analytics engine.",
-    services: [
-      {
+       {
         href: '/dashboard/analytics',
         icon: AreaChart,
         title: 'On-chain Analytics',
@@ -95,55 +116,14 @@ const serviceCategories = [
         chains: ["Ethereum", "Polygon", "BNB Chain"],
       },
       {
-        href: '/dashboard/audits',
-        icon: ShieldCheck,
-        title: 'Security Audits',
-        description: 'Run automated security audits on your smart contracts to find vulnerabilities.',
-        chains: ["Ethereum", "Solana"],
+        href: '/dashboard/storage',
+        icon: FileArchive,
+        title: 'Decentralized Storage',
+        description: 'Upload and manage files on IPFS and other decentralized storage networks.',
+        chains: ["IPFS", "Arweave"],
       },
     ]
   },
-    {
-    category: "Trading & DeFi",
-    description: "Tools for traders and financial engineers to automate strategies and manage assets.",
-    services: [
-      {
-        href: '/dashboard/trading-bots',
-        icon: Bot,
-        title: 'Trading Bot Platform',
-        description: 'Develop and deploy automated trading bots on major decentralized exchanges.',
-        chains: ["Ethereum", "Solana", "Arbitrum"],
-      },
-       {
-        href: '/dashboard/transactions',
-        icon: Network,
-        title: 'Manual Transactions',
-        description:
-          'Interact directly with any blockchain for custom operations and analysis.',
-        chains: ["All EVM", "Solana", "Bitcoin"],
-      },
-    ]
-  },
-  {
-    category: "Infrastructure",
-    description: "Robust infrastructure for scaling your Web3 applications.",
-    services: [
-        {
-            href: '#',
-            icon: Server,
-            title: 'Dedicated Nodes',
-            description: 'Get your own high-performance, dedicated node for maximum reliability.',
-            chains: ["Ethereum", "Solana", "Polygon"],
-        },
-        {
-            href: '/dashboard/storage',
-            icon: FileArchive,
-            title: 'Decentralized Storage',
-            description: 'Upload and manage files on IPFS and other decentralized storage networks.',
-            chains: ["IPFS", "Arweave"],
-        },
-    ]
-  }
 ]
 
 
@@ -173,7 +153,7 @@ export default function DashboardPage() {
                 <p className="text-muted-foreground mb-6">{category.description}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {category.services.map((tool) => (
-                    <Card key={tool.title} className="flex flex-col group bg-card/50 hover:border-primary/50 transition-colors duration-300">
+                    <Card key={tool.title} className={cn("flex flex-col group bg-card/50 hover:border-primary/50 transition-colors duration-300", tool.className)}>
                       <CardHeader className="flex-row items-start gap-4 space-y-0">
                         <div className="p-3 bg-primary/10 rounded-lg text-primary">
                           <tool.icon className="w-6 h-6" />
@@ -226,5 +206,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    
