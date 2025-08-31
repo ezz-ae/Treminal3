@@ -110,6 +110,15 @@ export default function DashboardLayout({
   const pathname = usePathname();
 
   const getBreadcrumb = () => {
+    if (pathname.startsWith('/dashboard/docs/solana')) {
+        return (
+            <>
+                <Link href="/dashboard/docs" className="hover:text-foreground">Documentation</Link>
+                <ChevronRight className="h-4 w-4"/>
+                <span className="text-foreground font-medium">Solana</span>
+            </>
+        )
+    }
     if (pathname.startsWith('/dashboard/docs')) {
         return <span className="text-foreground font-medium">Documentation</span>
     }

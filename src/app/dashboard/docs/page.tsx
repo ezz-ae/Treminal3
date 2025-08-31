@@ -16,7 +16,8 @@ import {
   AreaChart,
   ShieldCheck,
   BookOpen,
-  GraduationCap
+  GraduationCap,
+  Sprout
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -44,6 +45,12 @@ const docSections = [
     title: 'APIs & Integration',
     description: 'Full reference documentation for all our developer APIs, including examples and use cases.',
     href: '#'
+  },
+   {
+    icon: Sprout,
+    title: 'Solana',
+    description: 'Explore our comprehensive suite of tools and services for building on the Solana blockchain.',
+    href: '/dashboard/docs/solana'
   },
   {
     icon: FileJson,
