@@ -28,7 +28,6 @@ import {
   FilePenLine,
   BookOpen,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import React from 'react';
 
 const articles = [
@@ -165,35 +164,13 @@ export default function InteractiveGuides({ activeServiceIndex }: InteractiveGui
         </motion.div>
 
         <Dialog open={!!selectedArticle} onOpenChange={() => setSelectedArticle(null)}>
-          <DialogContent className="max-w-3xl w-full bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm p-0 border-0 flex flex-col">
-            <motion.div
-              className="relative font-code text-sm rounded-lg pointer-events-auto flex-grow flex flex-col"
-            >
-              <div className="absolute top-0 left-0 w-full h-px bg-primary origin-center animate-[scaleX_1.5s_ease-in-out]" />
-              <div className="absolute top-0 right-0 w-px h-full bg-primary origin-center animate-[scaleY_1.5s_ease-in-out]" />
-              <div className="absolute bottom-0 right-0 w-full h-px bg-primary origin-center animate-[scaleX_1.5s_ease-in-out_0.2s]" />
-              <div className="absolute top-0 left-0 w-px h-full bg-primary origin-center animate-[scaleY_1.5s_ease-in-out_0.2s]" />
-              
-              <div className="p-8 flex-grow overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle className="font-headline text-3xl text-white mb-4">{selectedArticle?.title}</DialogTitle>
-                  <DialogDescription className="text-gray-400 font-sans prose prose-invert">
-                    <p className="text-base leading-relaxed">{selectedArticle?.content}</p>
-                  </DialogDescription>
-                </DialogHeader>
-              </div>
-
-               <DialogFooter className="p-4 border-t border-primary/20">
-                <Button variant="ghost">
-                  <BookPlus className="mr-2" />
-                  Add to Notebook
-                </Button>
-                <Button variant="ghost">
-                  <FilePenLine className="mr-2" />
-                  Suggest Edit
-                </Button>
-              </DialogFooter>
-            </motion.div>
+          <DialogContent className="max-w-3xl">
+              <DialogHeader>
+                <DialogTitle>{selectedArticle?.title}</DialogTitle>
+                <DialogDescription>
+                  {selectedArticle?.content}
+                </DialogDescription>
+              </DialogHeader>
           </DialogContent>
         </Dialog>
       </div>
