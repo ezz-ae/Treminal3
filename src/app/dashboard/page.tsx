@@ -37,7 +37,7 @@ const serviceCategories = [
     description: "The foundational tools for creating and launching your digital assets.",
     services: [
        {
-        href: '/dashboard/token-launcher',
+        href: '/dashboard/ai-agents',
         icon: Puzzle,
         title: 'Token Launcher',
         description: 'Design and launch your own custom cryptocurrency tokens in minutes.',
@@ -58,7 +58,7 @@ const serviceCategories = [
     description: "Everything you need to build, brand, and launch your user-facing applications.",
      services: [
        {
-        href: '/dashboard/dapp-builder',
+        href: '/dashboard/ai-agents',
         icon: AppWindow,
         title: 'dApp Builder',
         description:
@@ -131,7 +131,7 @@ export default function DashboardPage() {
   return (
     <div>
       <div className="mb-12 text-center">
-        <h1 className="text-4xl font-bold font-headline tracking-tight">The AI-Powered Web3 Development <br /> and Services Platform</h1>
+        <h1 className="text-4xl font-bold font-headline tracking-tight">The AI-powered Web3 Development <br /> and Services Platform</h1>
         <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-lg">
             From idea to deployment, Treminal3 provides the tools, infrastructure, and AI-powered guidance to build, manage, and scale your Web3 projects.
         </p>
@@ -170,15 +170,10 @@ export default function DashboardPage() {
                       <CardContent className="flex-grow">
                         <p className="text-muted-foreground text-sm">{tool.description}</p>
                       </CardContent>
-                      <div className="p-6 pt-0 flex flex-col sm:flex-row gap-2">
-                        <Button asChild className="flex-1">
+                      <div className="p-6 pt-0">
+                        <Button asChild className="w-full">
                             <Link href={tool.href}>
                                 Launch Tool <ArrowRight className="ml-2"/>
-                            </Link>
-                        </Button>
-                        <Button variant="outline" asChild className="flex-1">
-                             <Link href="/dashboard/ai-agents">
-                                <BotMessageSquare className="mr-2"/> Start with AI Agent
                             </Link>
                         </Button>
                       </div>
