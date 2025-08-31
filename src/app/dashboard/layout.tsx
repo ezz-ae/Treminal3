@@ -32,7 +32,7 @@ import {
   Download,
   Terminal,
   FileCode,
-  GraduationCap
+  BookOpen
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -56,7 +56,7 @@ const secondaryMenuItems = [
 
 const discoverSubMenuItems = [
     { href: '#', label: 'Projects', icon: FileCode },
-    { href: '/dashboard', label: 'Education', icon: GraduationCap },
+    { href: '/dashboard/docs', label: 'Documentation', icon: BookOpen },
 ];
 
 const MenuLink = ({ href, children, isActive }: { href: string, children: React.ReactNode, isActive: boolean }) => {
@@ -73,7 +73,7 @@ const MenuLink = ({ href, children, isActive }: { href: string, children: React.
 const CollapsibleMenu = () => {
     const pathname = usePathname();
     const { setOpenMobile } = useSidebar();
-    const isDiscoverActive = discoverSubMenuItems.some(item => pathname === item.href);
+    const isDiscoverActive = discoverSubMenuItems.some(item => pathname.startsWith(item.href));
 
     return (
         <Collapsible defaultOpen={isDiscoverActive}>
@@ -89,7 +89,7 @@ const CollapsibleMenu = () => {
                     {discoverSubMenuItems.map(item => (
                         <SidebarMenuItem key={item.label}>
                             <Link href={item.href} className="w-full" onClick={() => setOpenMobile(false)}>
-                                <SidebarMenuSubButton isActive={pathname === item.href}>
+                                <SidebarMenuSubButton isActive={pathname.startsWith(item.href)}>
                                     <item.icon />
                                     <span>{item.label}</span>
                                 </SidebarMenuSubButton>
@@ -108,6 +108,14 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+
+  const getBreadcrumb = () => {
+    if (pathname.startsWith('/dashboard/docs')) {
+        return <span className="text-foreground font-medium">Documentation</span>
+    }
+    const activeItem = discoverSubMenuItems.find(item => item.href === pathname);
+    return <span className="text-foreground font-medium">{activeItem?.label || "Education"}</span>;
+  }
 
   return (
     <SidebarProvider>
@@ -150,7 +158,7 @@ export default function DashboardLayout({
                 <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
                     <span>Discover</span>
                     <ChevronRight className="h-4 w-4"/>
-                    <span className="text-foreground font-medium">Education</span>
+                    {getBreadcrumb()}
                 </div>
               </div>
               <div className="flex items-center gap-4">
