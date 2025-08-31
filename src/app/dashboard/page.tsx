@@ -173,7 +173,7 @@ export default function DashboardPage() {
                       <div className="p-6 pt-0">
                         <Button asChild className="w-full">
                             <Link href={tool.href}>
-                                Launch Tool <ArrowRight className="ml-2"/>
+                                Launch <ArrowRight className="ml-2"/>
                             </Link>
                         </Button>
                       </div>
