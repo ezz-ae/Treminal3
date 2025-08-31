@@ -33,6 +33,11 @@ import {
   ShieldCheck,
   Vote,
 } from 'lucide-react';
+<<<<<<< HEAD
+=======
+import { useSidebar } from '@/components/ui/sidebar';
+import type { Metadata } from 'next';
+>>>>>>> 342abc315c9312f08ffbdae801c299580064c808
 
 const FormSchema = z.object({
   prompt: z.string().min(10, {

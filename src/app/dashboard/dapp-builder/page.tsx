@@ -8,6 +8,7 @@ import { recommendBusinessTools, generateDapp, generateToken } from '@/app/actio
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
+<<<<<<< HEAD
 import { useToast } from '@/hooks/use-toast';
 import type { DappBuilderOutput, TokenLauncherOutput, BusinessToolRecommendationOutput } from '@/app/actions';
 import {
@@ -41,6 +42,14 @@ const toolUrlMap: Record<string, string> = {
   'Security Audits': '/dashboard/audits',
   'DAO Governance': '/dashboard/governance',
 };
+=======
+
+const FormSchema = z.object({
+  description: z.string().min(10, {
+    message: 'dApp description must be at least 10 characters.',
+  }),
+});
+>>>>>>> 342abc315c9312f08ffbdae801c299580064c808
 
 type DisplayLine = {
     id: string;
