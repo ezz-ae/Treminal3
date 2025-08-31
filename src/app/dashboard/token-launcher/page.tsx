@@ -44,11 +44,7 @@ export default function TokenLauncherPage() {
     const { toast } = useToast();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    const [lines, setLines] = useState<DisplayLine[]>([]);
-
-     useEffect(() => {
-      setLines(initialLinesDef.map(line => ({ ...line, id: self.crypto.randomUUID() })));
-    }, []);
+    const [lines, setLines] = useState<DisplayLine[]>(initialLinesDef);
 
     useEffect(() => {
         setOpen(false);
@@ -71,7 +67,7 @@ export default function TokenLauncherPage() {
     });
 
     const addLine = (line: Omit<DisplayLine, 'id'>) => {
-        setLines(prev => [...prev, { ...line, id: self.crypto.randomUUID() }]);
+        setLines(prev => [...prev, { ...line, id: crypto.randomUUID() }]);
     };
     
     const handleCopy = (code: string) => {
@@ -203,3 +199,5 @@ export default function TokenLauncherPage() {
     </>
   );
 }
+
+    

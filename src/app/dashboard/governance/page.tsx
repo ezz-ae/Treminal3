@@ -68,12 +68,8 @@ export default function GovernancePage() {
     const { setOpen } = useSidebar();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    const [lines, setLines] = useState<DisplayLine[]>([]);
+    const [lines, setLines] = useState<DisplayLine[]>(initialLinesDef);
     const [prompt, setPrompt] = useState("");
-
-    useEffect(() => {
-      setLines(initialLinesDef.map(line => ({ ...line, id: self.crypto.randomUUID() })));
-    }, []);
 
     useEffect(() => {
         setOpen(false);
@@ -89,7 +85,7 @@ export default function GovernancePage() {
     }, [lines, isLoading]);
 
     const addLine = (line: Omit<DisplayLine, 'id'>) => {
-        setLines(prev => [...prev, { ...line, id: self.crypto.randomUUID() }]);
+        setLines(prev => [...prev, { ...line, id: crypto.randomUUID() }]);
     };
     
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -217,3 +213,5 @@ export default function GovernancePage() {
     </>
   );
 }
+
+    

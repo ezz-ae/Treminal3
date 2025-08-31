@@ -23,17 +23,13 @@ const initialLinesDef: DisplayLine[] = [
 ];
 
 export default function DappBuilderPage() {
-    const [lines, setLines] = useState<DisplayLine[]>([]);
+    const [lines, setLines] = useState<DisplayLine[]>(initialLinesDef);
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
     const { toast } = useToast();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [prompt, setPrompt] = useState("");
-
-    useEffect(() => {
-      setLines(initialLinesDef.map(line => ({ ...line, id: self.crypto.randomUUID() })));
-    }, []);
 
     useEffect(() => {
         setOpen(false);
@@ -49,7 +45,7 @@ export default function DappBuilderPage() {
     }, [lines, isLoading]);
 
     const addLine = (line: Omit<DisplayLine, 'id'>) => {
-        setLines(prev => [...prev, { ...line, id: self.crypto.randomUUID() }]);
+        setLines(prev => [...prev, { ...line, id: crypto.randomUUID() }]);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -198,3 +194,5 @@ export default function DappBuilderPage() {
     </>
   );
 }
+
+    

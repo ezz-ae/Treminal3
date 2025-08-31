@@ -94,16 +94,12 @@ function determineTask(prompt: string): AgentTask {
 }
 
 export default function AiAgentsPage() {
-    const [lines, setLines] = useState<DisplayLine[]>([]);
+    const [lines, setLines] = useState<DisplayLine[]>(initialLines);
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
     const { toast } = useToast();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-      setLines(initialLines.map(line => ({ ...line, id: self.crypto.randomUUID() })));
-    }, []);
 
     useEffect(() => {
         setOpen(false);
@@ -126,7 +122,7 @@ export default function AiAgentsPage() {
     });
 
     const addLine = (line: Omit<DisplayLine, 'id'>) => {
-        setLines(prev => [...prev, { ...line, id: self.crypto.randomUUID() }]);
+        setLines(prev => [...prev, { ...line, id: crypto.randomUUID() }]);
     };
     
     const handleCopy = (code: string) => {
@@ -333,3 +329,5 @@ export default function AiAgentsPage() {
     </>
   );
 }
+
+    
