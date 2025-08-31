@@ -143,7 +143,7 @@ export default function DashboardLayout({
             </SidebarMenu>
           </SidebarContent>
         </Sidebar>
-        <div className="flex flex-col flex-1 h-screen">
+        <div className="flex flex-col flex-1 h-screen overflow-hidden">
           <header className="flex items-center justify-between p-4 border-b h-[65px] shrink-0">
               <div className="flex items-center gap-4">
                 <SidebarTrigger/>
@@ -179,7 +179,7 @@ export default function DashboardLayout({
                  </DropdownMenu>
               </div>
           </header>
-          <main className="flex-1 bg-background overflow-y-auto">
+          <main className="flex-1 bg-muted/30 overflow-y-auto">
              <div className="p-6">
               {children}
             </div>
