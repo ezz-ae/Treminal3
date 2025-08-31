@@ -58,18 +58,22 @@ type DisplayLine = {
     recommendation?: BusinessToolRecommendationOutput['recommendations'][0];
 };
 
+const initialLinesDef: DisplayLine[] = [
+    { id: 'guidance-1', type: 'guidance', text: 'Welcome to Smart Contract Templates.' },
+    { id: 'guidance-2', type: 'guidance', text: "Describe the smart contract you want to create and I'll recommend the right tools." },
+];
+
 export default function SmartContractsPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    const initialLines: DisplayLine[] = [
-        { id: 'guidance-1', type: 'guidance', text: 'Welcome to Smart Contract Templates.' },
-        { id: 'guidance-2', type: 'guidance', text: "Describe the smart contract you want to create and I'll recommend the right tools." },
-    ];
-    const [lines, setLines] = useState<DisplayLine[]>(initialLines);
+    const [lines, setLines] = useState<DisplayLine[]>([]);
     const [prompt, setPrompt] = useState("");
 
+    useEffect(() => {
+      setLines(initialLinesDef.map(line => ({ ...line, id: self.crypto.randomUUID() })));
+    }, []);
 
     useEffect(() => {
         setOpen(false);

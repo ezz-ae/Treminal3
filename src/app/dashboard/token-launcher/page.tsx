@@ -33,17 +33,22 @@ type DisplayLine = {
     code?: TokenLauncherOutput;
 };
 
+const initialLinesDef: DisplayLine[] = [
+    { id: 'guidance-1', type: 'guidance', text: 'Welcome to the Token Launcher.' },
+    { id: 'guidance-2', type: 'guidance', text: "Describe the cryptocurrency token you want to create." },
+];
+
 export default function TokenLauncherPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
     const { toast } = useToast();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    const initialLines: DisplayLine[] = [
-        { id: 'guidance-1', type: 'guidance', text: 'Welcome to the Token Launcher.' },
-        { id: 'guidance-2', type: 'guidance', text: "Describe the cryptocurrency token you want to create." },
-    ];
-    const [lines, setLines] = useState<DisplayLine[]>(initialLines);
+    const [lines, setLines] = useState<DisplayLine[]>([]);
+
+     useEffect(() => {
+      setLines(initialLinesDef.map(line => ({ ...line, id: self.crypto.randomUUID() })));
+    }, []);
 
     useEffect(() => {
         setOpen(false);

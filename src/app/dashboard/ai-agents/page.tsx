@@ -94,12 +94,16 @@ function determineTask(prompt: string): AgentTask {
 }
 
 export default function AiAgentsPage() {
-    const [lines, setLines] = useState<DisplayLine[]>(initialLines);
+    const [lines, setLines] = useState<DisplayLine[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
     const { toast } = useToast();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      setLines(initialLines.map(line => ({ ...line, id: self.crypto.randomUUID() })));
+    }, []);
 
     useEffect(() => {
         setOpen(false);

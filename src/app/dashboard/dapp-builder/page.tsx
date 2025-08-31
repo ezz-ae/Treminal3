@@ -17,19 +17,23 @@ type DisplayLine = {
     plan?: DappBuilderOutput;
 };
 
-const initialLines: DisplayLine[] = [
+const initialLinesDef: DisplayLine[] = [
     { id: 'guidance-1', type: 'guidance', text: 'Welcome to your dApp Builder.' },
     { id: 'guidance-2', type: 'guidance', text: "Describe what you want to build, and I'll generate a plan." },
 ];
 
 export default function DappBuilderPage() {
-    const [lines, setLines] = useState<DisplayLine[]>(initialLines);
+    const [lines, setLines] = useState<DisplayLine[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
     const { toast } = useToast();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [prompt, setPrompt] = useState("");
+
+    useEffect(() => {
+      setLines(initialLinesDef.map(line => ({ ...line, id: self.crypto.randomUUID() })));
+    }, []);
 
     useEffect(() => {
         setOpen(false);
