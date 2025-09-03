@@ -1,7 +1,7 @@
 
 'use client';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism/vsc-dark-plus';
 import { Button } from '@/components/ui/button';
 import { Copy, BotMessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -131,3 +131,5 @@ fetch(url, {
     </div>
   )
 }
+
+    

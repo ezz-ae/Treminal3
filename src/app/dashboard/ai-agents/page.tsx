@@ -122,7 +122,8 @@ export default function AiAgentsPage() {
     });
 
     const addLine = (line: Omit<DisplayLine, 'id'>) => {
-        setLines(prev => [...prev, { ...line, id: crypto.randomUUID() }]);
+        const id = crypto.randomUUID();
+        setLines(prev => [...prev, { ...line, id }]);
     };
     
     const handleCopy = (code: string) => {
@@ -329,3 +330,5 @@ export default function AiAgentsPage() {
     </>
   );
 }
+
+    
