@@ -37,7 +37,7 @@ const serviceCategories = [
     description: "The foundational tools for creating and launching your digital assets.",
     services: [
        {
-        href: '/dashboard/ai-agents',
+        href: '/dashboard/token-launcher',
         icon: Puzzle,
         title: 'Token Launcher',
         description: 'Design and launch your own custom cryptocurrency tokens in minutes.',
@@ -58,7 +58,7 @@ const serviceCategories = [
     description: "Everything you need to build, brand, and launch your user-facing applications.",
      services: [
        {
-        href: '/dashboard/ai-agents',
+        href: '/dashboard/dapp-builder',
         icon: AppWindow,
         title: 'dApp Builder',
         description:

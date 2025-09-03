@@ -45,8 +45,8 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const toolUrlMap: Record<string, string> = {
-    'dApp Builder': '/dashboard/ai-agents',
-    'Token Launcher': '/dashboard/ai-agents',
+    'dApp Builder': '/dashboard/dapp-builder',
+    'Token Launcher': '/dashboard/token-launcher',
     'Trading Bot Platform': '/dashboard/trading-bots',
     'AI Agents': '/dashboard/ai-agents',
     'Custom Wallets': '/dashboard/wallets',
@@ -329,5 +329,3 @@ export default function AiAgentsPage() {
     </>
   );
 }
-
-    

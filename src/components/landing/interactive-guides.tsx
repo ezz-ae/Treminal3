@@ -9,7 +9,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
 } from '@/components/ui/dialog';
 import { motion } from 'framer-motion';
 import {
@@ -24,8 +23,6 @@ import {
   FileArchive,
   ShieldCheck,
   Vote,
-  BookPlus,
-  FilePenLine,
   BookOpen,
 } from 'lucide-react';
 import React from 'react';

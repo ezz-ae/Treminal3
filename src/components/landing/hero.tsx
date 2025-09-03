@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import AnimatedText from './animated-text';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function Hero() {
   const animatedWords = ["dApps", "tokens", "wallets", "DeFi", "GameFi"];
@@ -36,8 +37,10 @@ export default function Hero() {
             }}
             className="rounded-md"
             >
-            <Button size="lg">
-                Start for Free <ArrowRight className="ml-2 h-5 w-5" />
+            <Button size="lg" asChild>
+                <Link href="/auth">
+                    Start for Free <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
             </Button>
             </motion.div>
         </div>
