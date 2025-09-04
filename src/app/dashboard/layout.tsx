@@ -11,16 +11,11 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarFooter,
-  useSidebar,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
 } from '@/components/ui/sidebar';
 import {
   Home,
   LogOut,
   Settings,
-  WalletCards,
   ChevronRight,
   Search,
   LayoutGrid,
@@ -31,76 +26,23 @@ import {
   Wrench,
   Download,
   Terminal,
-  FileCode,
   BookOpen
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
-const primaryMenuItems = [
+const menuItems = [
     { href: '/dashboard', label: 'Portfolio', icon: LayoutGrid },
+    { href: '/dashboard/ai-agents', label: 'AI Command Center', icon: Terminal },
+    { href: '/dashboard/docs', label: 'Documentation', icon: BookOpen },
     { href: '#', label: 'Stake', icon: Sprout },
-    { href: '#', label: 'Contacts', icon: Users },
-];
-
-const secondaryMenuItems = [
-    { href: '#', label: 'Explorer', icon: Globe },
     { href: '#', label: 'Tools', icon: Wrench },
     { href: '#', label: 'Download', icon: Download },
 ];
 
-const discoverSubMenuItems = [
-    { href: '/dashboard/docs', label: 'Documentation', icon: BookOpen },
-    { href: '/dashboard/ai-agents', label: 'AI Command Center', icon: Terminal },
-];
-
-const MenuLink = ({ href, children, isActive }: { href: string, children: React.ReactNode, isActive: boolean }) => {
-    const { setOpenMobile } = useSidebar();
-    return (
-        <Link href={href} onClick={() => setOpenMobile(false)}>
-            <SidebarMenuButton isActive={isActive}>
-                {children}
-            </SidebarMenuButton>
-        </Link>
-    )
-}
-
-const CollapsibleMenu = () => {
-    const pathname = usePathname();
-    const { setOpenMobile } = useSidebar();
-    const isDiscoverActive = discoverSubMenuItems.some(item => pathname.startsWith(item.href));
-
-    return (
-        <Collapsible defaultOpen={isDiscoverActive}>
-            <CollapsibleTrigger asChild>
-                <SidebarMenuButton>
-                    <Compass />
-                    <span>Discover</span>
-                    <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
-                </SidebarMenuButton>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-                <SidebarMenuSub>
-                    {discoverSubMenuItems.map(item => (
-                        <SidebarMenuItem key={item.label}>
-                            <Link href={item.href} className="w-full" onClick={() => setOpenMobile(false)}>
-                                <SidebarMenuSubButton isActive={pathname.startsWith(item.href)}>
-                                    <item.icon />
-                                    <span>{item.label}</span>
-                                </SidebarMenuSubButton>
-                            </Link>
-                        </SidebarMenuItem>
-                    ))}
-                </SidebarMenuSub>
-            </CollapsibleContent>
-        </Collapsible>
-    )
-}
 
 export default function DashboardLayout({
   children,
@@ -110,20 +52,20 @@ export default function DashboardLayout({
   const pathname = usePathname();
 
   const getBreadcrumb = () => {
-    if (pathname.startsWith('/dashboard/docs/solana')) {
+    const segments = pathname.split('/').filter(Boolean);
+    const breadcrumbs = segments.slice(1).map((segment, index) => {
+        const href = `/${segments.slice(0, index + 2).join('/')}`;
+        const label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+        const isLast = index === segments.length - 2;
+
         return (
-            <>
-                <Link href="/dashboard/docs" className="hover:text-foreground">Documentation</Link>
-                <ChevronRight className="h-4 w-4"/>
-                <span className="text-foreground font-medium">Solana</span>
-            </>
+            <React.Fragment key={href}>
+                <Link href={href} className={cn("hover:text-foreground", isLast && "text-foreground font-medium")}>{label}</Link>
+                {!isLast && <ChevronRight className="h-4 w-4"/>}
+            </React.Fragment>
         )
-    }
-    if (pathname.startsWith('/dashboard/docs')) {
-        return <span className="text-foreground font-medium">Documentation</span>
-    }
-    const activeItem = discoverSubMenuItems.find(item => item.href === pathname);
-    return <span className="text-foreground font-medium">{activeItem?.label || "Education"}</span>;
+    });
+    return breadcrumbs;
   }
 
   return (
@@ -138,23 +80,14 @@ export default function DashboardLayout({
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
-              {primaryMenuItems.map((item) => (
+              {menuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                    <MenuLink href={item.href} isActive={pathname === item.href}>
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </MenuLink>
-                </SidebarMenuItem>
-              ))}
-              <SidebarMenuItem>
-                 <CollapsibleMenu />
-              </SidebarMenuItem>
-              {secondaryMenuItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                    <MenuLink href={item.href} isActive={pathname === item.href}>
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </MenuLink>
+                    <Link href={item.href} className='w-full'>
+                      <SidebarMenuButton isActive={pathname === item.href}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -165,8 +98,7 @@ export default function DashboardLayout({
               <div className="flex items-center gap-4">
                 <SidebarTrigger/>
                 <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
-                    <span>Discover</span>
-                    <ChevronRight className="h-4 w-4"/>
+                    <Compass className='w-4 h-4'/>
                     {getBreadcrumb()}
                 </div>
               </div>
@@ -206,5 +138,3 @@ export default function DashboardLayout({
     </SidebarProvider>
   );
 }
-
-    
