@@ -96,7 +96,7 @@ export default function DashboardLayout({
           <header className="flex items-center justify-between p-4 border-b h-[65px] shrink-0">
               <div className="flex items-center gap-4">
                 <SidebarTrigger/>
-                <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Compass className='w-4 h-4'/>
                     {getBreadcrumb()}
                 </div>
@@ -106,7 +106,9 @@ export default function DashboardLayout({
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
                     <Input placeholder="Search" className="pl-10 w-64"/>
                 </div>
-                <Button variant="outline">Connect Wallet</Button>
+                <Button variant="outline" asChild>
+                  <Link href="/auth">Connect Wallet</Link>
+                </Button>
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
