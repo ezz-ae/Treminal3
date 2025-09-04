@@ -13,16 +13,13 @@ import {
   SidebarMenuButton,
 } from '@/components/ui/sidebar';
 import {
-  Home,
   LogOut,
   Settings,
   ChevronRight,
   Search,
   LayoutGrid,
   Sprout,
-  Users,
   Compass,
-  Globe,
   Wrench,
   Download,
   Terminal,
@@ -53,6 +50,8 @@ export default function DashboardLayout({
 
   const getBreadcrumb = () => {
     const segments = pathname.split('/').filter(Boolean);
+    if (segments.length < 2) return null; // No breadcrumb on base dashboard
+
     const breadcrumbs = segments.slice(1).map((segment, index) => {
         const href = `/${segments.slice(0, index + 2).join('/')}`;
         const label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
