@@ -30,7 +30,3 @@ export async function recommendBusinessTools(input: BusinessToolRecommendationIn
     console.log("Recommendation result:", result);
     return result;
 }
-
-export type { DappBuilderInput, DappBuilderOutput } from '@/ai/schemas/dapp-builder';
-export type { TokenLauncherInput, TokenLauncherOutput } from '@/ai/schemas/token-launcher';
-export type { BusinessToolRecommendationInput, BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';

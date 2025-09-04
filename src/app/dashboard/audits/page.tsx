@@ -20,7 +20,7 @@ import {
   Vote,
 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
-import type { BusinessToolRecommendationOutput } from '@/app/actions';
+import type { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
 import { Input } from '@/components/ui/input';
 
 const iconMap: Record<string, React.ElementType> = {

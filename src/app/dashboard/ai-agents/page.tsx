@@ -19,7 +19,9 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
-import type { DappBuilderOutput, TokenLauncherOutput, BusinessToolRecommendationOutput } from '@/app/actions';
+import type { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
+import type { DappBuilderOutput } from '@/ai/schemas/dapp-builder';
+import type { TokenLauncherOutput } from '@/ai/schemas/token-launcher';
 import {
   AppWindow,
   Bot,
@@ -330,5 +332,3 @@ export default function AiAgentsPage() {
     </>
   );
 }
-
-    

@@ -8,7 +8,7 @@ import { generateDapp } from '@/app/actions';
 import { Input } from '@/components/ui/input';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
-import type { DappBuilderOutput } from '@/app/actions';
+import type { DappBuilderOutput } from '@/ai/schemas/dapp-builder';
 
 type DisplayLine = {
     id: string;
