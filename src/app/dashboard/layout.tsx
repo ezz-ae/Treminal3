@@ -92,7 +92,7 @@ export default function DashboardLayout({
             </SidebarMenu>
           </SidebarContent>
         </Sidebar>
-        <div className="flex flex-col flex-1 h-screen overflow-hidden">
+        <div className="flex flex-col flex-1">
           <header className="flex items-center justify-between p-4 border-b h-[65px] shrink-0">
               <div className="flex items-center gap-4">
                 <SidebarTrigger/>
