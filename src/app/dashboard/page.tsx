@@ -41,14 +41,14 @@ const serviceCategories = [
     description: "The foundational tools for creating and launching your digital assets.",
     services: [
        {
-        href: '/dashboard/token-launcher',
+        href: '/dashboard/ai-agents',
         icon: Puzzle,
         title: 'Token Launcher',
         description: 'Design and launch your own custom cryptocurrency tokens in minutes.',
         chains: ["Ethereum", "Polygon", "BNB Chain"],
       },
       {
-        href: '/dashboard/smart-contracts',
+        href: '/dashboard/ai-agents',
         icon: FileJson,
         title: 'Smart Contract Templates',
         description:
@@ -62,7 +62,7 @@ const serviceCategories = [
     description: "Everything you need to build, brand, and launch your user-facing applications.",
      services: [
        {
-        href: '/dashboard/dapp-builder',
+        href: '/dashboard/ai-agents',
         icon: AppWindow,
         title: 'dApp Builder',
         description:
@@ -71,7 +71,7 @@ const serviceCategories = [
         className: 'lg:col-span-2'
       },
       {
-        href: '/dashboard/wallets',
+        href: '/dashboard/ai-agents',
         icon: Wallet,
         title: 'Custom Wallets',
         description: 'Build and brand your own secure crypto wallets for your users.',
@@ -92,7 +92,7 @@ const serviceCategories = [
         className: 'lg:col-span-2'
       },
       {
-        href: '/dashboard/trading-bots',
+        href: '/dashboard/ai-agents',
         icon: Bot,
         title: 'Trading Bot Platform',
         description: 'Develop and deploy automated trading bots on major decentralized exchanges.',
