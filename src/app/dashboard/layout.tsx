@@ -35,9 +35,9 @@ const menuItems = [
     { href: '/dashboard', label: 'Portfolio', icon: LayoutGrid },
     { href: '/dashboard/ai-agents', label: 'AI Command Center', icon: Terminal },
     { href: '/dashboard/docs', label: 'Documentation', icon: BookOpen },
-    { href: '#', label: 'Stake', icon: Sprout },
-    { href: '#', label: 'Tools', icon: Wrench },
-    { href: '#', label: 'Download', icon: Download },
+    { href: '/dashboard/stake', label: 'Stake', icon: Sprout },
+    { href: '/dashboard/tools', label: 'Tools', icon: Wrench },
+    { href: '/dashboard/download', label: 'Download', icon: Download },
 ];
 
 
