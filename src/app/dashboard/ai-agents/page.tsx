@@ -223,7 +223,7 @@ export default function AiAgentsPage() {
     }
 
   return (
-    <div className="font-code bg-black text-white text-sm -m-6 p-4 h-[calc(100vh-113px)] grid grid-rows-[1fr_auto]" onClick={() => inputRef.current?.focus()}>
+    <div className="font-code bg-black text-white text-sm p-4" onClick={() => inputRef.current?.focus()}>
         <div ref={terminalOutputRef} id="terminal-output" className="overflow-y-auto">
             <AnimatePresence>
             {lines.map((line, index) => (

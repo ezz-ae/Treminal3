@@ -69,7 +69,7 @@ export default function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen bg-background">
+      <div className="flex h-screen bg-background">
         <Sidebar>
           <SidebarHeader>
             <div className="flex items-center space-x-2">
