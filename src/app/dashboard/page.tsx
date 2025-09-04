@@ -183,9 +183,9 @@ export default function DashboardPage() {
       </div>
 
       <div className="mb-12 text-center">
-        <h2 className="text-3xl font-bold font-headline tracking-tight">The AI-powered Web3 Development <br /> and Services Platform</h2>
-        <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-lg">
-            From idea to deployment, Treminal3 provides the tools, infrastructure, and AI-powered guidance to build, manage, and scale your Web3 projects.
+        <h2 className="text-3xl font-bold font-headline tracking-tight">Your Unified Web3 Services Marketplace</h2>
+        <p className="max-w-3xl mx-auto mt-4 text-muted-foreground text-lg">
+            Below is our full suite of services. Whether you're a developer, trader, or enterprise, select a category to find the tools you need to build, manage, and grow your on-chain presence.
         </p>
       </div>
 
