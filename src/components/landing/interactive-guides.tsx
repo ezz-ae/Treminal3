@@ -32,15 +32,15 @@ const articles = [
     serviceIndex: 0,
     icon: AppWindow,
     title: 'Building a dApp with Natural Language',
-    excerpt: 'Discover how to describe your desired decentralized application and let Treminal3 AI generate the foundational code for you.',
-    content: 'Building a dApp is now as easy as describing it. With Treminal3\'s "Full Automatic" mode, you can simply write a prompt like "Create an NFT marketplace for digital artists with a 5% royalty fee." Our AI will interpret your request, select the appropriate smart contract templates, generate the front-end components, and present you with a functional baseline. This article walks you through the process, from crafting the perfect prompt to making minor tweaks to the AI-generated output. It\'s the fastest way to go from idea to MVP.',
+    excerpt: 'Discover how to describe your desired decentralized application and let Terminal3 AI generate the foundational code for you.',
+    content: 'Building a dApp is now as easy as describing it. With Terminal3\'s "Full Automatic" mode, you can simply write a prompt like "Create an NFT marketplace for digital artists with a 5% royalty fee." Our AI will interpret your request, select the appropriate smart contract templates, generate the front-end components, and present you with a functional baseline. This article walks you through the process, from crafting the perfect prompt to making minor tweaks to the AI-generated output. It\'s the fastest way to go from idea to MVP.',
   },
    {
     serviceIndex: 1,
     icon: Puzzle,
     title: 'Launching Your Own Cryptocurrency',
     excerpt: 'From concept to circulation, learn how the Token Launcher simplifies the complex process of creating a new digital asset.',
-    content: 'Ever dreamed of launching your own token? The Token Launcher makes it a reality. This guide covers the key parameters you can define, such as name, symbol, total supply, and decimal places. We\'ll walk through the automated process of generating and deploying an ERC-20 compliant smart contract. You\'ll learn how to manage your token\'s distribution and get it listed on decentralized exchanges, all from the Treminal3 dashboard.',
+    content: 'Ever dreamed of launching your own token? The Token Launcher makes it a reality. This guide covers the key parameters you can define, such as name, symbol, total supply, and decimal places. We\'ll walk through the automated process of generating and deploying an ERC-20 compliant smart contract. You\'ll learn how to manage your token\'s distribution and get it listed on decentralized exchanges, all from the Terminal3 dashboard.',
   },
   {
     serviceIndex: 2,
@@ -81,8 +81,8 @@ const articles = [
     serviceIndex: 7,
     icon: AreaChart,
     title: 'The Future of Decentralized Finance (DeFi)',
-    excerpt: 'Explore the cutting-edge of finance and learn how Treminal3 provides the tools to participate in the DeFi revolution.',
-    content: 'Decentralized Finance (DeFi) is rebuilding the entire financial system on the blockchain. From lending and borrowing to trading and insurance, DeFi protocols are creating a more open, efficient, and accessible global economy. Treminal3 is your gateway to this revolution. Use our Trading Bot Platform to execute complex strategies across multiple decentralized exchanges, or launch your own financial instrument with our Token Launcher. Our On-chain Analytics engine gives you the deep insights needed to navigate the market, while our audited Smart Contract Templates provide the security required for financial applications. With Treminal3, you\'re not just observing the future of finance—you\'re building it.',
+    excerpt: 'Explore the cutting-edge of finance and learn how Terminal3 provides the tools to participate in the DeFi revolution.',
+    content: 'Decentralized Finance (DeFi) is rebuilding the entire financial system on the blockchain. From lending and borrowing to trading and insurance, DeFi protocols are creating a more open, efficient, and accessible global economy. Terminal3 is your gateway to this revolution. Use our Trading Bot Platform to execute complex strategies across multiple decentralized exchanges, or launch your own financial instrument with our Token Launcher. Our On-chain Analytics engine gives you the deep insights needed to navigate the market, while our audited Smart Contract Templates provide the security required for financial applications. With Terminal3, you\'re not just observing the future of finance—you\'re building it.',
   },
    {
     serviceIndex: 8,
@@ -174,3 +174,5 @@ export default function InteractiveGuides({ activeServiceIndex }: InteractiveGui
     </section>
   );
 }
+
+    

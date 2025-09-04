@@ -79,10 +79,10 @@ export default function Web3DevTools({ activeServiceIndex }: Web3DevToolsProps) 
             transition={{ duration: 0.5 }}
             className="text-3xl md:text-4xl font-bold font-headline"
           >
-            The Treminal gives you the power to build your way: {currentService.title}
+            The Terminal gives you the power to build your way: {currentService.title}
           </motion.h2>
           <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
-            Whether you're using our 'Text to Code' AI or are a seasoned pro, Treminal adapts to your workflow.
+            Whether you're using our 'Text to Code' AI or are a seasoned pro, Terminal adapts to your workflow.
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -132,3 +132,5 @@ export default function Web3DevTools({ activeServiceIndex }: Web3DevToolsProps) 
     </section>
   );
 }
+
+    

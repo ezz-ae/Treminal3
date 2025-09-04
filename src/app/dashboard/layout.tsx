@@ -133,7 +133,7 @@ export default function DashboardLayout({
           <SidebarHeader>
             <div className="flex items-center space-x-2">
               <Terminal className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg font-headline">Treminal3</span>
+              <span className="font-bold text-lg font-headline">Terminal3</span>
             </div>
           </SidebarHeader>
           <SidebarContent>
@@ -206,3 +206,5 @@ export default function DashboardLayout({
     </SidebarProvider>
   );
 }
+
+    

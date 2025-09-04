@@ -53,7 +53,7 @@ export default function Footer() {
             <div className="col-span-2 md:col-span-2">
                 <Link href="/" className="flex items-center space-x-2 mb-4">
                   <Terminal className="h-6 w-6 text-primary" />
-                  <span className="font-bold text-lg font-headline">Treminal3</span>
+                  <span className="font-bold text-lg font-headline">Terminal3</span>
                 </Link>
                 <p className="text-muted-foreground text-sm max-w-xs">
                     The AI-powered Web3 Development and Services Platform.
@@ -104,7 +104,7 @@ export default function Footer() {
         
         <div className="mt-8 pt-8 border-t flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-                &copy; {new Date().getFullYear()} Treminal3, Inc. Part of <a href="https://mtc-agency.com" target="_blank" rel="noopener noreferrer" className="text-primary/80 hover:underline">mtc.</a>
+                &copy; {new Date().getFullYear()} Terminal3, Inc. Part of <a href="https://mtc-agency.com" target="_blank" rel="noopener noreferrer" className="text-primary/80 hover:underline">mtc.</a>
             </p>
             <div className="flex items-center space-x-4">
                 {socialLinks.map((social, index) => (
@@ -118,3 +118,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+    

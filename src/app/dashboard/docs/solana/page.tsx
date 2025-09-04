@@ -36,7 +36,7 @@ const CustomCodeBlock = ({ code, language = 'typescript' }: { code: string; lang
 }
 
 export default function SolanaPage() {
-    const rpcEndpoint = "https://api.treminal3.io/solana/mainnet";
+    const rpcEndpoint = "https://api.terminal3.io/solana/mainnet";
     const curlExample = `
 curl ${rpcEndpoint} -X POST -H "Content-Type: application/json" -d '
   {
@@ -77,7 +77,7 @@ fetch(url, {
   return (
     <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
         <header className="mb-12">
-            <h1 className="text-5xl font-bold">Solana on Treminal3</h1>
+            <h1 className="text-5xl font-bold">Solana on Terminal3</h1>
             <p className="text-xl text-muted-foreground mt-4">
                 Leverage our high-performance infrastructure for your Solana applications. Get reliable, low-latency access to the Solana blockchain.
             </p>
@@ -133,3 +133,5 @@ fetch(url, {
     </div>
   )
 }
+
+    

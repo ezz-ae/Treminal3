@@ -19,7 +19,7 @@ export default function Hero() {
           &nbsp;project at any scale with the all-in-one text-to-code platform.
         </h1>
         <p className="max-w-2xl text-lg text-muted-foreground mb-10">
-            From idea to deployment, Treminal3 provides the tools, templates, and AI-powered assistance to build and manage your Web3 projects faster than ever before.
+            From idea to deployment, Terminal3 provides the tools, templates, and AI-powered assistance to build and manage your Web3 projects faster than ever before.
         </p>
         <div className="flex justify-center items-center gap-4">
             <motion.div
@@ -48,3 +48,5 @@ export default function Hero() {
     </section>
   );
 }
+
+    
