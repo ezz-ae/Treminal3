@@ -2,29 +2,14 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Loader2, Copy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateToken } from '@/app/actions';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { TokenLauncherOutput } from '@/ai/schemas/token-launcher';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
-
-const FormSchema = z.object({
-  description: z.string().min(10, {
-    message: 'Token description must be at least 10 characters.',
-  }),
-});
 
 type DisplayLine = {
     id: string;
@@ -45,6 +30,7 @@ export default function TokenLauncherPage() {
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [lines, setLines] = useState<DisplayLine[]>(initialLinesDef);
+    const [prompt, setPrompt] = useState("");
 
     useEffect(() => {
         setOpen(false);
@@ -59,13 +45,6 @@ export default function TokenLauncherPage() {
         }
     }, [lines, isLoading]);
 
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
-        defaultValues: {
-            description: "",
-        },
-    });
-
     const addLine = (line: Omit<DisplayLine, 'id'>) => {
         setLines(prev => [...prev, { ...line, id: crypto.randomUUID() }]);
     };
@@ -78,28 +57,31 @@ export default function TokenLauncherPage() {
         });
     }
 
-    async function onSubmit(data: z.infer<typeof FormSchema>) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        if (prompt.length < 10) return;
+
         setIsLoading(true);
-        addLine({ type: 'prompt', text: data.description });
+        addLine({ type: 'prompt', text: prompt });
         
         addLine({ type: 'status', text: 'Generating ERC-20 Smart Contract...' });
 
         try {
-            const result = await generateToken({ description: data.description });
+            const result = await generateToken({ description: prompt });
             
             setTimeout(() => {
                 setLines(prev => prev.filter(l => l.type !== 'status'));
                 addLine({ type: 'guidance', text: 'Generated Contract:'})
                 addLine({ type: 'code', code: result });
                 setIsLoading(false);
-                form.reset();
+                setPrompt("");
             }, 1000);
 
         } catch (error) {
             console.error('Error generating token contract:', error);
             addLine({ type: 'output', text: 'Error: Could not generate token contract.' });
             setIsLoading(false);
-            form.reset();
+            setPrompt("");
         }
     }
 
@@ -150,7 +132,7 @@ export default function TokenLauncherPage() {
                                             <h3 className="font-bold text-base text-purple-400">{line.code.name} ({line.code.symbol})</h3>
                                             <p className="text-gray-400 text-xs">Total Supply: {line.code.supply.toLocaleString()}</p>
                                         </div>
-                                        <Button variant="ghost" size="sm" onClick={() => handleCopy(line.code.solidityCode)}>
+                                        <Button variant="ghost" size="sm" onClick={() => handleCopy(line.code!.solidityCode)}>
                                             <Copy className="w-4 h-4 mr-2"/>
                                             Copy Code
                                         </Button>
@@ -165,34 +147,23 @@ export default function TokenLauncherPage() {
                 ))}
                 </AnimatePresence>
                 {!isLoading && (
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)}>
-                             <div className="flex gap-4">
-                                <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
-                                <div className="flex-1 flex gap-2 items-center">
-                                    <span className="text-blue-400">&gt;</span>
-                                    <FormField
-                                        control={form.control}
-                                        name="description"
-                                        render={({ field }) => (
-                                            <FormItem className="flex-grow">
-                                                <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        ref={inputRef}
-                                                        placeholder="e.g., 'An ERC-20 utility token named 'Starlight' (STAR) with a total supply of 100 million...'"
-                                                        className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
-                                                        autoComplete="off"
-                                                        disabled={isLoading}
-                                                    />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
+                    <form onSubmit={handleSubmit}>
+                         <div className="flex gap-4">
+                            <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
+                            <div className="flex-1 flex gap-2 items-center">
+                                <span className="text-blue-400">&gt;</span>
+                                <Input
+                                    value={prompt}
+                                    onChange={(e) => setPrompt(e.target.value)}
+                                    ref={inputRef}
+                                    placeholder="e.g., 'An ERC-20 utility token named 'Starlight' (STAR) with a total supply of 100 million...'"
+                                    className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
+                                    autoComplete="off"
+                                    disabled={isLoading}
+                                />
                             </div>
-                        </form>
-                    </Form>
+                        </div>
+                    </form>
                 )}
             </div>
        </div>

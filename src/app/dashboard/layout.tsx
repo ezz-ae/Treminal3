@@ -1,3 +1,4 @@
+
 'use client';
 import * as React from 'react';
 import Link from 'next/link';
@@ -54,8 +55,8 @@ const secondaryMenuItems = [
 ];
 
 const discoverSubMenuItems = [
-    { href: '#', label: 'Projects', icon: FileCode },
     { href: '/dashboard/docs', label: 'Documentation', icon: BookOpen },
+    { href: '/dashboard/ai-agents', label: 'AI Command Center', icon: Terminal },
 ];
 
 const MenuLink = ({ href, children, isActive }: { href: string, children: React.ReactNode, isActive: boolean }) => {

@@ -5,6 +5,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from '@/components/ui/card';
 import {
   AppWindow,
@@ -23,7 +24,10 @@ import {
   ArrowRight,
   Code2,
   TrendingUp,
-  Building
+  Building,
+  Sprout,
+  Image as ImageIcon,
+  Activity
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -130,8 +134,56 @@ const serviceCategories = [
 export default function DashboardPage() {
   return (
     <div>
+       <div className="mb-8">
+        <h1 className="text-3xl font-bold font-headline">Portfolio</h1>
+        <p className="text-muted-foreground">Welcome back! Here's a summary of your on-chain assets.</p>
+      </div>
+
+       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-12">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Wallet Balance</CardTitle>
+            <Wallet className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$12,845.12</div>
+            <p className="text-xs text-muted-foreground">+2.1% from last 24h</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">NFTs Owned</CardTitle>
+            <ImageIcon className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">142</div>
+            <p className="text-xs text-muted-foreground">Floor value: 12.5 ETH</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Staking</CardTitle>
+            <Sprout className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$3,120.89</div>
+            <p className="text-xs text-muted-foreground">Avg. APY: 5.8%</p>
+          </CardContent>
+        </Card>
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Recent Activity</CardTitle>
+                <Activity className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">3 New Mints</div>
+                <p className="text-xs text-muted-foreground">Last transaction: 2h ago</p>
+            </CardContent>
+        </Card>
+      </div>
+
       <div className="mb-12 text-center">
-        <h1 className="text-4xl font-bold font-headline tracking-tight">The AI-powered Web3 Development <br /> and Services Platform</h1>
+        <h2 className="text-3xl font-bold font-headline tracking-tight">The AI-powered Web3 Development <br /> and Services Platform</h2>
         <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-lg">
             From idea to deployment, Treminal3 provides the tools, infrastructure, and AI-powered guidance to build, manage, and scale your Web3 projects.
         </p>
