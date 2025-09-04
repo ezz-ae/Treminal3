@@ -1,13 +1,12 @@
 
 'use client';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { CodeBlock, dracula } from 'react-code-blocks';
 import { Button } from '@/components/ui/button';
 import { Copy, BotMessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 
-const CodeBlock = ({ code, language = 'typescript' }: { code: string; language?: string }) => {
+const CustomCodeBlock = ({ code, language = 'typescript' }: { code: string; language?: string }) => {
     const { toast } = useToast();
     const handleCopy = () => {
         navigator.clipboard.writeText(code);
@@ -18,9 +17,12 @@ const CodeBlock = ({ code, language = 'typescript' }: { code: string; language?:
 
     return (
         <div className="relative group">
-            <SyntaxHighlighter language={language} style={vscDarkPlus} showLineNumbers>
-                {code.trim()}
-            </SyntaxHighlighter>
+            <CodeBlock
+                text={code.trim()}
+                language={language}
+                showLineNumbers={true}
+                theme={dracula}
+            />
             <Button 
                 variant="ghost" 
                 size="icon"
@@ -95,11 +97,11 @@ fetch(url, {
             <h3 className="mt-8">Examples</h3>
             <h4>cURL Request</h4>
             <p>Here's a simple example of how to fetch the current epoch info using cURL.</p>
-            <CodeBlock code={curlExample} language="bash" />
+            <CustomCodeBlock code={curlExample} language="bash" />
 
             <h4 className="mt-8">JavaScript Fetch</h4>
             <p>Here's how you can fetch account information using JavaScript's `fetch` API.</p>
-            <CodeBlock code={jsExample} language="javascript" />
+            <CustomCodeBlock code={jsExample} language="javascript" />
         </section>
 
         <section className="mt-12">
