@@ -5,10 +5,10 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Copy } from 'lucide-react';
+import { Loader2, Copy, AlertTriangle, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { recommendBusinessTools, generateDapp, generateToken } from '@/app/actions';
+import { recommendBusinessTools, generateDapp, generateToken, runSecurityAudit, generateDaoPlan } from '@/app/actions';
 import {
   Form,
   FormControl,
@@ -22,6 +22,8 @@ import { useToast } from '@/hooks/use-toast';
 import type { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
 import type { DappBuilderOutput } from '@/ai/schemas/dapp-builder';
 import type { TokenLauncherOutput } from '@/ai/schemas/token-launcher';
+import type { SecurityAuditOutput } from '@/ai/schemas/security-audit';
+import type { DaoGovernanceOutput } from '@/ai/schemas/dao-governance';
 import {
   AppWindow,
   Bot,
@@ -32,9 +34,11 @@ import {
   BotMessageSquare,
   AreaChart,
   FileArchive,
-  ShieldCheck,
   Vote,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 
 const FormSchema = z.object({
   prompt: z.string().min(10, {
@@ -47,42 +51,52 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const toolUrlMap: Record<string, string> = {
-    'dApp Builder': '/dashboard/dapp-builder',
-    'Token Launcher': '/dashboard/token-launcher',
-    'Trading Bot Platform': '/dashboard/trading-bots',
+    'dApp Builder': '/dashboard/ai-agents',
+    'Token Launcher': '/dashboard/ai-agents',
+    'Trading Bot Platform': '/dashboard/ai-agents',
     'AI Agents': '/dashboard/ai-agents',
-    'Custom Wallets': '/dashboard/wallets',
-    'Smart Contract Templates': '/dashboard/smart-contracts',
-    'Manual Transactions': '/dashboard/transactions',
-    'On-chain Analytics': '/dashboard/analytics',
-    'Decentralized Storage': '/dashboard/storage',
-    'Security Audits': '/dashboard/audits',
-    'DAO Governance': '/dashboard/governance',
+    'Custom Wallets': '/dashboard/ai-agents',
+    'Smart Contract Templates': '/dashboard/ai-agents',
+    'Manual Transactions': '/dashboard/ai-agents',
+    'On-chain Analytics': '/dashboard/ai-agents',
+    'Decentralized Storage': '/dashboard/ai-agents',
+    'Security Audits': '/dashboard/ai-agents',
+    'DAO Governance': '/dashboard/ai-agents',
 };
 
 type DisplayLine = {
     id: string;
-    type: 'prompt' | 'output' | 'status' | 'recommendation' | 'guidance' | 'plan' | 'code';
+    type: 'prompt' | 'output' | 'status' | 'recommendation' | 'guidance' | 'plan' | 'code' | 'audit' | 'dao';
     text?: string;
     recommendation?: BusinessToolRecommendationOutput['recommendations'][0];
     plan?: DappBuilderOutput;
     code?: TokenLauncherOutput;
+    audit?: SecurityAuditOutput;
+    dao?: DaoGovernanceOutput;
 };
 
 const initialLines: DisplayLine[] = [
     { id: 'guidance-1', type: 'guidance', text: 'Welcome to your AI Command Center.' },
-    { id: 'guidance-2', type: 'guidance', text: "Describe what you want to build, and I'll generate a plan or recommend the right tools." },
+    { id: 'guidance-2', type: 'guidance', text: "Describe what you want to build, audit a contract, or design a DAO. I'm ready." },
 ];
 
 enum AgentTask {
   Recommend,
   BuildDapp,
   LaunchToken,
+  AuditContract,
+  DesignDao,
   Unknown
 }
 
 function determineTask(prompt: string): AgentTask {
     const lowerCasePrompt = prompt.toLowerCase();
+    if (lowerCasePrompt.includes('audit') || lowerCasePrompt.includes('security') || lowerCasePrompt.includes('vulnerability')) {
+        return AgentTask.AuditContract;
+    }
+     if (lowerCasePrompt.includes('dao') || lowerCasePrompt.includes('governance')) {
+        return AgentTask.DesignDao;
+    }
     if (lowerCasePrompt.includes('dapp') || lowerCasePrompt.includes('application')) {
         return AgentTask.BuildDapp;
     }
@@ -93,6 +107,14 @@ function determineTask(prompt: string): AgentTask {
         return AgentTask.Recommend;
     }
     return AgentTask.Unknown;
+}
+
+const severityConfig = {
+    'Critical': 'bg-red-500/20 text-red-400 border-red-500/30',
+    'High': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+    'Medium': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+    'Low': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+    'Informational': 'bg-gray-500/20 text-gray-400 border-gray-500/30',
 }
 
 export default function AiAgentsPage() {
@@ -136,7 +158,7 @@ export default function AiAgentsPage() {
         navigator.clipboard.writeText(code);
         toast({
             title: "Copied to clipboard!",
-            description: "The Solidity code has been copied to your clipboard.",
+            description: "The code has been copied to your clipboard.",
         });
     }
 
@@ -173,6 +195,22 @@ export default function AiAgentsPage() {
                     addLine({ type: 'guidance', text: 'Generated Contract:'})
                     addLine({ type: 'code', code: result });
                 }, 1000);
+            } else if (task === AgentTask.AuditContract) {
+                addLine({ type: 'status', text: 'Analyzing contract for vulnerabilities...' });
+                const result = await runSecurityAudit({ solidityCode: data.prompt });
+                 setTimeout(() => {
+                    setLines(prev => prev.filter(l => l.type !== 'status'));
+                    addLine({ type: 'guidance', text: 'Security Audit Complete:'})
+                    addLine({ type: 'audit', audit: result });
+                }, 1000);
+            } else if (task === AgentTask.DesignDao) {
+                 addLine({ type: 'status', text: 'Generating DAO Governance Plan...' });
+                const result = await generateDaoPlan({ description: data.prompt });
+                 setTimeout(() => {
+                    setLines(prev => prev.filter(l => l.type !== 'status'));
+                    addLine({ type: 'guidance', text: 'Generated DAO Plan:'})
+                    addLine({ type: 'dao', dao: result });
+                }, 1000);
             }
         } catch (error) {
             console.error('Error processing prompt:', error);
@@ -208,9 +246,9 @@ export default function AiAgentsPage() {
                         <span className="text-gray-500 w-6 text-right select-none">{index + 1}</span>
                         <div className="flex-1">
                              {line.type === 'prompt' && (
-                                <div className="flex gap-2 items-center">
-                                    <span className="text-blue-400">&gt;</span>
-                                    <span>{line.text}</span>
+                                <div className="flex gap-2 items-start">
+                                    <span className="text-blue-400 mt-2">&gt;</span>
+                                    <span className="whitespace-pre-wrap">{line.text}</span>
                                 </div>
                              )}
                             {line.type === 'guidance' && (
@@ -227,7 +265,7 @@ export default function AiAgentsPage() {
                             )}
                             {line.type === 'recommendation' && line.recommendation && (() => {
                                 const LucideIcon = iconMap[line.recommendation.icon] || Puzzle;
-                                const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard';
+                                const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard/ai-agents';
                                 return (
                                     <>
                                         <Link href={toolUrl} className="block group -ml-2">
@@ -297,6 +335,59 @@ export default function AiAgentsPage() {
                                     </pre>
                                 </div>
                             )}
+                             {line.type === 'audit' && line.audit && (
+                                <div className="border border-gray-700 rounded-md p-4 my-2 bg-gray-900/50">
+                                    <h3 className="font-bold text-base text-purple-400 mb-2">Security Audit Report</h3>
+                                    <p className="text-gray-400 italic mb-4">{line.audit.summary}</p>
+                                    <div className="space-y-4">
+                                        {line.audit.vulnerabilities.length > 0 ? line.audit.vulnerabilities.map((vuln, i) => (
+                                            <div key={i} className={cn("border rounded-md p-3", severityConfig[vuln.severity])}>
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <h4 className="font-bold flex items-center gap-2"><AlertTriangle className="w-4 h-4"/> {vuln.name}</h4>
+                                                    <Badge variant="secondary" className={cn("text-xs", severityConfig[vuln.severity])}>{vuln.severity}</Badge>
+                                                </div>
+                                                <p className="text-gray-400 text-xs mb-2">{vuln.description}</p>
+                                                <p className="text-green-400 text-xs font-medium">{vuln.recommendation}</p>
+                                            </div>
+                                        )) : (
+                                            <div className="flex items-center gap-2 text-green-400">
+                                                <ShieldCheck className="w-5 h-5" />
+                                                <p>No vulnerabilities found.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                            {line.type === 'dao' && line.dao && (
+                                <div className="border border-gray-700 rounded-md p-4 my-2 bg-gray-900/50">
+                                    <h3 className="font-bold text-base text-purple-400">{line.dao.name}</h3>
+                                    <p className="text-gray-400 italic mb-4">{line.dao.description}</p>
+                                    
+                                    <div className="space-y-4">
+                                        <div>
+                                            <h4 className="font-bold text-green-400 mb-1">Governance Model</h4>
+                                            <p className="font-semibold text-gray-300">{line.dao.governanceModel.name}</p>
+                                            <p className="text-gray-400 text-xs">{line.dao.governanceModel.description}</p>
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-green-400 mb-1">Tokenomics</h4>
+                                             <p className="font-semibold text-gray-300">{line.dao.tokenomics.tokenName} ({line.dao.tokenomics.tokenSymbol})</p>
+                                            <p className="text-gray-400 text-xs">{line.dao.tokenomics.initialDistribution}</p>
+                                        </div>
+                                         <div>
+                                            <h4 className="font-bold text-green-400 mb-1">Operational Plan</h4>
+                                            <ul className="space-y-1">
+                                                {line.dao.operationalPlan.map((step, i) => (
+                                                    <li key={i} className="text-gray-400 flex items-start text-xs">
+                                                        <span className="mr-2 mt-1">&rarr;</span>
+                                                        <span>{step}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </motion.div>
                 ))}
@@ -304,23 +395,36 @@ export default function AiAgentsPage() {
                 {!isLoading && (
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
-                             <div className="flex gap-4">
-                                <span className="text-gray-500 w-6 text-right select-none">{lines.length + 1}</span>
-                                <div className="flex-1 flex gap-2 items-center">
-                                    <span className="text-blue-400">&gt;</span>
+                             <div className="flex gap-4 items-start">
+                                <span className="text-gray-500 w-6 text-right select-none mt-2">{lines.length + 1}</span>
+                                <div className="flex-1 flex gap-2 items-start">
+                                    <span className="text-blue-400 mt-2">&gt;</span>
                                     <FormField
                                         control={form.control}
                                         name="prompt"
                                         render={({ field }) => (
                                             <FormItem className="flex-grow">
                                                 <FormControl>
-                                                    <Input
+                                                    <Textarea
                                                         {...field}
                                                         ref={inputRef}
-                                                        placeholder="e.g., 'Launch a token named...', 'Build a dapp for...', 'I need a tool for...'"
-                                                        className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto"
+                                                        placeholder="e.g., 'Audit this contract for reentrancy...' or 'Design a DAO for a collective of artists...'"
+                                                        className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto resize-none"
                                                         autoComplete="off"
                                                         disabled={isLoading}
+                                                        rows={1}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                                e.preventDefault();
+                                                                form.handleSubmit(onSubmit)();
+                                                            }
+                                                        }}
+                                                        onChange={(e) => {
+                                                          field.onChange(e);
+                                                          const textarea = e.target;
+                                                          textarea.style.height = 'auto';
+                                                          textarea.style.height = `${textarea.scrollHeight}px`;
+                                                        }}
                                                     />
                                                 </FormControl>
                                             </FormItem>
