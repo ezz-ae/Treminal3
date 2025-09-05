@@ -13,18 +13,15 @@ export async function generateToken(input: TokenLauncherInput): Promise<TokenLau
   return tokenLauncherFlow(input);
 }
 
-const tokenLauncherFlow = ai.defineFlow(
-  {
-    name: 'tokenLauncherFlow',
-    inputSchema: TokenLauncherInputSchema,
-    outputSchema: TokenLauncherOutputSchema,
-  },
-  async (input) => {
-    const prompt = `
+const prompt = ai.definePrompt({
+  name: 'tokenContractGenerator',
+  input: { schema: TokenLauncherInputSchema },
+  output: { schema: TokenLauncherOutputSchema },
+  prompt: `
 You are an expert Solidity developer specializing in ERC-20 tokens. A user wants to create a new cryptocurrency. Based on their description, generate a complete, secure, and deployable Solidity smart contract for an ERC-20 token.
 
 **User's Description:**
-${input.description}
+{{description}}
 
 **Your Task:**
 1.  **Parse Details:** Extract the desired token name, symbol, and total supply from the user's description.
@@ -35,23 +32,17 @@ ${input.description}
     *   The contract should be named after the token.
     *   In the constructor, mint the total supply to the deployer of the contract (\`msg.sender\`). The total supply should be calculated correctly considering the standard 18 decimals for ERC-20 tokens (i.e., \`supply * (10 ** 18)\`).
 3.  **Format Output:** Provide the extracted details and the full Solidity code in the specified JSON format. Ensure the Solidity code is a single string with correct newlines.
+`,
+});
 
-**Example Output Structure:**
-{
-  "name": "Example Token",
-  "symbol": "EXM",
-  "supply": 1000000,
-  "solidityCode": "pragma solidity ^0.8.20;\\n\\nimport \\"@openzeppelin/contracts/token/ERC20/ERC20.sol\\";\\n\\ncontract ExampleToken is ERC20 {\\n    constructor() ERC20(\\"Example Token\\", \\"EXM\\") {\\n        _mint(msg.sender, 1000000 * (10 ** 18));\\n    }\\n}"
-}
-`;
-
-    const { output } = await ai.generate({
-      prompt: prompt,
-      model: 'googleai/gemini-2.0-flash',
-      output: {
-        schema: TokenLauncherOutputSchema,
-      },
-    });
+const tokenLauncherFlow = ai.defineFlow(
+  {
+    name: 'tokenLauncherFlow',
+    inputSchema: TokenLauncherInputSchema,
+    outputSchema: TokenLauncherOutputSchema,
+  },
+  async (input) => {
+    const { output } = await prompt(input);
 
     if (!output) {
       throw new Error("Failed to generate token contract. The AI model did not return a valid plan.");

@@ -14,17 +14,14 @@ export async function generateDapp(input: DappBuilderInput): Promise<DappBuilder
   return dappBuilderFlow(input);
 }
 
-const dappBuilderFlow = ai.defineFlow(
-  {
-    name: 'dappBuilderFlow',
-    inputSchema: DappBuilderInputSchema,
-    outputSchema: DappBuilderOutputSchema,
-  },
-  async (input) => {
-    const prompt = `You are an expert Web3 architect. A user wants to build a decentralized application. Based on their description, generate a plan for them.
+const prompt = ai.definePrompt({
+  name: 'dappArchitect',
+  input: { schema: DappBuilderInputSchema },
+  output: { schema: DappBuilderOutputSchema },
+  prompt: `You are an expert Web3 architect. A user wants to build a decentralized application. Based on their description, generate a plan for them.
 
 Business Description:
-${input.description}
+{{description}}
 
 Your task is to generate:
 1.  A creative and fitting name for the dApp.
@@ -33,15 +30,17 @@ Your task is to generate:
 4.  A list of the necessary smart contracts.
 
 Provide your response in the specified JSON format.
-`;
+`,
+});
 
-    const { output } = await ai.generate({
-      prompt: prompt,
-      model: 'googleai/gemini-2.0-flash',
-      output: {
-        schema: DappBuilderOutputSchema,
-      },
-    });
+const dappBuilderFlow = ai.defineFlow(
+  {
+    name: 'dappBuilderFlow',
+    inputSchema: DappBuilderInputSchema,
+    outputSchema: DappBuilderOutputSchema,
+  },
+  async (input) => {
+    const { output } = await prompt(input);
 
     if (!output) {
       throw new Error("Failed to generate dApp plan.");

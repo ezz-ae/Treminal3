@@ -129,7 +129,7 @@ interface InteractiveGuidesProps {
 }
 
 export default function InteractiveGuides({ activeServiceIndex }: InteractiveGuidesProps) {
-  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [article, setArticle] = useState<Article>(defaultArticle);
 
   useEffect(() => {
@@ -144,7 +144,7 @@ export default function InteractiveGuides({ activeServiceIndex }: InteractiveGui
       <div className="container mx-auto px-4">
         <motion.div 
             className="max-w-4xl mx-auto bg-card p-8 rounded-lg border cursor-pointer hover:border-primary/50 transition-colors duration-300" 
-            onClick={() => setSelectedArticle(article)}
+            onClick={() => setIsDialogOpen(true)}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -160,12 +160,12 @@ export default function InteractiveGuides({ activeServiceIndex }: InteractiveGui
             </div>
         </motion.div>
 
-        <Dialog open={!!selectedArticle} onOpenChange={() => setSelectedArticle(null)}>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent className="max-w-3xl">
               <DialogHeader>
-                <DialogTitle>{selectedArticle?.title}</DialogTitle>
+                <DialogTitle>{article.title}</DialogTitle>
                 <DialogDescription>
-                  {selectedArticle?.content}
+                  {article.content}
                 </DialogDescription>
               </DialogHeader>
           </DialogContent>
@@ -174,5 +174,3 @@ export default function InteractiveGuides({ activeServiceIndex }: InteractiveGui
     </section>
   );
 }
-
-    

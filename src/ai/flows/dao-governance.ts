@@ -14,17 +14,14 @@ export async function generateDaoPlan(input: DaoGovernanceInput): Promise<DaoGov
   return daoGovernanceFlow(input);
 }
 
-const daoGovernanceFlow = ai.defineFlow(
-  {
-    name: 'daoGovernanceFlow',
-    inputSchema: DaoGovernanceInputSchema,
-    outputSchema: DaoGovernanceOutputSchema,
-  },
-  async (input) => {
-    const prompt = `You are an expert in decentralized governance and DAO design. A user wants to create a Decentralized Autonomous Organization. Based on their description, generate a comprehensive plan.
+const prompt = ai.definePrompt({
+  name: 'daoGovernancePlanner',
+  input: { schema: DaoGovernanceInputSchema },
+  output: { schema: DaoGovernanceOutputSchema },
+  prompt: `You are an expert in decentralized governance and DAO design. A user wants to create a Decentralized Autonomous Organization. Based on their description, generate a comprehensive plan.
 
 User's Description:
-${input.description}
+{{description}}
 
 Your task is to generate:
 1.  A creative and fitting name for the DAO.
@@ -35,16 +32,18 @@ Your task is to generate:
 
 
 Provide your response in the specified JSON format.
-`;
+`,
+});
 
-    const { output } = await ai.generate({
-      prompt: prompt,
-      model: 'googleai/gemini-2.0-flash',
-      output: {
-        schema: DaoGovernanceOutputSchema,
-      },
-    });
 
+const daoGovernanceFlow = ai.defineFlow(
+  {
+    name: 'daoGovernanceFlow',
+    inputSchema: DaoGovernanceInputSchema,
+    outputSchema: DaoGovernanceOutputSchema,
+  },
+  async (input) => {
+    const { output } = await prompt(input);
     if (!output) {
       throw new Error("Failed to generate DAO plan.");
     }

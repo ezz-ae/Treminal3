@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useId } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -74,7 +74,7 @@ type DisplayLine = {
     dao?: DaoGovernanceOutput;
 };
 
-const initialLines: DisplayLine[] = [
+const getInitialLines = (): DisplayLine[] => [
     { id: 'guidance-1', type: 'guidance', text: 'Welcome to your AI Command Center.' },
     { id: 'guidance-2', type: 'guidance', text: "Describe what you want to build, audit a contract, or design a DAO. I'm ready." },
 ];
@@ -146,16 +146,12 @@ const CustomCodeBlock = ({ code, language = 'solidity' }: { code: string; langua
 }
 
 export default function AiAgentsPage() {
-    const [lines, setLines] = useState<DisplayLine[]>([]);
+    const [lines, setLines] = useState<DisplayLine[]>(getInitialLines);
     const [isLoading, setIsLoading] = useState(false);
     const { setOpen } = useSidebar();
     const { toast } = useToast();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-      setLines(initialLines.map(line => ({ ...line, id: crypto.randomUUID() })));
-    }, []);
 
     useEffect(() => {
         setOpen(false);
@@ -235,8 +231,7 @@ export default function AiAgentsPage() {
 
   return (
     <div 
-        className="font-code bg-black text-white text-sm -m-6 grid grid-rows-[1fr_auto] h-[calc(100vh-113px)]" 
-        onClick={() => inputRef.current?.focus()}
+        className="font-code bg-black text-white text-sm grid grid-rows-[1fr_auto] h-[calc(100vh-113px)] -m-6"
     >
         <div ref={terminalOutputRef} id="terminal-output" className="overflow-y-auto p-4">
             <AnimatePresence>
