@@ -137,8 +137,8 @@ export default function DashboardLayout({
                  </DropdownMenu>
               </div>
           </header>
-          <main className="overflow-y-auto">
-             <div className="p-6">
+          <main className="flex-1 overflow-y-auto">
+             <div className="p-6 h-full">
               {children}
             </div>
           </main>

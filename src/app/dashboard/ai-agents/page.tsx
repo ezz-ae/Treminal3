@@ -158,7 +158,7 @@ const CustomCodeBlock = ({ code, language = 'solidity' }: { code: string; langua
 }
 
 export default function AiAgentsPage() {
-    const [lines, setLines] = useState<DisplayLine[]>(() => getInitialLines());
+    const [lines, setLines] = useState<DisplayLine[]>(getInitialLines);
     const [status, setStatus] = useState<'idle' | 'thinking' | 'generating' | 'error'>('idle');
     const isLoading = status === 'thinking' || status === 'generating';
 
@@ -263,7 +263,7 @@ export default function AiAgentsPage() {
     }
 
   return (
-    <div className="font-code bg-black text-white text-sm flex flex-col h-[calc(100vh-113px)] rounded-md">
+    <div className="font-code bg-black text-white text-sm flex flex-col h-full rounded-md">
         <div ref={terminalOutputRef} id="terminal-output" className="flex-grow overflow-y-auto p-4">
             <AnimatePresence>
             {lines.map((line, index) => (
