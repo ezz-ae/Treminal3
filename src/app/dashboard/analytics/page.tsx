@@ -1,3 +1,4 @@
+
 'use client';
 
 import { BarChart as BarChartIcon, Wallet, Activity, CreditCard } from 'lucide-react';
@@ -40,7 +41,7 @@ const chartConfig = {
 const pieChartData = [
     { name: 'Swaps', value: 400, color: 'hsl(var(--chart-1))' },
     { name: 'Mints', value: 300, color: 'hsl(var(--chart-2))' },
-    { name 'Transfers', value: 200, color: 'hsl(var(--chart-3))' },
+    { 'name': 'Transfers', value: 200, color: 'hsl(var(--chart-3))' },
     { name: 'Votes', value: 100, color: 'hsl(var(--chart-4))' },
 ]
 
