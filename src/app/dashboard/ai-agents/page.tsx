@@ -263,7 +263,7 @@ export default function AiAgentsPage() {
     }
 
   return (
-    <div className="font-code bg-black text-white text-sm grid grid-rows-[1fr_auto] h-[calc(100vh-113px)] -m-6">
+    <div className="font-code bg-black text-white text-sm grid grid-rows-[1fr_auto] h-full">
         <div ref={terminalOutputRef} id="terminal-output" className="overflow-y-auto p-4">
             <AnimatePresence>
             {lines.map((line, index) => (
@@ -464,5 +464,3 @@ export default function AiAgentsPage() {
    </div>
   );
 }
-
-    
