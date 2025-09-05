@@ -1,4 +1,3 @@
-
 'use client';
 import { CodeBlock, dracula } from 'react-code-blocks';
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,7 @@ const CustomCodeBlock = ({ code, language = 'typescript' }: { code: string; lang
     }
 
     return (
-        <div className="relative group">
+        <div className="relative group my-4 rounded-md overflow-hidden">
             <CodeBlock
                 text={code.trim()}
                 language={language}
@@ -133,5 +132,3 @@ fetch(url, {
     </div>
   )
 }
-
-    

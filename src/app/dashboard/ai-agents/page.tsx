@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -38,6 +37,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
+import { CodeBlock, dracula } from 'react-code-blocks';
 
 const FormSchema = z.object({
   prompt: z.string().min(10, {
@@ -116,6 +116,35 @@ const severityConfig = {
     'Informational': 'bg-gray-500/20 text-gray-400 border-gray-500/30',
 }
 
+const CustomCodeBlock = ({ code, language = 'solidity' }: { code: string; language?: string }) => {
+    const { toast } = useToast();
+    const handleCopy = () => {
+        navigator.clipboard.writeText(code);
+        toast({
+            title: "Copied to clipboard!",
+        });
+    }
+
+    return (
+        <div className="relative group my-4 rounded-md overflow-hidden">
+            <CodeBlock
+                text={code.trim()}
+                language={language}
+                showLineNumbers={true}
+                theme={dracula}
+            />
+            <Button
+                variant="ghost"
+                size="icon"
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={handleCopy}
+            >
+                <Copy className="w-4 h-4"/>
+            </Button>
+        </div>
+    )
+}
+
 export default function AiAgentsPage() {
     const [lines, setLines] = useState<DisplayLine[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -148,77 +177,59 @@ export default function AiAgentsPage() {
         },
     });
 
-    const addLine = (line: Omit<DisplayLine, 'id'>) => {
+    const addLine = (line: Omit<DisplayLine, 'id'>, type?: 'status' | 'guidance' | 'output') => {
         const id = crypto.randomUUID();
-        setLines(prev => [...prev, { ...line, id }]);
+        if (type) {
+            setLines(prev => {
+                const newLines = prev.filter(l => l.type !== type);
+                return [...newLines, { ...line, id }];
+            });
+        } else {
+             setLines(prev => [...prev, { ...line, id }]);
+        }
     };
     
-    const handleCopy = (code: string) => {
-        navigator.clipboard.writeText(code);
-        toast({
-            title: "Copied to clipboard!",
-            description: "The code has been copied to your clipboard.",
-        });
-    }
-
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         setIsLoading(true);
         addLine({ type: 'prompt', text: data.prompt });
+        form.reset();
         
         const task = determineTask(data.prompt);
 
         try {
             if (task === AgentTask.Recommend || task === AgentTask.Unknown) {
-                addLine({ type: 'status', text: 'Analyzing business needs...' });
+                addLine({ type: 'status', text: 'Analyzing business needs...' }, 'status');
                 const result = await recommendBusinessTools({ business_description: data.prompt });
-                setTimeout(() => {
-                    setLines(prev => prev.filter(l => l.type !== 'status'));
-                    addLine({ type: 'guidance', text: 'Found recommendations:'})
-                    result.recommendations.forEach((rec) => {
-                        addLine({ type: 'recommendation', recommendation: rec });
-                    });
-                }, 1000);
+                addLine({ type: 'guidance', text: 'Found recommendations:'}, 'status')
+                result.recommendations.forEach((rec) => {
+                    addLine({ type: 'recommendation', recommendation: rec });
+                });
             } else if (task === AgentTask.BuildDapp) {
-                addLine({ type: 'status', text: 'Generating dApp plan...' });
+                addLine({ type: 'status', text: 'Generating dApp plan...' }, 'status');
                 const result = await generateDapp({ description: data.prompt });
-                setTimeout(() => {
-                    setLines(prev => prev.filter(l => l.type !== 'status'));
-                    addLine({ type: 'guidance', text: 'Generated Plan:'})
-                    addLine({ type: 'plan', plan: result });
-                }, 1000);
+                addLine({ type: 'guidance', text: 'Generated Plan:'}, 'status');
+                addLine({ type: 'plan', plan: result });
             } else if (task === AgentTask.LaunchToken) {
-                 addLine({ type: 'status', text: 'Generating ERC-20 Smart Contract...' });
+                addLine({ type: 'status', text: 'Generating ERC-20 Smart Contract...' }, 'status');
                 const result = await generateToken({ description: data.prompt });
-                 setTimeout(() => {
-                    setLines(prev => prev.filter(l => l.type !== 'status'));
-                    addLine({ type: 'guidance', text: 'Generated Contract:'})
-                    addLine({ type: 'code', code: result });
-                }, 1000);
+                addLine({ type: 'guidance', text: 'Generated Contract:'}, 'status');
+                addLine({ type: 'code', code: result });
             } else if (task === AgentTask.AuditContract) {
-                addLine({ type: 'status', text: 'Analyzing contract for vulnerabilities...' });
+                addLine({ type: 'status', text: 'Analyzing contract for vulnerabilities...' }, 'status');
                 const result = await runSecurityAudit({ solidityCode: data.prompt });
-                 setTimeout(() => {
-                    setLines(prev => prev.filter(l => l.type !== 'status'));
-                    addLine({ type: 'guidance', text: 'Security Audit Complete:'})
-                    addLine({ type: 'audit', audit: result });
-                }, 1000);
+                addLine({ type: 'guidance', text: 'Security Audit Complete:'}, 'status');
+                addLine({ type: 'audit', audit: result });
             } else if (task === AgentTask.DesignDao) {
-                 addLine({ type: 'status', text: 'Generating DAO Governance Plan...' });
+                addLine({ type: 'status', text: 'Generating DAO Governance Plan...' }, 'status');
                 const result = await generateDaoPlan({ description: data.prompt });
-                 setTimeout(() => {
-                    setLines(prev => prev.filter(l => l.type !== 'status'));
-                    addLine({ type: 'guidance', text: 'Generated DAO Plan:'})
-                    addLine({ type: 'dao', dao: result });
-                }, 1000);
+                addLine({ type: 'guidance', text: 'Generated DAO Plan:'}, 'status');
+                addLine({ type: 'dao', dao: result });
             }
         } catch (error) {
             console.error('Error processing prompt:', error);
-            addLine({ type: 'output', text: 'Error: Could not process your request.' });
+            addLine({ type: 'output', text: 'Error: Could not process your request.' }, 'status');
         } finally {
-             setTimeout(() => {
-                setIsLoading(false);
-                form.reset();
-            }, 1000);
+            setIsLoading(false);
         }
     }
 
@@ -314,19 +325,13 @@ export default function AiAgentsPage() {
                         )}
                         {line.type === 'code' && line.code && (
                             <div className="border border-gray-700 rounded-md my-2 bg-gray-900/50">
-                                <div className="p-4 border-b border-gray-700 flex justify-between items-center">
-                                    <div>
-                                        <h3 className="font-bold text-base text-purple-400">{line.code.name} ({line.code.symbol})</h3>
-                                        <p className="text-gray-400 text-xs">Total Supply: {line.code.supply.toLocaleString()}</p>
-                                    </div>
-                                    <Button variant="ghost" size="sm" onClick={() => handleCopy(line.code!.solidityCode)}>
-                                        <Copy className="w-4 h-4 mr-2"/>
-                                        Copy Code
-                                    </Button>
+                                <div className="p-4 border-b border-gray-700">
+                                     <h3 className="font-bold text-base text-purple-400">{line.code.name} ({line.code.symbol})</h3>
+                                    <p className="text-gray-400 text-xs">Total Supply: {line.code.supply.toLocaleString()}</p>
                                 </div>
-                                <pre className="p-4 overflow-x-auto text-xs">
-                                    <code>{line.code.solidityCode}</code>
-                                </pre>
+                                <div className="p-4">
+                                    <CustomCodeBlock code={line.code.solidityCode} />
+                                </div>
                             </div>
                         )}
                         {line.type === 'audit' && line.audit && (

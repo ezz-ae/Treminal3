@@ -1,4 +1,3 @@
-
 'use client';
 
 import { BarChart as BarChartIcon, Wallet, Activity, CreditCard } from 'lucide-react';
@@ -16,7 +15,7 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from '@/components/ui/chart';
-import { BarChart, Bar, Pie, Cell, PieChart } from 'recharts';
+import { BarChart, Bar, Pie, Cell, PieChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 const chartData = [
   { month: 'January', desktop: 186, mobile: 80 },
@@ -41,9 +40,28 @@ const chartConfig = {
 const pieChartData = [
     { name: 'Swaps', value: 400, color: 'hsl(var(--chart-1))' },
     { name: 'Mints', value: 300, color: 'hsl(var(--chart-2))' },
-    { name: 'Transfers', value: 200, color: 'hsl(var(--chart-3))' },
+    { name 'Transfers', value: 200, color: 'hsl(var(--chart-3))' },
     { name: 'Votes', value: 100, color: 'hsl(var(--chart-4))' },
 ]
+
+const pieChartConfig = {
+  swaps: {
+    label: "Swaps",
+    color: "hsl(var(--chart-1))",
+  },
+  mints: {
+    label: "Mints",
+    color: "hsl(var(--chart-2))",
+  },
+  transfers: {
+    label: "Transfers",
+    color: "hsl(var(--chart-3))",
+  },
+  votes: {
+    label: "Votes",
+    color: "hsl(var(--chart-4))",
+  }
+}
 
 export default function AnalyticsPage() {
   return (
@@ -102,35 +120,45 @@ export default function AnalyticsPage() {
         <Card className="lg:col-span-4">
           <CardHeader>
             <CardTitle>Transactions Over Time</CardTitle>
+             <CardDescription>January - June 2024</CardDescription>
           </CardHeader>
           <CardContent className="pl-2">
             <ChartContainer config={chartConfig} className="h-[350px] w-full">
               <BarChart accessibilityLayer data={chartData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) => value.slice(0, 3)}
+                />
                 <ChartTooltip
                   cursor={false}
                   content={<ChartTooltipContent indicator="dot" />}
                 />
+                 <ChartLegend content={<ChartLegendContent />} />
                 <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
                 <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
               </BarChart>
             </ChartContainer>
           </CardContent>
         </Card>
-        <Card className="lg:col-span-3">
+        <Card className="lg:col-span-3 flex flex-col">
           <CardHeader>
             <CardTitle>Transaction Volume by Type</CardTitle>
             <CardDescription>January - June 2024</CardDescription>
           </CardHeader>
-          <CardContent className="flex-1 pb-0">
-             <ChartContainer config={{}} className="mx-auto aspect-square h-[250px]">
+          <CardContent className="flex-1 flex pb-0">
+             <ChartContainer config={pieChartConfig} className="mx-auto aspect-square max-h-[300px]">
                 <PieChart>
                   <ChartTooltip
                     cursor={false}
                     content={<ChartTooltipContent hideLabel />}
                   />
-                  <Pie data={pieChartData} dataKey="value" nameKey="name" innerRadius={60}>
-                     {pieChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Pie data={pieChartData} dataKey="value" nameKey="name" innerRadius={60} outerRadius={100}>
+                     {pieChartData.map((entry) => (
+                        <Cell key={entry.name} fill={entry.color} />
                      ))}
                   </Pie>
                   <ChartLegend
