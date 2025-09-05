@@ -1,10 +1,11 @@
+
 'use client';
 
-import { useState, useEffect, useRef, useId } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Copy, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Loader2, Copy, AlertTriangle, ShieldCheck, BrainCircuit, BotMessageSquare, FileText, Vote } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { recommendBusinessTools, generateDapp, generateToken, runSecurityAudit, generateDaoPlan } from '@/app/actions';
@@ -29,10 +30,8 @@ import {
   Wallet,
   FileJson,
   Network,
-  BotMessageSquare,
   AreaChart,
   FileArchive,
-  Vote,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
@@ -57,7 +56,7 @@ const toolUrlMap: Record<string, string> = {
     'Custom Wallets': '/dashboard/ai-agents',
     'Smart Contract Templates': '/dashboard/ai-agents',
     'Manual Transactions': '/dashboard/ai-agents',
-    'On-chain Analytics': '/dashboard/ai-agents',
+    'On-chain Analytics': '/dashboard/analytics', // Keep this as analytics
     'Decentralized Storage': '/dashboard/ai-agents',
     'Security Audits': '/dashboard/ai-agents',
     'DAO Governance': '/dashboard/ai-agents',
@@ -90,6 +89,22 @@ enum AgentTask {
 
 function determineTask(prompt: string): AgentTask {
     const lowerCasePrompt = prompt.toLowerCase();
+    if (lowerCasePrompt.includes('audit this contract') || lowerCasePrompt.includes('security check') || lowerCasePrompt.includes('find vulnerabilities')) {
+        return AgentTask.AuditContract;
+    }
+     if (lowerCasePrompt.includes('design a dao') || lowerCasePrompt.includes('dao governance') || lowerCasePrompt.includes('create a governance plan')) {
+        return AgentTask.DesignDao;
+    }
+    if (lowerCasePrompt.includes('build a dapp') || lowerCasePrompt.includes('create an application')) {
+        return AgentTask.BuildDapp;
+    }
+    if (lowerCasePrompt.includes('launch a token') || lowerCasePrompt.includes('create a cryptocurrency') || lowerCasePrompt.includes('new coin')) {
+        return AgentTask.LaunchToken;
+    }
+    if (lowerCasePrompt.includes('recommend tools') || lowerCasePrompt.includes('help my business') || lowerCasePrompt.includes('what tools should i use')) {
+        return AgentTask.Recommend;
+    }
+    // Defaults that are context specific
     if (lowerCasePrompt.includes('audit') || lowerCasePrompt.includes('security') || lowerCasePrompt.includes('vulnerability')) {
         return AgentTask.AuditContract;
     }
@@ -101,9 +116,6 @@ function determineTask(prompt: string): AgentTask {
     }
     if (lowerCasePrompt.includes('token') || lowerCasePrompt.includes('crypto') || lowerCasePrompt.includes('coin')) {
         return AgentTask.LaunchToken;
-    }
-    if (lowerCasePrompt.includes('business') || lowerCasePrompt.includes('help') || lowerCasePrompt.includes('tool')) {
-        return AgentTask.Recommend;
     }
     return AgentTask.Unknown;
 }
@@ -146,12 +158,13 @@ const CustomCodeBlock = ({ code, language = 'solidity' }: { code: string; langua
 }
 
 export default function AiAgentsPage() {
-    const [lines, setLines] = useState<DisplayLine[]>(getInitialLines);
-    const [isLoading, setIsLoading] = useState(false);
+    const [lines, setLines] = useState<DisplayLine[]>(() => getInitialLines());
+    const [status, setStatus] = useState<'idle' | 'thinking' | 'generating' | 'error'>('idle');
+    const isLoading = status === 'thinking' || status === 'generating';
+
     const { setOpen } = useSidebar();
-    const { toast } = useToast();
     const terminalOutputRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
         setOpen(false);
@@ -173,66 +186,84 @@ export default function AiAgentsPage() {
         },
     });
 
-    const addLine = (line: Omit<DisplayLine, 'id'>, type?: 'status' | 'guidance' | 'output') => {
-        const id = crypto.randomUUID();
-        if (type) {
-            setLines(prev => {
-                const newLines = prev.filter(l => l.type !== type);
-                return [...newLines, { ...line, id }];
-            });
-        } else {
-             setLines(prev => [...prev, { ...line, id }]);
-        }
+    const addLine = (line: Omit<DisplayLine, 'id'>) => {
+        setLines(prev => [...prev, { ...line, id: crypto.randomUUID() }]);
     };
     
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-        setIsLoading(true);
+        setStatus('thinking');
         addLine({ type: 'prompt', text: data.prompt });
         form.reset();
         
         const task = determineTask(data.prompt);
+        let statusLineId: string | null = null;
+        
+        const updateStatus = (text: string) => {
+            const newLine: DisplayLine = { id: crypto.randomUUID(), type: 'status', text };
+            if (statusLineId === null) {
+                statusLineId = newLine.id;
+                setLines(prev => [...prev, newLine]);
+            } else {
+                setLines(prev => prev.map(l => l.id === statusLineId ? newLine : l));
+            }
+        };
+        
+        const removeStatus = () => {
+            if (statusLineId) {
+                setLines(prev => prev.filter(l => l.id !== statusLineId));
+            }
+        }
 
         try {
             if (task === AgentTask.Recommend || task === AgentTask.Unknown) {
-                addLine({ type: 'status', text: 'Analyzing business needs...' }, 'status');
+                updateStatus('Analyzing business needs...');
+                setStatus('generating');
                 const result = await recommendBusinessTools({ business_description: data.prompt });
-                addLine({ type: 'guidance', text: 'Found recommendations:'}, 'status')
+                removeStatus();
+                addLine({ type: 'guidance', text: 'Found recommendations:'});
                 result.recommendations.forEach((rec) => {
                     addLine({ type: 'recommendation', recommendation: rec });
                 });
             } else if (task === AgentTask.BuildDapp) {
-                addLine({ type: 'status', text: 'Generating dApp plan...' }, 'status');
+                updateStatus('Generating dApp plan...');
+                setStatus('generating');
                 const result = await generateDapp({ description: data.prompt });
-                addLine({ type: 'guidance', text: 'Generated Plan:'}, 'status');
+                removeStatus();
+                addLine({ type: 'guidance', text: 'Generated Plan:'});
                 addLine({ type: 'plan', plan: result });
             } else if (task === AgentTask.LaunchToken) {
-                addLine({ type: 'status', text: 'Generating ERC-20 Smart Contract...' }, 'status');
+                updateStatus('Generating ERC-20 Smart Contract...');
+                setStatus('generating');
                 const result = await generateToken({ description: data.prompt });
-                addLine({ type: 'guidance', text: 'Generated Contract:'}, 'status');
+                removeStatus();
+                addLine({ type: 'guidance', text: 'Generated Contract:'});
                 addLine({ type: 'code', code: result });
             } else if (task === AgentTask.AuditContract) {
-                addLine({ type: 'status', text: 'Analyzing contract for vulnerabilities...' }, 'status');
+                updateStatus('Analyzing contract for vulnerabilities...');
+                setStatus('generating');
                 const result = await runSecurityAudit({ solidityCode: data.prompt });
-                addLine({ type: 'guidance', text: 'Security Audit Complete:'}, 'status');
+                removeStatus();
+                addLine({ type: 'guidance', text: 'Security Audit Complete:'});
                 addLine({ type: 'audit', audit: result });
             } else if (task === AgentTask.DesignDao) {
-                addLine({ type: 'status', text: 'Generating DAO Governance Plan...' }, 'status');
+                updateStatus('Generating DAO Governance Plan...');
+                setStatus('generating');
                 const result = await generateDaoPlan({ description: data.prompt });
-                addLine({ type: 'guidance', text: 'Generated DAO Plan:'}, 'status');
+                removeStatus();
+                addLine({ type: 'guidance', text: 'Generated DAO Plan:'});
                 addLine({ type: 'dao', dao: result });
             }
+            setStatus('idle');
         } catch (error) {
             console.error('Error processing prompt:', error);
-            addLine({ type: 'output', text: 'Error: Could not process your request.' }, 'status');
-        } finally {
-            setIsLoading(false);
+            removeStatus();
+            addLine({ type: 'output', text: `Error: Could not process your request. ${error instanceof Error ? error.message : ''}` });
+            setStatus('error');
         }
     }
 
   return (
-    <div 
-        className="font-code bg-black text-white text-sm grid grid-rows-[1fr_auto] h-[calc(100vh-113px)] -m-6"
-    >
+    <div className="font-code bg-black text-white text-sm grid grid-rows-[1fr_auto] h-[calc(100vh-113px)] -m-6">
         <div ref={terminalOutputRef} id="terminal-output" className="overflow-y-auto p-4">
             <AnimatePresence>
             {lines.map((line, index) => (
@@ -331,7 +362,7 @@ export default function AiAgentsPage() {
                         )}
                         {line.type === 'audit' && line.audit && (
                             <div className="border border-gray-700 rounded-md p-4 my-2 bg-gray-900/50">
-                                <h3 className="font-bold text-base text-purple-400 mb-2">Security Audit Report</h3>
+                                <h3 className="font-bold text-base text-purple-400 mb-2 flex items-center gap-2"><ShieldCheck className="w-5 h-5"/> Security Audit Report</h3>
                                 <p className="text-gray-400 italic mb-4">{line.audit.summary}</p>
                                 <div className="space-y-4">
                                     {line.audit.vulnerabilities.length > 0 ? line.audit.vulnerabilities.map((vuln, i) => (
@@ -357,23 +388,23 @@ export default function AiAgentsPage() {
                                 <h3 className="font-bold text-base text-purple-400">{line.dao.name}</h3>
                                 <p className="text-gray-400 italic mb-4">{line.dao.description}</p>
                                 
-                                <div className="space-y-4">
-                                    <div>
-                                        <h4 className="font-bold text-green-400 mb-1">Governance Model</h4>
+                                <div className="space-y-6">
+                                    <div className="p-4 rounded-md bg-gray-900 border border-gray-700">
+                                        <h4 className="font-bold text-green-400 mb-2 flex items-center gap-2"><BrainCircuit className="w-5 h-5"/>Governance Model</h4>
                                         <p className="font-semibold text-gray-300">{line.dao.governanceModel.name}</p>
-                                        <p className="text-gray-400 text-xs">{line.dao.governanceModel.description}</p>
+                                        <p className="text-gray-400 text-sm mt-1">{line.dao.governanceModel.description}</p>
                                     </div>
-                                    <div>
-                                        <h4 className="font-bold text-green-400 mb-1">Tokenomics</h4>
+                                    <div className="p-4 rounded-md bg-gray-900 border border-gray-700">
+                                        <h4 className="font-bold text-green-400 mb-2 flex items-center gap-2"><FileText className="w-5 h-5"/>Tokenomics</h4>
                                         <p className="font-semibold text-gray-300">{line.dao.tokenomics.tokenName} ({line.dao.tokenomics.tokenSymbol})</p>
-                                        <p className="text-gray-400 text-xs">{line.dao.tokenomics.initialDistribution}</p>
+                                        <p className="text-gray-400 text-sm mt-1">{line.dao.tokenomics.initialDistribution}</p>
                                     </div>
-                                    <div>
-                                        <h4 className="font-bold text-green-400 mb-1">Operational Plan</h4>
-                                        <ul className="space-y-1">
+                                    <div className="p-4 rounded-md bg-gray-900 border border-gray-700">
+                                        <h4 className="font-bold text-green-400 mb-2 flex items-center gap-2"><Vote className="w-5 h-5"/>Operational Plan</h4>
+                                        <ul className="space-y-2 mt-2">
                                             {line.dao.operationalPlan.map((step, i) => (
-                                                <li key={i} className="text-gray-400 flex items-start text-xs">
-                                                    <span className="mr-2 mt-1">&rarr;</span>
+                                                <li key={i} className="text-gray-400 flex items-start text-sm">
+                                                    <span className="mr-2 mt-1 text-green-400">&rarr;</span>
                                                     <span>{step}</span>
                                                 </li>
                                             ))}
@@ -402,7 +433,7 @@ export default function AiAgentsPage() {
                                         <FormControl>
                                             <Textarea
                                                 {...field}
-                                                ref={inputRef as React.Ref<HTMLTextAreaElement>}
+                                                ref={inputRef}
                                                 placeholder="e.g., 'Audit this contract for reentrancy...' or 'Design a DAO for a collective of artists...'"
                                                 className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto resize-none"
                                                 autoComplete="off"
@@ -433,3 +464,5 @@ export default function AiAgentsPage() {
    </div>
   );
 }
+
+    

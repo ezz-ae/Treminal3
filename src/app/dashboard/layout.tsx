@@ -50,7 +50,9 @@ export default function DashboardLayout({
 
   const getBreadcrumb = () => {
     const segments = pathname.split('/').filter(Boolean);
-    if (segments.length < 2) return null; // No breadcrumb on base dashboard
+    if (segments.length < 2) {
+        return <Link href="/dashboard" className="font-medium">Dashboard</Link>;
+    }
 
     const breadcrumbs = segments.slice(1).map((segment, index) => {
         const href = `/${segments.slice(0, index + 2).join('/')}`;
@@ -59,12 +61,18 @@ export default function DashboardLayout({
 
         return (
             <React.Fragment key={href}>
+                <ChevronRight className="h-4 w-4"/>
                 <Link href={href} className={cn("hover:text-foreground", isLast && "text-foreground font-medium")}>{label}</Link>
-                {!isLast && <ChevronRight className="h-4 w-4"/>}
             </React.Fragment>
         )
     });
-    return breadcrumbs;
+    
+    return (
+        <>
+          <Link href="/dashboard" className="hover:text-foreground">Dashboard</Link>
+          {breadcrumbs}
+        </>
+    )
   }
 
   return (
@@ -92,7 +100,7 @@ export default function DashboardLayout({
             </SidebarMenu>
           </SidebarContent>
         </Sidebar>
-        <div className="flex flex-1 flex-col">
+        <div className="flex-1 flex flex-col">
           <header className="flex items-center justify-between p-4 border-b h-[65px] shrink-0">
               <div className="flex items-center gap-4">
                 <SidebarTrigger/>
@@ -139,3 +147,5 @@ export default function DashboardLayout({
     </SidebarProvider>
   );
 }
+
+    

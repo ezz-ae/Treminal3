@@ -17,10 +17,6 @@ import {
   BotMessageSquare,
   AreaChart,
   FileArchive,
-  ShieldCheck,
-  Vote,
-  Database,
-  Server,
   ArrowRight,
   Code2,
   TrendingUp,
@@ -120,7 +116,7 @@ const serviceCategories = [
         chains: ["Ethereum", "Polygon", "BNB Chain"],
       },
       {
-        href: '/dashboard/storage',
+        href: '/dashboard/ai-agents',
         icon: FileArchive,
         title: 'Decentralized Storage',
         description: 'Upload and manage files on IPFS and other decentralized storage networks.',
@@ -253,3 +249,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    
