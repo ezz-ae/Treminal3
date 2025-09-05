@@ -223,8 +223,11 @@ export default function AiAgentsPage() {
     }
 
   return (
-    <div className="font-code bg-black text-white text-sm p-4" onClick={() => inputRef.current?.focus()}>
-        <div ref={terminalOutputRef} id="terminal-output" className="overflow-y-auto">
+    <div 
+        className="font-code bg-black text-white text-sm -m-6 grid grid-rows-[1fr_auto] h-[calc(100vh-113px)]" 
+        onClick={() => inputRef.current?.focus()}
+    >
+        <div ref={terminalOutputRef} id="terminal-output" className="overflow-y-auto p-4">
             <AnimatePresence>
             {lines.map((line, index) => (
                 <motion.div 
@@ -384,7 +387,7 @@ export default function AiAgentsPage() {
             ))}
             </AnimatePresence>
         </div>
-        <div className="pt-4 border-t border-gray-700">
+        <div className="p-4 border-t border-gray-700">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="flex gap-4 items-start">
@@ -430,5 +433,3 @@ export default function AiAgentsPage() {
    </div>
   );
 }
-
-    
