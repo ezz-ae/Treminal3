@@ -28,7 +28,8 @@ import {
   AppWindow,
   Puzzle,
   ShieldCheck,
-  Vote
+  Vote,
+  Bot
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -44,6 +45,7 @@ const menuItems = [
     { href: '/dashboard/token-launcher', label: 'Token Launcher', icon: Puzzle },
     { href: '/dashboard/security-audits', label: 'Security Audits', icon: ShieldCheck },
     { href: '/dashboard/dao-governance', label: 'DAO Governance', icon: Vote },
+    { href: '/dashboard/business-tool-recommendation', label: 'AI Business Tools', icon: Bot },
     { href: '/dashboard/analytics', label: 'Analytics', icon: AreaChart },
     { href: '/dashboard/stake', label: 'Stake', icon: Sprout },
     { href: '/dashboard/tools', label: 'Tools', icon: Wrench },

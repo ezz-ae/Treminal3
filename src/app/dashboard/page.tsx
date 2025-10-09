@@ -73,6 +73,14 @@ const allServices = [
         serviceIndex: 10,
       },
       {
+        href: '/dashboard/business-tool-recommendation',
+        iconName: 'Bot',
+        title: 'AI Business Tools',
+        description: 'Get AI-powered business tool recommendations.',
+        category: 'AI',
+        serviceIndex: null,
+      },
+      {
         href: '/dashboard/analytics',
         iconName: 'AreaChart',
         title: 'On-chain Analytics',
