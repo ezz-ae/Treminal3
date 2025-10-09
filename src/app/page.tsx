@@ -44,6 +44,12 @@ const services = [
     },
 ];
 
+/**
+ * The main landing page for the Terminal3 application.
+ * Features a hero section, an interactive terminal showcasing services,
+ * coding mode customizations, and interactive guides.
+ * @returns {JSX.Element} The Home component.
+ */
 export default function Home() {
   const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null);
   const targetRef = useRef<HTMLDivElement>(null);
@@ -65,7 +71,7 @@ export default function Home() {
 
     if (activeIndex >= 0 && activeIndex < featureCount) {
         setActiveServiceIndex(services[activeIndex].serviceIndex);
-    } else {
+    } else if (latest < 0.1 || latest > 0.9) { // Show default at the very top/bottom
         setActiveServiceIndex(null);
     }
   });

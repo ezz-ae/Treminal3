@@ -1,5 +1,5 @@
 
-import { Terminal, Menu, Newspaper } from 'lucide-react';
+import { Terminal, Menu } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -12,6 +12,11 @@ const navItems = [
   { href: '/#start', label: 'Start' },
 ];
 
+/**
+ * The main header component for the application.
+ * Includes navigation links, theme toggle, and a link to the dashboard.
+ * @returns {JSX.Element} The Header component.
+ */
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

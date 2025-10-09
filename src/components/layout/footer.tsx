@@ -1,5 +1,5 @@
 
-import { Terminal, Twitter, Github, Linkedin, Newspaper } from 'lucide-react';
+import { Terminal, Twitter, Github, Linkedin } from 'lucide-react';
 import Link from 'next/link';
 import { StatusIndicator } from '../ui/status-indicator';
 
@@ -31,6 +31,12 @@ const socialLinks = [
   { icon: Linkedin, href: '#', 'aria-label': 'LinkedIn' },
 ];
 
+/**
+ * The main footer component for the application.
+ * Includes service links, resource links, company links, social media links,
+ * and a status indicator.
+ * @returns {JSX.Element} The Footer component.
+ */
 export default function Footer() {
   return (
     <footer className="border-t py-12 bg-background relative overflow-hidden">

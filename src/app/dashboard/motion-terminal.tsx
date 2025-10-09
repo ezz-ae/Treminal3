@@ -91,6 +91,12 @@ interface MotionTerminalProps {
   scrollYProgress: MotionValue<number>;
 }
 
+/**
+ * An animated terminal component that displays different scripts
+ * based on the user's scroll position and active service.
+ * @param {MotionTerminalProps} props - The component props.
+ * @returns {JSX.Element} The MotionTerminal component.
+ */
 export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: MotionTerminalProps) {
   const [lines, setLines] = useState<{ text: string; type: string; }[]>([]);
   const [isComplete, setIsComplete] = useState(false);
