@@ -18,6 +18,7 @@ import {
     Terminal,
     Code2,
     Newspaper,
+    Check,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -40,4 +41,5 @@ import {
     Terminal,
     Code2,
     Newspaper,
+    Check,
   };

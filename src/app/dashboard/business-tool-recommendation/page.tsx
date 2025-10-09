@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Bot, AppWindow, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, ShieldCheck, Vote } from 'lucide-react';
+import { Loader2, Bot } from 'lucide-react';
 import * as React from 'react';
 import { motion } from 'framer-motion';
 import { recommendBusinessTools } from '@/app/actions';
@@ -16,6 +16,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { iconMap } from '@/lib/icon-map';
 
 const industries = ['DeFi', 'Gaming', 'NFTs / Art', 'Social', 'Infrastructure', 'Other'];
 const stages = ['Idea / Concept', 'Prototype / MVP', 'Growth Stage', 'Mature Product'];
@@ -36,10 +37,6 @@ const FormSchema = z.object({
   }),
   description: z.string().min(20, 'Please describe your business in at least 20 characters.'),
 });
-
-const iconMap: Record<string, React.ElementType> = {
-    AppWindow, Bot, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, ShieldCheck, Vote
-};
 
 export default function BusinessToolRecommendationPage() {
     const [result, setResult] = useState<BusinessToolRecommendationOutput | null>(null);
@@ -214,7 +211,7 @@ export default function BusinessToolRecommendationPage() {
                     </CardHeader>
                     <CardContent className="space-y-6">
                         {result.recommendations.map((rec, i) => {
-                            const Icon = iconMap[rec.icon] || Puzzle;
+                            const Icon = iconMap[rec.icon] || iconMap.Puzzle;
                             return (
                                 <Card key={i} className="bg-card/50">
                                     <CardHeader>
