@@ -81,9 +81,9 @@ export default function Home() {
         <Hero />
         <div ref={targetRef} className="relative z-10 bg-gradient-to-b from-background via-black to-black py-24">
             <div className="container mx-auto px-4 text-center mb-16">
-                 <h2 className="text-3xl md:text-4xl font-bold font-headline text-primary-foreground">The All-in-One Web3 Platform</h2>
+                 <h2 className="text-3xl md:text-4xl font-bold font-headline text-primary-foreground">All Your Web3 Tools in One Place</h2>
                 <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-lg">
-                    Hover over a service to see it in action. From smart contracts to on-chain analytics, build everything with a single, AI-native toolkit.
+                    Hover any service below to see it come to life in the terminal. From smart contracts to analytics, build faster with our AI-native toolkit.
                 </p>
             </div>
             <div className="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center">
