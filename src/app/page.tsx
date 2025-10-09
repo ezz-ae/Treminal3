@@ -1,3 +1,4 @@
+
 'use client';
 
 import Header from '@/components/layout/header';
@@ -58,8 +59,8 @@ export default function Home() {
   useMotionValueEvent(featureScrollProgress, "change", (latest) => {
     if (latest > 0.05) { // Only start changing active index when user is in the section
         const segment = 1 / services.length;
-        const activeIndex = Math.floor(latest / segment);
-        if(activeIndex < services.length) {
+        const activeIndex = Math.floor((latest - 0.05) / segment); // Adjust for the initial offset
+        if(activeIndex >= 0 && activeIndex < services.length) {
             setActiveServiceIndex(services[activeIndex].serviceIndex);
         }
     } else {
@@ -99,13 +100,13 @@ export default function Home() {
                     </p>
                 </div>
                
-                <div className="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center relative z-10 w-full">
-                    <div className="w-full h-[60vh] relative">
+                <div className="container mx-auto px-4 grid md:grid-cols-1 gap-8 items-center relative z-10 w-full">
+                    <div className="w-full h-[25vh] md:h-[20vh] relative">
                       {services.map((service, index) => {
-                        const segmentStart = (index / services.length);
-                        const segmentEnd = ((index + 1) / services.length);
+                        const segmentStart = (index / services.length) * 0.9 + 0.05; // start later
+                        const segmentEnd = ((index + 1) / services.length) * 0.9 + 0.05; // end sooner
                         const opacity = useTransform(featureScrollProgress, 
-                          [segmentStart - 0.1, segmentStart, segmentEnd, segmentEnd + 0.1],
+                          [segmentStart - 0.05, segmentStart, segmentEnd, segmentEnd + 0.05],
                           [0, 1, 1, 0]
                         )
                         const Icon = iconMap[service.iconName] || iconMap['AppWindow'];
@@ -113,7 +114,7 @@ export default function Home() {
                           <motion.div 
                             key={service.title} 
                             style={{ opacity }}
-                            className="absolute inset-0 flex flex-col justify-center text-left"
+                            className="absolute inset-0 flex flex-col justify-center items-center text-center"
                           >
                               <div className="flex items-center gap-4 mb-4">
                                   <div className="p-4 bg-primary/10 rounded-lg text-primary border border-primary/20">
