@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Copy, AlertTriangle, ShieldCheck, BrainCircuit, BotMessageSquare, FileText, Vote } from 'lucide-react';
+import { Loader2, AlertTriangle, ShieldCheck, BrainCircuit, BotMessageSquare, FileText, Vote } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { recommendBusinessTools, generateDapp, generateToken, runSecurityAudit, generateDaoPlan } from '@/app/actions';
@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
-import { useToast } from '@/hooks/use-toast';
 import type { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
 import type { DappBuilderOutput } from '@/ai/schemas/dapp-builder';
 import type { TokenLauncherOutput } from '@/ai/schemas/token-launcher';
@@ -35,8 +34,8 @@ import {
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { CodeBlock, dracula } from 'react-code-blocks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CustomCodeBlock } from '@/components/ui/code-block';
 
 const FormSchema = z.object({
   prompt: z.string().min(10, {
@@ -124,35 +123,6 @@ const severityConfig = {
     'Medium': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
     'Low': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
     'Informational': 'bg-gray-500/20 text-gray-400 border-gray-500/30',
-}
-
-const CustomCodeBlock = ({ code, language = 'solidity' }: { code: string; language?: string }) => {
-    const { toast } = useToast();
-    const handleCopy = () => {
-        navigator.clipboard.writeText(code);
-        toast({
-            title: "Copied to clipboard!",
-        });
-    }
-
-    return (
-        <div className="relative group my-4 rounded-md overflow-hidden bg-[#282a36]">
-            <CodeBlock
-                text={code.trim()}
-                language={language}
-                showLineNumbers={true}
-                theme={dracula}
-            />
-            <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={handleCopy}
-            >
-                <Copy className="w-4 h-4 text-white"/>
-            </Button>
-        </div>
-    )
 }
 
 export default function AiAgentsPage() {
@@ -261,7 +231,7 @@ export default function AiAgentsPage() {
     }
 
   return (
-    <div className="font-code text-sm flex flex-col h-full rounded-md border bg-card -m-6">
+    <div className="font-mono text-sm flex flex-col h-full rounded-md border bg-card -m-6">
         <div ref={terminalOutputRef} id="terminal-output" className="flex-grow overflow-y-auto p-4">
             <AnimatePresence>
             {lines.map((line, index) => (

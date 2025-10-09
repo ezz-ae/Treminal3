@@ -1,24 +1,15 @@
-
 'use client';
 
-import { useState } from 'react';
 import Header from '@/components/layout/header';
 import Hero from '@/components/landing/hero';
-import ServiceGrid from '@/components/landing/service-grid';
 import MotionTerminal from '@/components/landing/motion-terminal';
-import Web3DevTools from '@/components/landing/web3-dev-tools';
 import CodingModes from '@/components/landing/coding-modes';
 import InteractiveGuides from '@/components/landing/interactive-guides';
 import Footer from '@/components/layout/footer';
 import GridPattern from '@/components/landing/grid-pattern';
+import React from 'react';
 
 export default function Home() {
-  const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(0);
-  
-  const handleServiceClick = (index: number) => {
-    setActiveServiceIndex(index);
-  };
-
   return (
     <div className="flex flex-col min-h-screen bg-background relative">
         <GridPattern
@@ -31,11 +22,9 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <ServiceGrid onServiceClick={handleServiceClick} activeServiceIndex={activeServiceIndex} />
-        <MotionTerminal activeServiceIndex={activeServiceIndex} />
-        <Web3DevTools activeServiceIndex={activeServiceIndex} />
+        <MotionTerminal />
         <CodingModes />
-        <InteractiveGuides activeServiceIndex={activeServiceIndex} />
+        <InteractiveGuides />
       </main>
       <Footer />
     </div>
