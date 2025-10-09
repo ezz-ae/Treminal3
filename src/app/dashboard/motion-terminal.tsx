@@ -8,10 +8,10 @@ import { motion, useTransform, MotionValue } from 'framer-motion';
 
 const scripts: Record<string, { text: string; type: string }[]> = {
   default: [
-    { text: 'Welcome to Terminal3.', type: 'info' },
-    { text: 'Select a service to see its execution.', type: 'info' },
     { text: 'terminal3 --version', type: 'command' },
     { text: 'v1.0.0', type: 'success' },
+    { text: 'Welcome to Terminal3.', type: 'info' },
+    { text: 'Scroll to see what you can build.', type: 'info' },
   ],
   '0': [
     { text: 'terminal3 create:dapp --name=my-awesome-dapp --template=nft-marketplace', type: 'command' },
@@ -135,20 +135,17 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
   }, [lines]);
 
   useEffect(() => {
-    let newKey = 'default';
-    if (activeServiceIndex !== null) {
-      newKey = activeServiceIndex.toString();
-    } 
-
+    let newKey = activeServiceIndex !== null ? activeServiceIndex.toString() : 'default';
     if(newKey !== scriptKey) {
         setScriptKey(newKey);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeServiceIndex]);
+  }, [activeServiceIndex, scriptKey]);
 
   useEffect(() => {
     const scriptToRun = scripts[scriptKey] || scripts['default'];
     startAnimation(scriptToRun);
+  // This dependency array intentionally watches scriptKey to re-run the animation
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scriptKey]);
 
 

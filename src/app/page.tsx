@@ -1,4 +1,3 @@
-
 'use client';
 
 import Header from '@/components/layout/header';
@@ -11,7 +10,6 @@ import React, { useState, useRef } from 'react';
 import { useScroll, useTransform, motion, useMotionValueEvent } from 'framer-motion';
 import MotionTerminal from '@/app/dashboard/motion-terminal';
 import { iconMap } from '@/lib/icon-map';
-import { cn } from '@/lib/utils';
 
 
 const services = [
@@ -46,7 +44,7 @@ const services = [
 ];
 
 export default function Home() {
-  const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(0);
+  const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null);
   const targetRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -54,14 +52,18 @@ export default function Home() {
   });
   const { scrollYProgress: featureScrollProgress } = useScroll({
       target: targetRef,
-      offset: ["center center", "end start"]
+      offset: ["start center", "end start"]
   });
 
   useMotionValueEvent(featureScrollProgress, "change", (latest) => {
-    const segment = 1 / services.length;
-    const activeIndex = Math.floor(latest / segment);
-    if(activeIndex < services.length) {
-      setActiveServiceIndex(services[activeIndex].serviceIndex);
+    if (latest > 0.05) { // Only start changing active index when user is in the section
+        const segment = 1 / services.length;
+        const activeIndex = Math.floor(latest / segment);
+        if(activeIndex < services.length) {
+            setActiveServiceIndex(services[activeIndex].serviceIndex);
+        }
+    } else {
+        setActiveServiceIndex(null); // Default to null when not in view
     }
   })
 
@@ -77,7 +79,7 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <div ref={targetRef} className="relative z-10 py-24 h-[400vh]">
+        <div ref={targetRef} className="relative z-10 h-[400vh]">
             <div className="sticky top-0 h-screen flex flex-col items-center justify-center bg-black">
                 <div className="absolute inset-0 z-0">
                     <div className="absolute inset-0 bg-black" />
@@ -97,8 +99,8 @@ export default function Home() {
                     </p>
                 </div>
                
-                <div className="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center relative z-10">
-                    <div className="w-full h-[60vh]">
+                <div className="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center relative z-10 w-full">
+                    <div className="w-full h-[60vh] relative">
                       {services.map((service, index) => {
                         const segmentStart = (index / services.length);
                         const segmentEnd = ((index + 1) / services.length);
@@ -111,7 +113,7 @@ export default function Home() {
                           <motion.div 
                             key={service.title} 
                             style={{ opacity }}
-                            className="absolute inset-0 flex flex-col justify-center"
+                            className="absolute inset-0 flex flex-col justify-center text-left"
                           >
                               <div className="flex items-center gap-4 mb-4">
                                   <div className="p-4 bg-primary/10 rounded-lg text-primary border border-primary/20">
@@ -119,12 +121,12 @@ export default function Home() {
                                   </div>
                                   <h3 className="font-headline text-3xl font-bold text-primary-foreground">{service.title}</h3>
                               </div>
-                              <p className="text-muted-foreground text-lg">{service.description}</p>
+                              <p className="text-muted-foreground text-lg max-w-md">{service.description}</p>
                           </motion.div>
                         )
                       })}
                     </div>
-                    <div>
+                    <div className="w-full">
                         <MotionTerminal scrollYProgress={scrollYProgress} activeServiceIndex={activeServiceIndex}/>
                     </div>
                 </div>
