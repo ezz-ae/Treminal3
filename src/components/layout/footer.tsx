@@ -1,5 +1,4 @@
-
-import { Terminal, Twitter, Github, Linkedin } from 'lucide-react';
+import { Terminal, Twitter, Github, Linkedin, Newspaper } from 'lucide-react';
 import Link from 'next/link';
 import { StatusIndicator } from '../ui/status-indicator';
 
@@ -20,7 +19,7 @@ const serviceLinks = [
 const resourceLinks = [
     { href: '/dashboard/docs', label: 'Documentation' },
     { href: '/#start', label: 'Interactive Guides' },
-    { href: '#', label: 'Blog' },
+    { href: '/blog', label: 'Blog' },
     { href: '#', label: 'Release Notes' },
 ];
 
@@ -40,11 +39,11 @@ export default function Footer() {
   return (
     <footer className="border-t py-12 bg-background relative overflow-hidden">
         <div 
-            className="absolute -bottom-1/2 -left-1/4 w-1/2 h-[200%] bg-primary/5 rounded-full blur-3xl"
+            className="absolute -bottom-1/2 -left-1/4 w-1/2 h-[200%] bg-primary/5 rounded-full blur-3xl dark:bg-primary/10"
             style={{ animation: 'aurora 20s linear infinite' }}
         ></div>
          <div 
-            className="absolute -top-1/2 -right-1/4 w-1/2 h-[200%] bg-blue-500/5 rounded-full blur-3xl"
+            className="absolute -top-1/2 -right-1/4 w-1/2 h-[200%] bg-blue-500/5 rounded-full blur-3xl dark:bg-blue-500/10"
             style={{ animation: 'aurora 25s linear infinite reverse' }}
         ></div>
 
@@ -76,7 +75,7 @@ export default function Footer() {
                 </ul>
             </div>
              <div>
-                <h4 className="font-headline font-semibold mb-4 text-white/0">Services</h4>
+                <h4 className="font-headline font-semibold mb-4 text-transparent select-none">Services</h4>
                 <ul className="space-y-2">
                     {serviceLinks.slice(6).map((link) => (
                         <li key={link.label}>
@@ -118,5 +117,3 @@ export default function Footer() {
     </footer>
   );
 }
-
-    

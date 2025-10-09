@@ -1,4 +1,3 @@
-
 'use client';
 import * as React from 'react';
 import Link from 'next/link';
@@ -23,19 +22,22 @@ import {
   Wrench,
   Download,
   Terminal,
-  BookOpen
+  BookOpen,
+  Newspaper
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
     { href: '/dashboard/ai-agents', label: 'AI Command Center', icon: Terminal },
     { href: '/dashboard/analytics', label: 'Analytics', icon: AreaChart },
     { href: '/dashboard/docs', label: 'Documentation', icon: BookOpen },
+    { href: '/blog', label: 'Blog', icon: Newspaper },
     { href: '/dashboard/stake', label: 'Stake', icon: Sprout },
     { href: '/dashboard/tools', label: 'Tools', icon: Wrench },
     { href: '/dashboard/download', label: 'Download', icon: Download },
@@ -63,14 +65,14 @@ export default function DashboardLayout({
         return (
             <React.Fragment key={href}>
                 <ChevronRight className="h-4 w-4"/>
-                <Link href={href} className={cn("hover:text-foreground", isLast && "text-foreground font-medium")}>{label}</Link>
+                <Link href={href} className={cn("hover:text-foreground", isLast ? "text-foreground font-medium" : "text-muted-foreground")}>{label}</Link>
             </React.Fragment>
         )
     });
     
     return (
         <>
-          <Link href="/dashboard" className="hover:text-foreground">Dashboard</Link>
+          <Link href="/dashboard" className="text-muted-foreground hover:text-foreground">Dashboard</Link>
           {breadcrumbs}
         </>
     )
@@ -91,7 +93,7 @@ export default function DashboardLayout({
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
                     <Link href={item.href} className='w-full'>
-                      <SidebarMenuButton isActive={pathname === item.href}>
+                      <SidebarMenuButton isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}>
                         <item.icon />
                         <span>{item.label}</span>
                       </SidebarMenuButton>
@@ -110,7 +112,7 @@ export default function DashboardLayout({
                     {getBreadcrumb()}
                 </div>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <div className="relative hidden md:block">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
                     <Input placeholder="Search" className="pl-10 w-64"/>
@@ -118,6 +120,7 @@ export default function DashboardLayout({
                 <Button variant="outline" asChild>
                   <Link href="/auth">Connect Wallet</Link>
                 </Button>
+                 <ThemeToggle />
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
@@ -148,5 +151,3 @@ export default function DashboardLayout({
     </SidebarProvider>
   );
 }
-
-    

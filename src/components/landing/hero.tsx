@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -13,29 +12,43 @@ export default function Hero() {
   return (
     <section className="bg-background text-foreground">
       <div className="container mx-auto px-4 py-24 sm:py-32 flex flex-col justify-center items-center text-center">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight font-headline mb-10">
+        <motion.h1 
+            className="text-4xl md:text-6xl font-bold tracking-tight font-headline mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
           Build, manage, and grow your&nbsp;
           <AnimatedText words={animatedWords} className="font-headline" />
           &nbsp;project with an AI-native code editor.
-        </h1>
-        <p className="max-w-3xl text-lg text-muted-foreground mb-10">
+        </motion.h1>
+        <motion.p 
+            className="max-w-3xl text-lg text-muted-foreground mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+        >
             From idea to deployment, Terminal3 provides the tools, templates, and AI-powered assistance to build and manage your Web3 projects faster than ever before. Go from a prompt to a full-stack dApp in minutes.
-        </p>
-        <div className="flex justify-center items-center gap-4">
+        </motion.p>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+        >
             <motion.div
-            animate={{
-                boxShadow: [
-                    '0 0 0 0 hsl(var(--primary) / 0.5)',
-                    '0 0 25px 0px hsl(var(--accent) / 0.4)',
-                    '0 0 0 0 hsl(var(--primary) / 0.5)',
-                ],
-            }}
-            transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-            }}
-            className="rounded-md"
+                animate={{
+                    boxShadow: [
+                        '0 0 0 0px hsl(var(--primary) / 0)',
+                        '0 0 0 4px hsl(var(--primary) / 0.3)',
+                        '0 0 0 0px hsl(var(--primary) / 0)',
+                    ],
+                }}
+                transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                }}
+                className="rounded-md"
             >
             <Button size="lg" asChild>
                 <Link href="/auth">
@@ -43,7 +56,7 @@ export default function Hero() {
                 </Link>
             </Button>
             </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

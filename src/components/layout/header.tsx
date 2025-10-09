@@ -1,12 +1,13 @@
-
-import { Terminal, Menu } from 'lucide-react';
+import { Terminal, Menu, Newspaper } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { ThemeToggle } from '../theme-toggle';
 
 const navItems = [
   { href: '/#services', label: 'Services' },
   { href: '/#for-developers', label: 'Developers' },
+  { href: '/blog', label: 'Blog' },
   { href: '/#start', label: 'Start' },
 ];
 
@@ -31,7 +32,8 @@ export default function Header() {
             ))}
           </nav>
         </div>
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        <div className="flex flex-1 items-center justify-end space-x-2">
+          <ThemeToggle />
            <Button asChild>
             <Link href="/auth">Get Started</Link>
           </Button>
@@ -67,5 +69,3 @@ export default function Header() {
     </header>
   );
 }
-
-    
