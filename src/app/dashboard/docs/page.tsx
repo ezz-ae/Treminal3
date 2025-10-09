@@ -48,12 +48,6 @@ const docSections = [
     href: '/dashboard/docs/getting-started'
   },
   {
-    icon: AppWindow,
-    title: 'Core Services',
-    description: 'Detailed guides on our foundational tools like the dApp Builder and Token Launcher.',
-    href: '#'
-  },
-  {
     icon: Bot,
     title: 'AI Agents',
     description: 'Master the art of creating and deploying autonomous AI agents to automate your on-chain tasks.',

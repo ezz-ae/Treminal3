@@ -214,69 +214,41 @@ export default function DashboardPage() {
         </p>
       </div>
 
-       <Tabs defaultValue="developers" className="w-full">
-        <div className="flex justify-center mb-10">
-          <TabsList className="grid w-full max-w-md grid-cols-3">
-            <TabsTrigger value="developers"><Code2 className="mr-2"/> For Developers</TabsTrigger>
-            <TabsTrigger value="traders"><TrendingUp className="mr-2"/> For Traders</TabsTrigger>
-            <TabsTrigger value="enterprises"><Building className="mr-2"/> For Enterprises</TabsTrigger>
-          </TabsList>
-        </div>
-
-        <TabsContent value="developers">
-            {serviceCategories.map((category) => (
-              <div key={category.category} className="mb-12">
-                <h2 className="text-2xl font-bold font-headline mb-2">{category.category}</h2>
-                <p className="text-muted-foreground mb-6">{category.description}</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {category.services.map((tool) => (
-                    <Card key={tool.title} className={cn("flex flex-col group bg-card/50 hover:border-primary/50 transition-colors duration-300", tool.className)}>
-                      <CardHeader className="flex-row items-start gap-4 space-y-0">
-                        <div className="p-3 bg-primary/10 rounded-lg text-primary">
-                          <tool.icon className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-xl font-bold mb-1">{tool.title}</CardTitle>
-                          <div className="flex flex-wrap gap-1.5">
-                            {tool.chains.map(chain => (
-                                <span key={chain} className="text-xs bg-secondary text-secondary-foreground/80 px-2 py-0.5 rounded-full">{chain}</span>
-                            ))}
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="flex-grow">
-                        <p className="text-muted-foreground text-sm">{tool.description}</p>
-                      </CardContent>
-                      <div className="p-6 pt-0">
-                        <Button asChild className="w-full">
-                            <Link href={tool.href}>
-                                Launch <ArrowRight className="ml-2"/>
-                            </Link>
-                        </Button>
-                      </div>
-                    </Card>
-                  ))}
+      {serviceCategories.map((category) => (
+        <div key={category.category} className="mb-12">
+          <h2 className="text-2xl font-bold font-headline mb-2">{category.category}</h2>
+          <p className="text-muted-foreground mb-6">{category.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {category.services.map((tool) => (
+              <Card key={tool.title} className={cn("flex flex-col group bg-card/50 hover:border-primary/50 transition-colors duration-300", tool.className)}>
+                <CardHeader className="flex-row items-start gap-4 space-y-0">
+                  <div className="p-3 bg-primary/10 rounded-lg text-primary">
+                    <tool.icon className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl font-bold mb-1">{tool.title}</CardTitle>
+                    <div className="flex flex-wrap gap-1.5">
+                      {tool.chains.map(chain => (
+                          <span key={chain} className="text-xs bg-secondary text-secondary-foreground/80 px-2 py-0.5 rounded-full">{chain}</span>
+                      ))}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <p className="text-muted-foreground text-sm">{tool.description}</p>
+                </CardContent>
+                <div className="p-6 pt-0">
+                  <Button asChild className="w-full">
+                      <Link href={tool.href}>
+                          Launch <ArrowRight className="ml-2"/>
+                      </Link>
+                  </Button>
                 </div>
-              </div>
+              </Card>
             ))}
-        </TabsContent>
-         <TabsContent value="traders">
-            <div className="text-center py-20">
-                <TrendingUp className="w-12 h-12 mx-auto text-muted-foreground mb-4"/>
-                <h3 className="text-2xl font-bold font-headline">Trading Tools Coming Soon</h3>
-                <p className="text-muted-foreground mt-2">Specialized tools for DeFi traders and financial engineers are under construction.</p>
-            </div>
-        </TabsContent>
-        <TabsContent value="enterprises">
-            <div className="text-center py-20">
-                <Building className="w-12 h-12 mx-auto text-muted-foreground mb-4"/>
-                <h3 className="text-2xl font-bold font-headline">Enterprise Solutions Coming Soon</h3>
-                <p className="text-muted-foreground mt-2">High-performance infrastructure and support for large-scale applications are on the way.</p>
-            </div>
-        </TabsContent>
-      </Tabs>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
-
-    
