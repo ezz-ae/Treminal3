@@ -1,3 +1,4 @@
+
 import { Terminal, Menu, Newspaper } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -5,8 +6,8 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from '../theme-toggle';
 
 const navItems = [
-  { href: '/#services', label: 'Services' },
-  { href: '/#for-developers', label: 'Developers' },
+  { href: '/dashboard', label: 'Services' },
+  { href: '/dashboard/docs', label: 'Developers' },
   { href: '/blog', label: 'Blog' },
   { href: '/#start', label: 'Start' },
 ];

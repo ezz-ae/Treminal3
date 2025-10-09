@@ -1,39 +1,10 @@
 
 'use client';
-import { CodeBlock, dracula } from 'react-code-blocks';
 import { Button } from '@/components/ui/button';
-import { Copy, BotMessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Copy, BotMessageSquare } from 'lucide-react';
 import Link from 'next/link';
-
-const CustomCodeBlock = ({ code, language = 'typescript' }: { code: string; language?: string }) => {
-    const { toast } = useToast();
-    const handleCopy = () => {
-        navigator.clipboard.writeText(code);
-        toast({
-            title: "Copied to clipboard!",
-        });
-    }
-
-    return (
-        <div className="relative group my-4 rounded-md overflow-hidden">
-            <CodeBlock
-                text={code.trim()}
-                language={language}
-                showLineNumbers={true}
-                theme={dracula}
-            />
-            <Button 
-                variant="ghost" 
-                size="icon"
-                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={handleCopy}
-            >
-                <Copy className="w-4 h-4 text-white"/>
-            </Button>
-        </div>
-    )
-}
+import { CustomCodeBlock } from '@/components/ui/code-block';
 
 export default function SolanaPage() {
     const rpcEndpoint = "https://api.terminal3.me/v1/rpc/YOUR_API_KEY/sol";
@@ -119,14 +90,14 @@ fetch(url, {
         <section className="mt-12 p-8 rounded-lg bg-primary/10 border border-primary/20">
             <h2 className="!mt-0">Supercharge with AI</h2>
             <p>
-                Don't want to manually craft complex JSON-RPC calls? Use our AI Agent to interact with the Solana network using natural language.
+                Don't want to manually craft complex JSON-RPC calls? Use our AI tools to interact with the Solana network using natural language.
             </p>
             <p>
                 Simply describe what you want to do, like "Get the token balance for wallet address X" or "Airdrop 2 SOL to my devnet wallet," and our AI will handle the rest.
             </p>
              <Button asChild>
-                <Link href="/dashboard/ai-agents">
-                    <BotMessageSquare className="mr-2"/> Try the AI Agent
+                <Link href="/dashboard/dapp-builder">
+                    <BotMessageSquare className="mr-2"/> Try the AI Tools
                 </Link>
             </Button>
         </section>

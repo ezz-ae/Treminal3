@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -24,7 +25,7 @@ export const CustomCodeBlock = ({ code, language = 'solidity' }: { code: string;
 
     return (
         <div className="relative group my-4 rounded-md overflow-hidden bg-[#2d2d2d]">
-            <pre className={`language-${language} p-4 text-sm`}>
+            <pre className={`language-${language} p-4 text-sm font-mono`}>
                 <code>{code.trim()}</code>
             </pre>
             <Button

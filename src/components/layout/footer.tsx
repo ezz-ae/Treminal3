@@ -4,17 +4,14 @@ import Link from 'next/link';
 import { StatusIndicator } from '../ui/status-indicator';
 
 const serviceLinks = [
-    { href: '/dashboard/ai-agents', label: 'AI Agents' },
-    { href: '/dashboard/ai-agents', label: 'dApp Builder' },
-    { href: '/dashboard/ai-agents', label: 'Token Launcher' },
-    { href: '/dashboard/ai-agents', label: 'Trading Bots' },
-    { href: '/dashboard/ai-agents', label: 'Custom Wallets' },
-    { href: '/dashboard/ai-agents', label: 'Smart Contracts' },
-    { href: '/dashboard/ai-agents', label: 'Manual Transactions' },
+    { href: '/dashboard/dapp-builder', label: 'dApp Builder' },
+    { href: '/dashboard/token-launcher', label: 'Token Launcher' },
+    { href: '/dashboard/security-audits', label: 'Security Audits' },
+    { href: '/dashboard/dao-governance', label: 'DAO Governance' },
     { href: '/dashboard/analytics', label: 'On-chain Analytics' },
-    { href: '/dashboard/ai-agents', label: 'Decentralized Storage' },
-    { href: '/dashboard/ai-agents', label: 'Security Audits' },
-    { href: '/dashboard/ai-agents', label: 'DAO Governance' },
+    { href: '/dashboard/stake', label: 'Staking' },
+    { href: '/dashboard/tools', label: 'Developer Tools' },
+    { href: '/dashboard/docs/apis', label: 'Universal RPC' },
 ];
 
 const resourceLinks = [
@@ -42,7 +39,7 @@ export default function Footer() {
         ></div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div className="col-span-2 md:col-span-2">
                 <Link href="/" className="flex items-center space-x-2 mb-4">
                   <Terminal className="h-6 w-6 text-primary" />
@@ -59,7 +56,7 @@ export default function Footer() {
              <div>
                 <h4 className="font-headline font-semibold mb-4">Services</h4>
                 <ul className="space-y-2">
-                    {serviceLinks.slice(0,6).map((link) => (
+                    {serviceLinks.map((link) => (
                         <li key={link.label}>
                             <Link href={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                                 {link.label}
@@ -68,19 +65,7 @@ export default function Footer() {
                     ))}
                 </ul>
             </div>
-             <div>
-                <h4 className="font-headline font-semibold mb-4 text-transparent select-none">Services</h4>
-                <ul className="space-y-2">
-                    {serviceLinks.slice(6).map((link) => (
-                        <li key={link.label}>
-                            <Link href={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                {link.label}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-
+            
             <div>
                 <h4 className="font-headline font-semibold mb-4">Resources</h4>
                 <ul className="space-y-2">

@@ -83,7 +83,7 @@ export default function SmartContractsPage() {
             <div>
                 <h2 className="!mt-0">AI-Powered Customization</h2>
                 <p>
-                    Need to add a feature? Don't start from scratch. Use our <Link href="/dashboard/ai-agents">AI Command Center</Link> to customize any template. Simply describe your requirements, like "Add a 5% royalty fee to the NFT contract" or "Make the crowdsale support a whitelist," and our AI will generate the necessary code modifications for you.
+                    Need to add a feature? Don't start from scratch. Use our <Link href="/dashboard/token-launcher">AI tools</Link> to customize any template. Simply describe your requirements, like "Add a 5% royalty fee to the NFT contract" or "Make the crowdsale support a whitelist," and our AI will generate the necessary code modifications for you.
                 </p>
             </div>
         </section>

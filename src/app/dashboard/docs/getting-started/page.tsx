@@ -16,25 +16,25 @@ const features = [
     icon: Terminal,
     title: 'AI Command Center',
     description: 'The heart of Terminal3. A conversational interface to execute any task, from creating a token to auditing a contract.',
-    href: '/dashboard/ai-agents'
+    href: '/dashboard/dapp-builder'
   },
   {
     icon: AppWindow,
     title: 'dApp Builder',
     description: 'Describe your application and let the AI generate a complete plan, including UI components and smart contracts.',
-    href: '/dashboard/ai-agents'
+    href: '/dashboard/dapp-builder'
   },
   {
     icon: ShieldCheck,
     title: 'Security Audits',
     description: 'Paste in Solidity code and receive a comprehensive security analysis and recommendations.',
-    href: '/dashboard/ai-agents'
+    href: '/dashboard/security-audits'
   },
     {
     icon: Vote,
     title: 'DAO Governance',
     description: 'Design a complete governance structure for your Decentralized Autonomous Organization.',
-    href: '/dashboard/ai-agents'
+    href: '/dashboard/dao-governance'
   },
   {
     icon: AreaChart,
@@ -98,7 +98,7 @@ export default function GettingStartedPage() {
                   <strong>Explore the Dashboard:</strong> The <Link href="/dashboard">main dashboard</Link> is your mission control. It gives you a snapshot of your assets and provides access to all available services.
                 </li>
                 <li>
-                  <strong>Use the AI Command Center:</strong> The fastest way to build is to ask. Go to the <Link href="/dashboard/ai-agents">AI Command Center</Link> and try a prompt like: <em className="text-primary/80">"Create a plan for a dApp that lets users mint a profile NFT."</em>
+                  <strong>Use the AI dApp Builder:</strong> The fastest way to build is to ask. Go to the <Link href="/dashboard/dapp-builder">dApp Builder</Link> and try a prompt like: <em className="text-primary/80">"Create a plan for a dApp that lets users mint a profile NFT."</em>
                 </li>
                 <li>
                   <strong>Check the Analytics:</strong> Visit the <Link href="/dashboard/analytics">Analytics</Link> page to see a demo of our on-chain data visualization capabilities.

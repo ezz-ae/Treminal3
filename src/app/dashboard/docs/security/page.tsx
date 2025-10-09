@@ -72,7 +72,7 @@ export default function SecurityPage() {
                 <div>
                     <h2 className="!mt-0 text-red-400">Security is a Process, Not a Destination</h2>
                     <p className="text-red-400/80">
-                        No application is ever 100% secure. Security is an ongoing process of vigilance, testing, and auditing. While Terminal3 provides powerful tools like our <Link href="/dashboard/ai-agents" className='text-red-300 hover:text-red-200'>AI Security Auditor</Link>, they are aids, not substitutes for a comprehensive security strategy. For high-value contracts, always consider a full manual audit from a reputable third-party firm.
+                        No application is ever 100% secure. Security is an ongoing process of vigilance, testing, and auditing. While Terminal3 provides powerful tools like our <Link href="/dashboard/security-audits" className='text-red-300 hover:text-red-200'>AI Security Auditor</Link>, they are aids, not substitutes for a comprehensive security strategy. For high-value contracts, always consider a full manual audit from a reputable third-party firm.
                     </p>
                 </div>
              </div>
