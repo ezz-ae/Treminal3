@@ -8,83 +8,119 @@ import { motion, useTransform, MotionValue } from 'framer-motion';
 
 const scripts: Record<string, { text: string; type: string }[]> = {
   default: [
-    { text: 'Welcome to Terminal3.', type: 'info' },
-    { text: 'Select a service above to see its execution.', type: 'info' },
+    { text: 'Welcome to the Terminal3 Command Center.', type: 'info' },
+    { text: 'Select a service from the grid above to see its execution flow.', type: 'info' },
     { text: 'terminal3 --version', type: 'command' },
     { text: 'v1.0.0', type: 'success' },
   ],
   '0': [
-    { text: 'terminal3 create:dapp --name=my-awesome-dapp --template=nft-marketplace', type: 'command' },
-    { text: '✔ dApp created successfully from template: nft-marketplace.', type: 'success' },
-    { text: 'terminal3 deploy:dapp --name=my-awesome-dapp --network=mainnet', type: 'command' },
-    { text: 'Deploying to mainnet...', type: 'info' },
-    { text: '✔ dApp deployed. URL: https://my-awesome-dapp.t3.app', type: 'success' },
+    { text: 'terminal3 create:dapp --name="NFT-Gallery" --template=marketplace', type: 'command' },
+    { text: 'i Analyzing requirements for "NFT-Gallery"...', type: 'info' },
+    { text: 'i Generating ERC721 smart contract...', type: 'info' },
+    { text: 'i Assembling front-end with wallet connection and minting UI...', type: 'info' },
+    { text: '✔ dApp scaffold created successfully in `/dapps/nft-gallery`.', type: 'success' },
+    { text: 'terminal3 deploy --dapp="NFT-Gallery" --network=sepolia', type: 'command' },
+    { text: 'i Deploying contracts and hosting front-end on IPFS...', type: 'info' },
+    { text: '✔ Deployment complete. dApp available at: nft-gallery.t3.app', type: 'success' },
   ],
   '1': [
-    { text: 'terminal3 create:token --name="My Token" --symbol=TKN --supply=1000000', type: 'command' },
-    { text: '✔ Token contract generated successfully.', type: 'success' },
-    { text: 'terminal3 deploy:token --network=polygon', type: 'command' },
-    { text: 'Deploying token to Polygon network...', type: 'info' },
-    { text: '✔ Token deployed. Contract address: 0x123...abc', type: 'success' },
+    { text: 'terminal3 create:token --name="Starlight" --symbol=STAR --supply=1000000000', type: 'command' },
+    { text: 'i Generating ERC-20 contract with OpenZeppelin standards...', type: 'info' },
+    { text: 'i Setting total supply to 1,000,000,000 STAR...', type: 'info' },
+    { text: '✔ Smart contract generated at `/contracts/StarlightToken.sol`.', type: 'success' },
+    { text: 'terminal3 deploy:token --contract="StarlightToken" --network=polygon', type: 'command' },
+    { text: 'i Submitting contract to Polygon mainnet...', type: 'info' },
+    { text: '✔ Token deployed. Contract address: 0x5a...c3d', type: 'success' },
   ],
   '2': [
-    { text: 'terminal3 create:bot --name=arbitrage-bot --template=uniswap-v3', type: 'command' },
-    { text: '✔ Bot created successfully at ./bots/arbitrage-bot.js', type: 'success' },
-    { text: 'terminal3 backtest --name=arbitrage-bot --from=2023-01-01', type: 'command' },
-    { text: 'Running backtest... Total PnL: 23.45 WETH', type: 'info' },
-    { text: 'terminal3 deploy:bot --name=arbitrage-bot --live', type: 'command' },
-    { text: '✔ Bot deployed successfully. Listening for opportunities...', type: 'success' },
+    { text: 'terminal3 create:bot --name="ArbitrageHunter" --template=dex-arbitrage', type: 'command' },
+    { text: 'i Creating bot from `dex-arbitrage` template...', type: 'info' },
+    { text: 'i Configuring bot to monitor Uniswap and Sushiswap for ETH/USDC pair.', type: 'info' },
+    { text: '✔ Bot created at `/bots/ArbitrageHunter.js`.', type: 'success' },
+    { text: 'terminal3 backtest --bot="ArbitrageHunter" --from="30d" --pair=ETH/USDC', type: 'command' },
+    { text: 'i Running backtest over last 30 days of market data...', type: 'info' },
+    { text: '✔ Backtest complete. Estimated PnL: +1.24 ETH.', type: 'success' },
   ],
-    '3': [
-    { text: 'terminal3 create:agent --name=oracle-updater --trigger=on-chain-event', type: 'command' },
-    { text: '✔ AI Agent created. Listening for PriceUpdate events...', type: 'success' },
-    { text: 'terminal3 agent:logs --name=oracle-updater', type: 'command' },
-    { text: 'Event triggered. Agent executing logic...', type: 'info' },
-    { text: 'Price updated on-chain via agent.', type: 'success' },
+  '3': [
+    { text: 'terminal3 create:agent --name="PortfolioRebalancer" --trigger="time(24h)"', type: 'command' },
+    { text: 'i Creating new AI agent with a 24-hour time-based trigger...', type: 'info' },
+    { text: 'i Defining goal: "Ensure BTC and ETH holdings are balanced to a 50/50 split."', type: 'info' },
+    { text: '✔ Agent "PortfolioRebalancer" created and is now active.', type: 'success' },
+    { text: 'terminal3 agent:logs --name="PortfolioRebalancer" -f', type: 'command' },
+    { text: 'i Agent triggered. Current split: 60% BTC / 40% ETH.', type: 'info' },
+    { text: 'i Executing swap: Sell 10% of BTC for ETH to rebalance...', type: 'info' },
+    { text: '✔ Rebalancing complete. New split: 50% BTC / 50% ETH.', type: 'success' },
   ],
   '4': [
-    { text: 'terminal3 create:wallet --brand=my-brand --template=multi-sig', type: 'command' },
-    { text: '✔ Custom branded wallet SDK generated.', type: 'success' },
-    { text: 'terminal3 publish:wallet --name=my-brand-wallet', type: 'command' },
-    { text: 'Publishing wallet to app stores...', type: 'info' },
-    { text: '✔ Wallet published successfully.', type: 'success' },
+    { text: 'terminal3 create:wallet --brand="My dApp" --color-scheme=blue', type: 'command' },
+    { text: 'i Generating white-label wallet SDK components...', type: 'info' },
+    { text: 'i Applying "My dApp" branding and blue color theme...', type: 'info' },
+    { text: '✔ Wallet SDK ready for integration.', type: 'success' },
+    { text: 'terminal3 publish:wallet --platform=ios,android', type: 'command' },
+    { text: 'i Compiling and submitting builds to App Store and Play Store...', type: 'info' },
+    { text: '✔ Wallet submitted for review.', type: 'success' },
   ],
   '5': [
-    { text: 'terminal3 list:templates', type: 'command' },
-    { text: 'Available templates: ERC20, ERC721, DAO, Vesting...', type: 'info' },
-    { text: 'terminal3 use:template --name=DAO --output=./contracts/MyDAO.sol', type: 'command' },
-    { text: '✔ Smart contract MyDAO.sol created successfully.', type: 'success' },
+    { text: 'terminal3 list:templates --type=contract', type: 'command' },
+    { text: 'i Available contract templates: ERC20, ERC721, Vesting, Marketplace, DAO...', type: 'info' },
+    { text: 'terminal3 use:template --name=Vesting --output=./contracts/MyVesting.sol', type: 'command' },
+    { text: 'i Creating vesting contract from audited template...', type: 'info' },
+    { text: '✔ Smart contract `MyVesting.sol` created successfully.', type: 'success' },
   ],
   '6': [
-    { text: 'terminal3 tx:send --to=0xabc...123 --value=1.5ETH --network=sepolia', type: 'command' },
-    { text: 'Submitting transaction on Sepolia testnet...', type: 'info' },
-    { text: '✔ Transaction confirmed. Hash: 0x456...def', type: 'success' },
+    { text: 'terminal3 tx:send --to=0x...dEaD --value=2.5ETH --network=mainnet', type: 'command' },
+    { text: 'i Crafting transaction for Ethereum mainnet...', type: 'info' },
+    { text: 'i Estimating gas fees... (Priority: 2 Gwei)', type: 'info' },
+    { text: 'i Simulating transaction... Success.', type: 'info' },
+    { text: '✔ Transaction broadcasted. Hash: 0x8f...b4a', type: 'success' },
   ],
   '7': [
-    { text: 'terminal3 analytics:query --dataset=uniswap_v3 --query="SELECT * FROM swaps LIMIT 5"', type: 'command' },
-    { text: 'Running query on on-chain data...', type: 'info' },
-    { text: 'Results:\n- Swap 1: 10 ETH for 30,000 USDC\n- Swap 2: 5 ETH for 15,000 USDC', type: 'success' },
+    { text: 'terminal3 analytics:query --dataset=opensea_sales --query="SUM(price) by collection in last 7d"', type: 'command' },
+    { text: 'i Connecting to on-chain data warehouse...', type: 'info' },
+    { text: 'i Processing query against indexed sales data...', type: 'info' },
+    { text: '✔ Query successful. Results:\n1. CryptoPunks: 1,203 ETH\n2. BAYC: 987 ETH\n3. Pudgy Penguins: 812 ETH', type: 'success' },
   ],
   '8': [
-    { text: 'terminal3 storage:upload ./my-dapp-assets --network=ipfs', type: 'command' },
-    { text: 'Uploading files to IPFS...', type: 'info' },
-    { text: '✔ Upload complete. CID: QmXo...pA', type: 'success' },
+    { text: 'terminal3 storage:upload ./my-nft-assets --network=arweave', type: 'command' },
+    { text: 'i Preparing 1,000 assets for upload to Arweave permanent storage...', type: 'info' },
+    { text: 'i Uploading and pinning files... [||||||||||||||||||||] 100%', type: 'info' },
+    { text: '✔ Upload complete. Manifest ID: ar://...xyz', type: 'success' },
   ],
   '9': [
-    { text: 'terminal3 audit:contract ./contracts/MyToken.sol', type: 'command' },
-    { text: 'Running automated security audit...', type: 'info' },
-    { text: '✔ Audit complete. No critical vulnerabilities found. 2 recommendations.', type: 'success' },
+    { text: 'terminal3 audit:contract ./contracts/MyDAO.sol', type: 'command' },
+    { text: 'i Analyzing contract for vulnerabilities using AI model...', type: 'info' },
+    { text: 'i Checking for reentrancy, integer overflow, and access control issues...', type: 'info' },
+    { text: '✔ Audit complete. 1 High, 2 Medium vulnerabilities found.', type: 'success' },
+    { text: 'terminal3 audit:report --last', type: 'command' },
+    { text: 'High: Unchecked external call in `executeProposal`.\nMedium: Potential integer underflow in `withdraw`...', type: 'info' },
   ],
   '10': [
-    { text: 'terminal3 dao:create-proposal --title="New Partnership" --description="..."', type: 'command' },
-    { text: '✔ Proposal created. Voting starts now and ends in 3 days.', type: 'success' },
-    { text: 'terminal3 dao:vote --proposal-id=5 --vote=yes', type: 'command' },
-    { text: '✔ Vote cast successfully.', type: 'success' },
+    { text: 'terminal3 dao:create-proposal --title="Increase Treasury Allocation" --network=arbitrum', type: 'command' },
+    { text: 'i Creating new proposal on Arbitrum DAO...', type: 'info' },
+    { text: '✔ Proposal #123 created. Voting period: 7 days.', type: 'success' },
+    { text: 'terminal3 dao:vote --proposal-id=123 --vote=for --reason="Secure future development"', type: 'command' },
+    { text: 'i Casting vote with 1,500,000 tokens...', type: 'info' },
+    { text: '✔ Vote successfully cast.', type: 'success' },
   ],
 };
 
+const serviceTitles: Record<string, string> = {
+  '0': 'dApp Builder Execution',
+  '1': 'Token Launcher Execution',
+  '2': 'Trading Bot Execution',
+  '3': 'AI Agents Execution',
+  '4': 'Custom Wallet Execution',
+  '5': 'Smart Contract Templates Execution',
+  '6': 'Manual Transaction Execution',
+  '7': 'On-chain Analytics Execution',
+  '8': 'Decentralized Storage Execution',
+  '9': 'Security Audit Execution',
+  '10': 'DAO Governance Execution',
+  default: 'Terminal3 Command Center'
+};
 
-const linePause = 1000;
+
+const linePause = 800;
 
 interface MotionTerminalProps {
   activeServiceIndex: number | null;
@@ -162,6 +198,7 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
   }, []);
 
   const currentScript = scripts[scriptKey] || scripts['default'];
+  const currentTitle = serviceTitles[scriptKey] || serviceTitles['default'];
 
   return (
     <div
@@ -177,18 +214,22 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
           <motion.div className="absolute bottom-0 right-0 w-full h-px bg-primary origin-right" style={{ scaleX: bottomBorderScaleX }}/>
           <motion.div className="absolute top-0 left-0 w-px h-full bg-primary origin-bottom" style={{ scaleY: leftBorderScaleY }} />
 
-          <div className="h-[60vh] max-h-[700px] flex flex-col rounded-md">
-            <div className="flex items-center gap-2 p-3 border-b border-white/10">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+          <div className="min-h-[60vh] max-h-[700px] flex flex-col rounded-md">
+            <div className="flex items-center justify-between p-3 border-b border-white/10">
+                <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <p className="text-white/50 text-xs font-semibold">{currentTitle}</p>
+                 <div className="w-16"></div> {/* Spacer */}
             </div>
             <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto">
               {lines.filter(Boolean).map((line, index) => (
                 <div key={index} className="flex items-start">
                   {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
                   <pre
-                    className={cn('text-white whitespace-pre-wrap font-code', {
+                    className={cn('whitespace-pre-wrap font-code text-white', {
                       'text-green-400': line.type === 'success',
                       'text-red-400': line.type === 'error',
                       'text-gray-400': line.type === 'info',
@@ -207,8 +248,8 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
 
               {isComplete && (
                 <div className="mt-4">
-                  <Button onClick={() => startAnimation(currentScript)}>
-                    Re-run Build
+                  <Button onClick={() => startAnimation(currentScript)} variant="secondary" size="sm">
+                    Re-run Execution
                   </Button>
                 </div>
               )}
