@@ -9,11 +9,19 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from "react";
 import { useUser } from "@/firebase";
 
+/**
+ * Authentication page for users to sign in.
+ * Handles Google sign-in and redirects authenticated users to the dashboard.
+ * @returns {JSX.Element} The authentication page component.
+ */
 export default function AuthPage() {
     const router = useRouter();
     const auth = useAuth();
     const { user, loading } = useUser();
 
+    /**
+     * Handles the Google sign-in process via a popup.
+     */
     const handleConnect = async () => {
         if (auth) {
             const provider = new GoogleAuthProvider();
@@ -27,12 +35,14 @@ export default function AuthPage() {
     }
 
     useEffect(() => {
+        // If the user is already logged in, redirect to the dashboard.
         if (!loading && user) {
             router.push('/dashboard');
         }
     }, [user, loading, router]);
 
 
+    // Show a loading state while checking user status or if the user is already authenticated.
     if (loading || user) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-background">

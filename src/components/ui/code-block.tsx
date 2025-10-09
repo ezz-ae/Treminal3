@@ -5,9 +5,22 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Copy } from 'lucide-react';
 
-export const CustomCodeBlock = ({ code, language = 'solidity' }: { code: string; language?: string }) => {
+interface CustomCodeBlockProps {
+    code: string;
+    language?: string;
+}
+
+/**
+ * A UI component for displaying blocks of code with a copy-to-clipboard button.
+ * @param {CustomCodeBlockProps} props - The component props.
+ * @returns {JSX.Element} The code block component.
+ */
+export const CustomCodeBlock = ({ code, language = 'solidity' }: CustomCodeBlockProps) => {
     const { toast } = useToast();
     
+    /**
+     * Copies the code to the user's clipboard and shows a toast notification.
+     */
     const handleCopy = () => {
         navigator.clipboard.writeText(code);
         toast({

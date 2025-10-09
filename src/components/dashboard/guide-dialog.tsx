@@ -26,6 +26,12 @@ interface GuideDialogProps {
   onOpenChange: (isOpen: boolean) => void;
 }
 
+/**
+ * A dialog component that displays a short guide based on a selected article.
+ * It provides options to save the guide as a note or read the full article.
+ * @param {GuideDialogProps} props - The component props.
+ * @returns {JSX.Element | null} The dialog component or null if no article is provided.
+ */
 export function GuideDialog({ article, isOpen, onOpenChange }: GuideDialogProps) {
   const { toast } = useToast();
   const { user } = useUser();
@@ -35,6 +41,9 @@ export function GuideDialog({ article, isOpen, onOpenChange }: GuideDialogProps)
     return null;
   }
 
+  /**
+   * Handles saving the current article as a note in Firestore for the logged-in user.
+   */
   const handleAddNote = async () => {
     if (!user) {
         toast({

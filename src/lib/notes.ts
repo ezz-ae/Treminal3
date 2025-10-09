@@ -7,6 +7,9 @@ import {
   Firestore,
 } from 'firebase/firestore';
 
+/**
+ * Represents the structure of a note object.
+ */
 export type Note = {
   title: string;
   content: string;
@@ -14,6 +17,12 @@ export type Note = {
   slug: string;
 };
 
+/**
+ * Adds a new note to the Firestore database.
+ * @param {Firestore} firestore - The Firestore database instance.
+ * @param {Note} note - The note object to add.
+ * @throws {Error} If the user is not authenticated or if the save fails.
+ */
 export async function addNote(
   firestore: Firestore,
   note: Note
