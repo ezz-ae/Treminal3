@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, BrainCircuit, FileText, Vote, Users, Bot } from 'lucide-react';
+import { Loader2, BrainCircuit, Vote, Users, Bot } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { generateDaoPlan } from '@/app/actions';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
