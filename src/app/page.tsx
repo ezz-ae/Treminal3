@@ -16,11 +16,7 @@ import GridPattern from '@/components/landing/grid-pattern';
 export default function Home() {
   const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(0);
   const terminalRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: terminalRef,
-    offset: ['start end', 'end start'],
-  });
-
+  
   const handleServiceClick = (index: number) => {
     setActiveServiceIndex(index);
     if (terminalRef.current) {
@@ -44,9 +40,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <ServiceGrid onServiceClick={handleServiceClick} activeServiceIndex={activeServiceIndex} />
-         <div ref={terminalRef}>
-            <MotionTerminal activeServiceIndex={activeServiceIndex} scrollYProgress={scrollYProgress} />
-        </div>
+        <MotionTerminal ref={terminalRef} activeServiceIndex={activeServiceIndex} />
         <Web3DevTools activeServiceIndex={activeServiceIndex} />
         <CodingModes />
         <InteractiveGuides activeServiceIndex={activeServiceIndex} />

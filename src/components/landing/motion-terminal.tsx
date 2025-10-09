@@ -1,10 +1,11 @@
 
 'use client';
 
+import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
-import { motion, useTransform, MotionValue } from 'framer-motion';
+import { motion, useTransform, useScroll } from 'framer-motion';
 
 const scripts: Record<string, { text: string; type: string }[]> = {
   default: [
@@ -124,15 +125,20 @@ const linePause = 800;
 
 interface MotionTerminalProps {
   activeServiceIndex: number | null;
-  scrollYProgress: MotionValue<number>;
 }
 
-export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: MotionTerminalProps) {
+const MotionTerminal =  React.forwardRef<HTMLDivElement, MotionTerminalProps>(
+  ({ activeServiceIndex }, ref) => {
   const [lines, setLines] = useState<{ text: string; type: string; }[]>([]);
   const [isComplete, setIsComplete] = useState(false);
   const [scriptKey, setScriptKey] = useState('default');
-  const terminalRef = useRef<HTMLDivElement>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
+
+  const targetRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ['start end', 'end start'],
+  });
   
   const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
   const scale = useTransform(scrollYProgress, [0, 0.2], [0.9, 1]);
@@ -165,8 +171,9 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
   };
   
   useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    const terminalElement = targetRef.current?.querySelector('.p-4');
+    if (terminalElement) {
+      terminalElement.scrollTop = terminalElement.scrollHeight;
     }
   }, [lines]);
 
@@ -201,10 +208,10 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
   const currentTitle = serviceTitles[scriptKey] || serviceTitles['default'];
 
   return (
-    <section className="py-12 md:py-24">
-      <div className="container mx-auto px-4 flex items-center justify-center">
+    <section ref={ref} className="py-12 md:py-24">
         <motion.div 
-            className="relative font-code text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm pointer-events-auto w-full max-w-5xl"
+            ref={targetRef}
+            className="relative font-code text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm pointer-events-auto w-full max-w-5xl mx-auto"
             style={{ opacity, scale }}
         >
           {/* Borders */}
@@ -223,7 +230,7 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
                 <p className="text-white/50 text-xs font-semibold">{currentTitle}</p>
                  <div className="w-16"></div> {/* Spacer */}
             </div>
-            <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto h-[450px]">
+            <div className="p-4 overflow-y-auto h-full max-h-[700px] min-h-[450px]">
               {lines.filter(Boolean).map((line, index) => (
                 <div key={index} className="flex items-start">
                   {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
@@ -255,9 +262,10 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
             </div>
           </div>
         </motion.div>
-      </div>
     </section>
   );
-}
+});
 
-    
+MotionTerminal.displayName = 'MotionTerminal';
+
+export default MotionTerminal;
