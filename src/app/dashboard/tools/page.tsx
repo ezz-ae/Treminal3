@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Wrench, Beaker, HardHat } from 'lucide-react';
+import { Wrench, Beaker, HardHat, CircleDollarSign } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -9,49 +9,177 @@ import {
   CardTitle,
   CardDescription
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-const tools = [
-    {
-        name: 'Gas Price Tracker',
-        description: 'Real-time gas price estimates for various networks.',
-        icon: Wrench,
-    },
-    {
-        name: 'ABI Converter',
-        description: 'Convert between human-readable ABI and JSON formats.',
-        icon: Beaker,
-    },
-    {
-        name: 'EVM Disassembler',
-        description: 'Analyze smart contract bytecode and convert it to opcodes.',
-        icon: HardHat,
+const GasPriceTracker = () => {
+    const networks = [
+        { name: 'Ethereum', gwei: '25', priority: '2' },
+        { name: 'Polygon', gwei: '30', priority: '1' },
+        { name: 'BNB Chain', gwei: '5', priority: '1' },
+    ];
+    return (
+        <Card className="w-full">
+            <CardHeader>
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">
+                        <CircleDollarSign className="w-8 h-8" />
+                    </div>
+                    <div>
+                        <CardTitle className="text-xl font-bold">Gas Price Tracker</CardTitle>
+                        <CardDescription>Real-time gas price estimates for various networks.</CardDescription>
+                    </div>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-4">
+                    {networks.map(network => (
+                        <div key={network.name} className="flex justify-between items-center bg-muted p-3 rounded-md">
+                            <span className="font-medium">{network.name}</span>
+                            <div className="text-right">
+                                <p className="font-semibold">{network.gwei} Gwei</p>
+                                <p className="text-xs text-muted-foreground">Priority: {network.priority} Gwei</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
+
+const ABIConverter = () => {
+    const { toast } = useToast();
+    const [jsonAbi, setJsonAbi] = useState('');
+    const [humanReadableAbi, setHumanReadableAbi] = useState('');
+
+    const convertToHumanReadable = () => {
+        try {
+            const parsed = JSON.parse(jsonAbi);
+            if (!Array.isArray(parsed)) throw new Error('Invalid JSON ABI');
+            const result = parsed
+                .filter(item => item.type === 'function' || item.type === 'event')
+                .map(item => {
+                    const inputs = item.inputs.map((input: any) => input.type).join(',');
+                    return `${item.type} ${item.name}(${inputs})`;
+                }).join('\n');
+            setHumanReadableAbi(result);
+            toast({ title: 'Conversion successful!' });
+        } catch (error) {
+            toast({ variant: 'destructive', title: 'Conversion failed', description: 'Please check your JSON ABI syntax.' });
+        }
     }
-]
+
+    return (
+        <Card>
+            <CardHeader>
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">
+                        <Beaker className="w-8 h-8" />
+                    </div>
+                    <div>
+                        <CardTitle className="text-xl font-bold">ABI Converter</CardTitle>
+                        <CardDescription>Convert between JSON and human-readable ABI formats.</CardDescription>
+                    </div>
+                </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div>
+                    <label className="text-sm font-medium">JSON ABI</label>
+                    <Textarea 
+                        placeholder='[{"type":"function", "name":"myFunc", "inputs":[{"name":"myArg","type":"uint256"}]}]'
+                        className="mt-1 h-32"
+                        value={jsonAbi}
+                        onChange={(e) => setJsonAbi(e.target.value)}
+                    />
+                </div>
+                <Button onClick={convertToHumanReadable} className="w-full">Convert to Human-Readable</Button>
+                <div>
+                    <label className="text-sm font-medium">Human-Readable ABI</label>
+                    <Textarea 
+                        placeholder="function myFunc(uint256)"
+                        className="mt-1 h-32"
+                        value={humanReadableAbi}
+                        readOnly
+                    />
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
+const EVMDisassembler = () => {
+    const { toast } = useToast();
+    const [bytecode, setBytecode] = useState('');
+    const [opcodes, setOpcodes] = useState('');
+
+    const disassemble = () => {
+        if (!bytecode.startsWith('0x') || bytecode.length % 2 !== 0) {
+            toast({ variant: 'destructive', title: 'Invalid Bytecode', description: 'Bytecode must be a hex string starting with 0x and have an even length.' });
+            return;
+        }
+        const simpleOpcodes = bytecode.substring(2).match(/.{1,2}/g)?.join(' ') || '';
+        setOpcodes(simpleOpcodes.toUpperCase());
+        toast({ title: 'Disassembly successful!' });
+    }
+
+    return (
+        <Card>
+            <CardHeader>
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">
+                        <HardHat className="w-8 h-8" />
+                    </div>
+                    <div>
+                        <CardTitle className="text-xl font-bold">EVM Disassembler</CardTitle>
+                        <CardDescription>Analyze smart contract bytecode and convert it to opcodes.</CardDescription>
+                    </div>
+                </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div>
+                    <label className="text-sm font-medium">Bytecode</label>
+                    <Textarea 
+                        placeholder="0x60806040..."
+                        className="mt-1 h-32"
+                        value={bytecode}
+                        onChange={(e) => setBytecode(e.target.value)}
+                    />
+                </div>
+                <Button onClick={disassemble} className="w-full">Disassemble</Button>
+                <div>
+                    <label className="text-sm font-medium">Opcodes (Simplified)</label>
+                    <Textarea 
+                        placeholder="60 80 60 40..."
+                        className="mt-1 h-32 font-mono"
+                        value={opcodes}
+                        readOnly
+                    />
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
 
 export default function ToolsPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold font-headline">Developer Tools</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-4xl font-bold font-headline tracking-tight">Developer Tools</h1>
+        <p className="text-muted-foreground mt-2 text-lg">
           A suite of utilities to help you build, test, and debug your Web3 projects.
         </p>
       </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {tools.map((tool) => (
-            <Card key={tool.name}>
-                <CardHeader>
-                     <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit mb-4">
-                        <tool.icon className="w-8 h-8" />
-                    </div>
-                    <CardTitle className="text-xl font-bold">{tool.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <CardDescription>{tool.description}</CardDescription>
-                </CardContent>
-            </Card>
-        ))}
+      <div className="grid gap-8 md:grid-cols-1">
+        <GasPriceTracker />
+      </div>
+      <div className="grid gap-8 lg:grid-cols-2">
+        <ABIConverter />
+        <EVMDisassembler />
       </div>
     </div>
   );

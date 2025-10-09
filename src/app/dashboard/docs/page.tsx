@@ -45,7 +45,7 @@ const docSections = [
     icon: GraduationCap,
     title: 'Getting Started',
     description: 'Learn the basics of the Terminal3 platform, from connecting your wallet to deploying your first dApp.',
-    href: '#'
+    href: '/dashboard/docs/getting-started'
   },
   {
     icon: AppWindow,
@@ -275,5 +275,3 @@ export default function DocsPage() {
     </div>
   )
 }
-
-    

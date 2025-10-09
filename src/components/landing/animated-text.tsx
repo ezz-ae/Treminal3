@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface AnimatedTextProps {
   words: string[];
@@ -21,20 +22,21 @@ export default function AnimatedText({ words, className }: AnimatedTextProps) {
   }, [words.length]);
 
   return (
-    <span className={cn("inline-block text-left transition-all duration-300 ease-in-out", className)}>
-       <span className="inline-block relative text-center">
-        {words.map((word, i) => (
-          <span
-            key={i}
-            className={cn(
-              "absolute left-1/2 -translate-x-1/2 transition-all duration-500 ease-in-out",
-              index === i ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-            )}
-          >
-            {word}
-          </span>
-        ))}
-        <span className="invisible">{words[index]}</span>
+    <span className={cn("inline-grid text-left", className)}>
+       <AnimatePresence>
+        <motion.span
+          key={words[index]}
+          className="col-start-1 row-start-1 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ ease: 'easeInOut', duration: 0.5 }}
+        >
+          {words[index]}
+        </motion.span>
+      </AnimatePresence>
+       <span className="col-start-1 row-start-1 invisible">
+        {words[index]}
       </span>
     </span>
   );
