@@ -40,15 +40,7 @@ const iconMap: Record<string, React.ElementType> = {
 
 const allServices = [
       {
-        href: '/dashboard/ai-agents',
-        iconName: 'Terminal',
-        title: 'AI Command Center',
-        description: 'Describe what you want to build, audit, or design.',
-        category: 'AI',
-        serviceIndex: null,
-      },
-       {
-        href: '/dashboard/ai-agents',
+        href: '/dashboard/dapp-builder',
         iconName: 'AppWindow',
         title: 'dApp Builder',
         description:
@@ -57,7 +49,7 @@ const allServices = [
         serviceIndex: 0,
       },
       {
-        href: '/dashboard/ai-agents',
+        href: '/dashboard/token-launcher',
         iconName: 'Puzzle',
         title: 'Token Launcher',
         description: 'Design and launch your own custom cryptocurrency tokens.',
@@ -65,45 +57,20 @@ const allServices = [
         serviceIndex: 1,
       },
       {
-        href: '/dashboard/ai-agents',
-        iconName: 'Bot',
-        title: 'Trading Bot Platform',
-        description: 'Develop and deploy automated trading bots on DEXs.',
-        category: 'Automate',
-        serviceIndex: 2,
-      },
-       {
-        href: '/dashboard/ai-agents',
-        iconName: 'BotMessageSquare',
-        title: 'AI Agents',
-        description: 'Deploy autonomous AI agents to automate on-chain tasks.',
-        category: 'Automate',
-        serviceIndex: 3,
+        href: '/dashboard/security-audits',
+        iconName: 'ShieldCheck',
+        title: 'Security Audits',
+        description: 'Automatically audit your smart contracts for vulnerabilities.',
+        category: 'Security',
+        serviceIndex: 9,
       },
       {
-        href: '/dashboard/ai-agents',
-        iconName: 'Wallet',
-        title: 'Custom Wallets',
-        description: 'Build and brand your own secure crypto wallets for your users.',
-        category: 'Build',
-        serviceIndex: 4,
-      },
-       {
-        href: '/dashboard/ai-agents',
-        iconName: 'FileJson',
-        title: 'Smart Contract Templates',
-        description:
-          'Use our audited templates to create secure smart contracts.',
-        category: 'Build',
-        serviceIndex: 5,
-      },
-      {
-        href: '/dashboard/ai-agents',
-        iconName: 'Network',
-        title: 'Manual Transactions',
-        description: 'Interact directly with the blockchain for custom operations.',
-        category: 'Tools',
-        serviceIndex: 6,
+        href: '/dashboard/dao-governance',
+        iconName: 'Vote',
+        title: 'DAO Governance',
+        description: 'Manage your decentralized autonomous organization with ease.',
+        category: 'Community',
+        serviceIndex: 10,
       },
       {
         href: '/dashboard/analytics',
@@ -112,30 +79,6 @@ const allServices = [
         description: 'Run complex queries and visualize data from blockchains.',
         category: 'Data',
         serviceIndex: 7,
-      },
-       {
-        href: '/dashboard/ai-agents',
-        iconName: 'FileArchive',
-        title: 'Decentralized Storage',
-        description: 'Upload and manage files on IPFS and other storage networks.',
-        category: 'Infra',
-        serviceIndex: 8,
-      },
-       {
-        href: '/dashboard/ai-agents',
-        iconName: 'ShieldCheck',
-        title: 'Security Audits',
-        description: 'Automatically audit your smart contracts for vulnerabilities.',
-        category: 'Security',
-        serviceIndex: 9,
-      },
-      {
-        href: '/dashboard/ai-agents',
-        iconName: 'Vote',
-        title: 'DAO Governance',
-        description: 'Manage your decentralized autonomous organization with ease.',
-        category: 'Community',
-        serviceIndex: 10,
       },
       {
         href: '/dashboard/docs/apis',
@@ -191,9 +134,11 @@ export default function DashboardPage() {
                         <p className="text-muted-foreground text-sm">{service.description}</p>
                     </CardContent>
                     <div className="p-6 pt-0 flex items-center justify-between">
-                        <Link href={service.href} className="text-sm font-medium text-primary flex items-center gap-2 group-hover:underline">
-                           Go to {service.category === 'AI' ? 'AI Agent' : service.title} <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
+                        <Button asChild className="group-hover:underline">
+                            <Link href={service.href} className="text-sm font-medium flex items-center gap-2">
+                                Go to {service.title} <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                            </Link>
+                        </Button>
                         {service.serviceIndex !== null && (
                            <Button variant="ghost" size="icon" onClick={() => handleOpenGuide(service.serviceIndex)}>
                                 <Info className="w-4 h-4 text-muted-foreground group-hover:text-primary" />

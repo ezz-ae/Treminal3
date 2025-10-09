@@ -25,6 +25,10 @@ import {
   Terminal,
   BookOpen,
   AreaChart,
+  AppWindow,
+  Puzzle,
+  ShieldCheck,
+  Vote
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -36,11 +40,14 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
-    { href: '/dashboard/ai-agents', label: 'AI Command Center', icon: Terminal },
+    { href: '/dashboard/dapp-builder', label: 'dApp Builder', icon: AppWindow },
+    { href: '/dashboard/token-launcher', label: 'Token Launcher', icon: Puzzle },
+    { href: '/dashboard/security-audits', label: 'Security Audits', icon: ShieldCheck },
+    { href: '/dashboard/dao-governance', label: 'DAO Governance', icon: Vote },
     { href: '/dashboard/analytics', label: 'Analytics', icon: AreaChart },
-    { href: '/dashboard/docs', label: 'Documentation', icon: BookOpen },
     { href: '/dashboard/stake', label: 'Stake', icon: Sprout },
     { href: '/dashboard/tools', label: 'Tools', icon: Wrench },
+    { href: '/dashboard/docs', label: 'Documentation', icon: BookOpen },
     { href: '/dashboard/download', label: 'Download', icon: Download },
 ];
 
