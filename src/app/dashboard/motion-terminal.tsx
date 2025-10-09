@@ -164,57 +164,53 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
   const currentScript = scripts[scriptKey] || scripts['default'];
 
   return (
-    <div
-        className="container mx-auto px-4 py-24 flex items-center justify-center min-h-[80vh]"
-      >
-        <motion.div 
-            className="relative font-mono text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm pointer-events-auto w-full max-w-5xl"
-            style={{ opacity, scale }}
-        >
-          {/* Borders */}
-          <motion.div className="absolute top-0 left-0 w-full h-px bg-primary origin-left" style={{ scaleX: topBorderScaleX }} />
-          <motion.div className="absolute top-0 right-0 w-px h-full bg-primary origin-top" style={{ scaleY: rightBorderScaleY }}/>
-          <motion.div className="absolute bottom-0 right-0 w-full h-px bg-primary origin-right" style={{ scaleX: bottomBorderScaleX }}/>
-          <motion.div className="absolute top-0 left-0 w-px h-full bg-primary origin-bottom" style={{ scaleY: leftBorderScaleY }} />
+    <motion.div 
+        className="relative font-mono text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm pointer-events-auto w-full max-w-5xl"
+        style={{ opacity, scale }}
+    >
+      {/* Borders */}
+      <motion.div className="absolute top-0 left-0 w-full h-px bg-primary origin-left" style={{ scaleX: topBorderScaleX }} />
+      <motion.div className="absolute top-0 right-0 w-px h-full bg-primary origin-top" style={{ scaleY: rightBorderScaleY }}/>
+      <motion.div className="absolute bottom-0 right-0 w-full h-px bg-primary origin-right" style={{ scaleX: bottomBorderScaleX }}/>
+      <motion.div className="absolute top-0 left-0 w-px h-full bg-primary origin-bottom" style={{ scaleY: leftBorderScaleY }} />
 
-          <div className="h-[60vh] max-h-[700px] flex flex-col rounded-md">
-            <div className="flex items-center gap-2 p-3 border-b border-white/10">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+      <div className="h-[60vh] max-h-[700px] flex flex-col rounded-md">
+        <div className="flex items-center gap-2 p-3 border-b border-white/10">
+          <div className="w-3 h-3 rounded-full bg-red-500"></div>
+          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+        </div>
+        <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto">
+          {lines.filter(Boolean).map((line, index) => (
+            <div key={index} className="flex items-start">
+              {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
+              <pre
+                className={cn('text-white whitespace-pre-wrap font-mono', {
+                  'text-green-400': line.type === 'success',
+                  'text-red-400': line.type === 'error',
+                  'text-gray-400': line.type === 'info',
+                })}
+              >
+                {line.text}
+              </pre>
             </div>
-            <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto">
-              {lines.filter(Boolean).map((line, index) => (
-                <div key={index} className="flex items-start">
-                  {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
-                  <pre
-                    className={cn('text-white whitespace-pre-wrap font-mono', {
-                      'text-green-400': line.type === 'success',
-                      'text-red-400': line.type === 'error',
-                      'text-gray-400': line.type === 'info',
-                    })}
-                  >
-                    {line.text}
-                  </pre>
-                </div>
-              ))}
-              {!isComplete && (
-                 <div className="flex items-start">
-                    <span className="text-blue-400 mr-2 shrink-0">$</span>
-                    <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
-                 </div>
-              )}
+          ))}
+          {!isComplete && (
+             <div className="flex items-start">
+                <span className="text-blue-400 mr-2 shrink-0">$</span>
+                <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
+             </div>
+          )}
 
-              {isComplete && (
-                <div className="mt-4">
-                  <Button onClick={() => startAnimation(currentScript)}>
-                    Re-run Build
-                  </Button>
-                </div>
-              )}
+          {isComplete && (
+            <div className="mt-4">
+              <Button onClick={() => startAnimation(currentScript)}>
+                Re-run Build
+              </Button>
             </div>
-          </div>
-        </motion.div>
+          )}
+        </div>
       </div>
+    </motion.div>
   );
 }

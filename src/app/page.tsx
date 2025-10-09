@@ -8,51 +8,37 @@ import InteractiveGuides from '@/components/landing/interactive-guides';
 import Footer from '@/components/layout/footer';
 import GridPattern from '@/components/landing/grid-pattern';
 import React, { useState, useRef } from 'react';
-import { useScroll, useTransform, motion } from 'framer-motion';
+import { useScroll, useTransform, motion, useMotionValueEvent } from 'framer-motion';
 import MotionTerminal from '@/app/dashboard/motion-terminal';
 import { iconMap } from '@/lib/icon-map';
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { cn } from '@/lib/utils';
+
 
 const services = [
     {
         title: 'dApp Builder',
-        description: 'Create and deploy dApps with our intuitive AI-powered builder.',
+        description: 'Describe your application, and our AI architect will generate a complete plan, including required UI components and smart contracts.',
         iconName: 'AppWindow',
         serviceIndex: 0,
         href: '/dashboard/dapp-builder'
     },
     {
         title: 'Token Launcher',
-        description: 'Design and launch your own custom cryptocurrency tokens.',
+        description: 'Simply describe the name, symbol, and supply for your new cryptocurrency, and the AI will generate a secure, ERC-20 compliant smart contract.',
         iconName: 'Puzzle',
         serviceIndex: 1,
         href: '/dashboard/token-launcher'
     },
     {
-        title: 'Trading Bot Platform',
-        description: 'Develop and deploy automated trading bots on major exchanges.',
-        iconName: 'Bot',
-        serviceIndex: 2,
-        href: '/dashboard/tools'
-    },
-    {
-        title: 'AI Agents',
-        description: 'Deploy autonomous AI agents to interact with your dApps.',
-        iconName: 'BotMessageSquare',
-        serviceIndex: 3,
-        href: '/dashboard/business-tool-recommendation'
-    },
-    {
         title: 'Security Audits',
-        description: 'Run automated security audits on your smart contracts.',
+        description: 'Paste your Solidity code and receive a comprehensive security analysis, identifying potential vulnerabilities and providing recommendations.',
         iconName: 'ShieldCheck',
         serviceIndex: 9,
         href: '/dashboard/security-audits'
     },
     {
         title: 'On-chain Analytics',
-        description: 'Get deep insights into on-chain data with our analytics engine.',
+        description: 'Ask complex questions about on-chain data in natural language and get back rich visualizations and insights from our powerful analytics engine.',
         iconName: 'AreaChart',
         serviceIndex: 7,
         href: '/dashboard/analytics'
@@ -66,6 +52,18 @@ export default function Home() {
     target: targetRef,
     offset: ['start end', 'end start'],
   });
+  const { scrollYProgress: featureScrollProgress } = useScroll({
+      target: targetRef,
+      offset: ["center center", "end start"]
+  });
+
+  useMotionValueEvent(featureScrollProgress, "change", (latest) => {
+    const segment = 1 / services.length;
+    const activeIndex = Math.floor(latest / segment);
+    if(activeIndex < services.length) {
+      setActiveServiceIndex(services[activeIndex].serviceIndex);
+    }
+  })
 
   return (
     <div className="flex flex-col min-h-screen bg-background relative">
@@ -79,42 +77,56 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <div ref={targetRef} className="relative z-10 bg-gradient-to-b from-background via-black to-black py-24">
-            <div className="container mx-auto px-4 text-center mb-16">
-                 <h2 className="text-3xl md:text-4xl font-bold font-headline text-primary-foreground">The All-in-One Web3 Platform</h2>
-                <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-lg">
-                    Hover any service below to see it come to life in the terminal. From smart contracts to analytics, build faster with our AI-native toolkit.
-                </p>
-            </div>
-            <div className="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center">
-                 <div className="space-y-4">
-                    {services.map((service, index) => {
+        <div ref={targetRef} className="relative z-10 py-24 h-[400vh]">
+            <div className="sticky top-0 h-screen flex flex-col items-center justify-center bg-black">
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute inset-0 bg-black" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black" />
+                    <motion.div
+                        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(var(--primary-rgb),0.15)_0%,transparent_70%)]"
+                        style={{
+                            opacity: useTransform(scrollYProgress, [0, 0.3], [0, 1]),
+                        }}
+                    />
+                </div>
+                
+                <div className="container mx-auto px-4 text-center mb-8 relative z-10">
+                    <h2 className="text-3xl md:text-5xl font-bold font-headline text-primary-foreground">One Command Center. Infinite Possibilities.</h2>
+                    <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-lg">
+                        Scroll to see how Terminal3 transforms your ideas into reality.
+                    </p>
+                </div>
+               
+                <div className="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center relative z-10">
+                    <div className="w-full h-[60vh]">
+                      {services.map((service, index) => {
+                        const segmentStart = (index / services.length);
+                        const segmentEnd = ((index + 1) / services.length);
+                        const opacity = useTransform(featureScrollProgress, 
+                          [segmentStart - 0.1, segmentStart, segmentEnd, segmentEnd + 0.1],
+                          [0, 1, 1, 0]
+                        )
                         const Icon = iconMap[service.iconName] || iconMap['AppWindow'];
                         return (
-                            <Link 
-                                href={service.href} 
-                                key={service.title}
-                                onMouseEnter={() => setActiveServiceIndex(service.serviceIndex)}
-                                className="block"
-                            >
-                                <div className="group p-6 rounded-lg border border-transparent hover:border-primary/50 hover:bg-primary/10 transition-all duration-300">
-                                    <div className="flex items-start justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <Icon className="w-8 h-8 text-primary"/>
-                                            <div>
-                                                <h3 className="font-headline text-xl font-bold text-primary-foreground">{service.title}</h3>
-                                                <p className="text-muted-foreground">{service.description}</p>
-                                            </div>
-                                        </div>
-                                        <ArrowRight className="w-5 h-5 text-muted-foreground/50 transition-transform group-hover:translate-x-1 group-hover:text-primary mt-1"/>
-                                    </div>
-                                </div>
-                            </Link>
+                          <motion.div 
+                            key={service.title} 
+                            style={{ opacity }}
+                            className="absolute inset-0 flex flex-col justify-center"
+                          >
+                              <div className="flex items-center gap-4 mb-4">
+                                  <div className="p-4 bg-primary/10 rounded-lg text-primary border border-primary/20">
+                                      <Icon className="w-8 h-8"/>
+                                  </div>
+                                  <h3 className="font-headline text-3xl font-bold text-primary-foreground">{service.title}</h3>
+                              </div>
+                              <p className="text-muted-foreground text-lg">{service.description}</p>
+                          </motion.div>
                         )
-                    })}
-                </div>
-                <div className="sticky top-20">
-                     <MotionTerminal scrollYProgress={scrollYProgress} activeServiceIndex={activeServiceIndex}/>
+                      })}
+                    </div>
+                    <div>
+                        <MotionTerminal scrollYProgress={scrollYProgress} activeServiceIndex={activeServiceIndex}/>
+                    </div>
                 </div>
             </div>
         </div>

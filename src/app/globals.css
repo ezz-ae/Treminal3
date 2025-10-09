@@ -11,6 +11,7 @@
     --card-foreground: 215 28% 17%;
     --popover: 210 20% 100%;
     --popover-foreground: 215 28% 17%;
+    --primary-rgb: 39 51 67;
     --primary: 215 28% 27%; /* Dark Blue (#223343) */
     --primary-foreground: 210 20% 98%;
     --secondary: 210 20% 92%;
@@ -49,6 +50,7 @@
     --card-foreground: 210 20% 96%;
     --popover: 215 28% 17%;
     --popover-foreground: 210 20% 96%;
+    --primary-rgb: 100 181 205;
     --primary: 194 51% 60%; /* Soft Teal (#64B5CD) */
     --primary-foreground: 215 28% 12%;
     --secondary: 215 28% 25%;
