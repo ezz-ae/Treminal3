@@ -30,7 +30,7 @@ const skills = [
 
 export default function CodingModes() {
   return (
-    <section id="coding-modes" className="py-12 md:py-24">
+    <section id="coding-modes" className="py-12 md:py-24 bg-card/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold font-headline">Modify your smart assistant as you like</h2>

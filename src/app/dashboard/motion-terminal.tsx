@@ -98,13 +98,8 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
   const terminalRef = useRef<HTMLDivElement>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
   
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
-  const scale = useTransform(scrollYProgress, [0, 0.2], [0.9, 1]);
-  
-  const topBorderScaleX = useTransform(scrollYProgress, [0.1, 0.4], [0, 1]);
-  const rightBorderScaleY = useTransform(scrollYProgress, [0.3, 0.6], [0, 1]);
-  const bottomBorderScaleX = useTransform(scrollYProgress, [0.5, 0.8], [0, 1]);
-  const leftBorderScaleY = useTransform(scrollYProgress, [0.7, 1], [0, 1]);
+  const opacity = useTransform(scrollYProgress, [0.05, 0.2], [0, 1]);
+  const scale = useTransform(scrollYProgress, [0.05, 0.2], [0.95, 1]);
 
   const startAnimation = (codeLines: { text: string; type: string; }[]) => {
     if (animationTimeoutRef.current) {
@@ -162,17 +157,11 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
 
   return (
     <motion.div 
-        className="relative font-mono text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm pointer-events-auto w-full max-w-5xl"
+        className="relative font-mono text-sm rounded-lg bg-card/50 border shadow-2xl shadow-primary/10 backdrop-blur-sm pointer-events-auto w-full h-full"
         style={{ opacity, scale }}
     >
-      {/* Borders */}
-      <motion.div className="absolute top-0 left-0 w-full h-px bg-primary origin-left" style={{ scaleX: topBorderScaleX }} />
-      <motion.div className="absolute top-0 right-0 w-px h-full bg-primary origin-top" style={{ scaleY: rightBorderScaleY }}/>
-      <motion.div className="absolute bottom-0 right-0 w-full h-px bg-primary origin-right" style={{ scaleX: bottomBorderScaleX }}/>
-      <motion.div className="absolute top-0 left-0 w-px h-full bg-primary origin-bottom" style={{ scaleY: leftBorderScaleY }} />
-
-      <div className="h-[60vh] max-h-[700px] flex flex-col rounded-md">
-        <div className="flex items-center gap-2 p-3 border-b border-white/10">
+      <div className="h-full flex flex-col rounded-md">
+        <div className="flex items-center gap-2 p-3 border-b">
           <div className="w-3 h-3 rounded-full bg-red-500"></div>
           <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
           <div className="w-3 h-3 rounded-full bg-green-500"></div>
@@ -180,12 +169,12 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
         <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto">
           {lines.filter(Boolean).map((line, index) => (
             <div key={index} className="flex items-start">
-              {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
+              {line.type === 'command' && <span className="text-primary mr-2 shrink-0">$</span>}
               <pre
-                className={cn('text-white whitespace-pre-wrap font-mono', {
+                className={cn('text-foreground whitespace-pre-wrap font-mono', {
                   'text-green-400': line.type === 'success',
                   'text-red-400': line.type === 'error',
-                  'text-gray-400': line.type === 'info',
+                  'text-muted-foreground': line.type === 'info',
                 })}
               >
                 {line.text}
@@ -194,8 +183,8 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
           ))}
           {!isComplete && (
              <div className="flex items-start">
-                <span className="text-blue-400 mr-2 shrink-0">$</span>
-                <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
+                <span className="text-primary mr-2 shrink-0">$</span>
+                <span className="inline-block w-2 h-4 bg-foreground ml-1 animate-pulse" />
              </div>
           )}
 

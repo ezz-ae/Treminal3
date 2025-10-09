@@ -51,22 +51,25 @@ export default function Home() {
     target: targetRef,
     offset: ['start end', 'end start'],
   });
+  
+  const featureRefs = useRef<(HTMLDivElement | null)[]>([]);
   const { scrollYProgress: featureScrollProgress } = useScroll({
-      target: targetRef,
-      offset: ["start center", "end start"]
+    target: targetRef,
+    offset: ["start start", "end end"]
   });
 
   useMotionValueEvent(featureScrollProgress, "change", (latest) => {
-    if (latest > 0.05) { // Only start changing active index when user is in the section
-        const segment = 1 / services.length;
-        const activeIndex = Math.floor((latest - 0.05) / segment); // Adjust for the initial offset
-        if(activeIndex >= 0 && activeIndex < services.length) {
-            setActiveServiceIndex(services[activeIndex].serviceIndex);
-        }
+    const featureCount = services.length;
+    const segment = 1 / featureCount;
+    const activeIndex = Math.floor(latest / segment);
+
+    if (activeIndex >= 0 && activeIndex < featureCount) {
+        setActiveServiceIndex(services[activeIndex].serviceIndex);
     } else {
-        setActiveServiceIndex(null); // Default to null when not in view
+        setActiveServiceIndex(null);
     }
-  })
+  });
+
 
   return (
     <div className="flex flex-col min-h-screen bg-background relative">
@@ -80,56 +83,46 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <div ref={targetRef} className="relative z-10 h-[400vh]">
-            <div className="sticky top-0 h-screen flex flex-col items-center justify-center bg-black">
-                <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-black" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black" />
-                    <motion.div
-                        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(var(--primary-rgb),0.15)_0%,transparent_70%)]"
-                        style={{
-                            opacity: useTransform(scrollYProgress, [0, 0.3], [0, 1]),
-                        }}
-                    />
-                </div>
-                
-                <div className="container mx-auto px-4 text-center mb-8 relative z-10">
-                    <h2 className="text-3xl md:text-5xl font-bold font-headline text-primary-foreground">One Command Center. Infinite Possibilities.</h2>
-                    <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-lg">
-                        Scroll to see how Terminal3 transforms your ideas into reality.
-                    </p>
-                </div>
-               
-                <div className="container mx-auto px-4 grid md:grid-cols-1 gap-8 items-center relative z-10 w-full">
-                    <div className="w-full h-[25vh] md:h-[20vh] relative">
-                      {services.map((service, index) => {
-                        const segmentStart = (index / services.length) * 0.9 + 0.05; // start later
-                        const segmentEnd = ((index + 1) / services.length) * 0.9 + 0.05; // end sooner
-                        const opacity = useTransform(featureScrollProgress, 
-                          [segmentStart - 0.05, segmentStart, segmentEnd, segmentEnd + 0.05],
-                          [0, 1, 1, 0]
-                        )
+        <div ref={targetRef} className="relative z-10 container mx-auto px-4 py-24">
+            <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-5xl font-bold font-headline text-foreground">One Command Center. Infinite Possibilities.</h2>
+                <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-lg">
+                    Terminal3 transforms complex Web3 development into simple, AI-driven commands.
+                </p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-16 md:gap-8 items-start">
+                <div className="md:sticky md:top-24 space-y-16">
+                    {services.map((service, index) => {
                         const Icon = iconMap[service.iconName] || iconMap['AppWindow'];
+                        const segmentStart = index / services.length;
+                        const segmentEnd = (index + 1) / services.length;
+
+                        const opacity = useTransform(
+                            featureScrollProgress,
+                            [segmentStart - 0.1, segmentStart, segmentEnd, segmentEnd + 0.1],
+                            [0.3, 1, 1, 0.3]
+                        );
+                        
                         return (
                           <motion.div 
                             key={service.title} 
                             style={{ opacity }}
-                            className="absolute inset-0 flex flex-col justify-center items-center text-center"
+                            className="flex flex-col"
+                            ref={el => featureRefs.current[index] = el}
                           >
-                              <div className="flex items-center gap-4 mb-4">
-                                  <div className="p-4 bg-primary/10 rounded-lg text-primary border border-primary/20">
-                                      <Icon className="w-8 h-8"/>
+                              <div className="flex items-center gap-4 mb-3">
+                                  <div className="p-3 bg-primary/10 rounded-lg text-primary border border-primary/20">
+                                      <Icon className="w-6 h-6"/>
                                   </div>
-                                  <h3 className="font-headline text-3xl font-bold text-primary-foreground">{service.title}</h3>
+                                  <h3 className="font-headline text-2xl font-bold text-foreground">{service.title}</h3>
                               </div>
-                              <p className="text-muted-foreground text-lg max-w-md">{service.description}</p>
+                              <p className="text-muted-foreground text-base max-w-md">{service.description}</p>
                           </motion.div>
                         )
                       })}
-                    </div>
-                    <div className="w-full">
-                        <MotionTerminal scrollYProgress={scrollYProgress} activeServiceIndex={activeServiceIndex}/>
-                    </div>
+                </div>
+                <div className="md:sticky md:top-24 w-full h-[60vh] min-h-[400px] md:h-auto md:aspect-[4/3]">
+                     <MotionTerminal scrollYProgress={scrollYProgress} activeServiceIndex={activeServiceIndex}/>
                 </div>
             </div>
         </div>
