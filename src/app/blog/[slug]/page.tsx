@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: article.excerpt,
       type: 'article',
       publishedTime: new Date(article.date).toISOString(),
-      url: `https://terminal3.app/blog/${article.slug}`,
+      url: `https://terminal3.me/blog/${article.slug}`,
     },
   };
 }

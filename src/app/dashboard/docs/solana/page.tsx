@@ -36,7 +36,7 @@ const CustomCodeBlock = ({ code, language = 'typescript' }: { code: string; lang
 }
 
 export default function SolanaPage() {
-    const rpcEndpoint = "https://api.terminal3.io/solana/mainnet";
+    const rpcEndpoint = "https://api.terminal3.me/solana/mainnet";
     const curlExample = `
 curl ${rpcEndpoint} -X POST -H "Content-Type: application/json" -d '
   {
@@ -100,7 +100,7 @@ fetch(url, {
             <CustomCodeBlock code={curlExample} language="bash" />
 
             <h4 className="mt-8">JavaScript Fetch</h4>
-            <p>Here's how you can fetch account information using JavaScript's `fetch` API.</p>
+            <p>Here's how you can fetch account information using JavaScript's \`fetch\` API.</p>
             <CustomCodeBlock code={jsExample} language="javascript" />
         </section>
 
@@ -133,5 +133,3 @@ fetch(url, {
     </div>
   )
 }
-
-    

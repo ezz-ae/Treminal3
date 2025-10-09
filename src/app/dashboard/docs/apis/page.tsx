@@ -35,7 +35,7 @@ const CustomCodeBlock = ({ code, language = 'typescript' }: { code: string; lang
 }
 
 export default function ApisPage() {
-    const rpcEndpoint = "https://api.terminal3.io/v1/rpc";
+    const rpcEndpoint = "https://api.terminal3.me/v1/rpc";
     const curlExample = `
 curl ${rpcEndpoint}/YOUR_API_KEY/eth -X POST -H "Content-Type: application/json" -d '
   {
@@ -75,7 +75,7 @@ console.log(blockNumber);
             </p>
             <h3>Endpoint URL</h3>
             <p>
-                Use the following base URL for all RPC requests. Replace `YOUR_API_KEY` with your actual API key and `eth` with the desired chain identifier (e.g., `sol`, `polygon`, `arbitrum`).
+                Use the following base URL for all RPC requests. Replace \`YOUR_API_KEY\` with your actual API key and \`eth\` with the desired chain identifier (e.g., \`sol\`, \`polygon\`, \`arbitrum\`).
             </p>
             <div className="bg-card border rounded-md p-4 font-mono text-sm">{rpcEndpoint}/<span className='text-primary'>YOUR_API_KEY</span>/<span className='text-primary'>CHAIN</span></div>
             
