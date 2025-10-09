@@ -16,7 +16,7 @@ const terms = {
   "D": [
     { term: "dApp (Decentralized Application)", definition: "An application that runs on a decentralized network (like a blockchain) rather than on a single, centralized server. This makes it more resistant to censorship and single points of failure." },
     { term: "DAO (Decentralized Autonomous Organization)", definition: "An organization represented by rules encoded as a computer program (smart contract) that is controlled by its members and not influenced by a central authority." },
-    { term:g: "DeFi (Decentralized Finance)", definition: "A new financial system built on blockchain technology that enables peer-to-peer financial services without traditional intermediaries like banks." },
+    { term: "DeFi (Decentralized Finance)", definition: "A new financial system built on blockchain technology that enables peer-to-peer financial services without traditional intermediaries like banks." },
   ],
   "E": [
     { term: "ERC-20", definition: "The technical standard for fungible tokens on the Ethereum blockchain. Fungible tokens are interchangeable, like currency (one dollar is the same as another dollar)." },
