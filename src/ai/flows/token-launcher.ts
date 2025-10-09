@@ -36,8 +36,8 @@ You are an expert Solidity developer specializing in ERC-20 tokens. A user wants
     *   Import the base \`@openzeppelin/contracts/token/ERC20/ERC20.sol\`.
     *   In the constructor, mint the total supply to the deployer of the contract (\`msg.sender\`). The total supply should be calculated correctly considering the standard 18 decimals for ERC-20 tokens (i.e., \`supply * (10 ** 18)\`).
     *   **Conditional Features**:
-        *   If **Is Burnable** is \`true\`, import and use \`@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol\`.
-        *   If **Is Mintable** is \`true\`, import and use \`@openzeppelin/contracts/access/Ownable.sol\` and add a public \`mint\` function restricted to the contract owner (\`onlyOwner\`). The contract should inherit from \`Ownable\`.
+        *   If **Is Burnable** is \`true\`, import and use \`@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol\`. The contract must inherit from it.
+        *   If **Is Mintable** is \`true\`, import and use \`@openzeppelin/contracts/access/Ownable.sol\` (and set the initial owner to the deployer in the constructor). The contract must inherit from \`Ownable\` and have a public \`mint\` function restricted to the contract owner (\`onlyOwner\`).
 3.  **Format Output:** Provide the extracted details and the full Solidity code in the specified JSON format. Ensure the Solidity code is a single string with correct newlines.
 `,
 });
@@ -50,7 +50,7 @@ const tokenLauncherFlow = ai.defineFlow(
   },
   async (input) => {
     // Sanitize name for contract
-    const sanitizedName = input.name.replace(/\s/g, '');
+    const sanitizedName = input.name.replace(/[^a-zA-Z0-9]/g, '');
     const promptInput = {...input, name: sanitizedName };
 
     const { output } = await prompt(promptInput);
