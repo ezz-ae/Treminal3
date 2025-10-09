@@ -2,7 +2,10 @@
 import { z } from 'zod';
 
 export const BusinessToolRecommendationInputSchema = z.object({
-  business_description: z.string().describe('The description of the business.'),
+  industry: z.string().describe("The industry the business operates in."),
+  stage: z.string().describe("The current stage of the business (e.g., Idea, MVP, Growth)."),
+  goals: z.array(z.string()).describe("The primary goals of the business."),
+  description: z.string().describe('A brief description of the business project.'),
 });
 export type BusinessToolRecommendationInput = z.infer<typeof BusinessToolRecommendationInputSchema>;
 

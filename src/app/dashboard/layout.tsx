@@ -31,13 +31,15 @@ import {
   Vote,
   Bot
 } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { useLocalStorage } from '@/hooks/use-local-storage';
+import { useUser, useAuth } from '@/firebase';
+import { signOut } from 'firebase/auth';
+
 
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
@@ -60,15 +62,12 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useLocalStorage('isAuthenticated', true);
-
-  const handleAuthAction = () => {
-    if (isAuthenticated) {
-      setIsAuthenticated(false);
-      router.push('/auth');
-    } else {
-      router.push('/auth');
+  const { user, loading } = useUser();
+  const auth = useAuth();
+  
+  const handleLogout = async () => {
+    if (auth) {
+      await signOut(auth);
     }
   }
 
@@ -138,25 +137,29 @@ export default function DashboardLayout({
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
                     <Input placeholder="Search" className="pl-10 w-64"/>
                 </div>
-                 <Button variant="outline" onClick={handleAuthAction}>
-                  {isAuthenticated ? 'Disconnect' : 'Connect Wallet'}
-                </Button>
+                 {!loading && !user && (
+                  <Button asChild>
+                    <Link href="/auth">Connect Wallet</Link>
+                  </Button>
+                )}
                  <ThemeToggle />
-                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <Settings className="h-5 w-5"/>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={handleAuthAction}>
-                            <LogOut className="mr-2 h-4 w-4"/>
-                            {isAuthenticated ? 'Log out' : 'Log in'}
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                 </DropdownMenu>
+                 {!loading && user && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <Settings className="h-5 w-5"/>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={handleLogout}>
+                                <LogOut className="mr-2 h-4 w-4"/>
+                                Log out
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                 )}
               </div>
           </header>
           <main className="flex-1 overflow-y-auto">

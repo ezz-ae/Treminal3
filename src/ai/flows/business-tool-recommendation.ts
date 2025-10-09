@@ -18,12 +18,15 @@ const prompt = ai.definePrompt({
   name: 'businessToolRecommender',
   input: { schema: BusinessToolRecommendationInputSchema },
   output: { schema: BusinessToolRecommendationOutputSchema },
-  prompt: `You are an expert business consultant specializing in Web3. Based on the following business description, recommend up to 3 tools from the list provided that would be most beneficial for the user. For each tool, provide a brief explanation of how it would help their specific business. For each recommendation, also provide a step-by-step "flow" of actions the user should take to utilize the tool effectively for their business.
+  prompt: `You are an expert business consultant specializing in Web3. Based on the following structured business profile, recommend up to 3 tools from the list provided that would be most beneficial for the user. For each tool, provide a brief explanation of how it would help their specific business. For each recommendation, also provide a step-by-step "flow" of actions the user should take to utilize the tool effectively for their business.
 
-Business Description:
-{{business_description}}
+**Business Profile:**
+- **Industry:** {{industry}}
+- **Stage:** {{stage}}
+- **Primary Goals:** {{#each goals}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
+- **Description:** {{description}}
 
-Available Tools:
+**Available Tools:**
 - dApp Builder: Create and deploy decentralized applications with our intuitive builder.
 - Token Launcher: Design and launch your own custom cryptocurrency tokens in minutes.
 - Trading Bot Platform: Develop and deploy automated trading bots on major exchanges.

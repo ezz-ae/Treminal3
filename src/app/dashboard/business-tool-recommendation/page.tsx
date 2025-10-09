@@ -14,9 +14,27 @@ import { Button } from '@/components/ui/button';
 import type { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+
+const industries = ['DeFi', 'Gaming', 'NFTs / Art', 'Social', 'Infrastructure', 'Other'];
+const stages = ['Idea / Concept', 'Prototype / MVP', 'Growth Stage', 'Mature Product'];
+const goals = [
+    { id: 'Launch a Token', label: 'Launch a Token' },
+    { id: 'Build a Community', label: 'Build a Community' },
+    { id: 'Generate Revenue', label: 'Generate Revenue' },
+    { id: 'Increase Security', label: 'Increase Security' },
+    { id: 'Improve User Experience', label: 'Improve User Experience' },
+    { id: 'Analyze Data', label: 'Analyze Data' },
+];
 
 const FormSchema = z.object({
-  business_description: z.string().min(20, 'Please describe your business in at least 20 characters.'),
+  industry: z.string({ required_error: "Please select an industry." }),
+  stage: z.string({ required_error: "Please select your business stage." }),
+  goals: z.array(z.string()).refine((value) => value.some((item) => item), {
+    message: "You have to select at least one goal.",
+  }),
+  description: z.string().min(20, 'Please describe your business in at least 20 characters.'),
 });
 
 const iconMap: Record<string, React.ElementType> = {
@@ -29,6 +47,10 @@ export default function BusinessToolRecommendationPage() {
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
+        defaultValues: {
+            goals: [],
+            description: "",
+        },
     });
     
     async function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -56,22 +78,119 @@ export default function BusinessToolRecommendationPage() {
         <Card>
             <CardHeader>
                 <CardTitle>Describe Your Business</CardTitle>
-                <CardDescription>Tell us about your goals, your target audience, and what you're trying to build.</CardDescription>
+                <CardDescription>Fill out your project profile for our AI to analyze.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <FormField
+                                control={form.control}
+                                name="industry"
+                                render={({ field }) => (
+                                    <FormItem>
+                                    <FormLabel>Industry</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                                        <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select an industry" />
+                                        </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                        {industries.map(industry => (
+                                            <SelectItem key={industry} value={industry}>{industry}</SelectItem>
+                                        ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="stage"
+                                render={({ field }) => (
+                                    <FormItem>
+                                    <FormLabel>Business Stage</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                                        <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a stage" />
+                                        </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                        {stages.map(stage => (
+                                            <SelectItem key={stage} value={stage}>{stage}</SelectItem>
+                                        ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                         <FormField
+                            control={form.control}
+                            name="goals"
+                            render={() => (
+                                <FormItem>
+                                    <div className="mb-4">
+                                        <FormLabel className="text-base">Primary Goals</FormLabel>
+                                        <p className="text-sm text-muted-foreground">Select up to 3 main objectives.</p>
+                                    </div>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    {goals.map((item) => (
+                                        <FormField
+                                        key={item.id}
+                                        control={form.control}
+                                        name="goals"
+                                        render={({ field }) => {
+                                            return (
+                                            <FormItem
+                                                key={item.id}
+                                                className="flex flex-row items-start space-x-3 space-y-0"
+                                            >
+                                                <FormControl>
+                                                <Checkbox
+                                                    checked={field.value?.includes(item.id)}
+                                                    onCheckedChange={(checked) => {
+                                                    return checked
+                                                        ? field.onChange([...field.value, item.id])
+                                                        : field.onChange(
+                                                            field.value?.filter(
+                                                            (value) => value !== item.id
+                                                            )
+                                                        )
+                                                    }}
+                                                    disabled={isLoading}
+                                                />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                {item.label}
+                                                </FormLabel>
+                                            </FormItem>
+                                            )
+                                        }}
+                                        />
+                                    ))}
+                                    </div>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
                         <FormField
                             control={form.control}
-                            name="business_description"
+                            name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                     <FormLabel>Business Description</FormLabel>
+                                     <FormLabel>Brief Description</FormLabel>
                                     <FormControl>
                                         <Textarea
                                             {...field}
-                                            placeholder="e.g., 'We're building a decentralized social media platform for artists to share and monetize their work through NFTs. We need a way for users to connect their wallets, mint NFTs, and vote on community governance proposals.'"
-                                            className="min-h-[150px] text-base"
+                                            placeholder="e.g., 'A decentralized social media platform for artists to share and monetize their work through NFTs.'"
+                                            className="min-h-[100px] text-base"
                                             disabled={isLoading}
                                         />
                                     </FormControl>
