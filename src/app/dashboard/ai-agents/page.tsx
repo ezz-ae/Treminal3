@@ -56,7 +56,7 @@ const toolUrlMap: Record<string, string> = {
     'Custom Wallets': '/dashboard/ai-agents',
     'Smart Contract Templates': '/dashboard/ai-agents',
     'Manual Transactions': '/dashboard/ai-agents',
-    'On-chain Analytics': '/dashboard/analytics', // Keep this as analytics
+    'On-chain Analytics': '/dashboard/analytics',
     'Decentralized Storage': '/dashboard/ai-agents',
     'Security Audits': '/dashboard/ai-agents',
     'DAO Governance': '/dashboard/ai-agents',
@@ -89,34 +89,32 @@ enum AgentTask {
 
 function determineTask(prompt: string): AgentTask {
     const lowerCasePrompt = prompt.toLowerCase();
-    if (lowerCasePrompt.includes('audit this contract') || lowerCasePrompt.includes('security check') || lowerCasePrompt.includes('find vulnerabilities')) {
+
+    const auditKeywords = ['audit', 'security', 'vulnerability', 'check contract'];
+    if (auditKeywords.some(kw => lowerCasePrompt.includes(kw))) {
         return AgentTask.AuditContract;
     }
-     if (lowerCasePrompt.includes('design a dao') || lowerCasePrompt.includes('dao governance') || lowerCasePrompt.includes('create a governance plan')) {
+    
+    const daoKeywords = ['dao', 'governance', 'decentralized autonomous organization'];
+    if (daoKeywords.some(kw => lowerCasePrompt.includes(kw))) {
         return AgentTask.DesignDao;
     }
-    if (lowerCasePrompt.includes('build a dapp') || lowerCasePrompt.includes('create an application')) {
+
+    const dappKeywords = ['dapp', 'application', 'build a website', 'create a platform'];
+    if (dappKeywords.some(kw => lowerCasePrompt.includes(kw))) {
         return AgentTask.BuildDapp;
     }
-    if (lowerCasePrompt.includes('launch a token') || lowerCasePrompt.includes('create a cryptocurrency') || lowerCasePrompt.includes('new coin')) {
+
+    const tokenKeywords = ['token', 'cryptocurrency', 'coin', 'erc-20', 'launch a currency'];
+    if (tokenKeywords.some(kw => lowerCasePrompt.includes(kw))) {
         return AgentTask.LaunchToken;
     }
-    if (lowerCasePrompt.includes('recommend tools') || lowerCasePrompt.includes('help my business') || lowerCasePrompt.includes('what tools should i use')) {
+
+    const recommendKeywords = ['recommend', 'suggest', 'what tools', 'help my business'];
+     if (recommendKeywords.some(kw => lowerCasePrompt.includes(kw))) {
         return AgentTask.Recommend;
     }
-    // Defaults that are context specific
-    if (lowerCasePrompt.includes('audit') || lowerCasePrompt.includes('security') || lowerCasePrompt.includes('vulnerability')) {
-        return AgentTask.AuditContract;
-    }
-     if (lowerCasePrompt.includes('dao') || lowerCasePrompt.includes('governance')) {
-        return AgentTask.DesignDao;
-    }
-    if (lowerCasePrompt.includes('dapp') || lowerCasePrompt.includes('application')) {
-        return AgentTask.BuildDapp;
-    }
-    if (lowerCasePrompt.includes('token') || lowerCasePrompt.includes('crypto') || lowerCasePrompt.includes('coin')) {
-        return AgentTask.LaunchToken;
-    }
+
     return AgentTask.Unknown;
 }
 
