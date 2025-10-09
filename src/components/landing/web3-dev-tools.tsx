@@ -2,7 +2,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { Lightbulb, Zap, Code } from 'lucide-react';
 import React from 'react';
 import { DAppBuilderVector, TokenLauncherVector, TradingBotVector, AIVector, DefaultVector } from './web3-dev-tools-graphics';
@@ -93,18 +92,7 @@ export default function Web3DevTools({ activeServiceIndex }: Web3DevToolsProps) 
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              {typeof ImageComponent === 'string' ? (
-                <Image
-                    key={currentService.title}
-                    src={ImageComponent}
-                    alt={currentService.title}
-                    data-ai-hint={currentService.aiHint}
-                    fill
-                    className="object-cover"
-                />
-              ) : (
-                <ImageComponent />
-              )}
+              <ImageComponent />
           </motion.div>
           <div>
             <motion.div 
@@ -132,5 +120,3 @@ export default function Web3DevTools({ activeServiceIndex }: Web3DevToolsProps) 
     </section>
   );
 }
-
-    
