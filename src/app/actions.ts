@@ -38,9 +38,3 @@ export async function generateDaoPlan(input: DaoGovernanceInput): Promise<DaoGov
     const result = await genDao(input);
     return result;
 }
-
-// TODO: Replace this with a real database implementation
-export async function addNoteAction(note: { title: string, content: string }): Promise<void> {
-    console.log('Note added:', note);
-    return Promise.resolve();
-}

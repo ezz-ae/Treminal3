@@ -13,13 +13,11 @@ import {
 } from '@/components/ui/dialog';
 import { motion } from 'framer-motion';
 import {
-  BookOpen,
   BookPlus,
 } from 'lucide-react';
 import React from 'react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-import { addNoteAction } from '@/app/actions';
 import { articles } from '@/lib/articles';
 import {
     Select,
@@ -27,24 +25,48 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-  } from "@/components/ui/select"
+  } from "@/components/ui/select";
+import { useUser, useFirestore } from '@/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
   
 
 export default function InteractiveGuides() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeArticle, setActiveArticle] = useState(articles[0]);
   const { toast } = useToast();
+  const { user } = useUser();
+  const firestore = useFirestore();
   
   const handleAddNote = async () => {
     if (!activeArticle) return;
+     if (!user) {
+        toast({
+            variant: 'destructive',
+            title: 'Authentication Required',
+            description: 'You must be logged in to save notes.',
+        });
+        return;
+    }
+     if (!firestore) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Firestore is not available.',
+      });
+      return;
+    }
     try {
-      await addNoteAction({
+       await addDoc(collection(firestore, 'notes'), {
+        userId: user.uid,
         title: activeArticle.title,
         content: activeArticle.excerpt,
+        slug: activeArticle.slug,
+        createdAt: serverTimestamp(),
       });
       toast({
         title: 'Note Saved!',
         description: `"${activeArticle.title}" has been added to your notes.`,
+        action: <Button asChild variant="secondary"><Link href="/dashboard/notes">View Notes</Link></Button>
       });
     } catch (error) {
       toast({
