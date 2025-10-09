@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -44,13 +45,13 @@ const docSections = [
     icon: Bot,
     title: 'AI Agents',
     description: 'Master the art of creating and deploying autonomous AI agents to automate your on-chain tasks.',
-    href: '#'
+    href: '/dashboard/ai-agents'
   },
   {
     icon: Puzzle,
     title: 'APIs & Integration',
     description: 'Full reference documentation for all our developer APIs, including examples and use cases.',
-    href: '#'
+    href: '/dashboard/docs/apis'
   },
    {
     icon: Sprout,
@@ -62,25 +63,25 @@ const docSections = [
     icon: FileJson,
     title: 'Smart Contracts',
     description: 'Explore our library of audited smart contract templates and learn how to customize them securely.',
-    href: '#'
+    href: '/dashboard/docs/smart-contracts'
   },
   {
     icon: AreaChart,
     title: 'Data & Analytics',
     description: 'Dive deep into our analytics engine to query, visualize, and get insights from on-chain data.',
-    href: '#'
+    href: '/dashboard/analytics'
   },
   {
     icon: ShieldCheck,
     title: 'Security',
     description: 'Best practices for securing your applications and smart contracts on our platform.',
-    href: '#'
+    href: '/dashboard/docs/security'
   },
   {
     icon: BookOpen,
     title: 'Glossary',
     description: 'A comprehensive dictionary of Web3 and blockchain terms used throughout the platform.',
-    href: '#'
+    href: '/dashboard/docs/glossary'
   },
 ]
 
