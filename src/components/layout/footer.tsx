@@ -1,3 +1,4 @@
+
 import { Terminal, Twitter, Github, Linkedin, Newspaper } from 'lucide-react';
 import Link from 'next/link';
 import { StatusIndicator } from '../ui/status-indicator';
@@ -20,13 +21,6 @@ const resourceLinks = [
     { href: '/dashboard/docs', label: 'Documentation' },
     { href: '/#start', label: 'Interactive Guides' },
     { href: '/blog', label: 'Blog' },
-    { href: '#', label: 'Release Notes' },
-];
-
-const companyLinks = [
-    { href: '#', label: 'About Us' },
-    { href: '#', label: 'Careers' },
-    { href: '#', label: 'Contact' },
 ];
 
 const socialLinks = [
@@ -117,5 +111,3 @@ export default function Footer() {
     </footer>
   );
 }
-
-    

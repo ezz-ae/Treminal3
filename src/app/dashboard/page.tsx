@@ -5,7 +5,6 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from '@/components/ui/card';
 import {
   AppWindow,
@@ -29,7 +28,7 @@ import {
   Newspaper,
 } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 const allServices = [
@@ -147,24 +146,27 @@ export default function DashboardPage() {
         <h2 className="text-2xl font-bold font-headline mb-6">Unified Web3 Services</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {allServices.map((tool) => (
-            <Card key={tool.title} className="flex flex-col group bg-card/50 hover:border-primary/50 transition-colors duration-300">
-                <CardHeader>
-                    <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit mb-4">
-                        <tool.icon className="w-6 h-6" />
+              <Link href={tool.href} key={tool.title} className="group">
+                <Card className="flex flex-col h-full bg-card/50 hover:border-primary/50 transition-colors duration-300">
+                    <CardHeader>
+                        <div className="flex justify-between items-start">
+                            <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit mb-4">
+                                <tool.icon className="w-6 h-6" />
+                            </div>
+                            <Badge variant="secondary">{tool.category}</Badge>
+                        </div>
+                        <CardTitle className="text-xl font-bold">{tool.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                        <p className="text-muted-foreground text-sm">{tool.description}</p>
+                    </CardContent>
+                    <div className="p-6 pt-0">
+                        <div className="text-sm font-medium text-primary flex items-center gap-2">
+                           Go to {tool.category === 'AI' ? 'AI Agent' : tool.title} <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        </div>
                     </div>
-                    <CardTitle className="text-xl font-bold">{tool.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                    <p className="text-muted-foreground text-sm">{tool.description}</p>
-                </CardContent>
-                <div className="p-6 pt-0">
-                    <Button asChild className="w-full">
-                        <Link href={tool.href}>
-                            Launch <ArrowRight className="ml-2"/>
-                        </Link>
-                    </Button>
-                </div>
-            </Card>
+                </Card>
+            </Link>
             ))}
         </div>
       </div>

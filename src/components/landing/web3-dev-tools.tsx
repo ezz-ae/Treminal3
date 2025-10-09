@@ -4,20 +4,20 @@
 import { motion } from 'framer-motion';
 import { Lightbulb, Zap, Code } from 'lucide-react';
 import React from 'react';
-import { DAppBuilderVector, TokenLauncherVector, TradingBotVector, AIVector, DefaultVector } from './web3-dev-tools-graphics';
+import Image from 'next/image';
 
 const serviceContent = [
-  { title: 'dApp Builder', image: DAppBuilderVector, aiHint: 'dApp builder interface' },
-  { title: 'Token Launcher', image: TokenLauncherVector, aiHint: 'cryptocurrency token creation' },
-  { title: 'Trading Bot Platform', image: TradingBotVector, aiHint: 'trading bot algorithm' },
-  { title: 'AI Agents', image: AIVector, aiHint: 'artificial intelligence network' },
-  { title: 'Custom Wallets', image: DefaultVector, aiHint: 'secure crypto wallet' },
-  { title: 'Smart Contract Templates', image: DefaultVector, aiHint: 'smart contract code' },
-  { title: 'Manual Transactions', image: DefaultVector, aiHint: 'blockchain transaction' },
-  { title: 'On-chain Analytics', image: DefaultVector, aiHint: 'data analytics dashboard' },
-  { title: 'Decentralized Storage', image: DefaultVector, aiHint: 'decentralized network nodes' },
-  { title: 'Security Audits', image: DefaultVector, aiHint: 'cyber security analysis' },
-  { title: 'DAO Governance', image: DefaultVector, aiHint: 'community governance vote' },
+  { title: 'dApp Builder', aiHint: 'dApp builder interface' },
+  { title: 'Token Launcher', aiHint: 'cryptocurrency token creation' },
+  { title: 'Trading Bot Platform', aiHint: 'trading bot algorithm' },
+  { title: 'AI Agents', aiHint: 'artificial intelligence network' },
+  { title: 'Custom Wallets', aiHint: 'secure crypto wallet' },
+  { title: 'Smart Contract Templates', aiHint: 'smart contract code' },
+  { title: 'Manual Transactions', aiHint: 'blockchain transaction' },
+  { title: 'On-chain Analytics', aiHint: 'data analytics dashboard' },
+  { title: 'Decentralized Storage', aiHint: 'decentralized network nodes' },
+  { title: 'Security Audits', aiHint: 'cyber security analysis' },
+  { title: 'DAO Governance', aiHint: 'community governance vote' },
 ];
 
 const codingModes = [
@@ -65,7 +65,7 @@ interface Web3DevToolsProps {
 
 export default function Web3DevTools({ activeServiceIndex }: Web3DevToolsProps) {
   const currentService = serviceContent[activeServiceIndex ?? 0];
-  const ImageComponent = currentService.image;
+  const placeholderSeed = activeServiceIndex ?? 0;
 
   return (
     <section id="for-developers" className="py-12 md:py-24">
@@ -86,13 +86,19 @@ export default function Web3DevTools({ activeServiceIndex }: Web3DevToolsProps) 
         </div>
         <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div 
-              className="relative h-96 rounded-lg overflow-hidden"
+              className="relative h-96 rounded-lg overflow-hidden bg-card border"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <ImageComponent />
+              <Image 
+                src={`https://picsum.photos/seed/${placeholderSeed}/600/400`}
+                alt={currentService.title}
+                fill
+                className="object-cover"
+                data-ai-hint={currentService.aiHint}
+              />
           </motion.div>
           <div>
             <motion.div 

@@ -72,8 +72,10 @@ export default function ArticlePage({ params }: Props) {
             </div>
         </header>
 
-        <div dangerouslySetInnerHTML={{ __html: article.content }} />
+        <div>{article.content}</div>
       </article>
     </>
   );
 }
+
+    

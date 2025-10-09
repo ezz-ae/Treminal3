@@ -29,7 +29,7 @@ const CustomCodeBlock = ({ code, language = 'typescript' }: { code: string; lang
                 className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                 onClick={handleCopy}
             >
-                <Copy className="w-4 h-4"/>
+                <Copy className="w-4 h-4 text-white"/>
             </Button>
         </div>
     )
@@ -90,9 +90,9 @@ fetch(url, {
             </p>
             <h3>Endpoint URL</h3>
             <p>
-                Use the following base URL for all RPC requests. Replace \`YOUR_API_KEY\` with your actual API key and \`sol\` with the desired chain identifier.
+                Use the following base URL for all RPC requests. Replace \`YOUR_API_KEY\` with your actual API key.
             </p>
-            <div className="bg-card border rounded-md p-4 font-mono text-sm">https://api.terminal3.me/v1/rpc/<span className='text-primary'>YOUR_API_KEY</span>/<span className='text-primary'>CHAIN</span></div>
+            <div className="bg-card border rounded-md p-4 font-mono text-sm">https://api.terminal3.me/v1/rpc/<span className='text-primary'>YOUR_API_KEY</span>/sol</div>
             
             <h3 className="mt-8">Examples</h3>
             <h4>cURL Request (Solana)</h4>
