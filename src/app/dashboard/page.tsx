@@ -207,50 +207,93 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <div className="mb-12 text-center">
-        <h2 className="text-3xl font-bold font-headline tracking-tight">Your Unified Web3 Services Marketplace</h2>
-        <p className="max-w-3xl mx-auto mt-4 text-muted-foreground text-lg">
-            Below is our full suite of services. Whether you're a developer, trader, or enterprise, select a category to find the tools you need to build, manage, and grow your on-chain presence.
-        </p>
-      </div>
-
-      {serviceCategories.map((category) => (
-        <div key={category.category} className="mb-12">
-          <h2 className="text-2xl font-bold font-headline mb-2">{category.category}</h2>
-          <p className="text-muted-foreground mb-6">{category.description}</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {category.services.map((tool) => (
-              <Card key={tool.title} className={cn("flex flex-col group bg-card/50 hover:border-primary/50 transition-colors duration-300", tool.className)}>
-                <CardHeader className="flex-row items-start gap-4 space-y-0">
-                  <div className="p-3 bg-primary/10 rounded-lg text-primary">
-                    <tool.icon className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-xl font-bold mb-1">{tool.title}</CardTitle>
-                    <div className="flex flex-wrap gap-1.5">
-                      {tool.chains.map(chain => (
-                          <span key={chain} className="text-xs bg-secondary text-secondary-foreground/80 px-2 py-0.5 rounded-full">{chain}</span>
-                      ))}
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+            <div className="mb-12">
+                <h2 className="text-2xl font-bold font-headline mb-2">Unified Web3 Services</h2>
+                <p className="text-muted-foreground">
+                    Your complete toolkit to build, manage, and grow your on-chain presence.
+                </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {serviceCategories.flatMap(cat => cat.services).map((tool) => (
+                <Card key={tool.title} className={cn("flex flex-col group bg-card/50 hover:border-primary/50 transition-colors duration-300", tool.className)}>
+                    <CardHeader className="flex-row items-start gap-4 space-y-0">
+                    <div className="p-3 bg-primary/10 rounded-lg text-primary">
+                        <tool.icon className="w-6 h-6" />
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground text-sm">{tool.description}</p>
-                </CardContent>
-                <div className="p-6 pt-0">
-                  <Button asChild className="w-full">
-                      <Link href={tool.href}>
-                          Launch <ArrowRight className="ml-2"/>
-                      </Link>
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </div>
+                    <div>
+                        <CardTitle className="text-xl font-bold mb-1">{tool.title}</CardTitle>
+                        <div className="flex flex-wrap gap-1.5">
+                        {tool.chains.map(chain => (
+                            <span key={chain} className="text-xs bg-secondary text-secondary-foreground/80 px-2 py-0.5 rounded-full">{chain}</span>
+                        ))}
+                        </div>
+                    </div>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                    <p className="text-muted-foreground text-sm">{tool.description}</p>
+                    </CardContent>
+                    <div className="p-6 pt-0">
+                    <Button asChild className="w-full">
+                        <Link href={tool.href}>
+                            Launch <ArrowRight className="ml-2"/>
+                        </Link>
+                    </Button>
+                    </div>
+                </Card>
+                ))}
+            </div>
         </div>
-      ))}
+        <div>
+            <div className="mb-12">
+                <h2 className="text-2xl font-bold font-headline mb-2">Recent Activity</h2>
+                <p className="text-muted-foreground">
+                    A live feed of your recent on-chain events.
+                </p>
+            </div>
+             <Card>
+                <CardContent className="p-6 space-y-4">
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-blue-500/10 rounded-full text-blue-500">
+                            <Activity className="w-5 h-5"/>
+                        </div>
+                        <div>
+                            <p className="font-medium">New Mint: "Cyber Panther #42"</p>
+                            <p className="text-sm text-muted-foreground">2 hours ago</p>
+                        </div>
+                    </div>
+                     <div className="flex items-center gap-4">
+                        <div className="p-3 bg-green-500/10 rounded-full text-green-500">
+                            <Vote className="w-5 h-5"/>
+                        </div>
+                        <div>
+                            <p className="font-medium">Vote Cast: Prop #17</p>
+                            <p className="text-sm text-muted-foreground">8 hours ago</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-red-500/10 rounded-full text-red-500">
+                            <TrendingUp className="w-5 h-5"/>
+                        </div>
+                        <div>
+                            <p className="font-medium">Trade Executed: 1.5 ETH to 4,500 USDC</p>
+                            <p className="text-sm text-muted-foreground">1 day ago</p>
+                        </div>
+                    </div>
+                     <div className="flex items-center gap-4">
+                        <div className="p-3 bg-purple-500/10 rounded-full text-purple-500">
+                            <Building className="w-5 h-5"/>
+                        </div>
+                        <div>
+                            <p className="font-medium">DAO Contribution: 100 T3</p>
+                            <p className="text-sm text-muted-foreground">2 days ago</p>
+                        </div>
+                    </div>
+                </CardContent>
+             </Card>
+        </div>
+      </div>
     </div>
   );
 }
-
-    
