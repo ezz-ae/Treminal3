@@ -12,12 +12,12 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-import { addNote } from '@/lib/notes';
 import type { Article } from '@/lib/articles';
 import { BookPlus } from 'lucide-react';
 import * as React from 'react';
 import { iconMap } from '@/lib/icon-map';
-import { useUser } from '@/hooks/use-user';
+import { useUser, useFirestore } from '@/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 
 interface GuideDialogProps {
@@ -29,6 +29,7 @@ interface GuideDialogProps {
 export function GuideDialog({ article, isOpen, onOpenChange }: GuideDialogProps) {
   const { toast } = useToast();
   const { user } = useUser();
+  const firestore = useFirestore();
 
   if (!article) {
     return null;
@@ -43,11 +44,21 @@ export function GuideDialog({ article, isOpen, onOpenChange }: GuideDialogProps)
         });
         return;
     }
+     if (!firestore) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Firestore is not available.',
+      });
+      return;
+    }
     try {
-      await addNote({
+       await addDoc(collection(firestore, 'notes'), {
         userId: user.uid,
         title: article.title,
         content: article.excerpt,
+        slug: article.slug,
+        createdAt: serverTimestamp(),
       });
       toast({
         title: 'Note Saved!',

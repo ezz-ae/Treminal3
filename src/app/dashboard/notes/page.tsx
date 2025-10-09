@@ -1,15 +1,15 @@
 
 'use client';
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { BookPlus, ArrowRight } from 'lucide-react';
-import { useUser } from '@/hooks/use-user';
-import { useCollection } from '@/hooks/use-collection';
+import { useUser, useCollection, useFirestore } from '@/firebase';
 import { collection, query, where, orderBy } from 'firebase/firestore';
-import { useFirestore } from '@/hooks/use-firebase';
 import { useMemo } from 'react';
 
 type Note = {
+  id: string;
   title: string;
   content: string;
   slug: string;
@@ -45,14 +45,16 @@ export default function NotesPage() {
         {!loading && notes && notes.length > 0 ? (
             <div className="grid gap-8">
                 {notes.map((note) => (
-                    <Card key={note.slug} className="group hover:border-primary transition-colors">
-                        <CardHeader>
-                            <CardTitle className="text-2xl font-bold font-headline group-hover:text-primary transition-colors">
-                                {note.title}
-                            </CardTitle>
-                            <CardDescription className="mt-2 text-base line-clamp-3">{note.content}</CardDescription>
-                        </CardHeader>
-                    </Card>
+                   <Link href={`/blog/${note.slug}`} key={note.id}>
+                        <Card className="group hover:border-primary transition-colors">
+                            <CardHeader>
+                                <CardTitle className="text-2xl font-bold font-headline group-hover:text-primary transition-colors">
+                                    {note.title}
+                                </CardTitle>
+                                <CardDescription className="mt-2 text-base line-clamp-3">{note.content}</CardDescription>
+                            </CardHeader>
+                        </Card>
+                    </Link>
                 ))}
             </div>
         ) : null}
@@ -63,8 +65,8 @@ export default function NotesPage() {
                 <p className="text-muted-foreground mt-2 mb-6">
                     You can save notes from articles in our blog.
                 </p>
-                <Link href="/blog">
-                    <Button>
+                <Button asChild>
+                    <Link href="/blog">
                         Explore Articles <ArrowRight className="ml-2" />
                     </Button>
                 </Link>
