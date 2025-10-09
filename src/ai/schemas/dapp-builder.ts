@@ -2,7 +2,10 @@
 import { z } from 'zod';
 
 export const DappBuilderInputSchema = z.object({
-  description: z.string().describe('The description of the dApp to build.'),
+  name: z.string().describe("The name of the dApp."),
+  coreIdea: z.string().describe('The core idea of the dApp to build.'),
+  features: z.array(z.string()).describe("A list of features for the dApp."),
+  industry: z.string().describe("The target industry for the dApp."),
 });
 export type DappBuilderInput = z.infer<typeof DappBuilderInputSchema>;
 

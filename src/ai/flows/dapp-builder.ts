@@ -18,16 +18,19 @@ const prompt = ai.definePrompt({
   name: 'dappArchitect',
   input: { schema: DappBuilderInputSchema },
   output: { schema: DappBuilderOutputSchema },
-  prompt: `You are an expert Web3 architect. A user wants to build a decentralized application. Based on their description, generate a plan for them.
+  prompt: `You are an expert Web3 architect. A user wants to build a decentralized application. Based on their structured input, generate a plan for them.
 
-Business Description:
-{{description}}
+**User's dApp Plan:**
+- **dApp Name:** {{name}}
+- **Core Idea:** {{coreIdea}}
+- **Key Features:** {{#each features}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
+- **Target Industry:** {{industry}}
 
-Your task is to generate:
-1.  A creative and fitting name for the dApp.
-2.  A short, one-sentence description of what it does.
-3.  A list of the essential front-end UI components required.
-4.  A list of the necessary smart contracts.
+**Your Task:**
+1.  **Use dApp Name**: Use the provided name: **{{name}}**. If it's generic, you can suggest a more creative alternative, but use the user's name in the final output.
+2.  **Description**: Write a short, one-sentence description of what the dApp does, based on the core idea and features.
+3.  **UI Components**: List the essential front-end UI components required to build the specified features (e.g., 'NFT Grid', 'Connect Wallet Button', 'Staking Dashboard', 'Proposal Voting Form').
+4.  **Smart Contracts**: List the necessary smart contracts, referencing standard patterns where applicable (e.g., 'ERC721 Contract for NFTs', 'Marketplace Contract (for listings and sales)', 'Staking Contract (for rewards)', 'Governor Contract (for voting)').
 
 Provide your response in the specified JSON format.
 `,

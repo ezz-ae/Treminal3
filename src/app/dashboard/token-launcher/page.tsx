@@ -5,20 +5,23 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Puzzle } from 'lucide-react';
+import { Loader2, Bot, CirclePlus, Flame, FileJson } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { generateToken } from '@/app/actions';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import type { TokenLauncherOutput } from '@/ai/schemas/token-launcher';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { CustomCodeBlock } from '@/components/ui/code-block';
+import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 
 const FormSchema = z.object({
-  description: z.string().min(20, {
-    message: 'Please provide a more detailed description (at least 20 characters).',
-  }),
+  name: z.string().min(3, 'Token name must be at least 3 characters.'),
+  symbol: z.string().min(2, 'Symbol must be at least 2 characters.').max(5, 'Symbol cannot be more than 5 characters.'),
+  supply: z.coerce.number().min(1, 'Supply must be at least 1.'),
+  isMintable: z.boolean().default(false),
+  isBurnable: z.boolean().default(false),
 });
 
 export default function TokenLauncherPage() {
@@ -28,7 +31,11 @@ export default function TokenLauncherPage() {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            description: "",
+            name: "",
+            symbol: "",
+            supply: 1000000,
+            isBurnable: true,
+            isMintable: false,
         },
     });
     
@@ -36,7 +43,7 @@ export default function TokenLauncherPage() {
         setIsLoading(true);
         setResult(null);
         try {
-            const tokenResult = await generateToken({ description: data.description });
+            const tokenResult = await generateToken(data);
             setResult(tokenResult);
         } catch (error) {
             console.error("Failed to generate token", error);
@@ -50,36 +57,102 @@ export default function TokenLauncherPage() {
         <div>
             <h1 className="text-4xl font-bold font-headline">Token Launcher</h1>
             <p className="text-muted-foreground text-lg mt-2">
-                Describe the ERC-20 token you want to create, and our AI will generate a secure, deployable Solidity smart contract.
+                Define your ERC-20 token's properties, and our AI will generate a secure, deployable Solidity smart contract.
             </p>
         </div>
 
         <Card>
             <CardHeader>
-                <CardTitle>Describe Your Token</CardTitle>
+                <CardTitle>Define Your Token</CardTitle>
+                <CardDescription>Fill out the fields below to create your token contract.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Token Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="e.g., 'Galaxy Dust'" {...field} disabled={isLoading} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                             <FormField
+                                control={form.control}
+                                name="symbol"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Token Symbol</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="e.g., 'GLX'" {...field} disabled={isLoading} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                         <FormField
                             control={form.control}
-                            name="description"
+                            name="supply"
                             render={({ field }) => (
                                 <FormItem>
+                                    <FormLabel>Initial Supply</FormLabel>
                                     <FormControl>
-                                        <Textarea
-                                            {...field}
-                                            placeholder="e.g., 'A governance token for a new DeFi protocol. Call it 'Galaxy Dust' with symbol 'GLX' and a total supply of 100 million.'"
-                                            className="min-h-[120px] text-base"
-                                            disabled={isLoading}
-                                        />
+                                        <Input type="number" placeholder="e.g., 1000000" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" disabled={isLoading} size="lg">
-                            {isLoading ? <Loader2 className="animate-spin" /> : 'Generate Contract'}
+                        <div className="space-y-4">
+                            <FormLabel>Token Features</FormLabel>
+                            <FormField
+                                control={form.control}
+                                name="isBurnable"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                                        <div className="space-y-0.5">
+                                            <FormLabel className="text-base flex items-center gap-2"><Flame/>Burnable</FormLabel>
+                                            <p className="text-sm text-muted-foreground">Allows token holders to destroy (burn) their tokens.</p>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={isLoading}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="isMintable"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                                        <div className="space-y-0.5">
+                                            <FormLabel className="text-base flex items-center gap-2"><CirclePlus/>Mintable</FormLabel>
+                                            <p className="text-sm text-muted-foreground">Allows the contract owner to create new tokens.</p>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={isLoading}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <Button type="submit" disabled={isLoading} size="lg" className="w-full">
+                            {isLoading ? <Loader2 className="animate-spin" /> : <><Bot className="mr-2"/>Generate Contract</>}
                         </Button>
                     </form>
                 </Form>
@@ -90,8 +163,13 @@ export default function TokenLauncherPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                  <Card>
                     <CardHeader>
-                         <CardTitle className="text-primary text-2xl">{result.name} ({result.symbol})</CardTitle>
-                        <p className="text-muted-foreground text-sm">Total Supply: {result.supply.toLocaleString()}</p>
+                        <div className="flex items-center gap-3">
+                            <FileJson className="w-8 h-8 text-primary"/>
+                            <div>
+                                <CardTitle className="text-primary text-2xl">{result.name} ({result.symbol})</CardTitle>
+                                <p className="text-muted-foreground text-sm">Total Supply: {result.supply.toLocaleString()}</p>
+                            </div>
+                        </div>
                     </CardHeader>
                     <CardContent>
                         <CustomCodeBlock code={result.solidityCode} />

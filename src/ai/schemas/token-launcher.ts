@@ -2,7 +2,11 @@
 import { z } from 'zod';
 
 export const TokenLauncherInputSchema = z.object({
-  description: z.string().describe('The user\'s description of the token they want to create.'),
+  name: z.string().describe("The name of the token."),
+  symbol: z.string().describe("The symbol for the token."),
+  supply: z.number().describe("The total initial supply of the token."),
+  isMintable: z.boolean().describe("Whether the token supply can be increased after initial creation."),
+  isBurnable: z.boolean().describe("Whether tokens can be destroyed (burned) by their owners."),
 });
 export type TokenLauncherInput = z.infer<typeof TokenLauncherInputSchema>;
 
