@@ -144,9 +144,6 @@ export default function DashboardLayout({
                     <DropdownMenuContent align="end">
                          <DropdownMenuLabel>My Account</DropdownMenuLabel>
                          <DropdownMenuSeparator />
-                        <DropdownMenuItem>Settings</DropdownMenuItem>
-                        <DropdownMenuItem>Support</DropdownMenuItem>
-                        <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={handleAuthAction}>
                             <LogOut className="mr-2 h-4 w-4"/>
                             {isAuthenticated ? 'Log out' : 'Log in'}

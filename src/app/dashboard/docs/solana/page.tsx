@@ -36,7 +36,7 @@ const CustomCodeBlock = ({ code, language = 'typescript' }: { code: string; lang
 }
 
 export default function SolanaPage() {
-    const rpcEndpoint = "https://api.terminal3.me/solana/mainnet";
+    const rpcEndpoint = "https://api.terminal3.me/v1/rpc/YOUR_API_KEY/sol";
     const curlExample = `
 curl ${rpcEndpoint} -X POST -H "Content-Type: application/json" -d '
   {
@@ -84,18 +84,18 @@ fetch(url, {
         </header>
 
         <section>
-            <h2>Core API</h2>
+            <h2>Universal RPC API</h2>
             <p>
                 Connect to our robust Solana RPC endpoints to interact with the blockchain. Send transactions, query data, and build powerful applications with confidence.
             </p>
             <h3>Endpoint URL</h3>
             <p>
-                Use the following URL for Mainnet Beta access. Simply append your API key to authenticate.
+                Use the following base URL for all RPC requests. Replace \`YOUR_API_KEY\` with your actual API key and \`sol\` with the desired chain identifier.
             </p>
-            <div className="bg-card border rounded-md p-4 font-mono text-sm">{rpcEndpoint}</div>
+            <div className="bg-card border rounded-md p-4 font-mono text-sm">https://api.terminal3.me/v1/rpc/<span className='text-primary'>YOUR_API_KEY</span>/<span className='text-primary'>CHAIN</span></div>
             
             <h3 className="mt-8">Examples</h3>
-            <h4>cURL Request</h4>
+            <h4>cURL Request (Solana)</h4>
             <p>Here's a simple example of how to fetch the current epoch info using cURL.</p>
             <CustomCodeBlock code={curlExample} language="bash" />
 

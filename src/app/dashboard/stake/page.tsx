@@ -9,9 +9,7 @@ import {
   CardTitle,
   CardDescription
 } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
@@ -45,22 +43,27 @@ const stakingOptions = [
 
 export default function StakePage() {
     const { toast } = useToast();
-    const [stakeAmount, setStakeAmount] = useState('');
+    const [stakeAmounts, setStakeAmounts] = useState<Record<string, string>>({});
 
-    const handleStake = (tokenName: string) => {
-        if (!stakeAmount || parseFloat(stakeAmount) <= 0) {
+    const handleAmountChange = (symbol: string, amount: string) => {
+        setStakeAmounts(prev => ({ ...prev, [symbol]: amount }));
+    }
+
+    const handleStake = (tokenSymbol: string, tokenName: string) => {
+        const amount = stakeAmounts[tokenSymbol];
+        if (!amount || parseFloat(amount) <= 0) {
             toast({
                 variant: 'destructive',
                 title: 'Invalid Amount',
-                description: 'Please enter a valid amount to stake.',
+                description: `Please enter a valid amount of ${tokenSymbol} to stake.`,
             });
             return;
         }
         toast({
             title: 'Staking Successful!',
-            description: `You have successfully staked ${stakeAmount} ${tokenName}.`,
+            description: `You have successfully staked ${amount} ${tokenSymbol}.`,
         });
-        setStakeAmount('');
+        handleAmountChange(tokenSymbol, ''); // Clear input after staking
     }
 
   return (
@@ -93,7 +96,7 @@ export default function StakePage() {
       </Card>
 
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         {stakingOptions.map((option) => (
             <Card key={option.name} className="flex flex-col">
                 <CardHeader>
@@ -102,7 +105,9 @@ export default function StakePage() {
                             <CardTitle className="text-2xl font-bold">{option.name}</CardTitle>
                             <CardDescription>{option.description}</CardDescription>
                         </div>
-                        <Sprout className="w-8 h-8 text-primary shrink-0"/>
+                        <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">
+                            <Sprout className="w-6 h-6 shrink-0"/>
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4 flex-grow">
@@ -111,13 +116,13 @@ export default function StakePage() {
                         <p className="text-2xl font-semibold text-primary">{option.apr}</p>
                     </div>
                     <div className="space-y-2">
-                        <Input 
+                        <Input
                             type="number"
-                            placeholder="Amount to Stake"
-                            value={stakeAmount}
-                            onChange={(e) => setStakeAmount(e.target.value)}
+                            placeholder={`Amount of ${option.symbol} to Stake`}
+                            value={stakeAmounts[option.symbol] || ''}
+                            onChange={(e) => handleAmountChange(option.symbol, e.target.value)}
                         />
-                         <Button className="w-full" onClick={() => handleStake(option.symbol)}>
+                         <Button className="w-full" onClick={() => handleStake(option.symbol, option.name)}>
                             Stake {option.symbol}
                         </Button>
                     </div>

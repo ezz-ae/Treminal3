@@ -19,279 +19,153 @@ import {
   FileArchive,
   ArrowRight,
   Code2,
-  TrendingUp,
-  Building,
-  Sprout,
-  Image as ImageIcon,
-  Activity,
   ShieldCheck,
-  Vote
+  Vote,
+  Sprout,
+  Wrench,
+  BookOpen,
+  Download,
+  Terminal,
+  Newspaper,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-
-const serviceCategories = [
-  {
-    category: "Build On-chain Assets",
-    description: "The foundational tools for creating and launching your digital assets.",
-    services: [
-       {
-        href: '/dashboard/ai-agents',
-        icon: Puzzle,
-        title: 'Token Launcher',
-        description: 'Design and launch your own custom cryptocurrency tokens in minutes.',
-        chains: ["Ethereum", "Polygon", "BNB Chain"],
-      },
+const allServices = [
       {
         href: '/dashboard/ai-agents',
-        icon: FileJson,
-        title: 'Smart Contract Templates',
-        description:
-          'Use our audited templates to create secure smart contracts without the hassle.',
-        chains: ["Ethereum", "Polygon", "Arbitrum"],
+        icon: Terminal,
+        title: 'AI Command Center',
+        description: 'Describe what you want to build, audit, or design.',
+        category: 'AI',
       },
-       {
-        href: '/dashboard/ai-agents',
-        icon: ShieldCheck,
-        title: 'Security Audits',
-        description: 'Automatically audit your smart contracts for vulnerabilities.',
-        chains: ["Solidity", "Vyper"],
-      },
-    ]
-  },
-  {
-    category: "Build Your Application",
-    description: "Everything you need to build, brand, and launch your user-facing applications.",
-     services: [
        {
         href: '/dashboard/ai-agents',
         icon: AppWindow,
         title: 'dApp Builder',
         description:
-          'Create and deploy decentralized applications with our intuitive builder, powered by AI.',
-        chains: ["Ethereum", "Polygon", "Solana", "Avalanche"],
-        className: 'lg:col-span-2'
+          'Create and deploy dApps with our intuitive AI-powered builder.',
+        category: 'Build',
+      },
+      {
+        href: '/dashboard/ai-agents',
+        icon: Puzzle,
+        title: 'Token Launcher',
+        description: 'Design and launch your own custom cryptocurrency tokens.',
+        category: 'Build',
+      },
+      {
+        href: '/dashboard/ai-agents',
+        icon: Bot,
+        title: 'Trading Bot Platform',
+        description: 'Develop and deploy automated trading bots on DEXs.',
+        category: 'Automate',
+      },
+       {
+        href: '/dashboard/ai-agents',
+        icon: BotMessageSquare,
+        title: 'AI Agents',
+        description: 'Deploy autonomous AI agents to automate on-chain tasks.',
+        category: 'Automate',
       },
       {
         href: '/dashboard/ai-agents',
         icon: Wallet,
         title: 'Custom Wallets',
         description: 'Build and brand your own secure crypto wallets for your users.',
-        chains: ["Ethereum", "Solana"],
+        category: 'Build',
       },
-    ]
-  },
-   {
-    category: "Orchestrate & Automate",
-    description: "Deploy autonomous agents and bots to automate complex tasks and strategies.",
-    services: [
        {
         href: '/dashboard/ai-agents',
-        icon: BotMessageSquare,
-        title: 'AI Agents',
-        description: 'Deploy autonomous AI agents to interact with your dApps and automate tasks.',
-        chains: ["All EVM", "Solana"],
-        className: 'lg:col-span-2'
-      },
-      {
-        href: '/dashboard/ai-agents',
-        icon: Bot,
-        title: 'Trading Bot Platform',
-        description: 'Develop and deploy automated trading bots on major decentralized exchanges.',
-        chains: ["Ethereum", "Solana", "Arbitrum"],
-      },
-    ]
-  },
-  {
-    category: "Data & Infrastructure",
-    description: "Powerful APIs and robust infrastructure to scale your Web3 applications.",
-    services: [
-      {
-        href: '/dashboard/docs/solana',
-        icon: Code2,
-        title: 'Universal RPC API',
+        icon: FileJson,
+        title: 'Smart Contract Templates',
         description:
-          'Access 50+ chains with a single, reliable RPC endpoint.',
-        chains: ["Ethereum", "Solana", "+50 more"],
-      },
-       {
-        href: '/dashboard/analytics',
-        icon: AreaChart,
-        title: 'On-chain Analytics',
-        description: 'Run complex queries and visualize data from indexed blockchains.',
-        chains: ["Ethereum", "Polygon", "BNB Chain"],
-      },
-      {
-        href: '/dashboard/ai-agents',
-        icon: FileArchive,
-        title: 'Decentralized Storage',
-        description: 'Upload and manage files on IPFS and other decentralized storage networks.',
-        chains: ["IPFS", "Arweave"],
-      },
-    ]
-  },
-    {
-    category: "Governance & Community",
-    description: "Tools to manage and grow your decentralized organization.",
-    services: [
-      {
-        href: '/dashboard/ai-agents',
-        icon: Vote,
-        title: 'DAO Governance',
-        description: 'Manage your decentralized autonomous organization with ease.',
-        chains: ["Snapshot", "Aragon"],
+          'Use our audited templates to create secure smart contracts.',
+        category: 'Build',
       },
       {
         href: '/dashboard/ai-agents',
         icon: Network,
         title: 'Manual Transactions',
         description: 'Interact directly with the blockchain for custom operations.',
-        chains: ["All EVM", "Solana"],
+        category: 'Tools',
       },
-    ]
-  }
+      {
+        href: '/dashboard/analytics',
+        icon: AreaChart,
+        title: 'On-chain Analytics',
+        description: 'Run complex queries and visualize data from blockchains.',
+        category: 'Data',
+      },
+       {
+        href: '/dashboard/ai-agents',
+        icon: FileArchive,
+        title: 'Decentralized Storage',
+        description: 'Upload and manage files on IPFS and other storage networks.',
+        category: 'Infra',
+      },
+       {
+        href: '/dashboard/ai-agents',
+        icon: ShieldCheck,
+        title: 'Security Audits',
+        description: 'Automatically audit your smart contracts for vulnerabilities.',
+        category: 'Security',
+      },
+      {
+        href: '/dashboard/ai-agents',
+        icon: Vote,
+        title: 'DAO Governance',
+        description: 'Manage your decentralized autonomous organization with ease.',
+        category: 'Community',
+      },
+      {
+        href: '/dashboard/docs/apis',
+        icon: Code2,
+        title: 'Universal RPC API',
+        description:
+          'Access 50+ chains with a single, reliable RPC endpoint.',
+        category: 'Infra',
+      },
+      { href: '/dashboard/stake', icon: Sprout, title: 'Stake', description: 'Stake your assets to earn rewards.', category: 'DeFi'},
+      { href: '/dashboard/tools', icon: Wrench, title: 'Developer Tools', description: 'Utilities for building, testing, and debugging.', category: 'Tools'},
+      { href: '/dashboard/docs', icon: BookOpen, title: 'Documentation', description: 'Read guides and API references.', category: 'Resources'},
+      { href: '/blog', icon: Newspaper, title: 'Blog', description: 'Explore articles, guides, and updates.', category: 'Resources'},
+      { href: '/dashboard/download', icon: Download, title: 'Download App', description: 'Get the Terminal3 desktop application.', category: 'Resources'},
 ]
 
 
 export default function DashboardPage() {
   return (
     <div>
-       <div className="mb-8">
+       <div className="mb-12">
         <h1 className="text-3xl font-bold font-headline">Dashboard</h1>
         <p className="text-muted-foreground">Welcome back! Here's a summary of your on-chain assets and available services.</p>
       </div>
 
-       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-12">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Wallet Balance</CardTitle>
-            <Wallet className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">$12,845.12</div>
-            <p className="text-xs text-muted-foreground">+2.1% from last 24h</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">NFTs Owned</CardTitle>
-            <ImageIcon className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">142</div>
-            <p className="text-xs text-muted-foreground">Floor value: 12.5 ETH</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Staking</CardTitle>
-            <Sprout className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">$3,120.89</div>
-            <p className="text-xs text-muted-foreground">Avg. APY: 5.8%</p>
-          </CardContent>
-        </Card>
-        <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Recent Activity</CardTitle>
-                <Activity className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-                <div className="text-2xl font-bold">3 New Mints</div>
-                <p className="text-xs text-muted-foreground">Last transaction: 2h ago</p>
-            </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-            <div className="mb-12">
-                <h2 className="text-2xl font-bold font-headline mb-2">Unified Web3 Services</h2>
-                <p className="text-muted-foreground">
-                    Your complete toolkit to build, manage, and grow your on-chain presence.
-                </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {serviceCategories.flatMap(cat => cat.services).map((tool) => (
-                <Card key={tool.title} className={cn("flex flex-col group bg-card/50 hover:border-primary/50 transition-colors duration-300", tool.className)}>
-                    <CardHeader className="flex-row items-start gap-4 space-y-0">
-                    <div className="p-3 bg-primary/10 rounded-lg text-primary">
+      <div>
+        <h2 className="text-2xl font-bold font-headline mb-6">Unified Web3 Services</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {allServices.map((tool) => (
+            <Card key={tool.title} className="flex flex-col group bg-card/50 hover:border-primary/50 transition-colors duration-300">
+                <CardHeader>
+                    <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit mb-4">
                         <tool.icon className="w-6 h-6" />
                     </div>
-                    <div>
-                        <CardTitle className="text-xl font-bold mb-1">{tool.title}</CardTitle>
-                        <div className="flex flex-wrap gap-1.5">
-                        {tool.chains.map(chain => (
-                            <span key={chain} className="text-xs bg-secondary text-secondary-foreground/80 px-2 py-0.5 rounded-full">{chain}</span>
-                        ))}
-                        </div>
-                    </div>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
+                    <CardTitle className="text-xl font-bold">{tool.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-grow">
                     <p className="text-muted-foreground text-sm">{tool.description}</p>
-                    </CardContent>
-                    <div className="p-6 pt-0">
+                </CardContent>
+                <div className="p-6 pt-0">
                     <Button asChild className="w-full">
                         <Link href={tool.href}>
                             Launch <ArrowRight className="ml-2"/>
                         </Link>
                     </Button>
-                    </div>
-                </Card>
-                ))}
-            </div>
-        </div>
-        <div>
-            <div className="mb-12">
-                <h2 className="text-2xl font-bold font-headline mb-2">Recent Activity</h2>
-                <p className="text-muted-foreground">
-                    A live feed of your recent on-chain events.
-                </p>
-            </div>
-             <Card>
-                <CardContent className="p-6 space-y-4">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-blue-500/10 rounded-full text-blue-500">
-                            <Activity className="w-5 h-5"/>
-                        </div>
-                        <div>
-                            <p className="font-medium">New Mint: "Cyber Panther #42"</p>
-                            <p className="text-sm text-muted-foreground">2 hours ago</p>
-                        </div>
-                    </div>
-                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-green-500/10 rounded-full text-green-500">
-                            <Vote className="w-5 h-5"/>
-                        </div>
-                        <div>
-                            <p className="font-medium">Vote Cast: Prop #17</p>
-                            <p className="text-sm text-muted-foreground">8 hours ago</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-red-500/10 rounded-full text-red-500">
-                            <TrendingUp className="w-5 h-5"/>
-                        </div>
-                        <div>
-                            <p className="font-medium">Trade Executed: 1.5 ETH to 4,500 USDC</p>
-                            <p className="text-sm text-muted-foreground">1 day ago</p>
-                        </div>
-                    </div>
-                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-purple-500/10 rounded-full text-purple-500">
-                            <Building className="w-5 h-5"/>
-                        </div>
-                        <div>
-                            <p className="font-medium">DAO Contribution: 100 T3</p>
-                            <p className="text-sm text-muted-foreground">2 days ago</p>
-                        </div>
-                    </div>
-                </CardContent>
-             </Card>
+                </div>
+            </Card>
+            ))}
         </div>
       </div>
     </div>

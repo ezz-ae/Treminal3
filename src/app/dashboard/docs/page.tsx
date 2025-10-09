@@ -40,12 +40,6 @@ const docSections = [
     href: '/blog'
   },
   {
-    icon: Bot,
-    title: 'AI Agents',
-    description: 'Master the art of creating and deploying autonomous AI agents to automate your on-chain tasks.',
-    href: '/dashboard/ai-agents'
-  },
-  {
     icon: Puzzle,
     title: 'APIs & Integration',
     description: 'Full reference documentation for all our developer APIs, including examples and use cases.',
@@ -56,12 +50,6 @@ const docSections = [
     title: 'Smart Contracts',
     description: 'Explore our library of audited smart contract templates and learn how to customize them securely.',
     href: '/dashboard/docs/smart-contracts'
-  },
-  {
-    icon: AreaChart,
-    title: 'Data & Analytics',
-    description: 'Dive deep into our analytics engine to query, visualize, and get insights from on-chain data.',
-    href: '/dashboard/analytics'
   },
   {
     icon: ShieldCheck,

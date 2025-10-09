@@ -28,7 +28,7 @@ const CustomCodeBlock = ({ code, language = 'typescript' }: { code: string; lang
                 className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                 onClick={handleCopy}
             >
-                <Copy className="w-4 h-4"/>
+                <Copy className="w-4 h-4 text-white"/>
             </Button>
         </div>
     )

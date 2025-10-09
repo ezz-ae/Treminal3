@@ -9,25 +9,24 @@ import {
   CardTitle,
   CardDescription
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const GasPriceTracker = () => {
     const networks = [
         { name: 'Ethereum', gwei: '25', priority: '2' },
         { name: 'Polygon', gwei: '30', priority: '1' },
         { name: 'BNB Chain', gwei: '5', priority: '1' },
+        { name: 'Arbitrum', gwei: '0.1', priority: '0.1' },
     ];
     return (
         <Card className="w-full">
             <CardHeader>
                 <div className="flex items-center gap-4">
                     <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">
-                        <CircleDollarSign className="w-8 h-8" />
+                        <CircleDollarSign className="w-6 h-6" />
                     </div>
                     <div>
                         <CardTitle className="text-xl font-bold">Gas Price Tracker</CardTitle>
@@ -38,7 +37,7 @@ const GasPriceTracker = () => {
             <CardContent>
                 <div className="space-y-4">
                     {networks.map(network => (
-                        <div key={network.name} className="flex justify-between items-center bg-muted p-3 rounded-md">
+                        <div key={network.name} className="flex justify-between items-center bg-card-foreground/5 p-3 rounded-md">
                             <span className="font-medium">{network.name}</span>
                             <div className="text-right">
                                 <p className="font-semibold">{network.gwei} Gwei</p>
@@ -58,6 +57,10 @@ const ABIConverter = () => {
     const [humanReadableAbi, setHumanReadableAbi] = useState('');
 
     const convertToHumanReadable = () => {
+        if (!jsonAbi) {
+            toast({ variant: 'destructive', title: 'Input is empty', description: 'Please paste a JSON ABI to convert.' });
+            return;
+        }
         try {
             const parsed = JSON.parse(jsonAbi);
             if (!Array.isArray(parsed)) throw new Error('Invalid JSON ABI');
@@ -71,6 +74,7 @@ const ABIConverter = () => {
             toast({ title: 'Conversion successful!' });
         } catch (error) {
             toast({ variant: 'destructive', title: 'Conversion failed', description: 'Please check your JSON ABI syntax.' });
+            setHumanReadableAbi('');
         }
     }
 
@@ -79,7 +83,7 @@ const ABIConverter = () => {
             <CardHeader>
                 <div className="flex items-center gap-4">
                     <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">
-                        <Beaker className="w-8 h-8" />
+                        <Beaker className="w-6 h-6" />
                     </div>
                     <div>
                         <CardTitle className="text-xl font-bold">ABI Converter</CardTitle>
@@ -92,7 +96,7 @@ const ABIConverter = () => {
                     <label className="text-sm font-medium">JSON ABI</label>
                     <Textarea 
                         placeholder='[{"type":"function", "name":"myFunc", "inputs":[{"name":"myArg","type":"uint256"}]}]'
-                        className="mt-1 h-32"
+                        className="mt-1 h-32 font-mono text-xs"
                         value={jsonAbi}
                         onChange={(e) => setJsonAbi(e.target.value)}
                     />
@@ -102,7 +106,7 @@ const ABIConverter = () => {
                     <label className="text-sm font-medium">Human-Readable ABI</label>
                     <Textarea 
                         placeholder="function myFunc(uint256)"
-                        className="mt-1 h-32"
+                        className="mt-1 h-32 font-mono text-xs"
                         value={humanReadableAbi}
                         readOnly
                     />
@@ -118,8 +122,13 @@ const EVMDisassembler = () => {
     const [opcodes, setOpcodes] = useState('');
 
     const disassemble = () => {
-        if (!bytecode.startsWith('0x') || bytecode.length % 2 !== 0) {
-            toast({ variant: 'destructive', title: 'Invalid Bytecode', description: 'Bytecode must be a hex string starting with 0x and have an even length.' });
+        if (!bytecode) {
+            toast({ variant: 'destructive', title: 'Input is empty', description: 'Please paste bytecode to disassemble.' });
+            return;
+        }
+        if (!bytecode.startsWith('0x') || !/^[0-9a-fA-F_]+$/.test(bytecode.substring(2))) {
+            toast({ variant: 'destructive', title: 'Invalid Bytecode', description: 'Bytecode must be a hex string starting with 0x.' });
+            setOpcodes('');
             return;
         }
         const simpleOpcodes = bytecode.substring(2).match(/.{1,2}/g)?.join(' ') || '';
@@ -132,7 +141,7 @@ const EVMDisassembler = () => {
             <CardHeader>
                 <div className="flex items-center gap-4">
                     <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">
-                        <HardHat className="w-8 h-8" />
+                        <HardHat className="w-6 h-6" />
                     </div>
                     <div>
                         <CardTitle className="text-xl font-bold">EVM Disassembler</CardTitle>
@@ -145,7 +154,7 @@ const EVMDisassembler = () => {
                     <label className="text-sm font-medium">Bytecode</label>
                     <Textarea 
                         placeholder="0x60806040..."
-                        className="mt-1 h-32"
+                        className="mt-1 h-32 font-mono text-xs"
                         value={bytecode}
                         onChange={(e) => setBytecode(e.target.value)}
                     />
@@ -155,7 +164,7 @@ const EVMDisassembler = () => {
                     <label className="text-sm font-medium">Opcodes (Simplified)</label>
                     <Textarea 
                         placeholder="60 80 60 40..."
-                        className="mt-1 h-32 font-mono"
+                        className="mt-1 h-32 font-mono text-xs"
                         value={opcodes}
                         readOnly
                     />
