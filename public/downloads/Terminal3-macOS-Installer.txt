@@ -1,0 +1,1 @@
+This is a placeholder for the Terminal3 macOS installer. In a real application, this would be the desktop app binary.

@@ -3,6 +3,13 @@
 
 import { Download, Terminal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+
+const downloadLinks = [
+    { os: 'macOS', href: '/downloads/Terminal3-macOS-Installer.txt' },
+    { os: 'Windows', href: '/downloads/Terminal3-Windows-Installer.txt' },
+    { os: 'Linux', href: '/downloads/Terminal3-Linux-Installer.txt' },
+];
 
 export default function DownloadPage() {
   return (
@@ -19,15 +26,13 @@ export default function DownloadPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
-                <Button size="lg">
-                    <Download className="mr-2"/> macOS
-                </Button>
-                <Button size="lg">
-                    <Download className="mr-2"/> Windows
-                </Button>
-                <Button size="lg">
-                    <Download className="mr-2"/> Linux
-                </Button>
+                {downloadLinks.map((linkInfo) => (
+                    <Button key={linkInfo.os} size="lg" asChild>
+                        <Link href={linkInfo.href} download>
+                            <Download className="mr-2"/> {linkInfo.os}
+                        </Link>
+                    </Button>
+                ))}
             </div>
         </div>
     </div>
