@@ -5,16 +5,16 @@ import { StatusIndicator } from '../ui/status-indicator';
 
 const serviceLinks = [
     { href: '/dashboard/ai-agents', label: 'AI Agents' },
-    { href: '/dashboard/dapp-builder', label: 'dApp Builder' },
-    { href: '/dashboard/token-launcher', label: 'Token Launcher' },
-    { href: '/dashboard/trading-bots', label: 'Trading Bots' },
-    { href: '/dashboard/wallets', label: 'Custom Wallets' },
-    { href: '/dashboard/smart-contracts', label: 'Smart Contracts' },
-    { href: '/dashboard/transactions', label: 'Manual Transactions' },
+    { href: '/dashboard/ai-agents', label: 'dApp Builder' },
+    { href: '/dashboard/ai-agents', label: 'Token Launcher' },
+    { href: '/dashboard/ai-agents', label: 'Trading Bots' },
+    { href: '/dashboard/ai-agents', label: 'Custom Wallets' },
+    { href: '/dashboard/ai-agents', label: 'Smart Contracts' },
+    { href: '/dashboard/ai-agents', label: 'Manual Transactions' },
     { href: '/dashboard/analytics', label: 'On-chain Analytics' },
-    { href: '/dashboard/storage', label: 'Decentralized Storage' },
-    { href: '/dashboard/audits', label: 'Security Audits' },
-    { href: '/dashboard/governance', label: 'DAO Governance' },
+    { href: '/dashboard/ai-agents', label: 'Decentralized Storage' },
+    { href: '/dashboard/ai-agents', label: 'Security Audits' },
+    { href: '/dashboard/ai-agents', label: 'DAO Governance' },
 ];
 
 const resourceLinks = [
