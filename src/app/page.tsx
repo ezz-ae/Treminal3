@@ -1,8 +1,7 @@
 
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { useScroll, MotionValue } from 'framer-motion';
+import { useState } from 'react';
 import Header from '@/components/layout/header';
 import Hero from '@/components/landing/hero';
 import ServiceGrid from '@/components/landing/service-grid';
@@ -15,16 +14,9 @@ import GridPattern from '@/components/landing/grid-pattern';
 
 export default function Home() {
   const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(0);
-  const terminalRef = useRef<HTMLDivElement>(null);
   
   const handleServiceClick = (index: number) => {
     setActiveServiceIndex(index);
-    if (terminalRef.current) {
-        terminalRef.current.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-        });
-    }
   };
 
   return (
@@ -40,7 +32,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <ServiceGrid onServiceClick={handleServiceClick} activeServiceIndex={activeServiceIndex} />
-        <MotionTerminal ref={terminalRef} activeServiceIndex={activeServiceIndex} />
+        <MotionTerminal activeServiceIndex={activeServiceIndex} />
         <Web3DevTools activeServiceIndex={activeServiceIndex} />
         <CodingModes />
         <InteractiveGuides activeServiceIndex={activeServiceIndex} />
@@ -49,5 +41,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

@@ -5,7 +5,8 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
-import { motion, useTransform, useScroll } from 'framer-motion';
+import { motion, useTransform, useScroll, AnimatePresence } from 'framer-motion';
+import { Minimize2, Maximize2, RotateCw } from 'lucide-react';
 
 const scripts: Record<string, { text: string; type: string }[]> = {
   default: [
@@ -127,10 +128,11 @@ interface MotionTerminalProps {
   activeServiceIndex: number | null;
 }
 
-const MotionTerminal =  React.forwardRef<HTMLDivElement, MotionTerminalProps>(
+const MotionTerminal = React.forwardRef<HTMLDivElement, MotionTerminalProps>(
   ({ activeServiceIndex }, ref) => {
   const [lines, setLines] = useState<{ text: string; type: string; }[]>([]);
   const [isComplete, setIsComplete] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [scriptKey, setScriptKey] = useState('default');
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
 
@@ -171,13 +173,6 @@ const MotionTerminal =  React.forwardRef<HTMLDivElement, MotionTerminalProps>(
   };
   
   useEffect(() => {
-    const terminalElement = targetRef.current?.querySelector('.p-4');
-    if (terminalElement) {
-      terminalElement.scrollTop = terminalElement.scrollHeight;
-    }
-  }, [lines]);
-
-  useEffect(() => {
     let newKey = 'default';
     if (activeServiceIndex !== null) {
       newKey = activeServiceIndex.toString();
@@ -206,6 +201,7 @@ const MotionTerminal =  React.forwardRef<HTMLDivElement, MotionTerminalProps>(
 
   const currentScript = scripts[scriptKey] || scripts['default'];
   const currentTitle = serviceTitles[scriptKey] || serviceTitles['default'];
+  const linesToShow = isExpanded ? lines : lines.slice(0, 4);
 
   return (
     <section ref={ref} className="py-12 md:py-24">
@@ -228,38 +224,46 @@ const MotionTerminal =  React.forwardRef<HTMLDivElement, MotionTerminalProps>(
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
                 <p className="text-white/50 text-xs font-semibold">{currentTitle}</p>
-                 <div className="w-16"></div> {/* Spacer */}
-            </div>
-            <div className="p-4 overflow-y-auto h-full max-h-[700px] min-h-[450px]">
-              {lines.filter(Boolean).map((line, index) => (
-                <div key={index} className="flex items-start">
-                  {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
-                  <pre
-                    className={cn('whitespace-pre-wrap font-code text-white', {
-                      'text-green-400': line.type === 'success',
-                      'text-red-400': line.type === 'error',
-                      'text-gray-400': line.type === 'info',
-                    })}
-                  >
-                    {line.text}
-                  </pre>
-                </div>
-              ))}
-              {!isComplete && (
-                 <div className="flex items-start">
-                    <span className="text-blue-400 mr-2 shrink-0">$</span>
-                    <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
+                 <div className="flex items-center gap-1">
+                    <Button variant="ghost" size="icon" className="h-6 w-6 text-white/50 hover:text-white" onClick={() => startAnimation(currentScript)}>
+                        <RotateCw className="w-3 h-3"/>
+                    </Button>
+                     <Button variant="ghost" size="icon" className="h-6 w-6 text-white/50 hover:text-white" onClick={() => setIsExpanded(e => !e)}>
+                        {isExpanded ? <Minimize2 className="w-3 h-3"/> : <Maximize2 className="w-3 h-3"/>}
+                    </Button>
                  </div>
-              )}
-
-              {isComplete && (
-                <div className="mt-4">
-                  <Button onClick={() => startAnimation(currentScript)} variant="secondary" size="sm">
-                    Re-run Execution
-                  </Button>
-                </div>
-              )}
             </div>
+            <AnimatePresence>
+                <motion.div 
+                  className="p-4 overflow-hidden"
+                  initial={{ height: 160 }}
+                  animate={{ height: isExpanded ? 'auto' : 160 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                >
+                    <div className="min-h-[140px]">
+                      {linesToShow.filter(Boolean).map((line, index) => (
+                        <div key={index} className="flex items-start">
+                          {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
+                          <pre
+                            className={cn('whitespace-pre-wrap font-code text-white', {
+                              'text-green-400': line.type === 'success',
+                              'text-red-400': line.type === 'error',
+                              'text-gray-400': line.type === 'info',
+                            })}
+                          >
+                            {line.text}
+                          </pre>
+                        </div>
+                      ))}
+                      {!isComplete && (
+                         <div className="flex items-start">
+                            <span className="text-blue-400 mr-2 shrink-0">$</span>
+                            <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
+                         </div>
+                      )}
+                    </div>
+                </motion.div>
+            </AnimatePresence>
           </div>
         </motion.div>
     </section>
