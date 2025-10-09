@@ -4,7 +4,7 @@ import { articles, type Article } from './articles';
 // This function should only be called from server-side code (e.g., getStaticProps, getServerSideProps, or Server Components)
 export function getArticles(): Article[] {
   // In this project, articles are sourced from a single TS file, so we just sort them.
-  return articles.sort((a, b) => (a.date < b.date ? 1 : -1));
+  return articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 

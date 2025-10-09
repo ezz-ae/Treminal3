@@ -76,7 +76,7 @@ export default function ArticlePage({ params }: Props) {
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4"/>
-                            <span>{article.date}</span>
+                            <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                         </div>
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold !mb-0 text-foreground">{article.title}</h1>
@@ -84,7 +84,7 @@ export default function ArticlePage({ params }: Props) {
             </div>
         </header>
 
-        <div className="text-lg leading-relaxed">{article.content}</div>
+        <div className="text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: article.content }} />
       </article>
     </div>
   );

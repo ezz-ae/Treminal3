@@ -31,7 +31,7 @@ import {
   Vote,
   Bot
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -62,12 +62,14 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, loading } = useUser();
   const auth = useAuth();
   
   const handleLogout = async () => {
     if (auth) {
       await signOut(auth);
+      router.push('/');
     }
   }
 
@@ -139,7 +141,7 @@ export default function DashboardLayout({
                 </div>
                  {!loading && !user && (
                   <Button asChild>
-                    <Link href="/auth">Connect Wallet</Link>
+                    <Link href="/auth">Connect</Link>
                   </Button>
                 )}
                  <ThemeToggle />

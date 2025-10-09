@@ -18,7 +18,7 @@ import {
 import React from 'react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-import { articles } from '@/lib/articles';
+import { articles, type Article } from '@/lib/articles';
 import {
     Select,
     SelectContent,
@@ -126,7 +126,7 @@ export default function InteractiveGuides() {
             <DialogHeader>
               <DialogTitle className="font-headline text-3xl text-foreground mb-4">{activeArticle?.title}</DialogTitle>
               <DialogDescription className="text-muted-foreground font-sans prose prose-invert prose-p:text-muted-foreground max-h-[60vh] overflow-y-auto pr-4">
-                <p className="text-base leading-relaxed">{activeArticle?.content}</p>
+                <div dangerouslySetInnerHTML={{ __html: activeArticle?.content }} />
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="mt-4">
