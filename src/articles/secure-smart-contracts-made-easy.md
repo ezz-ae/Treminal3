@@ -5,4 +5,4 @@ date: "2024-07-15"
 icon: "FileJson"
 ---
 
-Content for Secure Smart Contracts Made Easy goes here. This is a placeholder. In a real application, this would be filled with rich markdown content.
+Smart contract vulnerabilities are a massive risk in Web3. Our Smart Contract Templates provide the peace of mind you need. This guide details our library of common contracts, including ERC-20 tokens, ERC-721 NFTs, vesting contracts, and DAOs. Learn how each template has been rigorously audited by third-party security firms and how you can easily customize them using an AI prompt like "Generate an ERC721 contract with a function that allows the owner to airdrop NFTs to a list of addresses." This combines the security of templates with the flexibility of AI.

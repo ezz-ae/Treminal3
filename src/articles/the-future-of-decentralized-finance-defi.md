@@ -5,4 +5,4 @@ date: "2024-07-13"
 icon: "AreaChart"
 ---
 
-Content for The Future of Decentralized Finance (DeFi) goes here. This is a placeholder. In a real application, this would be filled with rich markdown content.
+Our On-chain Analytics engine gives you the deep insights needed to navigate the market. This guide explains how you can use natural language to query indexed blockchain data. For example, you could ask, "Show me the top 10 most active trading pairs on Uniswap V3 in the last 24 hours" or "Visualize the daily transaction volume for the Bored Ape Yacht Club collection." The system translates your query, fetches the data, and presents it in a visually rich dashboard, transforming complex data into actionable intelligence.

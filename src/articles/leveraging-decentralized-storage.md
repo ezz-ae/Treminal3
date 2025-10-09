@@ -5,4 +5,4 @@ date: "2024-07-12"
 icon: "FileArchive"
 ---
 
-Content for Leveraging Decentralized Storage goes here. This is a placeholder. In a real application, this would be filled with rich markdown content.
+Decentralized storage is a core pillar of a truly censorship-resistant web. This note explains how to use our Decentralized Storage solutions to upload and manage files on IPFS, Arweave, and other networks. We'll walk through the process of using an AI prompt like "Upload my dApp's build folder to IPFS and pin it for permanence." The AI will handle the upload, provide you with the content-addressable hash (CID), and even show you how to link it to a decentralized domain name or use it in an NFT's metadata. Say goodbye to centralized servers and embrace the permanent web.

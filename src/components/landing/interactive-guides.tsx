@@ -26,11 +26,11 @@ import {
   Vote,
   BookOpen,
   BookPlus,
-  FilePenLine,
 } from 'lucide-react';
 import React from 'react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { addNoteAction } from '@/app/actions';
 
 const articles = [
   {
@@ -141,10 +141,30 @@ interface InteractiveGuidesProps {
 
 export default function InteractiveGuides({ activeServiceIndex }: InteractiveGuidesProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { toast } = useToast();
   
   const article = articles.find(a => a.serviceIndex === activeServiceIndex) || defaultArticle;
   
   const LucideIcon = article.icon;
+
+  const handleAddNote = async () => {
+    try {
+      await addNoteAction({
+        title: article.title,
+        content: article.excerpt,
+      });
+      toast({
+        title: 'Note Saved!',
+        description: `"${article.title}" has been added to your notes.`,
+      });
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error saving note',
+        description: 'There was a problem saving your note.',
+      });
+    }
+  }
 
   return (
     <section id="start" className="py-12 md:py-24 bg-secondary/50">
@@ -189,11 +209,11 @@ export default function InteractiveGuides({ activeServiceIndex }: InteractiveGui
               </div>
 
                <DialogFooter className="p-4 border-t border-primary/20">
-                <Button variant="ghost">
+                <Button variant="ghost" onClick={handleAddNote} disabled={article.serviceIndex === -1}>
                   <BookPlus className="mr-2" />
                   Add to Notes
                 </Button>
-                <Button variant="secondary" asChild>
+                <Button variant="secondary" asChild disabled={article.serviceIndex === -1}>
                     <Link href={`/blog/${article.slug}`}>Read Full Article</Link>
                 </Button>
               </DialogFooter>

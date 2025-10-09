@@ -1,6 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
+// This is a placeholder in-memory store. In a real application, you'd use a database.
+// To make it persist across server restarts in this prototype, we'll use a JSON file.
+
 const notesFilePath = path.join(process.cwd(), 'src/lib/notes.json');
 
 export type Note = {
@@ -10,16 +13,30 @@ export type Note = {
 };
 
 function readNotes(): Note[] {
-  if (!fs.existsSync(notesFilePath)) {
-    return [];
+  try {
+    if (fs.existsSync(notesFilePath)) {
+      const fileContent = fs.readFileSync(notesFilePath, 'utf-8');
+      return JSON.parse(fileContent);
+    }
+  } catch (error) {
+    console.error("Error reading notes file:", error);
   }
-  const fileContent = fs.readFileSync(notesFilePath, 'utf-8');
-  return JSON.parse(fileContent);
+  return [];
 }
 
 function writeNotes(notes: Note[]): void {
-  fs.writeFileSync(notesFilePath, JSON.stringify(notes, null, 2));
+  try {
+    fs.writeFileSync(notesFilePath, JSON.stringify(notes, null, 2));
+  } catch (error) {
+     console.error("Error writing notes file:", error);
+  }
 }
+
+// Initialize file if it doesn't exist
+if (!fs.existsSync(notesFilePath)) {
+    writeNotes([]);
+}
+
 
 export function getNotes(): Note[] {
   return readNotes();
@@ -27,7 +44,8 @@ export function getNotes(): Note[] {
 
 export function addNote(note: Omit<Note, 'slug'>): Note {
   const notes = readNotes();
-  const newNote: Note = { ...note, slug: note.title.toLowerCase().replace(/\s+/g, '-') };
+  const slug = note.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+  const newNote: Note = { ...note, slug };
   
   // Avoid duplicates
   if (notes.some(n => n.slug === newNote.slug)) {

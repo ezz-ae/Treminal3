@@ -17,13 +17,11 @@ import {
   ShieldCheck,
   BookOpen,
   GraduationCap,
-  Sprout,
   BotMessageSquare,
   Wallet,
   Network,
   FileArchive,
   Vote,
-  BookPlus,
   Newspaper,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -52,12 +50,6 @@ const docSections = [
     title: 'APIs & Integration',
     description: 'Full reference documentation for all our developer APIs, including examples and use cases.',
     href: '/dashboard/docs/apis'
-  },
-   {
-    icon: Sprout,
-    title: 'Solana',
-    description: 'Explore our comprehensive suite of tools and services for building on the Solana blockchain.',
-    href: '/dashboard/docs/solana'
   },
   {
     icon: FileJson,

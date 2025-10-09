@@ -27,12 +27,13 @@ import {
   Newspaper,
   AreaChart,
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
@@ -52,6 +53,17 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useLocalStorage('isAuthenticated', true);
+
+  const handleAuthAction = () => {
+    if (isAuthenticated) {
+      setIsAuthenticated(false);
+      router.push('/auth');
+    } else {
+      router.push('/auth');
+    }
+  }
 
   const getBreadcrumb = () => {
     const segments = pathname.split('/').filter(Boolean);
@@ -119,8 +131,8 @@ export default function DashboardLayout({
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
                     <Input placeholder="Search" className="pl-10 w-64"/>
                 </div>
-                <Button variant="outline" asChild>
-                  <Link href="/auth">Connect Wallet</Link>
+                 <Button variant="outline" onClick={handleAuthAction}>
+                  {isAuthenticated ? 'Disconnect' : 'Connect Wallet'}
                 </Button>
                  <ThemeToggle />
                  <DropdownMenu>
@@ -135,9 +147,9 @@ export default function DashboardLayout({
                         <DropdownMenuItem>Settings</DropdownMenuItem>
                         <DropdownMenuItem>Support</DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleAuthAction}>
                             <LogOut className="mr-2 h-4 w-4"/>
-                            Log out
+                            {isAuthenticated ? 'Log out' : 'Log in'}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                  </DropdownMenu>
