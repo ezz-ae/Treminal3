@@ -37,6 +37,7 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { CodeBlock, dracula } from 'react-code-blocks';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const FormSchema = z.object({
   prompt: z.string().min(10, {
@@ -136,7 +137,7 @@ const CustomCodeBlock = ({ code, language = 'solidity' }: { code: string; langua
     }
 
     return (
-        <div className="relative group my-4 rounded-md overflow-hidden">
+        <div className="relative group my-4 rounded-md overflow-hidden bg-[#282a36]">
             <CodeBlock
                 text={code.trim()}
                 language={language}
@@ -149,7 +150,7 @@ const CustomCodeBlock = ({ code, language = 'solidity' }: { code: string; langua
                 className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                 onClick={handleCopy}
             >
-                <Copy className="w-4 h-4"/>
+                <Copy className="w-4 h-4 text-white"/>
             </Button>
         </div>
     )
@@ -261,7 +262,7 @@ export default function AiAgentsPage() {
     }
 
   return (
-    <div className="font-code bg-black text-white text-sm flex flex-col h-full rounded-md border border-gray-700">
+    <div className="font-code text-sm flex flex-col h-full rounded-md border bg-card">
         <div ref={terminalOutputRef} id="terminal-output" className="flex-grow overflow-y-auto p-4">
             <AnimatePresence>
             {lines.map((line, index) => (
@@ -272,96 +273,106 @@ export default function AiAgentsPage() {
                     transition={{ duration: 0.3 }}
                     className="flex gap-4"
                 >
-                    <span className="text-gray-500 w-6 text-right select-none">{index + 1}</span>
+                    <span className="text-muted-foreground w-6 text-right select-none">{index + 1}</span>
                     <div className="flex-1">
                         {line.type === 'prompt' && (
                             <div className="flex gap-2 items-start">
-                                <span className="text-blue-400 mt-2">&gt;</span>
-                                <span className="whitespace-pre-wrap">{line.text}</span>
+                                <span className="text-primary mt-2">&gt;</span>
+                                <span className="whitespace-pre-wrap text-primary font-medium">{line.text}</span>
                             </div>
                         )}
                         {line.type === 'guidance' && (
-                            <p className="text-green-400">{line.text}</p>
+                            <p className="text-foreground">{line.text}</p>
                         )}
                         {line.type === 'status' && (
-                            <p className="text-yellow-400 flex items-center gap-2">
+                            <p className="text-muted-foreground flex items-center gap-2">
                             <Loader2 className="w-4 h-4 animate-spin" />
                             {line.text}
                             </p>
                         )}
                         {line.type === 'output' && (
-                            <p className="text-red-400">{line.text}</p>
+                            <p className="text-destructive">{line.text}</p>
                         )}
                         {line.type === 'recommendation' && line.recommendation && (() => {
                             const LucideIcon = iconMap[line.recommendation.icon] || Puzzle;
                             const toolUrl = toolUrlMap[line.recommendation.name] || '/dashboard/ai-agents';
                             return (
                                 <>
-                                    <Link href={toolUrl} className="block group -ml-2">
-                                        <div className="border border-gray-700 rounded-md p-3 my-2 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-200">
-                                            <div className="flex items-center gap-3">
-                                                <LucideIcon className="w-5 h-5 text-green-400" />
-                                                <h3 className="font-bold text-base">{line.recommendation.name}</h3>
+                                    <Card className="my-2">
+                                        <CardHeader>
+                                            <Link href={toolUrl} className="block group">
+                                                <div className="flex items-center gap-3">
+                                                    <LucideIcon className="w-5 h-5 text-primary" />
+                                                    <h3 className="font-bold text-base">{line.recommendation.name}</h3>
+                                                </div>
+                                                <p className="mt-1 ml-8 text-muted-foreground text-sm">{line.recommendation.description}</p>
+                                            </Link>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="ml-8 mt-2 pl-4 border-l">
+                                                <p className="text-foreground font-bold mb-1">Recommended Flow:</p>
+                                                <ul className="space-y-1">
+                                                    {line.recommendation.flow.map((step, i) => (
+                                                        <li key={i} className="text-muted-foreground text-xs flex items-start">
+                                                            <span className="mr-2">&rarr;</span>
+                                                            <span>{step}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             </div>
-                                            <p className="mt-1 ml-8 text-gray-400">{line.recommendation.description}</p>
-                                        </div>
-                                    </Link>
-                                    <div className="ml-8 mt-2 pl-4 border-l-2 border-gray-700">
-                                        <p className="text-purple-400 font-bold mb-1">Recommended Flow:</p>
-                                        <ul className="space-y-1">
-                                            {line.recommendation.flow.map((step, i) => (
-                                                <li key={i} className="text-gray-400 flex items-start">
-                                                    <span className="mr-2">&rarr;</span>
-                                                    <span>{step}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
+                                        </CardContent>
+                                    </Card>
                                 </>
                             )
                         })()}
                         {line.type === 'plan' && line.plan && (
-                            <div className="border border-gray-700 rounded-md p-4 my-2 bg-gray-900/50">
-                                <h3 className="font-bold text-base text-purple-400">{line.plan.name}</h3>
-                                <p className="text-gray-400 italic mb-4">{line.plan.description}</p>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <AppWindow className="w-4 h-4 text-green-400"/>
-                                            <h4 className="font-bold text-green-400">UI Components</h4>
+                            <Card className="my-2">
+                                <CardHeader>
+                                    <CardTitle className="text-primary">{line.plan.name}</CardTitle>
+                                    <p className="text-muted-foreground text-sm italic">{line.plan.description}</p>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <AppWindow className="w-4 h-4 text-primary"/>
+                                                <h4 className="font-bold">UI Components</h4>
+                                            </div>
+                                            <ul className="space-y-1 list-disc list-inside text-muted-foreground text-sm">
+                                                {line.plan.components.map((item, i) => <li key={i}>{item}</li>)}
+                                            </ul>
                                         </div>
-                                        <ul className="space-y-1 list-disc list-inside text-gray-400">
-                                            {line.plan.components.map((item, i) => <li key={i}>{item}</li>)}
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <FileJson className="w-4 h-4 text-green-400"/>
-                                            <h4 className="font-bold text-green-400">Smart Contracts</h4>
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <FileJson className="w-4 h-4 text-primary"/>
+                                                <h4 className="font-bold">Smart Contracts</h4>
+                                            </div>
+                                            <ul className="space-y-1 list-disc list-inside text-muted-foreground text-sm">
+                                                {line.plan.contracts.map((item, i) => <li key={i}>{item}</li>)}
+                                            </ul>
                                         </div>
-                                        <ul className="space-y-1 list-disc list-inside text-gray-400">
-                                            {line.plan.contracts.map((item, i) => <li key={i}>{item}</li>)}
-                                        </ul>
                                     </div>
-                                </div>
-                            </div>
+                                </CardContent>
+                            </Card>
                         )}
                         {line.type === 'code' && line.code && (
-                            <div className="border border-gray-700 rounded-md my-2 bg-gray-900/50">
-                                <div className="p-4 border-b border-gray-700">
-                                     <h3 className="font-bold text-base text-purple-400">{line.code.name} ({line.code.symbol})</h3>
-                                    <p className="text-gray-400 text-xs">Total Supply: {line.code.supply.toLocaleString()}</p>
-                                </div>
-                                <div className="p-4">
+                             <Card className="my-2">
+                                <CardHeader>
+                                     <CardTitle className="text-primary">{line.code.name} ({line.code.symbol})</CardTitle>
+                                    <p className="text-muted-foreground text-xs">Total Supply: {line.code.supply.toLocaleString()}</p>
+                                </CardHeader>
+                                <CardContent>
                                     <CustomCodeBlock code={line.code.solidityCode} />
-                                </div>
-                            </div>
+                                </CardContent>
+                            </Card>
                         )}
                         {line.type === 'audit' && line.audit && (
-                            <div className="border border-gray-700 rounded-md p-4 my-2 bg-gray-900/50">
-                                <h3 className="font-bold text-base text-purple-400 mb-2 flex items-center gap-2"><ShieldCheck className="w-5 h-5"/> Security Audit Report</h3>
-                                <p className="text-gray-400 italic mb-4">{line.audit.summary}</p>
+                           <Card className="my-2">
+                               <CardHeader>
+                                <CardTitle className="text-primary mb-2 flex items-center gap-2"><ShieldCheck className="w-5 h-5"/> Security Audit Report</CardTitle>
+                                <p className="text-muted-foreground text-sm italic">{line.audit.summary}</p>
+                               </CardHeader>
+                               <CardContent>
                                 <div className="space-y-4">
                                     {line.audit.vulnerabilities.length > 0 ? line.audit.vulnerabilities.map((vuln, i) => (
                                         <div key={i} className={cn("border rounded-md p-3", severityConfig[vuln.severity])}>
@@ -379,50 +390,66 @@ export default function AiAgentsPage() {
                                         </div>
                                     )}
                                 </div>
-                            </div>
+                               </CardContent>
+                            </Card>
                         )}
                         {line.type === 'dao' && line.dao && (
-                            <div className="border border-gray-700 rounded-md p-4 my-2 bg-gray-900/50">
-                                <h3 className="font-bold text-base text-purple-400">{line.dao.name}</h3>
-                                <p className="text-gray-400 italic mb-4">{line.dao.description}</p>
-                                
-                                <div className="space-y-6">
-                                    <div className="p-4 rounded-md bg-gray-900 border border-gray-700">
-                                        <h4 className="font-bold text-green-400 mb-2 flex items-center gap-2"><BrainCircuit className="w-5 h-5"/>Governance Model</h4>
-                                        <p className="font-semibold text-gray-300">{line.dao.governanceModel.name}</p>
-                                        <p className="text-gray-400 text-sm mt-1">{line.dao.governanceModel.description}</p>
+                            <Card className="my-2">
+                                <CardHeader>
+                                    <CardTitle className="text-primary">{line.dao.name}</CardTitle>
+                                    <p className="text-muted-foreground text-sm italic">{line.dao.description}</p>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-6">
+                                        <Card>
+                                            <CardHeader>
+                                                <CardTitle className="text-base font-bold flex items-center gap-2"><BrainCircuit className="w-5 h-5 text-primary"/>Governance Model</CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <p className="font-semibold text-foreground">{line.dao.governanceModel.name}</p>
+                                                <p className="text-muted-foreground text-sm mt-1">{line.dao.governanceModel.description}</p>
+                                            </CardContent>
+                                        </Card>
+                                        <Card>
+                                            <CardHeader>
+                                                <CardTitle className="text-base font-bold flex items-center gap-2"><FileText className="w-5 h-5 text-primary"/>Tokenomics</CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <p className="font-semibold text-foreground">{line.dao.tokenomics.tokenName} ({line.dao.tokenomics.tokenSymbol})</p>
+                                                <p className="text-muted-foreground text-sm mt-1">{line.dao.tokenomics.initialDistribution}</p>
+                                            </CardContent>
+                                        </Card>
+                                        <Card>
+                                            <CardHeader>
+                                                <CardTitle className="text-base font-bold flex items-center gap-2"><Vote className="w-5 h-5 text-primary"/>Operational Plan</CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <ul className="space-y-2">
+                                                    {line.dao.operationalPlan.map((step, i) => (
+                                                        <li key={i} className="text-muted-foreground flex items-start text-sm">
+                                                            <span className="mr-2 mt-1 text-primary">&rarr;</span>
+                                                            <span>{step}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </CardContent>
+                                        </Card>
                                     </div>
-                                    <div className="p-4 rounded-md bg-gray-900 border border-gray-700">
-                                        <h4 className="font-bold text-green-400 mb-2 flex items-center gap-2"><FileText className="w-5 h-5"/>Tokenomics</h4>
-                                        <p className="font-semibold text-gray-300">{line.dao.tokenomics.tokenName} ({line.dao.tokenomics.tokenSymbol})</p>
-                                        <p className="text-gray-400 text-sm mt-1">{line.dao.tokenomics.initialDistribution}</p>
-                                    </div>
-                                    <div className="p-4 rounded-md bg-gray-900 border border-gray-700">
-                                        <h4 className="font-bold text-green-400 mb-2 flex items-center gap-2"><Vote className="w-5 h-5"/>Operational Plan</h4>
-                                        <ul className="space-y-2 mt-2">
-                                            {line.dao.operationalPlan.map((step, i) => (
-                                                <li key={i} className="text-gray-400 flex items-start text-sm">
-                                                    <span className="mr-2 mt-1 text-green-400">&rarr;</span>
-                                                    <span>{step}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                                </CardContent>
+                            </Card>
                         )}
                     </div>
                 </motion.div>
             ))}
             </AnimatePresence>
         </div>
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-4 border-t">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="flex gap-4 items-start">
-                        <span className="text-gray-500 w-6 text-right select-none mt-2">{lines.length + 1}</span>
+                        <span className="text-muted-foreground w-6 text-right select-none mt-2">{lines.length + 1}</span>
                         <div className="flex-1 flex gap-2 items-start">
-                            <span className="text-blue-400 mt-2">&gt;</span>
+                            <span className="text-primary mt-2">&gt;</span>
                             <FormField
                                 control={form.control}
                                 name="prompt"
@@ -433,7 +460,7 @@ export default function AiAgentsPage() {
                                                 {...field}
                                                 ref={inputRef}
                                                 placeholder="e.g., 'Audit this contract for reentrancy...' or 'Design a DAO for a collective of artists...'"
-                                                className="bg-transparent border-0 text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-500 w-full p-0 h-auto resize-none"
+                                                className="bg-transparent border-0 ring-offset-card focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-muted-foreground w-full p-0 h-auto resize-none"
                                                 autoComplete="off"
                                                 disabled={isLoading}
                                                 rows={1}
