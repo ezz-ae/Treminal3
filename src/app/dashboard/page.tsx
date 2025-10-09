@@ -7,24 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
   ArrowRight,
-  Code2,
-  ShieldCheck,
-  Vote,
-  Sprout,
-  Wrench,
-  BookOpen,
-  Download,
-  Terminal,
   Info,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -33,10 +16,7 @@ import React from 'react';
 import { GuideDialog } from '@/components/dashboard/guide-dialog';
 import { articles, type Article } from '@/lib/articles';
 import { Button } from '@/components/ui/button';
-
-const iconMap: Record<string, React.ElementType> = {
-    AppWindow, Bot, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, Code2, ShieldCheck, Vote, Sprout, Wrench, BookOpen, Download, Terminal,
-};
+import { iconMap } from '@/lib/icon-map';
 
 const allServices = [
       {

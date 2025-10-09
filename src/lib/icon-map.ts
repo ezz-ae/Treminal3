@@ -1,0 +1,43 @@
+
+import {
+    AppWindow,
+    Bot,
+    Puzzle,
+    Wallet,
+    FileJson,
+    Network,
+    BotMessageSquare,
+    AreaChart,
+    FileArchive,
+    ShieldCheck,
+    Vote,
+    Sprout,
+    Wrench,
+    BookOpen,
+    Download,
+    Terminal,
+    Code2,
+    Newspaper,
+  } from 'lucide-react';
+  import type { LucideIcon } from 'lucide-react';
+
+  export const iconMap: Record<string, LucideIcon> = {
+    AppWindow,
+    Bot,
+    Puzzle,
+    Wallet,
+    FileJson,
+    Network,
+    BotMessageSquare,
+    AreaChart,
+    FileArchive,
+    ShieldCheck,
+    Vote,
+    Sprout,
+    Wrench,
+    BookOpen,
+    Download,
+    Terminal,
+    Code2,
+    Newspaper,
+  };

@@ -2,25 +2,9 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { getArticles, type Article } from '@/lib/articles.server';
-import { ArrowRight, Newspaper, BookOpen } from 'lucide-react';
+import { ArrowRight, Newspaper } from 'lucide-react';
 import * as React from 'react';
-import {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
-} from 'lucide-react';
-
-const iconMap: Record<string, React.ElementType> = {
-    AppWindow, Bot, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, ShieldCheck, Vote, BookOpen
-};
+import { iconMap } from '@/lib/icon-map';
 
 export const metadata = {
   title: 'Blog | Terminal3',
@@ -28,7 +12,7 @@ export const metadata = {
 };
 
 const ArticleCard = ({ article, isFeatured = false }: { article: Article, isFeatured?: boolean }) => {
-    const LucideIcon = iconMap[article.icon] || BookOpen;
+    const LucideIcon = iconMap[article.icon] || iconMap['BookOpen'];
     return (
         <Link href={`/blog/${article.slug}`} className="block group">
             <Card className="h-full bg-card/50 hover:border-primary/50 transition-colors duration-300 flex flex-col">

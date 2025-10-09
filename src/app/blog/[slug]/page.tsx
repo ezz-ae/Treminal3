@@ -2,28 +2,12 @@
 import { getArticles, getArticleBySlug } from '@/lib/articles.server';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Calendar, Tag, BookOpen } from 'lucide-react';
+import { Calendar, Tag } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Metadata } from 'next';
 import * as React from 'react';
-import {
-    AppWindow,
-    Bot,
-    Puzzle,
-    Wallet,
-    FileJson,
-    Network,
-    BotMessageSquare,
-    AreaChart,
-    FileArchive,
-    ShieldCheck,
-    Vote,
-  } from 'lucide-react';
+import { iconMap } from '@/lib/icon-map';
   
-const iconMap: Record<string, React.ElementType> = {
-    AppWindow, Bot, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, ShieldCheck, Vote, BookOpen
-};
-
 type Props = {
   params: { slug: string };
 };
@@ -74,7 +58,7 @@ export default function ArticlePage({ params }: Props) {
     },
   };
 
-  const LucideIcon = iconMap[article.icon] || BookOpen;
+  const LucideIcon = iconMap[article.icon] || iconMap['BookOpen'];
 
   return (
     <div className="max-w-4xl mx-auto py-8">

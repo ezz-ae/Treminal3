@@ -12,28 +12,13 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-import { addNoteAction } from '@/app/actions';
+import { addNote } from '@/lib/notes';
 import type { Article } from '@/lib/articles';
-import { BookOpen, BookPlus } from 'lucide-react';
+import { BookPlus } from 'lucide-react';
 import * as React from 'react';
+import { iconMap } from '@/lib/icon-map';
+import { useUser } from '@/hooks/use-user';
 
-import {
-  AppWindow,
-  Bot,
-  Puzzle,
-  Wallet,
-  FileJson,
-  Network,
-  BotMessageSquare,
-  AreaChart,
-  FileArchive,
-  ShieldCheck,
-  Vote,
-} from 'lucide-react';
-
-const iconMap: Record<string, React.ElementType> = {
-    AppWindow, Bot, Puzzle, Wallet, FileJson, Network, BotMessageSquare, AreaChart, FileArchive, ShieldCheck, Vote, BookOpen
-};
 
 interface GuideDialogProps {
   article: Article | null;
@@ -43,20 +28,31 @@ interface GuideDialogProps {
 
 export function GuideDialog({ article, isOpen, onOpenChange }: GuideDialogProps) {
   const { toast } = useToast();
+  const { user } = useUser();
 
   if (!article) {
     return null;
   }
 
   const handleAddNote = async () => {
+    if (!user) {
+        toast({
+            variant: 'destructive',
+            title: 'Authentication Required',
+            description: 'You must be logged in to save notes.',
+        });
+        return;
+    }
     try {
-      await addNoteAction({
+      await addNote({
+        userId: user.uid,
         title: article.title,
         content: article.excerpt,
       });
       toast({
         title: 'Note Saved!',
         description: `"${article.title}" has been added to your notes.`,
+        action: <Button asChild variant="secondary"><Link href="/dashboard/notes">View Notes</Link></Button>
       });
     } catch (error) {
       toast({
@@ -67,7 +63,7 @@ export function GuideDialog({ article, isOpen, onOpenChange }: GuideDialogProps)
     }
   };
   
-  const LucideIcon = iconMap[article.icon] || BookOpen;
+  const LucideIcon = iconMap[article.icon] || iconMap['BookOpen'];
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>

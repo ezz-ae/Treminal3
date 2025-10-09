@@ -12,7 +12,6 @@ import type { TokenLauncherInput, TokenLauncherOutput } from '@/ai/schemas/token
 import type { BusinessToolRecommendationInput, BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
 import type { SecurityAuditInput, SecurityAuditOutput } from '@/ai/schemas/security-audit';
 import type { DaoGovernanceInput, DaoGovernanceOutput } from '@/ai/schemas/dao-governance';
-import { addNote, type Note } from '@/lib/notes';
 
 
 export async function generateDapp(input: DappBuilderInput): Promise<DappBuilderOutput> {
@@ -38,8 +37,4 @@ export async function runSecurityAudit(input: SecurityAuditInput): Promise<Secur
 export async function generateDaoPlan(input: DaoGovernanceInput): Promise<DaoGovernanceOutput> {
     const result = await genDao(input);
     return result;
-}
-
-export async function addNoteAction(note: Omit<Note, 'slug'>): Promise<Note> {
-    return addNote(note);
 }

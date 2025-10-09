@@ -1,58 +1,28 @@
-import fs from 'fs';
-import path from 'path';
 
-// This is a placeholder in-memory store. In a real application, you'd use a database.
-// To make it persist across server restarts in this prototype, we'll use a JSON file.
+'use server';
 
-const notesFilePath = path.join(process.cwd(), 'src/lib/notes.json');
+import { firestore } from '@/firebase/server';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export type Note = {
   title: string;
   content: string;
-  slug: string;
+  userId: string;
 };
 
-function readNotes(): Note[] {
+export async function addNote(note: Note): Promise<void> {
+  if (!note.userId) {
+    throw new Error('User must be authenticated to add a note.');
+  }
+
   try {
-    if (fs.existsSync(notesFilePath)) {
-      const fileContent = fs.readFileSync(notesFilePath, 'utf-8');
-      return JSON.parse(fileContent);
-    }
+    await addDoc(collection(firestore, 'notes'), {
+      ...note,
+      createdAt: serverTimestamp(),
+      slug: note.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''),
+    });
   } catch (error) {
-    console.error("Error reading notes file:", error);
+    console.error("Error writing to Firestore:", error);
+    throw new Error("Failed to save note.");
   }
-  return [];
-}
-
-function writeNotes(notes: Note[]): void {
-  try {
-    fs.writeFileSync(notesFilePath, JSON.stringify(notes, null, 2));
-  } catch (error) {
-     console.error("Error writing notes file:", error);
-  }
-}
-
-// Initialize file if it doesn't exist
-if (!fs.existsSync(notesFilePath)) {
-    writeNotes([]);
-}
-
-
-export function getNotes(): Note[] {
-  return readNotes();
-}
-
-export function addNote(note: Omit<Note, 'slug'>): Note {
-  const notes = readNotes();
-  const slug = note.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
-  const newNote: Note = { ...note, slug };
-  
-  // Avoid duplicates
-  if (notes.some(n => n.slug === newNote.slug)) {
-    return notes.find(n => n.slug === newNote.slug)!;
-  }
-
-  const updatedNotes = [...notes, newNote];
-  writeNotes(updatedNotes);
-  return newNote;
 }
