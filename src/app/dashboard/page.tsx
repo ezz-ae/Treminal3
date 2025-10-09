@@ -23,7 +23,9 @@ import {
   Building,
   Sprout,
   Image as ImageIcon,
-  Activity
+  Activity,
+  ShieldCheck,
+  Vote
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -50,6 +52,13 @@ const serviceCategories = [
         description:
           'Use our audited templates to create secure smart contracts without the hassle.',
         chains: ["Ethereum", "Polygon", "Arbitrum"],
+      },
+       {
+        href: '/dashboard/ai-agents',
+        icon: ShieldCheck,
+        title: 'Security Audits',
+        description: 'Automatically audit your smart contracts for vulnerabilities.',
+        chains: ["Solidity", "Vyper"],
       },
     ]
   },
@@ -124,6 +133,26 @@ const serviceCategories = [
       },
     ]
   },
+    {
+    category: "Governance & Community",
+    description: "Tools to manage and grow your decentralized organization.",
+    services: [
+      {
+        href: '/dashboard/ai-agents',
+        icon: Vote,
+        title: 'DAO Governance',
+        description: 'Manage your decentralized autonomous organization with ease.',
+        chains: ["Snapshot", "Aragon"],
+      },
+      {
+        href: '/dashboard/ai-agents',
+        icon: Network,
+        title: 'Manual Transactions',
+        description: 'Interact directly with the blockchain for custom operations.',
+        chains: ["All EVM", "Solana"],
+      },
+    ]
+  }
 ]
 
 
@@ -131,8 +160,8 @@ export default function DashboardPage() {
   return (
     <div>
        <div className="mb-8">
-        <h1 className="text-3xl font-bold font-headline">Portfolio</h1>
-        <p className="text-muted-foreground">Welcome back! Here's a summary of your on-chain assets.</p>
+        <h1 className="text-3xl font-bold font-headline">Dashboard</h1>
+        <p className="text-muted-foreground">Welcome back! Here's a summary of your on-chain assets and available services.</p>
       </div>
 
        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-12">

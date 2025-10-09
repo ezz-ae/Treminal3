@@ -104,7 +104,7 @@ export default function Footer() {
         
         <div className="mt-8 pt-8 border-t flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-                &copy; {new Date().getFullYear()} Terminal3, Inc. Part of <a href="https://mtc-agency.com" target="_blank" rel="noopener noreferrer" className="text-primary/80 hover:underline">mtc.</a>
+                &copy; {new Date().getFullYear()} Terminal3, Inc. All rights reserved.
             </p>
             <div className="flex items-center space-x-4">
                 {socialLinks.map((social, index) => (

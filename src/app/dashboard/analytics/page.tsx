@@ -1,7 +1,7 @@
 
 'use client';
 
-import { BarChart as BarChartIcon, Wallet, Activity, CreditCard } from 'lucide-react';
+import { BarChart as BarChartIcon, Wallet, Activity, CreditCard, AreaChart } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -158,8 +158,8 @@ export default function AnalyticsPage() {
                     content={<ChartTooltipContent hideLabel />}
                   />
                   <Pie data={pieChartData} dataKey="value" nameKey="name" innerRadius={60} outerRadius={100}>
-                     {pieChartData.map((entry) => (
-                        <Cell key={entry.name} fill={entry.color} />
+                     {pieChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
                      ))}
                   </Pie>
                   <ChartLegend
@@ -174,3 +174,5 @@ export default function AnalyticsPage() {
     </div>
   );
 }
+
+    

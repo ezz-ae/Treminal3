@@ -32,8 +32,9 @@ import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const menuItems = [
-    { href: '/dashboard', label: 'Portfolio', icon: LayoutGrid },
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
     { href: '/dashboard/ai-agents', label: 'AI Command Center', icon: Terminal },
+    { href: '/dashboard/analytics', label: 'Analytics', icon: AreaChart },
     { href: '/dashboard/docs', label: 'Documentation', icon: BookOpen },
     { href: '/dashboard/stake', label: 'Stake', icon: Sprout },
     { href: '/dashboard/tools', label: 'Tools', icon: Wrench },
@@ -147,3 +148,5 @@ export default function DashboardLayout({
     </SidebarProvider>
   );
 }
+
+    

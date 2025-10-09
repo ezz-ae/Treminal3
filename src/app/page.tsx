@@ -13,29 +13,6 @@ import InteractiveGuides from '@/components/landing/interactive-guides';
 import Footer from '@/components/layout/footer';
 import GridPattern from '@/components/landing/grid-pattern';
 
-function useBoundedScroll(threshold: number): MotionValue<number> {
-  const { scrollY } = useScroll();
-  const scrollYBounded = new MotionValue(0);
-  const scrollYBoundedProgress = new MotionValue(0);
-
-  useEffect(() => {
-    return scrollY.on('change', (current) => {
-      const diff = current - scrollY.getPrevious()!;
-      const newScrollYBounded = scrollYBounded.get() + diff;
-      scrollYBounded.set(Math.max(0, Math.min(newScrollYBounded, threshold)));
-    });
-  }, [scrollY, threshold, scrollYBounded]);
-
-  useEffect(() => {
-    return scrollYBounded.on('change', (current) => {
-      const newProgress = current / threshold;
-      scrollYBoundedProgress.set(newProgress);
-    });
-  }, [scrollYBounded, threshold, scrollYBoundedProgress]);
-
-  return scrollYBoundedProgress;
-}
-
 export default function Home() {
   const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(0);
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -78,3 +55,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
