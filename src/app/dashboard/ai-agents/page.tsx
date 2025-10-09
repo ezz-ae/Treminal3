@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -262,8 +261,8 @@ export default function AiAgentsPage() {
     }
 
   return (
-    <div className="font-code text-sm flex flex-col h-full rounded-md border bg-card">
-        <div ref={terminalOutputRef} id="terminal-output" className="flex-grow overflow-y-auto p-4">
+    <div className="font-code text-sm grid grid-rows-[1fr_auto] min-h-[calc(100vh-113px)] rounded-md border bg-card -m-6">
+        <div ref={terminalOutputRef} id="terminal-output" className="overflow-y-auto p-4">
             <AnimatePresence>
             {lines.map((line, index) => (
                 <motion.div 
