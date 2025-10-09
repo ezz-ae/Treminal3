@@ -1,4 +1,4 @@
-import { getArticles, getArticleBySlug } from '@/lib/articles';
+import { getArticles, getArticleBySlug } from '@/lib/articles.server';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Calendar, Tag } from 'lucide-react';
@@ -77,5 +77,3 @@ export default function ArticlePage({ params }: Props) {
     </>
   );
 }
-
-    

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { getArticles, type Article } from '@/lib/articles';
+import { getArticles, type Article } from '@/lib/articles.server';
 import { ArrowRight, Newspaper } from 'lucide-react';
 
 export const metadata = {
