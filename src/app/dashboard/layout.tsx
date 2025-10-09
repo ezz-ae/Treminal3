@@ -24,7 +24,6 @@ import {
   Download,
   Terminal,
   BookOpen,
-  Newspaper,
   AreaChart,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -40,7 +39,6 @@ const menuItems = [
     { href: '/dashboard/ai-agents', label: 'AI Command Center', icon: Terminal },
     { href: '/dashboard/analytics', label: 'Analytics', icon: AreaChart },
     { href: '/dashboard/docs', label: 'Documentation', icon: BookOpen },
-    { href: '/blog', label: 'Blog', icon: Newspaper },
     { href: '/dashboard/stake', label: 'Stake', icon: Sprout },
     { href: '/dashboard/tools', label: 'Tools', icon: Wrench },
     { href: '/dashboard/download', label: 'Download', icon: Download },
