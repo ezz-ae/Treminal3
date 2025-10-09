@@ -10,15 +10,20 @@ const serviceLinks = [
     { href: '/dashboard/dao-governance', label: 'DAO Governance' },
     { href: '/dashboard/analytics', label: 'On-chain Analytics' },
     { href: '/dashboard/stake', label: 'Staking' },
-    { href: '/dashboard/tools', label: 'Developer Tools' },
-    { href: '/dashboard/docs/apis', label: 'Universal RPC' },
 ];
 
 const resourceLinks = [
     { href: '/dashboard/docs', label: 'Documentation' },
     { href: '/#start', label: 'Interactive Guides' },
     { href: '/blog', label: 'Blog' },
+    { href: '/dashboard/docs/apis', label: 'Universal RPC' },
 ];
+
+const companyLinks = [
+    { href: '#', label: 'About Us' },
+    { href: '#', label: 'Careers' },
+    { href: '#', label: 'Contact' },
+]
 
 const socialLinks = [
   { icon: Twitter, href: '#', 'aria-label': 'Twitter' },
@@ -39,7 +44,7 @@ export default function Footer() {
         ></div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
             <div className="col-span-2 md:col-span-2">
                 <Link href="/" className="flex items-center space-x-2 mb-4">
                   <Terminal className="h-6 w-6 text-primary" />
@@ -70,6 +75,18 @@ export default function Footer() {
                 <h4 className="font-headline font-semibold mb-4">Resources</h4>
                 <ul className="space-y-2">
                     {resourceLinks.map((link) => (
+                        <li key={link.label}>
+                            <Link href={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                                {link.label}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+             <div>
+                <h4 className="font-headline font-semibold mb-4">Company</h4>
+                <ul className="space-y-2">
+                    {companyLinks.map((link) => (
                         <li key={link.label}>
                             <Link href={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                                 {link.label}
