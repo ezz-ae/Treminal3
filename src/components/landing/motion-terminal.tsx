@@ -201,9 +201,8 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
   const currentTitle = serviceTitles[scriptKey] || serviceTitles['default'];
 
   return (
-    <div
-        className="container mx-auto px-4 py-24 flex items-center justify-center min-h-[80vh]"
-      >
+    <section className="py-12 md:py-24">
+      <div className="container mx-auto px-4 flex items-center justify-center">
         <motion.div 
             className="relative font-code text-sm rounded-lg bg-black/80 shadow-2xl shadow-primary/20 backdrop-blur-sm pointer-events-auto w-full max-w-5xl"
             style={{ opacity, scale }}
@@ -214,7 +213,7 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
           <motion.div className="absolute bottom-0 right-0 w-full h-px bg-primary origin-right" style={{ scaleX: bottomBorderScaleX }}/>
           <motion.div className="absolute top-0 left-0 w-px h-full bg-primary origin-bottom" style={{ scaleY: leftBorderScaleY }} />
 
-          <div className="min-h-[60vh] max-h-[700px] flex flex-col rounded-md">
+          <div className="flex flex-col rounded-md">
             <div className="flex items-center justify-between p-3 border-b border-white/10">
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -224,7 +223,7 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
                 <p className="text-white/50 text-xs font-semibold">{currentTitle}</p>
                  <div className="w-16"></div> {/* Spacer */}
             </div>
-            <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto">
+            <div ref={terminalRef} className="flex-grow p-4 overflow-y-auto h-[450px]">
               {lines.filter(Boolean).map((line, index) => (
                 <div key={index} className="flex items-start">
                   {line.type === 'command' && <span className="text-blue-400 mr-2 shrink-0">$</span>}
@@ -257,6 +256,7 @@ export default function MotionTerminal({ activeServiceIndex, scrollYProgress }: 
           </div>
         </motion.div>
       </div>
+    </section>
   );
 }
 
