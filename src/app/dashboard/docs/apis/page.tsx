@@ -1,8 +1,7 @@
-
 'use client';
 import { CustomCodeBlock } from '@/components/ui/code-block';
 import { Button } from '@/components/ui/button';
-import { Copy } from 'lucide-react';
+import { Copy, Puzzle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function ApisPage() {
@@ -33,10 +32,17 @@ console.log(blockNumber);
   return (
     <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
         <header className="mb-12">
-            <h1 className="text-5xl font-bold">APIs & Integration</h1>
-            <p className="text-xl text-muted-foreground mt-4">
-                Full reference documentation for all our developer APIs, including examples and use cases for our Universal RPC.
-            </p>
+            <div className="flex items-center gap-4 mb-4">
+                <div className="p-4 bg-primary/10 rounded-lg text-primary">
+                    <Puzzle className="w-8 h-8" />
+                </div>
+                <div>
+                    <h1 className="text-5xl font-bold !mb-0">APIs & Integration</h1>
+                    <p className="text-xl text-muted-foreground mt-2">
+                        Full reference documentation for all our developer APIs, including examples and use cases for our Universal RPC.
+                    </p>
+                </div>
+            </div>
         </header>
 
         <section>

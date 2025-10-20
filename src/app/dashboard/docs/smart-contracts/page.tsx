@@ -1,4 +1,3 @@
-
 'use client';
 import { FileJson, ShieldCheck, Zap } from 'lucide-react';
 import Link from 'next/link';
@@ -40,10 +39,17 @@ export default function SmartContractsPage() {
   return (
     <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
         <header className="mb-12">
-            <h1 className="text-5xl font-bold">Smart Contract Templates</h1>
-            <p className="text-xl text-muted-foreground mt-4">
-                Explore our library of audited smart contract templates and learn how to customize them securely with the help of AI.
-            </p>
+             <div className="flex items-center gap-4 mb-4">
+                <div className="p-4 bg-primary/10 rounded-lg text-primary">
+                    <FileJson className="w-8 h-8" />
+                </div>
+                <div>
+                    <h1 className="text-5xl font-bold !mb-0">Smart Contract Templates</h1>
+                    <p className="text-xl text-muted-foreground mt-2">
+                        Explore our library of audited smart contract templates and learn how to customize them securely with the help of AI.
+                    </p>
+                </div>
+            </div>
         </header>
 
         <section className="mb-12">
