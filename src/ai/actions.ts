@@ -3,10 +3,12 @@
 
 import { runSecurityAudit as runAudit } from '@/ai/flows/security-audit';
 import { generateTradingBot as genTradingBot, runTradingBotSimulation as runSim} from '@/ai/flows/trading-bot';
+import { runSolanaTool as runSolTool } from '@/ai/flows/solana-tool';
 
 
 import type { SecurityAuditInput, SecurityAuditOutput } from '@/ai/schemas/security-audit';
 import type { TradingBotInput, TradingBotOutput, TradingBotSimulationOutput } from '@/ai/schemas/trading-bot';
+import type { SolanaToolInput, SolanaToolOutput } from '@/ai/schemas/solana-tool';
 
 
 export async function runSecurityAudit(input: SecurityAuditInput): Promise<SecurityAuditOutput> {
@@ -21,5 +23,10 @@ export async function generateTradingBot(input: TradingBotInput): Promise<Tradin
 
 export async function runTradingBotSimulation(input: TradingBotInput): Promise<TradingBotSimulationOutput> {
     const result = await runSim(input);
+    return result;
+}
+
+export async function runSolanaTool(input: SolanaToolInput): Promise<SolanaToolOutput> {
+    const result = await runSolTool(input);
     return result;
 }

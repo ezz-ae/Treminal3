@@ -21,6 +21,7 @@ import {
     Check,
     BrainCircuit,
     SlidersHorizontal,
+    Wind,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -46,4 +47,5 @@ import {
     Check,
     BrainCircuit,
     SlidersHorizontal,
+    Wind,
   };
