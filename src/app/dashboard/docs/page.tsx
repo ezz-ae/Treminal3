@@ -23,6 +23,7 @@ import {
   FileArchive,
   Vote,
   Newspaper,
+  Wind,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -38,6 +39,12 @@ const docSections = [
     title: 'Blog & Guides',
     description: 'Explore our comprehensive library of articles, tutorials, and guides for building in Web3.',
     href: '/blog'
+  },
+  {
+    icon: Wind,
+    title: 'Solana Hub',
+    description: 'A deep-dive into our high-performance infrastructure and AI tools for Solana development.',
+    href: '/dashboard/solana'
   },
   {
     icon: Puzzle,
@@ -99,3 +106,5 @@ export default function DocsPage() {
     </div>
   )
 }
+
+    
