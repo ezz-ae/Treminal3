@@ -27,6 +27,7 @@ import {
     Plus,
     X,
     Gem,
+    Library,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -62,4 +63,5 @@ import {
     Plus,
     X,
     Gem,
+    Library,
   };

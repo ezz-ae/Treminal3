@@ -19,6 +19,7 @@ import {
   Wind,
   Gem,
   Vote,
+  Library,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -39,6 +40,7 @@ import {
 const menuItems = [
     { href: "/dashboard", label: "Home", icon: AppWindow },
     { type: 'separator', label: 'AI Tools' },
+    { href: "/dashboard/strategy-vault", label: "Strategy Vault", icon: Library },
     { href: "/dashboard/dapp-builder", label: "AI Business Architect", icon: Bot },
     { href: "/dashboard/token-launcher", label: "Token Launcher", icon: Gem },
     { href: "/dashboard/bot-creator", label: "Bot Creator", icon: BrainCircuit },

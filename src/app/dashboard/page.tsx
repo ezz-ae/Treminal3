@@ -13,7 +13,8 @@ import {
   ShieldCheck,
   BookOpen,
   BrainCircuit,
-  Wind
+  Wind,
+  Library,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -25,6 +26,7 @@ import Link from 'next/link';
 export default function DashboardPage() {
 
     const services = [
+        { href: "/dashboard/strategy-vault", title: "Strategy Vault", description: "Browse and execute pre-built investment flows.", icon: Library },
         { href: "/dashboard/dapp-builder", title: "AI Business Architect", description: "Get a strategic plan for your dApp.", icon: AppWindow },
         { href: "/dashboard/token-launcher", title: "Token Launcher", description: "Generate custom ERC-20 tokens with AI.", icon: Gem },
         { href: "/dashboard/bot-creator", title: "Bot Creator", description: "Design, simulate, and deploy trading bots.", icon: BrainCircuit },
