@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Bot, Wand2, ArrowLeft, ArrowRight, Check, ChevronsRight } from 'lucide-react';
+import { Loader2, Bot, Wand2, ArrowLeft, ArrowRight, Check, ChevronsRight, Plus, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { recommendBusinessTools } from '@/ai/actions';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
@@ -36,6 +36,11 @@ const steps = [
     { id: 'review', title: 'Review & Generate' },
 ]
 
+/**
+ * A multi-step form that guides the user through creating a business profile
+ * to receive AI-powered tool recommendations.
+ * @returns {JSX.Element} The AI Business Architect page component.
+ */
 export default function DappBuilderPage() {
     const [recommendations, setRecommendations] = useState<BusinessToolRecommendationOutput | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +59,10 @@ export default function DappBuilderPage() {
         name: "goals"
     });
     
+    /**
+     * Submits the form data to the AI to get tool recommendations.
+     * @param {z.infer<typeof FormSchema>} data The validated form data.
+     */
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         setIsLoading(true);
         setRecommendations(null);
@@ -73,6 +82,9 @@ export default function DappBuilderPage() {
 
     type FieldName = keyof z.infer<typeof FormSchema>;
 
+    /**
+     * Moves to the next step in the form after validating the current step.
+     */
     const next = async () => {
         const fields = steps[currentStep].fields as FieldName[];
         const output = await form.trigger(fields, { shouldFocus: true });
@@ -84,6 +96,9 @@ export default function DappBuilderPage() {
         }
     }
 
+    /**
+     * Moves to the previous step in the form.
+     */
     const prev = () => {
         if (currentStep > 0) {
             setCurrentStep(step => step - 1);
@@ -178,7 +193,7 @@ export default function DappBuilderPage() {
                                             ))}
                                         </div>
                                         <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => append({ value: "" })}>
-                                            Add Goal
+                                            <Plus className="mr-2 h-4 w-4"/>Add Goal
                                         </Button>
                                         <FormMessage>{form.formState.errors.goals?.message}</FormMessage>
                                     </div>
@@ -283,5 +298,3 @@ export default function DappBuilderPage() {
    </div>
   );
 }
-
-    

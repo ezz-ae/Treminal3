@@ -1,7 +1,7 @@
 
 'use server';
 /**
- * @fileOverview An AI agent that recommends business tools.
+ * @fileOverview An AI agent that recommends business tools and provides strategic workflows.
  *
  * - recommendBusinessTools - A function that handles the business tool recommendation process.
  */
@@ -9,7 +9,11 @@
 import { ai } from '@/ai/genkit';
 import { BusinessToolRecommendationInputSchema, BusinessToolRecommendationOutput, BusinessToolRecommendationOutputSchema, BusinessToolRecommendationInput } from '@/ai/schemas/business-tool-recommendation';
 
-
+/**
+ * Invokes the AI flow to get business tool recommendations.
+ * @param {BusinessToolRecommendationInput} input - The business profile provided by the user.
+ * @returns {Promise<BusinessToolRecommendationOutput>} A promise that resolves to the AI-generated recommendations.
+ */
 export async function recommendBusinessTools(input: BusinessToolRecommendationInput): Promise<BusinessToolRecommendationOutput> {
   return businessToolRecommendationFlow(input);
 }
@@ -27,17 +31,14 @@ const prompt = ai.definePrompt({
 - **Description:** {{description}}
 
 **Available Tools:**
-- dApp Builder: Create and deploy decentralized applications with our intuitive builder.
-- Token Launcher: Design and launch your own custom cryptocurrency tokens in minutes.
-- Trading Bot Platform: Develop and deploy automated trading bots on major exchanges.
-- AI Agents: Deploy autonomous AI agents to interact with your dApps and automate tasks.
-- Custom Wallets: Build and brand your own secure crypto wallets for your users.
-- Smart Contract Templates: Use our audited templates to create secure smart contracts without the hassle.
-- Manual Transactions: Interact directly with the blockchain for custom operations and analysis.
-- On-chain Analytics: Get deep insights into on-chain data with our powerful analytics engine.
-- Decentralized Storage: Upload and manage files on IPFS and other decentralized storage networks.
-- Security Audits: Run automated security audits on your smart contracts to find vulnerabilities.
-- DAO Governance: Manage your decentralized autonomous organization with our governance tools.
+- AI Business Architect: Plan your project with an AI consultant.
+- Bot Creator: Develop and deploy automated trading bots.
+- Solana Command Center: Interact with the Solana network via AI.
+- Security Audits: Run automated security audits on your smart contracts.
+- On-chain Analytics: Get deep insights into on-chain data.
+- Staking: Stake assets to earn rewards.
+- Developer Tools: A suite of utilities for Web3 developers.
+- Documentation: Access guides, tutorials, and API references.
 
 Provide your recommendations in the specified JSON format.
 `,

@@ -29,6 +29,10 @@ import {
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
+  /**
+   * A map of string keys to Lucide icon components.
+   * This allows for dynamic icon rendering based on a string name.
+   */
   export const iconMap: Record<string, LucideIcon> = {
     AppWindow,
     Bot,
