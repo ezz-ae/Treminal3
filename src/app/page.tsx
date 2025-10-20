@@ -15,8 +15,22 @@ import { iconMap } from '@/lib/icon-map';
 
 const services = [
     {
+        title: 'AI Business Architect',
+        description: 'Plan your project with an AI consultant. Answer a few questions, and our AI will recommend the best tools and a strategic plan to get you started.',
+        iconName: 'AppWindow',
+        serviceIndex: 0,
+        href: '/dashboard/dapp-builder'
+    },
+    {
+        title: 'AI Token Launcher',
+        description: 'Generate secure, ERC-20 compliant smart contracts for your new cryptocurrency by simply describing its properties.',
+        iconName: 'Gem',
+        serviceIndex: 1,
+        href: '/dashboard/token-launcher'
+    },
+    {
         title: 'AI Trading Bot Creator',
-        description: 'Design, backtest, and deploy high-frequency trading bots on major exchanges using natural language and our advanced simulation engine.',
+        description: 'Design, backtest, and deploy high-frequency trading bots using natural language and our advanced simulation engine.',
         iconName: 'BrainCircuit',
         serviceIndex: 2,
         href: '/dashboard/bot-creator'

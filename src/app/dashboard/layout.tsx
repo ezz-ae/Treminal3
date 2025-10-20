@@ -30,6 +30,7 @@ import {
   BrainCircuit,
   Wind,
   AppWindow,
+  Gem,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -43,6 +44,7 @@ import { useWallet } from '@/hooks/use-wallet';
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
     { href: '/dashboard/dapp-builder', label: 'AI Business Architect', icon: AppWindow },
+    { href: '/dashboard/token-launcher', label: 'Token Launcher', icon: Gem },
     { href: '/dashboard/solana', label: 'Solana', icon: Wind },
     { href: '/dashboard/bot-creator', label: 'Bot Creator', icon: BrainCircuit },
     { href: '/dashboard/security-audits', label: 'Security Audits', icon: ShieldCheck },

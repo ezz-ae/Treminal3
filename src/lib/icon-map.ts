@@ -26,6 +26,7 @@ import {
     ChevronsRight,
     Plus,
     X,
+    Gem,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -60,4 +61,5 @@ import {
     ChevronsRight,
     Plus,
     X,
+    Gem,
   };
