@@ -1,3 +1,4 @@
+
 'use client';
 import { ReactNode } from 'react';
 import {
@@ -57,7 +58,7 @@ export default function SolanaLayout({ children }: { children: ReactNode }) {
                 <span className="font-bold text-lg font-headline">Solana Hub</span>
             </Link>
         </div>
-        <nav className="flex-grow space-y-1">
+        <nav className="flex-grow space-y-1 overflow-y-auto">
             {menuItems.map((item, index) => {
                 if (item.type === 'separator') {
                     return (

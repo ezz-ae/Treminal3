@@ -6,6 +6,7 @@ import { generateTradingBot as genTradingBot, runTradingBotSimulation as runSim}
 import { runSolanaTool as runSolTool } from '@/ai/flows/solana-tool';
 import { recommendBusinessTools as recommendTools } from '@/ai/flows/business-tool-recommendation';
 import { generateTokenContract as genTokenContract } from '@/ai/flows/token-generator';
+import { generateSolanaToken as genSolToken } from '@/ai/flows/solana-token-generator';
 
 
 import type { SecurityAuditInput, SecurityAuditOutput } from '@/ai/schemas/security-audit';
@@ -13,6 +14,7 @@ import type { TradingBotInput, TradingBotOutput, TradingBotSimulationOutput } fr
 import type { SolanaToolInput, SolanaToolOutput } from '@/ai/schemas/solana-tool';
 import type { BusinessToolRecommendationInput, BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
 import type { TokenGeneratorInput, TokenGeneratorOutput } from '@/ai/schemas/token-generator';
+import type { SolanaTokenGeneratorInput, SolanaTokenGeneratorOutput } from '@/ai/schemas/solana-token-generator';
 
 
 export async function runSecurityAudit(input: SecurityAuditInput): Promise<SecurityAuditOutput> {
@@ -45,4 +47,7 @@ export async function generateTokenContract(input: TokenGeneratorInput): Promise
     return result;
 }
 
-    
+export async function generateSolanaToken(input: SolanaTokenGeneratorInput): Promise<SolanaTokenGeneratorOutput> {
+    const result = await genSolToken(input);
+    return result;
+}
