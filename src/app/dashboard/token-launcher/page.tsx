@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CustomCodeBlock } from '@/components/ui/code-block';
 import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
 const features = [
   { id: 'Mintable', label: 'Mintable - Allow creating more tokens after initial supply.' },
@@ -190,12 +191,14 @@ export default function TokenLauncherPage() {
                             <CardContent className="space-y-6">
                                 <CustomCodeBlock code={result.solidityCode} language="solidity" />
                                 <div className="flex gap-2">
-                                    <Button size="lg" className="w-full">
-                                        <ShieldCheck className="mr-2 h-4 w-4" />
-                                        Run Security Audit
+                                    <Button size="lg" className="w-full" asChild>
+                                        <Link href="/dashboard/security-audits">
+                                            <ShieldCheck className="mr-2 h-4 w-4" />
+                                            Run Security Audit
+                                        </Link>
                                     </Button>
-                                     <Button size="lg" className="w-full" variant="outline">
-                                        Deploy to Testnet
+                                     <Button size="lg" className="w-full" variant="outline" disabled>
+                                        Deploy to Testnet (Soon)
                                     </Button>
                                 </div>
                             </CardContent>

@@ -110,7 +110,7 @@ export default function SolanaTerminalPage() {
           <div className="mt-4 flex items-center gap-2">
             <Input
               type="text"
-              placeholder={wallet ? `e.g., 'Airdrop 1 SOL to my wallet' or 'get balance for ${wallet.address.slice(0,6)}...'` : "e.g., 'get balance for [address]'"}
+              placeholder={wallet ? `Your wallet (${wallet.address.slice(0,4)}...${wallet.address.slice(-4)}) is connected. Try 'airdrop 1 SOL to my wallet'` : "e.g., 'get balance for [address]'"}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
@@ -121,7 +121,7 @@ export default function SolanaTerminalPage() {
             </Button>
           </div>
            <p className="text-xs text-muted-foreground mt-2">
-            Try: `airdrop 1 SOL to my wallet`, `get balance for {wallet?.address || 'YOUR_WALLET_ADDRESS'}`, `get transaction details for 5som...`
+            Examples: `airdrop 1 SOL to my wallet`, `get balance for {wallet?.address || '...'}`, `get transaction details for ...`
           </p>
         </CardContent>
       </Card>

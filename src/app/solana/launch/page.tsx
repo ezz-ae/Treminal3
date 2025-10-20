@@ -328,7 +328,7 @@ export default function SolanaLaunchPage() {
                                 <p className="text-sm bg-card/50 p-3 rounded-md border">{result.telegram}</p>
                             </div>
 
-                             <Button size="lg" className="w-full">Deploy to Devnet</Button>
+                             <Button size="lg" className="w-full" disabled>Deploy to Devnet (Coming Soon)</Button>
                         </CardContent>
                        </Card>
 
@@ -404,5 +404,3 @@ const CopyableField = ({ fieldName, value }: { fieldName: string, value: string 
         </div>
     )
 }
-
-    

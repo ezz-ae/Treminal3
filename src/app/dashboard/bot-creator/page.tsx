@@ -235,7 +235,7 @@ export default function BotCreatorPage() {
                                         </TableBody>
                                     </Table>
                                 </div>
-                                <Button size="lg" className="w-full">Deploy Bot to Production</Button>
+                                <Button size="lg" className="w-full" disabled>Deploy Bot to Production (Coming Soon)</Button>
                             </CardContent>
                         </Card>
                     </motion.div>
@@ -244,3 +244,4 @@ export default function BotCreatorPage() {
         </div>
    </div>
   );
+}
