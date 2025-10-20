@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Bot, SlidersHorizontal, BrainCircuit, BarChart2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { generateTradingBot, runTradingBotSimulation } from '@/app/actions';
+import { generateTradingBot, runTradingBotSimulation } from '@/ai/actions';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import type { TradingBotInput, TradingBotOutput, TradingBotSimulationOutput } from '@/ai/schemas/trading-bot';
@@ -244,4 +244,5 @@ export default function BotCreatorPage() {
         </div>
    </div>
   );
-}
+
+    
