@@ -26,13 +26,12 @@ import {
   BookOpen,
   AreaChart,
   ShieldCheck,
-  Bot,
   Wallet,
   BrainCircuit,
   Wind,
   AppWindow,
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -43,7 +42,7 @@ import { useWallet } from '@/hooks/use-wallet';
 
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
-    { href: '/dashboard/dapp-builder', label: 'dApp Builder', icon: AppWindow },
+    { href: '/dashboard/dapp-builder', label: 'AI Business Architect', icon: AppWindow },
     { href: '/dashboard/solana', label: 'Solana', icon: Wind },
     { href: '/dashboard/bot-creator', label: 'Bot Creator', icon: BrainCircuit },
     { href: '/dashboard/security-audits', label: 'Security Audits', icon: ShieldCheck },
@@ -68,12 +67,21 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { wallet, disconnectWallet } = useWallet();
   
+  /**
+   * Handles user logout by disconnecting the wallet and redirecting to the homepage.
+   */
   const handleLogout = async () => {
     await disconnectWallet();
+    router.push('/');
   }
 
+  /**
+   * Generates breadcrumb navigation based on the current URL path.
+   * @returns {React.ReactNode} The breadcrumb links.
+   */
   const getBreadcrumb = () => {
     const segments = pathname.split('/').filter(Boolean);
     if (segments.length < 2) {
@@ -116,7 +124,10 @@ export default function DashboardLayout({
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
                     <Link href={item.href} className='w-full'>
-                      <SidebarMenuButton isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}>
+                      <SidebarMenuButton 
+                        isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}
+                        tooltip={{ children: item.label, className: 'bg-sidebar-accent text-sidebar-accent-foreground' }}
+                      >
                         <item.icon />
                         <span>{item.label}</span>
                       </SidebarMenuButton>

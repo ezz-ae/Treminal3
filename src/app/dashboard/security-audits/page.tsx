@@ -7,8 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, ShieldCheck, AlertTriangle, Wand2, Bot } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { runSecurityAudit } from '@/app/actions';
-import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
+import { runSecurityAudit } from '@/ai/actions';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import type { SecurityAuditOutput } from '@/ai/schemas/security-audit';
 import { cn } from '@/lib/utils';
@@ -89,6 +89,13 @@ const severityConfig = {
     'Informational': 'bg-gray-500/20 text-gray-400 border-gray-500/30',
 }
 
+/**
+ * Renders the AI Security Auditor page.
+ * This page provides an interface for users to submit Solidity smart contracts for an
+ * AI-powered security analysis. It displays the audit results, including found
+ * vulnerabilities, their severity, descriptions, and recommended fixes.
+ * @returns {JSX.Element} The security audit page component.
+ */
 export default function SecurityAuditPage() {
     const [result, setResult] = useState<SecurityAuditOutput | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -100,6 +107,10 @@ export default function SecurityAuditPage() {
         },
     });
     
+    /**
+     * Handles the form submission to run the security audit.
+     * @param {z.infer<typeof FormSchema>} data The form data containing the Solidity code.
+     */
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         setIsLoading(true);
         setResult(null);
@@ -113,12 +124,15 @@ export default function SecurityAuditPage() {
         }
     }
 
+    /**
+     * Loads an example Solidity contract into the text area.
+     */
     const loadExample = () => {
         form.setValue('solidityCode', exampleContract);
     }
 
   return (
-    <div className="space-y-8 h-full">
+    <div className="space-y-8">
         <div>
             <h1 className="text-4xl font-bold font-headline">AI Security Auditor</h1>
             <p className="text-muted-foreground text-lg mt-2">
@@ -126,7 +140,7 @@ export default function SecurityAuditPage() {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <Card className="lg:sticky lg:top-6">
                 <CardHeader>
                     <CardTitle>Paste Your Solidity Code</CardTitle>

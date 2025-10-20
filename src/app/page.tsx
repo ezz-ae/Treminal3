@@ -15,21 +15,21 @@ import { iconMap } from '@/lib/icon-map';
 
 const services = [
     {
-        title: 'dApp Builder',
-        description: 'Describe your application, and our AI architect will generate a complete plan, including required UI components and smart contracts.',
-        iconName: 'AppWindow',
-        serviceIndex: 0,
-        href: '/dashboard/dapp-builder'
+        title: 'AI Trading Bot Creator',
+        description: 'Design, backtest, and deploy high-frequency trading bots on major exchanges using natural language and our advanced simulation engine.',
+        iconName: 'BrainCircuit',
+        serviceIndex: 2,
+        href: '/dashboard/bot-creator'
     },
     {
-        title: 'Token Launcher',
-        description: 'Simply describe the name, symbol, and supply for your new cryptocurrency, and the AI will generate a secure, ERC-20 compliant smart contract.',
-        iconName: 'Puzzle',
-        serviceIndex: 1,
-        href: '/dashboard/token-launcher'
+        title: 'Solana Command Center',
+        description: 'Interact with the Solana network using our AI Agent. Airdrop SOL, check balances, and explore transactions with simple commands.',
+        iconName: 'Wind',
+        serviceIndex: -1, // No direct script, uses tool calls
+        href: '/dashboard/solana'
     },
     {
-        title: 'Security Audits',
+        title: 'AI Security Auditor',
         description: 'Paste your Solidity code and receive a comprehensive security analysis, identifying potential vulnerabilities and providing recommendations.',
         iconName: 'ShieldCheck',
         serviceIndex: 9,
@@ -68,9 +68,11 @@ export default function Home() {
     const featureCount = services.length;
     const segment = 1 / featureCount;
     const activeIndex = Math.floor(latest / segment);
+    const currentServiceIndex = services[activeIndex]?.serviceIndex;
 
-    if (activeIndex >= 0 && activeIndex < featureCount) {
-        setActiveServiceIndex(services[activeIndex].serviceIndex);
+
+    if (activeIndex >= 0 && activeIndex < featureCount && currentServiceIndex !== -1) {
+        setActiveServiceIndex(currentServiceIndex);
     } else { 
         setActiveServiceIndex(null);
     }

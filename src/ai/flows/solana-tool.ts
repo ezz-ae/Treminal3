@@ -3,13 +3,22 @@
 /**
  * @fileOverview An AI agent that uses tools to interact with the Solana blockchain.
  *
- * - runSolanaTool - A function that interprets a natural language query and uses the appropriate tool.
+ * This file defines the logic for an AI agent that can interpret natural language queries
+ * from a user and execute corresponding actions on the Solana network using a set of
+ * predefined mock tools.
+ *
+ * - runSolanaTool - A function that orchestrates the entire process, from receiving the
+ *   user's query to calling the AI, executing the tool, and generating a final response.
  */
 import { ai } from '@/ai/genkit';
-import { SolanaToolInput, SolanaToolInputSchema, SolanaToolOutput, SolanaToolOutputSchema } from '@/ai/schemas/solana-tool';
+import { SolanaToolInput, SolanaToolInputSchema, SolanaToolOutput } from '@/ai/schemas/solana-tool';
 import { z } from 'zod';
 
-// Mock Tool: Get Wallet Balance
+/**
+ * Mock Tool: getWalletBalance
+ * Simulates fetching the SOL balance for a given Solana wallet address.
+ * In a real application, this would make an RPC call to the Solana network.
+ */
 const getWalletBalance = ai.defineTool(
   {
     name: 'getWalletBalance',
@@ -24,7 +33,6 @@ const getWalletBalance = ai.defineTool(
   },
   async (input) => {
     console.log(`TOOL: getWalletBalance called with: ${input.address}`);
-    // In a real app, this would make an RPC call to the Solana network.
     const mockBalance = parseFloat((Math.random() * 100).toFixed(4));
     return {
       balance: mockBalance,
@@ -33,7 +41,11 @@ const getWalletBalance = ai.defineTool(
   }
 );
 
-// Mock Tool: Request Airdrop
+/**
+ * Mock Tool: requestAirdrop
+ * Simulates requesting an airdrop of SOL to a wallet address on the devnet.
+ * In a real application, this would make an RPC call to the Solana devnet.
+ */
 const requestAirdrop = ai.defineTool(
   {
     name: 'requestAirdrop',
@@ -48,7 +60,6 @@ const requestAirdrop = ai.defineTool(
   },
   async (input) => {
     console.log(`TOOL: requestAirdrop called for ${input.address} with amount ${input.amount}`);
-    // In a real app, this would make an RPC call to the Solana devnet.
      if (input.amount > 2) {
       throw new Error("Airdrop amount cannot exceed 2 SOL.");
     }
@@ -58,7 +69,10 @@ const requestAirdrop = ai.defineTool(
   }
 );
 
-// Mock Tool: Get Transaction Details
+/**
+ * Mock Tool: getTransactionDetails
+ * Simulates fetching and describing the details of a given Solana transaction signature.
+ */
 const getTransactionDetails = ai.defineTool(
     {
       name: 'getTransactionDetails',
@@ -91,7 +105,11 @@ const getTransactionDetails = ai.defineTool(
     }
   );
 
-
+/**
+ * The main AI prompt for the Solana agent.
+ * This prompt defines the agent's personality, its capabilities (tools), and how it should
+ * interact with the user and the provided data.
+ */
 const solanaAgent = ai.definePrompt({
   name: 'solanaAgent',
   system: `You are an expert AI assistant for the Terminal3 platform, specializing in the Solana blockchain.
@@ -110,10 +128,19 @@ const solanaAgent = ai.definePrompt({
 });
 
 
+/**
+ * Executes a query against the Solana AI agent.
+ * This function orchestrates the interaction with the Genkit AI model. It sends the user's query,
+ * processes any tool requests made by the model, runs the tool, and sends the result back to the
+ * model to generate a final, human-readable response.
+ * @param {SolanaToolInput} input - The user's query and optional wallet address.
+ * @returns {Promise<SolanaToolOutput>} The final result from the AI agent, including the text response and tool usage details.
+ */
 export async function runSolanaTool(input: SolanaToolInput): Promise<SolanaToolOutput> {
     const llmResponse = await solanaAgent(input);
     const toolRequest = llmResponse.choices[0].message.toolRequest;
 
+    // If the AI doesn't request a tool, just return its text response.
     if (!toolRequest) {
          return {
             result: llmResponse.text(),
@@ -126,8 +153,10 @@ export async function runSolanaTool(input: SolanaToolInput): Promise<SolanaToolO
     const toolName = toolRequest.name;
     const toolInput = toolRequest.input;
 
-    const toolResponse = await llamda.ai.runTool(toolRequest);
+    // Execute the requested tool
+    const toolResponse = await ai.runTool(toolRequest);
 
+    // Send the tool's response back to the AI to generate a final summary
     const finalResponse = await solanaAgent(input, { toolResponse });
 
     return {
