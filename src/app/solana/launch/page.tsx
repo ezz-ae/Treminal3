@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Rocket, Twitter, FileText, Bot, Sparkles, Copy, Check } from 'lucide-react';
+import { Loader2, Rocket, Twitter, FileText, Bot, Sparkles, Copy, Check, Terminal, PlayCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateSolanaToken } from '@/ai/actions';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
@@ -17,6 +17,7 @@ import { SolanaTokenGeneratorInputSchema } from '@/ai/schemas/solana-token-gener
 import type { z } from 'zod';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
+import { CustomCodeBlock } from '@/components/ui/code-block';
 
 type FormData = z.infer<typeof SolanaTokenGeneratorInputSchema>;
 
@@ -26,11 +27,82 @@ const steps = [
   { id: 'generate', title: 'Generate & Launch' },
 ];
 
+const createPoolScript = `
+import { Connection, Keypair, VersionedTransaction } from '@solana/web3.js';
+import { Liquidity, Token } from '@raydium-io/raydium-sdk';
+import { Wallet } from '@project-serum/anchor';
+import bs58 from 'bs58';
+
+// --- Configuration ---
+const RPC_URL = 'https://api.mainnet-beta.solana.com';
+const WALLET_PRIVATE_KEY = 'YOUR_WALLET_PRIVATE_KEY'; // Replace with your actual private key
+
+const BASE_TOKEN_MINT = 'YOUR_NEW_TOKEN_MINT_ADDRESS'; // AI will populate this
+const QUOTE_TOKEN_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'; // USDC
+
+const LP_AMOUNT_BASE = 1000000; // Amount of your token
+const LP_AMOUNT_QUOTE = 1000; // Amount of USDC to pair with
+
+// --- Execution ---
+async function createAndAddLiquidity() {
+    const connection = new Connection(RPC_URL, 'confirmed');
+    const owner = Keypair.fromSecretKey(bs58.decode(WALLET_PRIVATE_KEY));
+    const wallet = new Wallet(owner);
+
+    console.log('Wallet loaded:', wallet.publicKey.toBase58());
+
+    const baseToken = await Token.fetch(connection, new PublicKey(BASE_TOKEN_MINT));
+    const quoteToken = await Token.fetch(connection, new PublicKey(QUOTE_TOKEN_MINT));
+
+    console.log('Creating liquidity pool for', baseToken.symbol, 'and', quoteToken.symbol);
+
+    const { transaction, signers } = await Liquidity.makeCreatePoolTransaction({
+        connection,
+        programId: Liquidity.getProgramId(4), // Or use the appropriate version
+        baseMint: baseToken.mint,
+        quoteMint: quoteToken.mint,
+        baseDecimals: baseToken.decimals,
+        quoteDecimals: quoteToken.decimals,
+        marketId: 'Associated Market ID', // You need to create this first on OpenBook/Serum
+        baseAmount: new BN(LP_AMOUNT_BASE * (10 ** baseToken.decimals)),
+        quoteAmount: new BN(LP_AMOUNT_QUOTE * (10 ** quoteToken.decimals)),
+        owner: wallet.publicKey,
+    });
+    
+    // Sign and send the transaction
+    const txSignature = await connection.sendTransaction(transaction, [...signers, owner], {
+        skipPreflight: true,
+    });
+
+    console.log('Transaction sent with signature:', txSignature);
+    await connection.confirmTransaction(txSignature, 'confirmed');
+    console.log('Liquidity pool created and liquidity added successfully!');
+
+    return txSignature;
+}
+
+createAndAddLiquidity().catch(err => console.error(err));
+`;
+
+const mockOutput = [
+    'Wallet loaded: Df...u7',
+    'Creating liquidity pool for YOUR_SYMBOL and USDC',
+    'Fetching market information...',
+    'Constructing create pool transaction...',
+    'Transaction sent with signature: 5hT8Y...pL9e',
+    'Confirming transaction...',
+    'Confirmation received. Block: 234567890',
+    'Liquidity pool created and liquidity added successfully!',
+    'Pool Address: 7g...Zk',
+];
+
 
 export default function SolanaLaunchPage() {
     const [result, setResult] = useState<SolanaTokenGeneratorOutput | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
+    const [isRunningScript, setIsRunningScript] = useState(false);
+    const [scriptOutput, setScriptOutput] = useState<string[]>([]);
     const { toast } = useToast();
 
     const form = useForm<FormData>({
@@ -63,6 +135,22 @@ export default function SolanaLaunchPage() {
         }
     }
 
+    const handleRunScript = () => {
+        setIsRunningScript(true);
+        setScriptOutput([]);
+        
+        let lineIndex = 0;
+        const interval = setInterval(() => {
+            if (lineIndex < mockOutput.length) {
+                setScriptOutput(prev => [...prev, mockOutput[lineIndex].replace('YOUR_SYMBOL', form.getValues('symbol'))]);
+                lineIndex++;
+            } else {
+                clearInterval(interval);
+                setIsRunningScript(false);
+            }
+        }, 500);
+    }
+
     const nextStep = async () => {
         const fields = steps[currentStep].fields as (keyof FormData)[] | undefined;
         const output = await form.trigger(fields);
@@ -78,14 +166,6 @@ export default function SolanaLaunchPage() {
         if (currentStep > 0) {
             setCurrentStep(step => step - 1);
         }
-    }
-
-    const copyToClipboard = (text: string, fieldName: string) => {
-      navigator.clipboard.writeText(text);
-      toast({
-        title: `${fieldName} Copied!`,
-        description: `The ${fieldName.toLowerCase()} has been copied to your clipboard.`,
-      })
     }
 
     const renderStepContent = () => {
@@ -169,48 +249,51 @@ export default function SolanaLaunchPage() {
         </header>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <Card className="lg:sticky lg:top-6">
-                <CardHeader>
-                    <CardTitle>Step {currentStep + 1}: {steps[currentStep].title}</CardTitle>
-                    <CardDescription>
-                        {currentStep === 0 && "Define the core identity of your new token."}
-                        {currentStep === 1 && "Configure the supply and divisibility of your token."}
-                        {currentStep === 2 && "Review your configuration and let the AI generate your assets."}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={currentStep}
-                                    initial={{ opacity: 0, x: 50 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -50 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    {renderStepContent()}
-                                </motion.div>
-                            </AnimatePresence>
-                           
-                            <div className="flex justify-between items-center pt-4">
-                                <Button type="button" variant="ghost" onClick={prevStep} disabled={currentStep === 0}>
-                                    Back
-                                </Button>
-                                {currentStep < steps.length - 1 ? (
-                                    <Button type="button" onClick={nextStep}>
-                                        Next
+            <motion.div layout className="lg:sticky lg:top-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Step {currentStep + 1}: {steps[currentStep].title}</CardTitle>
+                        <CardDescription>
+                            {currentStep === 0 && "Define the core identity of your new token."}
+                            {currentStep === 1 && "Configure the supply and divisibility of your token."}
+                            {currentStep === 2 && "Review your configuration and let the AI generate your assets."}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        key={currentStep}
+                                        initial={{ opacity: 0, x: 50 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -50 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        {renderStepContent()}
+                                    </motion.div>
+                                </AnimatePresence>
+                            
+                                <div className="flex justify-between items-center pt-4">
+                                    <Button type="button" variant="ghost" onClick={prevStep} disabled={currentStep === 0}>
+                                        Back
                                     </Button>
-                                ) : (
-                                    <Button type="submit" disabled={isLoading} size="lg">
-                                        {isLoading ? <Loader2 className="animate-spin" /> : <><Sparkles className="mr-2"/>Generate & Launch</>}
-                                    </Button>
-                                )}
-                            </div>
-                        </form>
-                    </Form>
-                </CardContent>
-            </Card>
+                                    {currentStep < steps.length - 1 ? (
+                                        <Button type="button" onClick={nextStep}>
+                                            Next
+                                        </Button>
+                                    ) : (
+                                        <Button type="submit" disabled={isLoading} size="lg">
+                                            {isLoading ? <Loader2 className="animate-spin" /> : <><Sparkles className="mr-2"/>Generate & Launch</>}
+                                        </Button>
+                                    )}
+                                </div>
+                            </form>
+                        </Form>
+                    </CardContent>
+                </Card>
+            </motion.div>
+
 
             <div className="space-y-8">
                 {isLoading && (
@@ -221,10 +304,10 @@ export default function SolanaLaunchPage() {
                     </div>
                 )}
                 {result && (
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
+                    <motion.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
                        <Card>
                          <CardHeader>
-                            <CardTitle className="flex items-center gap-3"><Bot className="w-6 h-6 text-primary"/>Launch Kit Generated!</CardTitle>
+                            <CardTitle className="flex items-center gap-3"><Bot className="w-6 h-6 text-primary"/>Step 4: Launch Kit Generated!</CardTitle>
                             <CardDescription>Your token assets have been created and the launch has been simulated.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
@@ -247,6 +330,48 @@ export default function SolanaLaunchPage() {
                              <Button size="lg" className="w-full">Deploy to Devnet</Button>
                         </CardContent>
                        </Card>
+
+                       <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-3"><PlayCircle className="w-6 h-6 text-primary"/>Step 5: Create Liquidity Pool</CardTitle>
+                                <CardDescription>
+                                    Execute this script to create a new liquidity pool on Raydium for your token, making it tradable.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div>
+                                    <h3 className="font-semibold mb-2">Script Code</h3>
+                                    <CustomCodeBlock 
+                                        code={createPoolScript.replace('YOUR_NEW_TOKEN_MINT_ADDRESS', result.tokenAddress)} 
+                                        language="typescript" 
+                                    />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold mb-2">Simulated Output</h3>
+                                    <div className="bg-card-foreground/5 p-4 rounded-lg font-mono text-xs h-[250px] overflow-y-auto flex flex-col-reverse">
+                                        <AnimatePresence>
+                                            {scriptOutput.slice().reverse().map((line, index) => (
+                                                <motion.div 
+                                                    key={scriptOutput.length - index}
+                                                    initial={{ opacity: 0, y: 10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="flex items-center gap-2"
+                                                >
+                                                    <Terminal className="w-3 h-3 text-primary shrink-0"/>
+                                                    <span>{line}</span>
+                                                </motion.div>
+                                            ))}
+                                        </AnimatePresence>
+                                        {isRunningScript && scriptOutput.length === 0 && <p>Starting script execution...</p>}
+                                    </div>
+                                </div>
+                                <Button className="w-full" onClick={handleRunScript} disabled={isRunningScript}>
+                                    <PlayCircle className="mr-2"/> {isRunningScript ? 'Running Script...' : 'Simulate Script Execution'}
+                                </Button>
+                            </CardContent>
+                        </Card>
                     </motion.div>
                 )}
             </div>

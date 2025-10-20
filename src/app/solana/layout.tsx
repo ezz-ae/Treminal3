@@ -34,7 +34,6 @@ const menuItems = [
     { href: "/solana/tokens", label: "Tokens", icon: Gem },
     { href: "/solana/trading", label: "Trading", icon: AreaChart },
     { href: "/solana/staking", label: "Staking", icon: Sprout },
-    { href: "/solana/pools", label: "Pools & Scripts", icon: GanttChartSquare },
     { type: 'separator', label: 'Launchpad' },
     { href: "/solana/launch", label: "Launch Token", icon: Rocket },
     { href: "/solana/marketing", label: "Token Marketing", icon: CircleDollarSign },
