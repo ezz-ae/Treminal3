@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Vote, Users, PieChart } from 'lucide-react';
+import { Vote, Users, PieChart, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -30,7 +30,7 @@ export default function DaoGovernancePage() {
         </header>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card>
+            <Card className="bg-card/50">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2"><Users className="text-primary"/> New Proposal</CardTitle>
                 </CardHeader>
@@ -39,7 +39,7 @@ export default function DaoGovernancePage() {
                     <Button className="w-full mt-4" disabled>Create Proposal (Coming Soon)</Button>
                 </CardContent>
             </Card>
-            <Card>
+            <Card className="bg-card/50">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2"><PieChart className="text-primary"/> Active Votes</CardTitle>
                 </CardHeader>
@@ -48,9 +48,9 @@ export default function DaoGovernancePage() {
                      <Button className="w-full mt-4" variant="outline" disabled>View Active Votes (Coming Soon)</Button>
                 </CardContent>
             </Card>
-             <Card className="lg:col-span-1 md:col-span-2">
+             <Card className="bg-card/50 md:col-span-2 lg:col-span-1">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Vote className="text-primary"/> Treasury Management</CardTitle>
+                    <CardTitle className="flex items-center gap-2"><ShieldCheck className="text-primary"/> Treasury Management</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <CardDescription>Monitor the DAO's treasury and propose funding initiatives.</CardDescription>
@@ -58,7 +58,12 @@ export default function DaoGovernancePage() {
                 </CardContent>
             </Card>
         </div>
-        <p className="text-sm text-center text-muted-foreground mt-12">(Full DAO management capabilities are under active development)</p>
+        <div className="text-center mt-12 p-8 bg-card/50 rounded-lg border">
+            <h3 className="text-2xl font-bold font-headline">Full DAO Management Capabilities are Coming</h3>
+            <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
+                Our team is building a comprehensive suite of tools to make launching and managing your DAO as seamless as possible. Stay tuned for updates.
+            </p>
+        </div>
     </div>
   );
 }

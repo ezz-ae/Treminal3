@@ -17,6 +17,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { CustomCodeBlock } from '@/components/ui/code-block';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 
 const features = [
   { id: 'Mintable', label: 'Mintable - Allow creating more tokens after initial supply.' },
@@ -41,6 +42,7 @@ const FormSchema = z.object({
 export default function TokenLauncherPage() {
     const [result, setResult] = useState<TokenGeneratorOutput | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -58,8 +60,17 @@ export default function TokenLauncherPage() {
         try {
             const tokenResult = await generateTokenContract(data);
             setResult(tokenResult);
+            toast({
+              title: "Contract Generated!",
+              description: "Your ERC-20 smart contract is ready.",
+            });
         } catch (error) {
             console.error("Failed to generate token contract", error);
+            toast({
+              variant: "destructive",
+              title: "Generation Failed",
+              description: "The AI failed to generate the contract. Please try again.",
+            });
         } finally {
             setIsLoading(false);
         }
@@ -151,6 +162,7 @@ export default function TokenLauncherPage() {
                                                                         ? field.onChange([...field.value, item.id])
                                                                         : field.onChange(field.value?.filter((value) => value !== item.id))
                                                                     }}
+                                                                    disabled={isLoading}
                                                                 />
                                                             </FormControl>
                                                             <FormLabel className="font-normal text-sm text-muted-foreground">{item.label}</FormLabel>
@@ -192,7 +204,7 @@ export default function TokenLauncherPage() {
                                 <CustomCodeBlock code={result.solidityCode} language="solidity" />
                                 <div className="flex gap-2">
                                     <Button size="lg" className="w-full" asChild>
-                                        <Link href="/dashboard/security-audits">
+                                        <Link href={{ pathname: '/dashboard/security-audits', query: { code: result.solidityCode } }}>
                                             <ShieldCheck className="mr-2 h-4 w-4" />
                                             Run Security Audit
                                         </Link>

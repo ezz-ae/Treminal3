@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -15,6 +15,8 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useSearchParams } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 const FormSchema = z.object({
   solidityCode: z.string().min(50, {
@@ -99,13 +101,22 @@ const severityConfig = {
 export default function SecurityAuditPage() {
     const [result, setResult] = useState<SecurityAuditOutput | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const searchParams = useSearchParams();
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            solidityCode: "",
+            solidityCode: searchParams.get('code') || "",
         },
     });
+
+    useEffect(() => {
+        const codeFromQuery = searchParams.get('code');
+        if (codeFromQuery) {
+            form.setValue('solidityCode', codeFromQuery);
+        }
+    }, [searchParams, form]);
     
     /**
      * Handles the form submission to run the security audit.
@@ -117,8 +128,17 @@ export default function SecurityAuditPage() {
         try {
             const auditResult = await runSecurityAudit({ solidityCode: data.solidityCode });
             setResult(auditResult);
+            toast({
+                title: "Audit Complete!",
+                description: `Found ${auditResult.vulnerabilities.length} potential issues.`,
+            });
         } catch (error) {
             console.error("Failed to run security audit", error);
+            toast({
+              variant: "destructive",
+              title: "Audit Failed",
+              description: "The AI auditor encountered an error. Please try again.",
+            });
         } finally {
             setIsLoading(false);
         }

@@ -1,17 +1,19 @@
 
 'use client';
 
-import { Download, Terminal } from 'lucide-react';
+import { Download, Terminal, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 const downloadLinks = [
-    { os: 'macOS (Intel)', href: '#', icon: 'apple' },
-    { os: 'macOS (Apple Silicon)', href: '#', icon: 'apple' },
-    { os: 'Windows', href: '#', icon: 'windows' },
-    { os: 'Linux (.deb)', href: '#', icon: 'linux' },
-    { os: 'Linux (.rpm)', href: '#', icon: 'linux' },
+    { os: 'macOS (Intel)', href: '#' },
+    { os: 'macOS (Apple Silicon)', href: '#' },
+    { os: 'Windows x64', href: '#' },
+    { os: 'Linux (.deb)', href: '#' },
+    { os: 'Linux (.rpm)', href: '#' },
+    { os: 'Linux (.AppImage)', href: '#' },
 ];
 
 /**
@@ -25,13 +27,13 @@ export default function DownloadPage() {
         <div className="p-6 bg-primary/10 rounded-full text-primary mb-6 border border-primary/20">
             <Terminal className="w-16 h-16" />
         </div>
-        <h1 className="text-4xl font-bold font-headline">Download Terminal3 Desktop</h1>
-        <p className="text-muted-foreground max-w-xl mx-auto mt-4">
+        <Badge className="text-base bg-blue-500/10 text-blue-300 border-blue-500/20 mb-4">Coming Soon</Badge>
+        <h1 className="text-4xl font-bold font-headline">Terminal3 Desktop</h1>
+        <p className="text-muted-foreground max-w-2xl mx-auto mt-4">
             Access the full power of Terminal3 with our native desktop application for an integrated development experience, offline access, and enhanced security features.
         </p>
-         <Badge className="mt-6 text-base">Coming Soon</Badge>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-4xl mt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-4xl mt-12">
             {downloadLinks.map((linkInfo) => (
                 <Button key={linkInfo.os} size="lg" disabled asChild className="h-14 text-lg">
                     <Link href={linkInfo.href}>
@@ -40,9 +42,23 @@ export default function DownloadPage() {
                 </Button>
             ))}
         </div>
-        <p className="text-sm text-muted-foreground mt-8">
-            The desktop app will be available for macOS, Windows, and Linux.
-        </p>
+        <Card className="mt-12 w-full max-w-2xl text-left bg-card/50">
+            <CardHeader>
+                <CardTitle>Get Notified</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p className="text-muted-foreground">The desktop app is under active development. Sign up for our newsletter to be the first to know when it's available.</p>
+                <div className="flex w-full items-center space-x-2 mt-4">
+                    <Input type="email" placeholder="Email" disabled />
+                    <Button type="submit" disabled>Notify Me</Button>
+                </div>
+            </CardContent>
+        </Card>
     </div>
   );
 }
+
+// Dummy Input component to avoid breaking the page
+const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+    <input {...props} className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+);

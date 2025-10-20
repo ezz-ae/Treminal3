@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Wrench, Beaker, HardHat, CircleDollarSign } from 'lucide-react';
@@ -63,23 +64,38 @@ const ABIConverter = () => {
         try {
             const parsed = JSON.parse(jsonAbi);
             if (!Array.isArray(parsed)) throw new Error('Invalid JSON ABI. Must be an array.');
+            
             const result = parsed
-                .filter(item => (item.type === 'function' || item.type === 'event' || item.type === 'constructor' || item.type === 'error') && item.name)
                 .map(item => {
-                    const inputs = item.inputs?.map((input: any) => `${input.type}${input.indexed ? ' indexed' : ''} ${input.name || ''}`.trim()).join(',');
-                    const signature = `${item.type} ${item.name}(${inputs || ''})`;
+                    if (!['function', 'event', 'constructor', 'error'].includes(item.type)) {
+                        return null;
+                    }
+                    if (!item.name && item.type !== 'constructor') {
+                        return null;
+                    }
+                    
+                    const inputs = item.inputs?.map((input: any) => `${input.type}${input.indexed ? ' indexed' : ''} ${input.name || ''}`.trim()).join(',') || '';
+                    
+                    if (item.type === 'constructor') {
+                        return `constructor(${inputs})`;
+                    }
+                    
+                    const signature = `${item.type} ${item.name}(${inputs})`;
                     
                     let fullSignature = signature;
                     if (item.type === 'function') {
-                        const mutability = item.stateMutability || '';
+                        const mutability = item.stateMutability ? ` ${item.stateMutability}` : '';
                         const outputs = item.outputs?.map((output: any) => `${output.type} ${output.name || ''}`.trim()).join(', ');
-                        fullSignature = `${signature} ${mutability} ${outputs ? `returns (${outputs})` : ''}`.trim().replace(/\s+/g, ' ');
+                        const returns = outputs ? ` returns (${outputs})` : '';
+                        fullSignature = `${signature}${mutability}${returns}`.trim().replace(/\s+/g, ' ');
                     }
                     return fullSignature;
-                }).join('\n');
+                })
+                .filter(Boolean)
+                .join('\n');
 
             if (!result) {
-                 toast({ variant: 'destructive', title: 'Conversion failed', description: 'No valid function or event signatures found in the ABI.' });
+                 toast({ variant: 'destructive', title: 'Conversion failed', description: 'No valid function, event, constructor, or error signatures found in the ABI.' });
                  setHumanReadableAbi('');
                  return;
             }
@@ -141,7 +157,6 @@ const EVMDisassembler = () => {
             toast({ variant: 'destructive', title: 'Input is empty', description: 'Please paste bytecode to disassemble.' });
             return;
         }
-         // Remove '0x' prefix and any non-hex characters
         const sanitizedBytecode = bytecode.replace(/^0x/, '').replace(/[^0-9a-fA-F]/g, '');
 
         if (!sanitizedBytecode || sanitizedBytecode.length % 2 !== 0) {
@@ -150,10 +165,8 @@ const EVMDisassembler = () => {
             return;
         }
 
-        // This is a very simplistic "disassembler". A real one would map hex to opcodes.
-        // For this mock, we'll just format the hex.
-        const simpleOpcodes = sanitizedBytecode.match(/.{1,2}/g)?.join(' ') || '';
-        setOpcodes(simpleOpcodes.toUpperCase());
+        const formattedOpcodes = sanitizedBytecode.match(/.{1,2}/g)?.join(' ') || '';
+        setOpcodes(formattedOpcodes.toUpperCase());
         toast({ title: 'Disassembly successful!' });
     }
 
@@ -182,7 +195,7 @@ const EVMDisassembler = () => {
                 </div>
                 <Button onClick={disassemble} className="w-full">Disassemble</Button>
                 <div>
-                    <label className="text-sm font-medium">Opcodes (Simplified)</label>
+                    <label className="text-sm font-medium">Opcodes (Formatted)</label>
                     <Textarea 
                         placeholder="60 80 60 40..."
                         className="mt-1 h-32 font-mono text-xs"
