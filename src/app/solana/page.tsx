@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Wind, CircleDollarSign, Zap, Clock, Terminal } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { CustomCodeBlock } from '@/components/ui/code-block';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
