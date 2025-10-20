@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Sprout } from 'lucide-react';
@@ -16,3 +17,4 @@ export default function SolanaStakingPage() {
     </div>
   );
 }
+

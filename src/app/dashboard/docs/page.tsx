@@ -44,7 +44,7 @@ const docSections = [
     icon: Wind,
     title: 'Solana Hub',
     description: 'A deep-dive into our high-performance infrastructure and AI tools for Solana development.',
-    href: '/dashboard/solana'
+    href: '/solana'
   },
   {
     icon: Puzzle,

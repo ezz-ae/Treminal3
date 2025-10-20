@@ -1,7 +1,8 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Wind, CornerDownLeft, Loader2, Bot, CircleDollarSign, Zap, Clock, BotMessageSquare } from 'lucide-react';
+import { Wind, CornerDownLeft, Loader2, Bot, CircleDollarSign, Zap, Clock, BotMessageSquare, Terminal } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -63,7 +64,7 @@ export default function SolanaTerminalPage() {
   };
 
   return (
-    <div className="space-y-8 prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
+    <div className="container mx-auto py-12 space-y-8">
       <header className="not-prose">
         <h1 className="text-4xl font-bold font-headline flex items-center gap-3">
           <Terminal className="w-10 h-10 text-primary" />
@@ -130,3 +131,4 @@ export default function SolanaTerminalPage() {
     </div>
   );
 }
+
