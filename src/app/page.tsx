@@ -83,7 +83,7 @@ export default function Home() {
     const currentServiceIndex = services[activeIndex]?.serviceIndex;
 
 
-    if (activeIndex >= 0 && activeIndex < featureCount && currentServiceIndex !== -1) {
+    if (activeIndex >= 0 && activeIndex < featureCount && currentServiceIndex !== undefined) {
         setActiveServiceIndex(currentServiceIndex);
     } else { 
         setActiveServiceIndex(null);

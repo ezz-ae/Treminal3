@@ -36,6 +36,12 @@ import {
     FileText,
     Sparkles,
     Copy,
+    GraduationCap,
+    Users,
+    PieChart,
+    Beaker,
+    HardHat,
+    AlertTriangle,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -80,4 +86,10 @@ import {
     FileText,
     Sparkles,
     Copy,
+    GraduationCap,
+    Users,
+    PieChart,
+    Beaker,
+    HardHat,
+    AlertTriangle,
   };

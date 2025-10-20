@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { Wind, Rocket, Terminal, Sprout, Gem, AreaChart } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
