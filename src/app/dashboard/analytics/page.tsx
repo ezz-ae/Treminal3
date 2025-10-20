@@ -17,8 +17,9 @@ import {
   ChartLegendContent,
 } from '@/components/ui/chart';
 import { BarChart, Bar, Pie, Cell, PieChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { useEffect, useState } from 'react';
 
-const chartData = [
+const initialChartData = [
   { month: 'January', desktop: 186, mobile: 80 },
   { month: 'February', desktop: 305, mobile: 200 },
   { month: 'March', desktop: 237, mobile: 120 },
@@ -38,7 +39,7 @@ const chartConfig = {
   },
 };
 
-const pieChartData = [
+const initialPieData = [
     { name: 'Swaps', value: 400, color: 'hsl(var(--chart-1))' },
     { name: 'Mints', value: 300, color: 'hsl(var(--chart-2))' },
     { 'name': 'Transfers', value: 200, color: 'hsl(var(--chart-3))' },
@@ -64,7 +65,38 @@ const pieChartConfig = {
   }
 }
 
+const initialStats = {
+    transactions: 1234567,
+    wallets: 5231,
+    gas: 12234.56,
+    contracts: 789,
+};
+
 export default function AnalyticsPage() {
+  const [stats, setStats] = useState(initialStats);
+  const [barData, setBarData] = useState(initialChartData);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+        setStats(prevStats => ({
+            transactions: prevStats.transactions + Math.floor(Math.random() * 100),
+            wallets: prevStats.wallets + Math.floor(Math.random() * 10),
+            gas: prevStats.gas + (Math.random() * 100 - 50),
+            contracts: prevStats.contracts + Math.floor(Math.random() * 5),
+        }));
+
+        setBarData(prevData => prevData.map(d => ({
+            ...d,
+            desktop: Math.max(50, d.desktop + Math.floor(Math.random() * 20 - 10)),
+            mobile: Math.max(30, d.mobile + Math.floor(Math.random() * 20 - 10)),
+        })))
+
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [])
+
+
   return (
     <div className="container mx-auto py-12 space-y-6">
        <div>
@@ -81,7 +113,7 @@ export default function AnalyticsPage() {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,234,567</div>
+            <div className="text-2xl font-bold">{stats.transactions.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">+20.1% from last month</p>
           </CardContent>
         </Card>
@@ -91,7 +123,7 @@ export default function AnalyticsPage() {
             <Wallet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+5,231</div>
+            <div className="text-2xl font-bold">+{stats.wallets.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">+12.2% from last month</p>
           </CardContent>
         </Card>
@@ -101,7 +133,7 @@ export default function AnalyticsPage() {
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$12,234.56</div>
+            <div className="text-2xl font-bold">${stats.gas.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
             <p className="text-xs text-muted-foreground">-5.1% from last month</p>
           </CardContent>
         </Card>
@@ -111,7 +143,7 @@ export default function AnalyticsPage() {
                 <BarChartIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">+789</div>
+                <div className="text-2xl font-bold">+{stats.contracts.toLocaleString()}</div>
                 <p className="text-xs text-muted-foreground">+3.2% from last month</p>
             </CardContent>
         </Card>
@@ -125,7 +157,7 @@ export default function AnalyticsPage() {
           </CardHeader>
           <CardContent className="pl-2">
             <ChartContainer config={chartConfig} className="h-[350px] w-full">
-              <BarChart accessibilityLayer data={chartData}>
+              <BarChart accessibilityLayer data={barData}>
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="month"
@@ -157,8 +189,8 @@ export default function AnalyticsPage() {
                     cursor={false}
                     content={<ChartTooltipContent hideLabel />}
                   />
-                  <Pie data={pieChartData} dataKey="value" nameKey="name" innerRadius={60} outerRadius={100}>
-                     {pieChartData.map((entry, index) => (
+                  <Pie data={initialPieData} dataKey="value" nameKey="name" innerRadius={60} outerRadius={100}>
+                     {initialPieData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                      ))}
                   </Pie>
