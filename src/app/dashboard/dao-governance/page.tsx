@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Vote, Users, PieChart } from 'lucide-react';
