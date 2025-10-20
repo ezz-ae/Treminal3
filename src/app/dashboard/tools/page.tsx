@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Wrench, Beaker, HardHat, CircleDollarSign } from 'lucide-react';
@@ -151,6 +150,8 @@ const EVMDisassembler = () => {
             return;
         }
 
+        // This is a very simplistic "disassembler". A real one would map hex to opcodes.
+        // For this mock, we'll just format the hex.
         const simpleOpcodes = sanitizedBytecode.match(/.{1,2}/g)?.join(' ') || '';
         setOpcodes(simpleOpcodes.toUpperCase());
         toast({ title: 'Disassembly successful!' });
