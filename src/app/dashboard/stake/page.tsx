@@ -41,6 +41,11 @@ const stakingOptions = [
     }
 ]
 
+/**
+ * A dashboard for staking various crypto assets.
+ * Allows users to view staking options, input amounts, and simulate staking actions.
+ * @returns {JSX.Element} The Staking page component.
+ */
 export default function StakePage() {
     const { toast } = useToast();
     const [stakeAmounts, setStakeAmounts] = useState<Record<string, string>>({});

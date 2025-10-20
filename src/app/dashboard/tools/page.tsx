@@ -174,6 +174,11 @@ const EVMDisassembler = () => {
     )
 }
 
+/**
+ * A page hosting a suite of tools for Web3 developers.
+ * Includes a gas tracker, ABI converter, and EVM disassembler.
+ * @returns {JSX.Element} The Developer Tools page component.
+ */
 export default function ToolsPage() {
   return (
     <div className="space-y-8">

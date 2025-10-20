@@ -6,11 +6,16 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 const downloadLinks = [
-    { os: 'macOS', href: '/downloads/Terminal3-macOS-Installer.txt' },
-    { os: 'Windows', href: '/downloads/Terminal3-Windows-Installer.txt' },
-    { os: 'Linux', href: '/downloads/Terminal3-Linux-Installer.txt' },
+    { os: 'macOS', href: '#' },
+    { os: 'Windows', href: '#' },
+    { os: 'Linux', href: '#' },
 ];
 
+/**
+ * A page for downloading the Terminal3 desktop application.
+ * Provides "coming soon" links for different operating systems.
+ * @returns {JSX.Element} The Download page component.
+ */
 export default function DownloadPage() {
   return (
     <div className="flex items-center justify-center h-full">
@@ -28,7 +33,7 @@ export default function DownloadPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
                 {downloadLinks.map((linkInfo) => (
                     <Button key={linkInfo.os} size="lg" asChild>
-                        <Link href={linkInfo.href} download>
+                        <Link href={linkInfo.href}>
                             <Download className="mr-2"/> {linkInfo.os}
                         </Link>
                     </Button>
