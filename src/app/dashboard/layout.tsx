@@ -31,6 +31,7 @@ import {
   Wind,
   AppWindow,
   Gem,
+  Vote,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -48,6 +49,7 @@ const menuItems = [
     { href: '/dashboard/solana', label: 'Solana', icon: Wind },
     { href: '/dashboard/bot-creator', label: 'Bot Creator', icon: BrainCircuit },
     { href: '/dashboard/security-audits', label: 'Security Audits', icon: ShieldCheck },
+    { href: '/dashboard/dao-governance', label: 'DAO Governance', icon: Vote },
     { href: '/dashboard/analytics', label: 'Analytics', icon: AreaChart },
     { href: '/dashboard/stake', label: 'Stake', icon: Sprout },
     { href: '/dashboard/tools', label: 'Tools', icon: Wrench },
