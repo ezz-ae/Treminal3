@@ -1,11 +1,12 @@
 
 'use client';
 
-import { Download, Terminal, CheckCircle } from 'lucide-react';
+import { Download, Terminal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 
 const downloadLinks = [
     { os: 'macOS (Intel)', href: '#' },
@@ -57,8 +58,3 @@ export default function DownloadPage() {
     </div>
   );
 }
-
-// Dummy Input component to avoid breaking the page
-const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
-    <input {...props} className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
-);

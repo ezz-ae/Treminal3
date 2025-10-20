@@ -47,17 +47,17 @@ export default function DevFlowPage() {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center p-4">
         <div className="relative mb-6">
-            <div className="p-8 bg-primary/10 rounded-full text-primary">
+            <div className="p-8 bg-primary/10 rounded-full text-primary border border-primary/20">
                 <Bot className="w-20 h-20" />
             </div>
             <AnimatePresence>
             {!isComplete ? (
-                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="absolute bottom-2 right-0">
+                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="absolute bottom-2 -right-2 bg-background rounded-full p-1">
                     <Loader2 className="w-12 h-12 text-primary/80 animate-spin" />
                 </motion.div>
             ) : (
-                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="absolute bottom-2 right-0">
-                    <CheckCircle className="w-12 h-12 text-green-500 bg-background rounded-full p-1" />
+                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="absolute bottom-2 -right-2 bg-background rounded-full p-1">
+                    <CheckCircle className="w-12 h-12 text-green-500" />
                  </motion.div>
             )}
             </AnimatePresence>

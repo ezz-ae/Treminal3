@@ -143,7 +143,7 @@ export default function SolanaLaunchPage() {
         let lineIndex = 0;
         const interval = setInterval(() => {
             if (lineIndex < mockOutput.length) {
-                setScriptOutput(prev => [...prev, mockOutput[lineIndex].replace('YOUR_SYMBOL', form.getValues('symbol'))]);
+                setScriptOutput(prev => [...prev, mockOutput[lineIndex].replace('YOUR_SYMBOL', form.getValues('symbol') || 'TKN')]);
                 lineIndex++;
             } else {
                 clearInterval(interval);
@@ -349,7 +349,7 @@ export default function SolanaLaunchPage() {
                                 </div>
                                 <div>
                                     <h3 className="font-semibold mb-2">Simulated Output</h3>
-                                    <div className="bg-card-foreground/5 p-4 rounded-lg font-mono text-xs h-[250px] overflow-y-auto flex flex-col-reverse">
+                                    <div className="bg-black p-4 rounded-lg font-mono text-xs h-[250px] overflow-y-auto flex flex-col-reverse border">
                                         <AnimatePresence>
                                             {scriptOutput.slice().reverse().map((line, index) => (
                                                 <motion.div 
@@ -361,11 +361,11 @@ export default function SolanaLaunchPage() {
                                                     className="flex items-center gap-2"
                                                 >
                                                     <Terminal className="w-3 h-3 text-primary shrink-0"/>
-                                                    <span>{line}</span>
+                                                    <span className="text-muted-foreground">{line}</span>
                                                 </motion.div>
                                             ))}
                                         </AnimatePresence>
-                                        {isRunningScript && scriptOutput.length === 0 && <p>Starting script execution...</p>}
+                                        {isRunningScript && scriptOutput.length === 0 && <p className="text-muted-foreground">Starting script execution...</p>}
                                     </div>
                                 </div>
                                 <Button className="w-full" onClick={handleRunScript} disabled={isRunningScript}>

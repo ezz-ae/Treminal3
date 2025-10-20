@@ -66,7 +66,7 @@ const ABIConverter = () => {
             if (!Array.isArray(parsed)) throw new Error('Invalid JSON ABI. Must be an array.');
             
             const result = parsed
-                .map(item => {
+                .map((item: any) => {
                     if (!['function', 'event', 'constructor', 'error'].includes(item.type)) {
                         return null;
                     }
@@ -80,16 +80,15 @@ const ABIConverter = () => {
                         return `constructor(${inputs})`;
                     }
                     
-                    const signature = `${item.type} ${item.name}(${inputs})`;
+                    let signature = `${item.type} ${item.name}(${inputs})`;
                     
-                    let fullSignature = signature;
                     if (item.type === 'function') {
-                        const mutability = item.stateMutability ? ` ${item.stateMutability}` : '';
+                        const mutability = item.stateMutability && item.stateMutability !== 'nonpayable' ? ` ${item.stateMutability}` : '';
                         const outputs = item.outputs?.map((output: any) => `${output.type} ${output.name || ''}`.trim()).join(', ');
                         const returns = outputs ? ` returns (${outputs})` : '';
-                        fullSignature = `${signature}${mutability}${returns}`.trim().replace(/\s+/g, ' ');
+                        signature = `${item.type} ${item.name}(${inputs})${mutability}${returns}`.trim().replace(/\s+/g, ' ');
                     }
-                    return fullSignature;
+                    return signature;
                 })
                 .filter(Boolean)
                 .join('\n');
@@ -157,6 +156,8 @@ const EVMDisassembler = () => {
             toast({ variant: 'destructive', title: 'Input is empty', description: 'Please paste bytecode to disassemble.' });
             return;
         }
+        // This is a mock disassembler for demonstration purposes.
+        // A real implementation would require a complex library to map bytecode to opcodes.
         const sanitizedBytecode = bytecode.replace(/^0x/, '').replace(/[^0-9a-fA-F]/g, '');
 
         if (!sanitizedBytecode || sanitizedBytecode.length % 2 !== 0) {
@@ -164,9 +165,29 @@ const EVMDisassembler = () => {
             setOpcodes('');
             return;
         }
+        
+        // This simplified version just formats the bytecode, it doesn't map to actual opcodes names.
+        const opcodeMap: { [key: string]: string } = {
+            '60': 'PUSH1', '80': 'DUP1', '60': 'PUSH1', '40': 'MSTORE', '52': 'MSTORE', '34': 'CALLVALUE', '15': 'ISZERO',
+            '61': 'PUSH2', '57': 'JUMPI', '5b': 'JUMPDEST', '00': 'STOP'
+        };
 
-        const formattedOpcodes = sanitizedBytecode.match(/.{1,2}/g)?.join(' ') || '';
-        setOpcodes(formattedOpcodes.toUpperCase());
+        let result = '';
+        for (let i = 0; i < sanitizedBytecode.length; i += 2) {
+            const byte = sanitizedBytecode.substring(i, i + 2);
+            const opcodeName = opcodeMap[byte] || `0x${byte.toUpperCase()}`;
+            
+            if (opcodeName.startsWith('PUSH')) {
+                 const byteCount = parseInt(opcodeName.substring(4));
+                 const data = sanitizedBytecode.substring(i + 2, i + 2 + byteCount * 2);
+                 result += `${opcodeName} 0x${data}\n`;
+                 i += byteCount * 2;
+            } else {
+                 result += `${opcodeName}\n`;
+            }
+        }
+
+        setOpcodes(result);
         toast({ title: 'Disassembly successful!' });
     }
 
@@ -187,7 +208,7 @@ const EVMDisassembler = () => {
                 <div>
                     <label className="text-sm font-medium">Bytecode</label>
                     <Textarea 
-                        placeholder="0x60806040..."
+                        placeholder="0x6080604052..."
                         className="mt-1 h-32 font-mono text-xs"
                         value={bytecode}
                         onChange={(e) => setBytecode(e.target.value)}
@@ -195,10 +216,10 @@ const EVMDisassembler = () => {
                 </div>
                 <Button onClick={disassemble} className="w-full">Disassemble</Button>
                 <div>
-                    <label className="text-sm font-medium">Opcodes (Formatted)</label>
+                    <label className="text-sm font-medium">Opcodes</label>
                     <Textarea 
-                        placeholder="60 80 60 40..."
-                        className="mt-1 h-32 font-mono text-xs"
+                        placeholder="PUSH1 0x80\nPUSH1 0x40\nMSTORE..."
+                        className="mt-1 h-32 font-mono text-xs whitespace-pre-wrap"
                         value={opcodes}
                         readOnly
                     />
