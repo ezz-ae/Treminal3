@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Wallet } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { useWallet } from '@/hooks/use-wallet';
+import { useEffect } from "react";
 
 /**
  * Authentication page for users to connect their wallet.
@@ -18,13 +19,19 @@ export default function AuthPage() {
 
     const handleConnect = async () => {
         await connectWallet();
-        router.push('/dashboard');
     }
+
+    useEffect(() => {
+        if (wallet) {
+            router.push('/dashboard/dapp-builder');
+        }
+    }, [wallet, router]);
+
 
     if (wallet) {
          return (
             <div className="flex items-center justify-center min-h-screen bg-background">
-                <p>Redirecting to dashboard...</p>
+                <p>Connecting and redirecting...</p>
             </div>
         );
     }
@@ -34,7 +41,7 @@ export default function AuthPage() {
             <Card className="w-full max-w-md mx-4 sm:mx-auto">
                 <CardHeader className="text-center">
                     <CardTitle className="text-2xl font-headline">Connect to Terminal3</CardTitle>
-                    <CardDescription>Connect your wallet to access your dashboard and start building.</CardDescription>
+                    <CardDescription>Connect your wallet to access the platform and start building.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex flex-col items-center space-y-4">

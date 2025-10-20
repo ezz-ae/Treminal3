@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -108,7 +107,7 @@ export default function DappBuilderPage() {
     const progressValue = ((currentStep + 1) / (steps.length)) * 100;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="container mx-auto max-w-4xl py-12">
         <div className="text-center">
             <h1 className="text-4xl font-bold font-headline">AI Business Architect</h1>
             <p className="text-muted-foreground text-lg mt-2">
@@ -116,7 +115,7 @@ export default function DappBuilderPage() {
             </p>
         </div>
         
-        <Card className="min-h-[500px] flex flex-col">
+        <Card className="min-h-[500px] flex flex-col mt-8">
             <CardHeader>
                 <CardTitle>Step {currentStep + 1}: {steps[currentStep].title}</CardTitle>
                 <Progress value={progressValue} className="w-full mt-2" />

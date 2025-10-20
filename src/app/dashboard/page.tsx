@@ -17,8 +17,6 @@ import {
   Wind
 } from 'lucide-react';
 import Link from 'next/link';
-import { useWallet } from '@/hooks/use-wallet';
-
 
 /**
  * The main dashboard page, serving as a central hub for all Terminal3 services.
@@ -26,7 +24,6 @@ import { useWallet } from '@/hooks/use-wallet';
  * @returns {JSX.Element} The main dashboard component.
  */
 export default function DashboardPage() {
-    const { wallet } = useWallet();
 
     const services = [
         { href: "/dashboard/dapp-builder", title: "AI Business Architect", description: "Get a strategic plan for your dApp.", icon: AppWindow },
@@ -38,7 +35,7 @@ export default function DashboardPage() {
     ];
 
   return (
-    <div className="space-y-8">
+    <div className="container mx-auto py-12 space-y-8">
        <div className="mb-8">
         <h1 className="text-3xl font-bold font-headline">Welcome to Terminal3</h1>
         <p className="text-muted-foreground">Your AI-native command center for Web3 development. What will you build today?</p>

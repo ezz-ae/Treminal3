@@ -1,7 +1,7 @@
 
 'use client';
 
-import { BarChart as BarChartIcon, Wallet, Activity, CreditCard, AreaChart } from 'lucide-react';
+import { BarChart as BarChartIcon, Wallet, Activity, CreditCard } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -66,7 +66,7 @@ const pieChartConfig = {
 
 export default function AnalyticsPage() {
   return (
-    <div className="space-y-6">
+    <div className="container mx-auto py-12 space-y-6">
        <div>
         <h1 className="text-3xl font-bold font-headline">On-chain Analytics</h1>
         <p className="text-muted-foreground">
