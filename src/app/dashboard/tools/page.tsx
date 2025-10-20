@@ -63,17 +63,33 @@ const ABIConverter = () => {
         }
         try {
             const parsed = JSON.parse(jsonAbi);
-            if (!Array.isArray(parsed)) throw new Error('Invalid JSON ABI');
+            if (!Array.isArray(parsed)) throw new Error('Invalid JSON ABI. Must be an array.');
             const result = parsed
-                .filter(item => item.type === 'function' || item.type === 'event')
+                .filter(item => (item.type === 'function' || item.type === 'event' || item.type === 'constructor' || item.type === 'error') && item.name)
                 .map(item => {
-                    const inputs = item.inputs.map((input: any) => input.type).join(',');
-                    return `${item.type} ${item.name}(${inputs})`;
+                    const inputs = item.inputs?.map((input: any) => `${input.type}${input.indexed ? ' indexed' : ''} ${input.name || ''}`.trim()).join(',');
+                    const signature = `${item.type} ${item.name}(${inputs || ''})`;
+                    
+                    let fullSignature = signature;
+                    if (item.type === 'function') {
+                        const mutability = item.stateMutability || '';
+                        const outputs = item.outputs?.map((output: any) => `${output.type} ${output.name || ''}`.trim()).join(', ');
+                        fullSignature = `${signature} ${mutability} ${outputs ? `returns (${outputs})` : ''}`.trim().replace(/\s+/g, ' ');
+                    }
+                    return fullSignature;
                 }).join('\n');
+
+            if (!result) {
+                 toast({ variant: 'destructive', title: 'Conversion failed', description: 'No valid function or event signatures found in the ABI.' });
+                 setHumanReadableAbi('');
+                 return;
+            }
+
             setHumanReadableAbi(result);
             toast({ title: 'Conversion successful!' });
         } catch (error) {
-            toast({ variant: 'destructive', title: 'Conversion failed', description: 'Please check your JSON ABI syntax.' });
+            const message = error instanceof Error ? error.message : 'Please check your JSON ABI syntax.';
+            toast({ variant: 'destructive', title: 'Conversion failed', description: message });
             setHumanReadableAbi('');
         }
     }
@@ -126,12 +142,16 @@ const EVMDisassembler = () => {
             toast({ variant: 'destructive', title: 'Input is empty', description: 'Please paste bytecode to disassemble.' });
             return;
         }
-        if (!bytecode.startsWith('0x') || !/^[0-9a-fA-F_]+$/.test(bytecode.substring(2))) {
-            toast({ variant: 'destructive', title: 'Invalid Bytecode', description: 'Bytecode must be a hex string starting with 0x.' });
+         // Remove '0x' prefix and any non-hex characters
+        const sanitizedBytecode = bytecode.replace(/^0x/, '').replace(/[^0-9a-fA-F]/g, '');
+
+        if (!sanitizedBytecode || sanitizedBytecode.length % 2 !== 0) {
+            toast({ variant: 'destructive', title: 'Invalid Bytecode', description: 'Bytecode must be a valid hex string with an even number of characters.' });
             setOpcodes('');
             return;
         }
-        const simpleOpcodes = bytecode.substring(2).match(/.{1,2}/g)?.join(' ') || '';
+
+        const simpleOpcodes = sanitizedBytecode.match(/.{1,2}/g)?.join(' ') || '';
         setOpcodes(simpleOpcodes.toUpperCase());
         toast({ title: 'Disassembly successful!' });
     }
