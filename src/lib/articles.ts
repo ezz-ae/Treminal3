@@ -145,12 +145,12 @@ You can also use the AI agent with prompts like "Call the 'mint' function on con
 Learn how each template has been rigorously audited by third-party security firms and how you can easily customize them using an AI prompt like "Generate an ERC721 contract with a function that allows the owner to airdrop NFTs to a list of addresses." This combines the security of templates with the flexibility of AI.`
     },
     {
-        serviceIndex: 7,
         slug: 'on-chain-analytics',
         icon: 'AreaChart',
         title: 'On-chain Analytics',
         excerpt: 'Explore the cutting-edge of finance and learn how Terminal3 provides the tools to participate in the DeFi revolution.',
         date: '2024-07-13',
+        serviceIndex: 7,
         content: `Our On-chain Analytics engine gives you the deep insights needed to navigate the market. This guide explains how you can use natural language to query indexed blockchain data. 
         
 For example, you could ask:
