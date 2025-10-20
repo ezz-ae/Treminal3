@@ -31,7 +31,8 @@ import {
   Vote,
   Bot,
   Wallet,
-  BrainCircuit
+  BrainCircuit,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';

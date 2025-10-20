@@ -20,6 +20,7 @@ import {
     Newspaper,
     Check,
     BrainCircuit,
+    SlidersHorizontal,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -44,4 +45,5 @@ import {
     Newspaper,
     Check,
     BrainCircuit,
+    SlidersHorizontal,
   };

@@ -109,11 +109,17 @@ export default function DashboardPage() {
               <CardContent>
                  <ChartContainer config={chartConfig} className="h-[300px] w-full">
                     <AreaChart accessibilityLayer data={pnlData}>
+                        <defs>
+                            <linearGradient id="fillPnl" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="var(--color-pnl)" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="var(--color-pnl)" stopOpacity={0.1}/>
+                            </linearGradient>
+                        </defs>
                         <CartesianGrid vertical={false} />
                         <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => value.slice(0, 3)} />
                         <YAxis tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => `$${value/1000}k`} />
                         <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                        <Area dataKey="pnl" type="natural" fill="var(--color-pnl)" fillOpacity={0.4} stroke="var(--color-pnl)" />
+                        <Area dataKey="pnl" type="natural" fill="url(#fillPnl)" fillOpacity={0.4} stroke="var(--color-pnl)" />
                     </AreaChart>
                 </ChartContainer>
               </CardContent>
