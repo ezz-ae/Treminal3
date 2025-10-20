@@ -161,7 +161,7 @@ export default function BotCreatorPage() {
                             </CardHeader>
                             <CardContent>
                                 <CustomCodeBlock code={bot.pythonCode} language="python" />
-                                <Button onClick={onSimulate} disabled={isSimulating || !bot} className="w-full" size="lg">
+                                <Button onClick={onSimulate} disabled={isSimulating || !bot} className="w-full mt-4" size="lg">
                                     {isSimulating ? <Loader2 className="animate-spin" /> : <><SlidersHorizontal className="mr-2"/>Run Simulation</>}
                                 </Button>
                             </CardContent>
@@ -224,7 +224,7 @@ export default function BotCreatorPage() {
                                             {simulation.trades.slice(0, 5).map((trade, i) => (
                                                 <TableRow key={i}>
                                                     <TableCell>
-                                                        <Badge variant={trade.type === 'buy' ? 'default' : 'destructive'} className={trade.type === 'buy' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}>
+                                                        <Badge variant={trade.type === 'buy' ? 'default' : 'destructive'} className={trade.type === 'buy' ? 'bg-green-500/20 text-green-400 border-green-500/20' : 'bg-red-500/20 text-red-400 border-red-500/20'}>
                                                             {trade.type}
                                                         </Badge>
                                                     </TableCell>
