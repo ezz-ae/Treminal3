@@ -71,7 +71,7 @@ export default function Home() {
 
     if (activeIndex >= 0 && activeIndex < featureCount) {
         setActiveServiceIndex(services[activeIndex].serviceIndex);
-    } else if (latest < 0.1 || latest > 0.9) { // Show default at the very top/bottom
+    } else { 
         setActiveServiceIndex(null);
     }
   });
@@ -90,14 +90,14 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <div ref={targetRef} className="relative z-10 container mx-auto px-4 py-24">
-            <div className="text-center mb-16">
+            <div className="text-center mb-24">
                 <h2 className="text-3xl md:text-5xl font-bold font-headline text-foreground">One Command Center. Infinite Possibilities.</h2>
                 <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-lg">
                     Terminal3 transforms complex Web3 development into simple, AI-driven commands.
                 </p>
             </div>
             <div className="grid md:grid-cols-2 gap-16 md:gap-8 items-start">
-                <div className="md:sticky md:top-24 space-y-16">
+                <div className="md:sticky md:top-24 space-y-24">
                     {services.map((service, index) => {
                         const Icon = iconMap[service.iconName] || iconMap['AppWindow'];
                         const segmentStart = index / services.length;
