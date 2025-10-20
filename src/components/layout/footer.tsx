@@ -7,7 +7,7 @@ const serviceLinks = [
     { href: '/dashboard/dapp-builder', label: 'AI Business Architect' },
     { href: '/dashboard/token-launcher', label: 'Token Launcher' },
     { href: '/dashboard/bot-creator', label: 'Bot Creator' },
-    { href: '/dashboard/solana', label: 'Solana Command Center' },
+    { href: '/solana', label: 'Solana Command Center' },
     { href: '/dashboard/security-audits', label: 'Security Audits' },
     { href: '/dashboard/analytics', label: 'On-chain Analytics' },
     { href: '/dashboard/stake', label: 'Staking' },

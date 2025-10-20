@@ -24,7 +24,7 @@ const serviceItems = [
     { href: "/dashboard/dapp-builder", title: "AI Business Architect" },
     { href: "/dashboard/token-launcher", title: "Token Launcher" },
     { href: "/dashboard/bot-creator", title: "Bot Creator" },
-    { href: "/dashboard/solana", title: "Solana Command Center" },
+    { href: "/solana", title: "Solana Command Center" },
     { href: "/dashboard/security-audits", title: "Security Audits" },
 ]
 

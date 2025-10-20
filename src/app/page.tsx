@@ -1,4 +1,3 @@
-
 'use client';
 
 import Hero from '@/components/landing/hero';
@@ -38,7 +37,7 @@ const services = [
         description: 'Interact with the Solana network using our AI Agent. Airdrop SOL, check balances, and explore transactions with simple commands.',
         iconName: 'Wind',
         serviceIndex: -1, // No direct script, uses tool calls
-        href: '/dashboard/solana'
+        href: '/solana'
     },
     {
         title: 'AI Security Auditor',

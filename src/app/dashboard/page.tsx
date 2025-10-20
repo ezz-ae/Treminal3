@@ -1,4 +1,3 @@
-
 'use client';
 import {
   Card,
@@ -29,7 +28,7 @@ export default function DashboardPage() {
         { href: "/dashboard/dapp-builder", title: "AI Business Architect", description: "Get a strategic plan for your dApp.", icon: AppWindow },
         { href: "/dashboard/token-launcher", title: "Token Launcher", description: "Generate custom ERC-20 tokens with AI.", icon: Gem },
         { href: "/dashboard/bot-creator", title: "Bot Creator", description: "Design, simulate, and deploy trading bots.", icon: BrainCircuit },
-        { href: "/dashboard/solana", title: "Solana Command Center", description: "Interact with the Solana network via AI.", icon: Wind },
+        { href: "/solana", title: "Solana Command Center", description: "Interact with the Solana network via AI.", icon: Wind },
         { href: "/dashboard/security-audits", title: "Security Audits", description: "Audit smart contracts for vulnerabilities.", icon: ShieldCheck },
         { href: "/dashboard/docs", title: "Docs & Academy", description: "Read guides, tutorials, and API references.", icon: BookOpen },
     ];

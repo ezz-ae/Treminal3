@@ -1,4 +1,3 @@
-
 'use client';
 import { ReactNode } from 'react';
 import {
@@ -42,7 +41,7 @@ const menuItems = [
     { href: "/dashboard/dapp-builder", label: "AI Business Architect", icon: Bot },
     { href: "/dashboard/token-launcher", label: "Token Launcher", icon: Gem },
     { href: "/dashboard/bot-creator", label: "Bot Creator", icon: BrainCircuit },
-    { href: "/dashboard/solana", label: "Solana Command Center", icon: Wind },
+    { href: "/solana", label: "Solana Command Center", icon: Wind },
     { href: "/dashboard/security-audits", label: "Security Audits", icon: ShieldCheck },
     { type: 'separator', label: 'Services' },
     { href: "/dashboard/analytics", label: "On-chain Analytics", icon: AreaChart },
