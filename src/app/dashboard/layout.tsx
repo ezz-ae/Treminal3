@@ -29,16 +29,16 @@ import {
   Puzzle,
   ShieldCheck,
   Vote,
-  Bot
+  Bot,
+  Wallet
 } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { useUser, useAuth } from '@/firebase';
-import { signOut } from 'firebase/auth';
+import { useWallet } from '@/hooks/use-wallet';
 
 
 const menuItems = [
@@ -56,21 +56,23 @@ const menuItems = [
 ];
 
 
+/**
+ * Main layout for the authenticated dashboard section.
+ * Includes the sidebar, header with breadcrumbs, and user controls.
+ * @param {object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components to render within the layout.
+ * @returns {JSX.Element} The dashboard layout component.
+ */
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const { user, loading } = useUser();
-  const auth = useAuth();
+  const { wallet, disconnectWallet } = useWallet();
   
   const handleLogout = async () => {
-    if (auth) {
-      await signOut(auth);
-      router.push('/');
-    }
+    await disconnectWallet();
   }
 
   const getBreadcrumb = () => {
@@ -139,25 +141,30 @@ export default function DashboardLayout({
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
                     <Input placeholder="Search" className="pl-10 w-64"/>
                 </div>
-                 {!loading && !user && (
+                 {!wallet && (
                   <Button asChild>
-                    <Link href="/auth">Connect</Link>
+                    <Link href="/auth">Connect Wallet</Link>
                   </Button>
                 )}
                  <ThemeToggle />
-                 {!loading && user && (
+                 {wallet && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                                <Settings className="h-5 w-5"/>
-                            </Button>
+                           <Button variant="outline" className="flex items-center gap-2">
+                             <Wallet className="w-4 h-4" />
+                             <span>{wallet.address.substring(0, 6)}...{wallet.address.substring(wallet.address.length - 4)}</span>
+                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuLabel>My Wallet</DropdownMenuLabel>
                             <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                                <Settings className="mr-2 h-4 w-4"/>
+                                Settings
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={handleLogout}>
                                 <LogOut className="mr-2 h-4 w-4"/>
-                                Log out
+                                Disconnect
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

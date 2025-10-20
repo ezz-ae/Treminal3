@@ -26,55 +26,60 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select";
-import { useUser, useFirestore } from '@/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-  
+import { useWallet } from '@/hooks/use-wallet';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+
+type Note = {
+  id: string;
+  title: string;
+  content: string;
+  slug: string;
+};
 
 export default function InteractiveGuides() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeArticle, setActiveArticle] = useState(articles[0]);
   const { toast } = useToast();
-  const { user } = useUser();
-  const firestore = useFirestore();
+  const { wallet } = useWallet();
+  const [allNotes, setAllNotes] = useLocalStorage<Record<string, Note[]>>('notes', {});
   
   const handleAddNote = async () => {
     if (!activeArticle) return;
-     if (!user) {
+     if (!wallet) {
         toast({
             variant: 'destructive',
             title: 'Authentication Required',
-            description: 'You must be logged in to save notes.',
+            description: 'You must connect your wallet to save notes.',
         });
         return;
     }
-     if (!firestore) {
+
+    const newNote = {
+      id: `${wallet.address}-${activeArticle.slug}-${Date.now()}`,
+      title: activeArticle.title,
+      content: activeArticle.excerpt,
+      slug: activeArticle.slug,
+    };
+
+    const userNotes = allNotes[wallet.address] || [];
+    if (userNotes.some(note => note.slug === activeArticle.slug)) {
       toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Firestore is not available.',
+        title: 'Note Already Saved',
+        description: `You've already saved this article.`,
       });
       return;
     }
-    try {
-       await addDoc(collection(firestore, 'notes'), {
-        userId: user.uid,
-        title: activeArticle.title,
-        content: activeArticle.excerpt,
-        slug: activeArticle.slug,
-        createdAt: serverTimestamp(),
-      });
+
+    setAllNotes({
+      ...allNotes,
+      [wallet.address]: [...userNotes, newNote],
+    });
+    
       toast({
         title: 'Note Saved!',
         description: `"${activeArticle.title}" has been added to your notes.`,
         action: <Button asChild variant="secondary"><Link href="/dashboard/notes">View Notes</Link></Button>
       });
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error saving note',
-        description: 'There was a problem saving your note.',
-      });
-    }
   }
 
   const handleSelectChange = (slug: string) => {

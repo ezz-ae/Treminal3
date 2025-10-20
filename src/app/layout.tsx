@@ -6,7 +6,7 @@ import { Inter, Space_Grotesk } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from '@/components/theme-provider';
-import { FirebaseClientProvider } from '@/firebase/client-provider';
+import { WalletProvider } from '@/hooks/use-wallet';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
@@ -24,6 +24,13 @@ export const metadata: Metadata = {
   }
 };
 
+/**
+ * The root layout for the entire application.
+ * It sets up global styles, fonts, and providers like ThemeProvider and WalletProvider.
+ * @param {object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components to render.
+ * @returns {JSX.Element} The root layout component.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,9 +45,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-          <FirebaseClientProvider>
+          <WalletProvider>
             {children}
-          </FirebaseClientProvider>
+          </WalletProvider>
           <Toaster />
           <Analytics />
           <SpeedInsights/>

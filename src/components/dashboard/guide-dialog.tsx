@@ -16,15 +16,21 @@ import type { Article } from '@/lib/articles';
 import { BookPlus } from 'lucide-react';
 import * as React from 'react';
 import { iconMap } from '@/lib/icon-map';
-import { useUser, useFirestore } from '@/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-
+import { useWallet } from '@/hooks/use-wallet';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 interface GuideDialogProps {
   article: Article | null;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
 }
+
+type Note = {
+  id: string;
+  title: string;
+  content: string;
+  slug: string;
+};
 
 /**
  * A dialog component that displays a short guide based on a selected article.
@@ -34,53 +40,52 @@ interface GuideDialogProps {
  */
 export function GuideDialog({ article, isOpen, onOpenChange }: GuideDialogProps) {
   const { toast } = useToast();
-  const { user } = useUser();
-  const firestore = useFirestore();
+  const { wallet } = useWallet();
+  const [allNotes, setAllNotes] = useLocalStorage<Record<string, Note[]>>('notes', {});
 
   if (!article) {
     return null;
   }
 
   /**
-   * Handles saving the current article as a note in Firestore for the logged-in user.
+   * Handles saving the current article as a note in local storage for the connected wallet.
    */
   const handleAddNote = async () => {
-    if (!user) {
+    if (!wallet) {
         toast({
             variant: 'destructive',
             title: 'Authentication Required',
-            description: 'You must be logged in to save notes.',
+            description: 'You must connect your wallet to save notes.',
         });
         return;
     }
-     if (!firestore) {
+    
+    const newNote = {
+      id: `${wallet.address}-${article.slug}-${Date.now()}`,
+      title: article.title,
+      content: article.excerpt,
+      slug: article.slug,
+    };
+
+    const userNotes = allNotes[wallet.address] || [];
+    if (userNotes.some(note => note.slug === article.slug)) {
       toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Firestore is not available.',
+        title: 'Note Already Saved',
+        description: `You've already saved this article.`,
       });
       return;
     }
-    try {
-       await addDoc(collection(firestore, 'notes'), {
-        userId: user.uid,
-        title: article.title,
-        content: article.excerpt,
-        slug: article.slug,
-        createdAt: serverTimestamp(),
-      });
-      toast({
-        title: 'Note Saved!',
-        description: `"${article.title}" has been added to your notes.`,
-        action: <Button asChild variant="secondary"><Link href="/dashboard/notes">View Notes</Link></Button>
-      });
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error saving note',
-        description: 'There was a problem saving your note.',
-      });
-    }
+
+    setAllNotes({
+      ...allNotes,
+      [wallet.address]: [...userNotes, newNote],
+    });
+
+    toast({
+      title: 'Note Saved!',
+      description: `"${article.title}" has been added to your notes.`,
+      action: <Button asChild variant="secondary"><Link href="/dashboard/notes">View Notes</Link></Button>
+    });
   };
   
   const LucideIcon = iconMap[article.icon] || iconMap['BookOpen'];

@@ -1,12 +1,11 @@
 
 'use client';
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BookPlus, ArrowRight } from 'lucide-react';
-import { useUser, useCollection, useFirestore } from '@/firebase';
-import { collection, query, where, orderBy } from 'firebase/firestore';
-import { useMemo } from 'react';
+import { useWallet } from '@/hooks/use-wallet';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 type Note = {
   id: string;
@@ -15,20 +14,16 @@ type Note = {
   slug: string;
 };
 
+/**
+ * A page that displays the user's saved notes.
+ * Notes are stored in local storage and associated with the connected wallet address.
+ * @returns {JSX.Element} The notes page component.
+ */
 export default function NotesPage() {
-    const { user } = useUser();
-    const firestore = useFirestore();
+    const { wallet } = useWallet();
+    const [allNotes, setAllNotes] = useLocalStorage<Record<string, Note[]>>('notes', {});
 
-    const notesQuery = useMemo(() => {
-        if (!user || !firestore) return null;
-        return query(
-            collection(firestore, 'notes'), 
-            where('userId', '==', user.uid),
-            orderBy('createdAt', 'desc')
-        );
-    }, [user, firestore]);
-    
-    const { data: notes, loading } = useCollection<Note>(notesQuery);
+    const userNotes = wallet?.address ? allNotes[wallet.address] || [] : [];
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -40,11 +35,9 @@ export default function NotesPage() {
             </p>
         </header>
 
-        {loading && <div className="text-center">Loading notes...</div>}
-
-        {!loading && notes && notes.length > 0 ? (
+        {userNotes.length > 0 ? (
             <div className="grid gap-8">
-                {notes.map((note) => (
+                {userNotes.map((note) => (
                    <Link href={`/blog/${note.slug}`} key={note.id}>
                         <Card className="group hover:border-primary transition-colors">
                             <CardHeader>
@@ -57,13 +50,11 @@ export default function NotesPage() {
                     </Link>
                 ))}
             </div>
-        ) : null}
-
-        {!loading && (!notes || notes.length === 0) && (
+        ) : (
              <div className="text-center bg-card border rounded-lg p-12">
                 <h2 className="text-2xl font-bold font-headline">No notes yet.</h2>
                 <p className="text-muted-foreground mt-2 mb-6">
-                    You can save notes from articles in our blog.
+                    You can save notes from articles in our blog. Connect your wallet to see your saved notes.
                 </p>
                 <Button asChild>
                     <Link href="/blog">
