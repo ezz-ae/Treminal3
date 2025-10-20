@@ -28,6 +28,14 @@ import {
     X,
     Gem,
     Library,
+    Rocket,
+    Home,
+    CircleDollarSign,
+    PlayCircle,
+    Twitter,
+    FileText,
+    Sparkles,
+    Copy,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -64,4 +72,12 @@ import {
     X,
     Gem,
     Library,
+    Rocket,
+    Home,
+    CircleDollarSign,
+    PlayCircle,
+    Twitter,
+    FileText,
+    Sparkles,
+    Copy,
   };
