@@ -70,23 +70,30 @@ const ABIConverter = () => {
                     if (!['function', 'event', 'constructor', 'error'].includes(item.type)) {
                         return null;
                     }
-                    if (!item.name && item.type !== 'constructor') {
-                        return null;
-                    }
                     
-                    const inputs = item.inputs?.map((input: any) => `${input.type}${input.indexed ? ' indexed' : ''} ${input.name || ''}`.trim()).join(',') || '';
-                    
+                    const inputs = item.inputs?.map((input: any) => {
+                        if (input.type === 'tuple') {
+                            const components = input.components.map((c: any) => c.type).join(',');
+                            return `(${components})`;
+                        }
+                        return input.type;
+                    }).join(',');
+
                     if (item.type === 'constructor') {
-                        return `constructor(${inputs})`;
+                         return `constructor(${inputs}) ${item.stateMutability === 'payable' ? 'payable' : ''}`.trim();
+                    }
+                     if (item.type === 'event') {
+                        const eventInputs = item.inputs?.map((input: any) => `${input.type}${input.indexed ? ' indexed' : ''} ${input.name || ''}`.trim()).join(', ');
+                        return `event ${item.name}(${eventInputs})`;
                     }
                     
                     let signature = `${item.type} ${item.name}(${inputs})`;
                     
                     if (item.type === 'function') {
                         const mutability = item.stateMutability && item.stateMutability !== 'nonpayable' ? ` ${item.stateMutability}` : '';
-                        const outputs = item.outputs?.map((output: any) => `${output.type} ${output.name || ''}`.trim()).join(', ');
+                        const outputs = item.outputs?.map((output: any) => output.type).join(', ');
                         const returns = outputs ? ` returns (${outputs})` : '';
-                        signature = `${item.type} ${item.name}(${inputs})${mutability}${returns}`.trim().replace(/\s+/g, ' ');
+                        signature = `function ${item.name}(${inputs})${mutability}${returns}`.trim().replace(/\s+/g, ' ');
                     }
                     return signature;
                 })
@@ -156,8 +163,6 @@ const EVMDisassembler = () => {
             toast({ variant: 'destructive', title: 'Input is empty', description: 'Please paste bytecode to disassemble.' });
             return;
         }
-        // This is a mock disassembler for demonstration purposes.
-        // A real implementation would require a complex library to map bytecode to opcodes.
         const sanitizedBytecode = bytecode.replace(/^0x/, '').replace(/[^0-9a-fA-F]/g, '');
 
         if (!sanitizedBytecode || sanitizedBytecode.length % 2 !== 0) {
@@ -166,29 +171,49 @@ const EVMDisassembler = () => {
             return;
         }
         
-        // This simplified version just formats the bytecode, it doesn't map to actual opcodes names.
-        const opcodeMap: { [key: string]: string } = {
-            '60': 'PUSH1', '80': 'DUP1', '60': 'PUSH1', '40': 'MSTORE', '52': 'MSTORE', '34': 'CALLVALUE', '15': 'ISZERO',
-            '61': 'PUSH2', '57': 'JUMPI', '5b': 'JUMPDEST', '00': 'STOP'
+        const opcodeMap: { [key: number]: { name: string, pops: number, pushes: number, size: number } } = {
+            0x00: { name: 'STOP', pops: 0, pushes: 0, size: 1 }, 0x01: { name: 'ADD', pops: 2, pushes: 1, size: 1 }, 0x02: { name: 'MUL', pops: 2, pushes: 1, size: 1 },
+            0x10: { name: 'LT', pops: 2, pushes: 1, size: 1 }, 0x11: { name: 'GT', pops: 2, pushes: 1, size: 1 }, 0x14: { name: 'EQ', pops: 2, pushes: 1, size: 1 }, 0x15: { name: 'ISZERO', pops: 1, pushes: 1, size: 1 },
+            0x35: { name: 'CALLDATALOAD', pops: 1, pushes: 1, size: 1 }, 0x50: { name: 'POP', pops: 1, pushes: 0, size: 1 }, 0x52: { name: 'MSTORE', pops: 2, pushes: 0, size: 1 }, 0x56: { name: 'JUMP', pops: 1, pushes: 0, size: 1 }, 0x57: { name: 'JUMPI', pops: 2, pushes: 0, size: 1 }, 0x5b: { name: 'JUMPDEST', pops: 0, pushes: 0, size: 1 },
+            0x60: { name: 'PUSH1', pops: 0, pushes: 1, size: 2 }, 0x61: { name: 'PUSH2', pops: 0, pushes: 1, size: 3 }, 0x62: { name: 'PUSH3', pops: 0, pushes: 1, size: 4 }, 0x63: { name: 'PUSH4', pops: 0, pushes: 1, size: 5 },
+            0x64: { name: 'PUSH5', pops: 0, pushes: 1, size: 6 }, 0x65: { name: 'PUSH6', pops: 0, pushes: 1, size: 7 }, 0x66: { name: 'PUSH7', pops: 0, pushes: 1, size: 8 }, 0x67: { name: 'PUSH8', pops: 0, pushes: 1, size: 9 },
+            0x68: { name: 'PUSH9', pops: 0, pushes: 1, size: 10 }, 0x69: { name: 'PUSH10', pops: 0, pushes: 1, size: 11 }, 0x6a: { name: 'PUSH11', pops: 0, pushes: 1, size: 12 }, 0x6b: { name: 'PUSH12', pops: 0, pushes: 1, size: 13 },
+            0x6c: { name: 'PUSH13', pops: 0, pushes: 1, size: 14 }, 0x6d: { name: 'PUSH14', pops: 0, pushes: 1, size: 15 }, 0x6e: { name: 'PUSH15', pops: 0, pushes: 1, size: 16 }, 0x6f: { name: 'PUSH16', pops: 0, pushes: 1, size: 17 },
+            0x70: { name: 'PUSH17', pops: 0, pushes: 1, size: 18 }, 0x71: { name: 'PUSH18', pops: 0, pushes: 1, size: 19 }, 0x72: { name: 'PUSH19', pops: 0, pushes: 1, size: 20 }, 0x73: { name: 'PUSH20', pops: 0, pushes: 1, size: 21 },
+            0x74: { name: 'PUSH21', pops: 0, pushes: 1, size: 22 }, 0x75: { name: 'PUSH22', pops: 0, pushes: 1, size: 23 }, 0x76: { name: 'PUSH23', pops: 0, pushes: 1, size: 24 }, 0x77: { name: 'PUSH24', pops: 0, pushes: 1, size: 25 },
+            0x78: { name: 'PUSH25', pops: 0, pushes: 1, size: 26 }, 0x79: { name: 'PUSH26', pops: 0, pushes: 1, size: 27 }, 0x7a: { name: 'PUSH27', pops: 0, pushes: 1, size: 28 }, 0x7b: { name: 'PUSH28', pops: 0, pushes: 1, size: 29 },
+            0x7c: { name: 'PUSH29', pops: 0, pushes: 1, size: 30 }, 0x7d: { name: 'PUSH30', pops: 0, pushes: 1, size: 31 }, 0x7e: { name: 'PUSH31', pops: 0, pushes: 1, size: 32 }, 0x7f: { name: 'PUSH32', pops: 0, pushes: 1, size: 33 },
+            0x80: { name: 'DUP1', pops: 1, pushes: 2, size: 1 }, 0x81: { name: 'DUP2', pops: 2, pushes: 3, size: 1 }, 0x82: { name: 'DUP3', pops: 3, pushes: 4, size: 1 },
+            0x90: { name: 'SWAP1', pops: 2, pushes: 2, size: 1 }, 0x91: { name: 'SWAP2', pops: 3, pushes: 3, size: 1 },
+            0xf3: { name: 'RETURN', pops: 2, pushes: 0, size: 1 }, 0xfd: { name: 'REVERT', pops: 2, pushes: 0, size: 1 }, 0xfe: { name: 'INVALID', pops: 0, pushes: 0, size: 1 },
         };
-
+        
         let result = '';
-        for (let i = 0; i < sanitizedBytecode.length; i += 2) {
-            const byte = sanitizedBytecode.substring(i, i + 2);
-            const opcodeName = opcodeMap[byte] || `0x${byte.toUpperCase()}`;
-            
-            if (opcodeName.startsWith('PUSH')) {
-                 const byteCount = parseInt(opcodeName.substring(4));
-                 const data = sanitizedBytecode.substring(i + 2, i + 2 + byteCount * 2);
-                 result += `${opcodeName} 0x${data}\n`;
-                 i += byteCount * 2;
+        let i = 0;
+        while (i < sanitizedBytecode.length) {
+            const byte = parseInt(sanitizedBytecode.substring(i, i + 2), 16);
+            const opcode = opcodeMap[byte];
+            result += `[${(i/2).toString().padStart(4, '0')}] `;
+
+            if (opcode) {
+                result += `${opcode.name}`;
+                i += 2;
+                if (opcode.name.startsWith('PUSH')) {
+                    const pushSize = opcode.size - 1;
+                    const data = sanitizedBytecode.substring(i, i + pushSize * 2);
+                    result += ` 0x${data}\n`;
+                    i += pushSize * 2;
+                } else {
+                    result += '\n';
+                }
             } else {
-                 result += `${opcodeName}\n`;
+                result += `INVALID (0x${sanitizedBytecode.substring(i, i + 2)})\n`;
+                i += 2;
             }
         }
 
         setOpcodes(result);
-        toast({ title: 'Disassembly successful!' });
+        toast({ title: 'Disassembly complete!' });
     }
 
     return (
@@ -218,7 +243,7 @@ const EVMDisassembler = () => {
                 <div>
                     <label className="text-sm font-medium">Opcodes</label>
                     <Textarea 
-                        placeholder="PUSH1 0x80\nPUSH1 0x40\nMSTORE..."
+                        placeholder="[0000] PUSH1 0x80..."
                         className="mt-1 h-32 font-mono text-xs whitespace-pre-wrap"
                         value={opcodes}
                         readOnly

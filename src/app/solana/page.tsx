@@ -65,11 +65,11 @@ export default function SolanaHoloDeckPage() {
                 height={60}
                 x={-1}
                 y={-1}
-                className="[mask-image:radial-gradient(ellipse_at_center,white_30%,transparent_100%)] opacity-30"
+                className="[mask-image:radial-gradient(ellipse_at_center,white_30%,transparent_100%)] opacity-30 animate-pulse"
              />
              <motion.div 
                 className="absolute inset-0 bg-primary/10 [mask-image:radial-gradient(350px_at_50%_50%,white,transparent)]"
-                animate={{ x, y }}
+                animate={{ x, y, background: 'radial-gradient(circle at center, hsl(var(--primary) / 0.05), transparent 60%)' }}
                 transition={{ type: 'tween', ease: 'backOut', duration: 0 }}
              />
         </div>

@@ -28,75 +28,71 @@ const steps = [
 ];
 
 const createPoolScript = `
-import { Connection, Keypair, VersionedTransaction } from '@solana/web3.js';
+import { Connection, Keypair, VersionedTransaction, PublicKey } from '@solana/web3.js';
 import { Liquidity, Token } from '@raydium-io/raydium-sdk';
 import { Wallet } from '@project-serum/anchor';
 import bs58 from 'bs58';
 
 // --- Configuration ---
+// Warning: Do not hardcode private keys in production code. Use environment variables.
 const RPC_URL = 'https://api.mainnet-beta.solana.com';
-const WALLET_PRIVATE_KEY = 'YOUR_WALLET_PRIVATE_KEY'; // Replace with your actual private key
+const WALLET_PRIVATE_KEY = process.env.SOLANA_PRIVATE_KEY || 'YOUR_WALLET_PRIVATE_KEY';
 
 const BASE_TOKEN_MINT = 'YOUR_NEW_TOKEN_MINT_ADDRESS'; // AI will populate this
 const QUOTE_TOKEN_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'; // USDC
 
-const LP_AMOUNT_BASE = 1000000; // Amount of your token
-const LP_AMOUNT_QUOTE = 1000; // Amount of USDC to pair with
+const LP_AMOUNT_BASE = 1000000; // The amount of your new token to add to the pool
+const LP_AMOUNT_QUOTE = 1000; // The amount of USDC to pair with your token
 
-// --- Execution ---
-async function createAndAddLiquidity() {
-    const connection = new Connection(RPC_URL, 'confirmed');
-    const owner = Keypair.fromSecretKey(bs58.decode(WALLET_PRIVATE_KEY));
-    const wallet = new Wallet(owner);
+async function main() {
+  console.log('--- Solana Liquidity Pool Creation Script ---');
+  if (WALLET_PRIVATE_KEY === 'YOUR_WALLET_PRIVATE_KEY') {
+    console.error('ERROR: Please replace YOUR_WALLET_PRIVATE_KEY with your actual private key.');
+    return;
+  }
 
-    console.log('Wallet loaded:', wallet.publicKey.toBase58());
+  const connection = new Connection(RPC_URL, 'confirmed');
+  const owner = Keypair.fromSecretKey(bs58.decode(WALLET_PRIVATE_KEY));
+  const wallet = new Wallet(owner);
 
-    const baseToken = await Token.fetch(connection, new PublicKey(BASE_TOKEN_MINT));
-    const quoteToken = await Token.fetch(connection, new PublicKey(QUOTE_TOKEN_MINT));
+  console.log('Wallet loaded. Public Key:', wallet.publicKey.toBase58());
 
-    console.log('Creating liquidity pool for', baseToken.symbol, 'and', quoteToken.symbol);
+  // This is a placeholder. In a real scenario, you'd create a market on OpenBook/Raydium first.
+  const MOCK_OPENBOOK_MARKET_ID = '8BnEgHoWFysVcuFFX7QztDmzuH8rMaXpeWAKcfjchZ14';
+  
+  console.log('Fetching token details...');
+  const baseToken = await Token.fetch(connection, new PublicKey(BASE_TOKEN_MINT));
+  const quoteToken = await Token.fetch(connection, new PublicKey(QUOTE_TOKEN_MINT));
+  console.log('Base Token:', baseToken.symbol, 'Quote Token:', quoteToken.symbol);
 
-    // Note: You must create a market on OpenBook first. This is a placeholder.
-    const { transaction, signers } = await Liquidity.makeCreatePoolTransaction({
-        connection,
-        programId: Liquidity.getProgramId(4), // Or use the appropriate version
-        baseMint: baseToken.mint,
-        quoteMint: quoteToken.mint,
-        baseDecimals: baseToken.decimals,
-        quoteDecimals: quoteToken.decimals,
-        marketId: 'YOUR_OPENBOOK_MARKET_ID', // Replace with your market ID
-        baseAmount: new BN(LP_AMOUNT_BASE * (10 ** baseToken.decimals)),
-        quoteAmount: new BN(LP_AMOUNT_QUOTE * (10 ** quoteToken.decimals)),
-        owner: wallet.publicKey,
-    });
-    
-    // Sign and send the transaction
-    const txSignature = await connection.sendTransaction(transaction, [...signers, owner], {
-        skipPreflight: true,
-    });
+  console.log('Constructing transaction to create liquidity pool...');
+  // This is a simplified example. Raydium SDK usage can be complex.
+  const { transaction, signers } = await Liquidity.makeCreatePoolTransaction({
+    connection,
+    programId: Liquidity.getProgramId(4),
+    baseMint: baseToken.mint,
+    quoteMint: quoteToken.mint,
+    baseDecimals: baseToken.decimals,
+    quoteDecimals: quoteToken.decimals,
+    marketId: new PublicKey(MOCK_OPENBOOK_MARKET_ID),
+    baseAmount: new BN(LP_AMOUNT_BASE * (10 ** baseToken.decimals)),
+    quoteAmount: new BN(LP_AMOUNT_QUOTE * (10 ** quoteToken.decimals)),
+    owner: wallet.publicKey,
+  });
 
-    console.log('Transaction sent with signature:', txSignature);
-    await connection.confirmTransaction(txSignature, 'confirmed');
-    console.log('Liquidity pool created and liquidity added successfully!');
-
-    return txSignature;
+  console.log('Transaction constructed. Sending to network...');
+  // In a real run, this would be sent. Here we simulate it.
+  // const txSignature = await connection.sendTransaction(transaction, [owner, ...signers], { skipPreflight: true });
+  const txSignature = 'SIMULATED_SIGNATURE_' + Math.random().toString(36).substring(2);
+  
+  console.log('Transaction sent with signature:', txSignature);
+  // await connection.confirmTransaction(txSignature);
+  console.log('--- SIMULATION COMPLETE ---');
+  console.log('Liquidity pool creation has been simulated successfully!');
 }
 
-createAndAddLiquidity().catch(err => console.error(err));
+main().catch(err => console.error('Script failed:', err));
 `;
-
-const mockOutput = [
-    'Wallet loaded: Df...u7',
-    'Creating liquidity pool for YOUR_SYMBOL and USDC',
-    'Fetching market information...',
-    'Constructing create pool transaction...',
-    'Transaction sent with signature: 5hT8Y...pL9e',
-    'Confirming transaction...',
-    'Confirmation received. Block: 234567890',
-    'Liquidity pool created and liquidity added successfully!',
-    'Pool Address: 7g...Zk',
-];
-
 
 export default function SolanaLaunchPage() {
     const [result, setResult] = useState<SolanaTokenGeneratorOutput | null>(null);
@@ -140,16 +136,28 @@ export default function SolanaLaunchPage() {
         setIsRunningScript(true);
         setScriptOutput([]);
         
+        const mockOutput = [
+            '--- Solana Liquidity Pool Creation Script ---',
+            `Wallet loaded. Public Key: ${'YourWalletAddress'.slice(0,4)}...${'YourWalletAddress'.slice(-4)}`,
+            'Fetching token details...',
+            `Base Token: ${form.getValues('symbol') || 'TKN'} Quote Token: USDC`,
+            'Constructing transaction to create liquidity pool...',
+            'Transaction constructed. Sending to network...',
+            `Transaction sent with signature: SIMULATED_SIGNATURE_${Math.random().toString(36).substring(2, 10)}`,
+            '--- SIMULATION COMPLETE ---',
+            'Liquidity pool creation has been simulated successfully!',
+        ];
+
         let lineIndex = 0;
         const interval = setInterval(() => {
             if (lineIndex < mockOutput.length) {
-                setScriptOutput(prev => [...prev, mockOutput[lineIndex].replace('YOUR_SYMBOL', form.getValues('symbol') || 'TKN')]);
+                setScriptOutput(prev => [...prev, mockOutput[lineIndex]]);
                 lineIndex++;
             } else {
                 clearInterval(interval);
                 setIsRunningScript(false);
             }
-        }, 500);
+        }, 350);
     }
 
     const nextStep = async () => {
@@ -349,27 +357,27 @@ export default function SolanaLaunchPage() {
                                 </div>
                                 <div>
                                     <h3 className="font-semibold mb-2">Simulated Output</h3>
-                                    <div className="bg-black p-4 rounded-lg font-mono text-xs h-[250px] overflow-y-auto flex flex-col-reverse border">
-                                        <AnimatePresence>
+                                    <div className="bg-black text-white p-4 rounded-lg font-mono text-xs h-[250px] overflow-y-auto flex flex-col-reverse border border-primary/20">
+                                        <div>
                                             {scriptOutput.slice().reverse().map((line, index) => (
                                                 <motion.div 
                                                     key={scriptOutput.length - index}
-                                                    initial={{ opacity: 0, y: 10 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0 }}
-                                                    transition={{ duration: 0.2 }}
-                                                    className="flex items-center gap-2"
+                                                    initial={{ opacity: 0, x: -10 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="flex items-start gap-2"
                                                 >
-                                                    <Terminal className="w-3 h-3 text-primary shrink-0"/>
-                                                    <span className="text-muted-foreground">{line}</span>
+                                                    <span className="text-primary/50 shrink-0">$</span>
+                                                    <span className="text-muted-foreground whitespace-pre-wrap">{line}</span>
                                                 </motion.div>
                                             ))}
-                                        </AnimatePresence>
-                                        {isRunningScript && scriptOutput.length === 0 && <p className="text-muted-foreground">Starting script execution...</p>}
+                                            {isRunningScript && <div className="w-2 h-4 bg-green-400 animate-pulse" />}
+                                        </div>
                                     </div>
                                 </div>
                                 <Button className="w-full" onClick={handleRunScript} disabled={isRunningScript}>
-                                    <PlayCircle className="mr-2"/> {isRunningScript ? 'Running Script...' : 'Simulate Script Execution'}
+                                    {isRunningScript ? <Loader2 className="mr-2 animate-spin"/> : <PlayCircle className="mr-2"/>} 
+                                    {isRunningScript ? 'Running Script...' : 'Simulate Script Execution'}
                                 </Button>
                             </CardContent>
                         </Card>

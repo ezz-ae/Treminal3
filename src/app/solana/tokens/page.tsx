@@ -16,7 +16,6 @@ const trendingTokens = [
     change: '+152.4%',
     changeType: 'up',
     volume: '$1.2M',
-    logo: 'https://i.imgur.com/example1.png',
   },
   {
     name: 'Solama',
@@ -25,7 +24,6 @@ const trendingTokens = [
     change: '+88.1%',
     changeType: 'up',
     volume: '$890K',
-    logo: 'https://i.imgur.com/example2.png',
   },
   {
     name: 'Bonk',
@@ -34,7 +32,6 @@ const trendingTokens = [
     change: '-5.2%',
     changeType: 'down',
     volume: '$250M',
-    logo: 'https://i.imgur.com/example3.png',
   },
   {
     name: 'Dogwifhat',
@@ -43,7 +40,6 @@ const trendingTokens = [
     change: '+3.1%',
     changeType: 'up',
     volume: '$400M',
-    logo: 'https://i.imgur.com/example4.png',
   },
     {
     name: 'Jeo Boden',
@@ -52,7 +48,6 @@ const trendingTokens = [
     change: '+25.7%',
     changeType: 'up',
     volume: '$2.3M',
-    logo: 'https://i.imgur.com/example5.png',
   },
 ];
 
