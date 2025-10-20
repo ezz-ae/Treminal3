@@ -1,63 +1,34 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Wind, CircleDollarSign, Zap, Clock, Terminal } from 'lucide-react';
+import { Wind, Rocket, Terminal, Sprout, Gem, AreaChart } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { CustomCodeBlock } from '@/components/ui/code-block';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
+import { useMousePosition } from '@/hooks/use-mouse-position';
+import { cn } from '@/lib/utils';
+import GridPattern from '@/components/landing/grid-pattern';
 
-const rpcEndpoint = "https://api.terminal3.me/v1/rpc/YOUR_API_KEY/sol";
-const curlExample = `
-curl ${rpcEndpoint} -X POST -H "Content-Type: application/json" -d '
-  {
-    "jsonrpc": "2.0",
-    "id": 1,
-    "method": "getEpochInfo"
-  }
-'
-    `;
 
-const jsExample = `
-const url = '${rpcEndpoint}';
-const headers = {
-    'Content-Type': 'application/json'
-};
-const body = JSON.stringify({
-    jsonrpc: '2.0',
-    id: 1,
-    method: 'getAccountInfo',
-    params: [
-        'vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg',
-        {
-          encoding: 'jsonParsed'
-        }
-    ]
-});
-
-fetch(url, {
-    method: 'POST',
-    headers: headers,
-    body: body
-})
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error('Error:', error));
-    `;
-
+const services = [
+    { href: "/solana/launch", title: "Launchpad", description: "Create and launch a new SPL token from scratch.", icon: Rocket },
+    { href: "/solana/terminal", title: "AI Terminal", description: "Interact with the network using natural language.", icon: Terminal },
+    { href: "/solana/tokens", title: "Token Hub", description: "Explore and analyze tokens on the network.", icon: Gem },
+    { href: "/solana/trading", title: "DEX Terminal", description: "Trade assets on Solana's decentralized exchanges.", icon: AreaChart },
+    { href: "/solana/staking", title: "Staking", description: "Stake SOL and other assets to earn rewards.", icon: Sprout },
+]
 
 /**
- * A comprehensive dashboard for interacting with and monitoring the Solana network.
- * Features live network stats and an AI-powered terminal for natural language commands.
- * @returns {JSX.Element} The Solana dashboard page component.
+ * A futuristic, interactive "Holo-Deck" for the Solana ecosystem.
+ * Visualizes live network stats and provides access to key services through animated,
+ * interactive cards that react to the user's mouse position.
+ * @returns {JSX.Element} The Solana Holo-Deck page component.
  */
-export default function SolanaPage() {
-
-  const [networkStats, setNetworkStats] = useState({
-    tps: 0,
-    slotTime: 0,
-    epoch: 0,
-  });
+export default function SolanaHoloDeckPage() {
+  const [networkStats, setNetworkStats] = useState({ tps: 0, slotTime: 0, epoch: 0 });
+  const { x, y } = useMousePosition();
 
   useEffect(() => {
     // Mock real-time data fetching
@@ -65,107 +36,116 @@ export default function SolanaPage() {
       setNetworkStats({
         tps: Math.floor(2500 + Math.random() * 1500),
         slotTime: Math.floor(400 + Math.random() * 100),
-        epoch: 512, // Usually static for a while
+        epoch: 512,
       });
     }, 2000);
     return () => clearInterval(interval);
   }, []);
 
+  const cardVariants = {
+    initial: { opacity: 0, scale: 0.9, y: 20 },
+    animate: (i: number) => ({
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.5,
+        ease: 'easeOut',
+      },
+    }),
+  };
 
   return (
-    <div className="space-y-8 prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
-      <header className="not-prose">
-        <h1 className="text-4xl font-bold font-headline flex items-center gap-3">
-          <Wind className="w-10 h-10 text-primary" />
-          Solana Hub Overview
-        </h1>
-        <p className="text-muted-foreground text-lg">
-          Your complete hub to interact with the Solana network using natural language, monitor live stats, and access high-performance RPC endpoints.
-        </p>
-      </header>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 not-prose">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Transactions per Second</CardTitle>
-            <Zap className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{networkStats.tps.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Live network throughput</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Slot Time (ms)</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{networkStats.slotTime}ms</div>
-            <p className="text-xs text-muted-foreground">Block confirmation speed</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Current Epoch</CardTitle>
-            <CircleDollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{networkStats.epoch}</div>
-            <p className="text-xs text-muted-foreground">Next epoch in ~2 days</p>
-          </CardContent>
-        </Card>
-      </div>
-
-       <Card className="not-prose text-center">
-            <CardHeader>
-                <CardTitle className="text-2xl flex items-center justify-center gap-2">
-                    <Terminal className="text-primary"/> AI Terminal
-                </CardTitle>
-                 <CardDescription>
-                    The heart of the Solana Hub. Use natural language to interact with the network.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <p className="text-muted-foreground mb-4">Airdrop tokens, check balances, inspect transactions, and more without writing a single line of code.</p>
-                <Button asChild>
-                    <Link href="/solana/terminal">Open AI Terminal &rarr;</Link>
-                </Button>
-            </CardContent>
-       </Card>
+    <div className="relative w-full h-full flex flex-col items-center justify-center p-4 overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 z-0">
+             <GridPattern
+                width={60}
+                height={60}
+                x={-1}
+                y={-1}
+                className="[mask-image:radial-gradient(ellipse_at_center,white_30%,transparent_100%)] opacity-30"
+             />
+             <motion.div 
+                className="absolute inset-0 bg-primary/10 [mask-image:radial-gradient(350px_at_50%_50%,white,transparent)]"
+                animate={{ x, y }}
+                transition={{ type: 'tween', ease: 'backOut', duration: 0 }}
+             />
+        </div>
       
-      <section>
-            <h2>High-Performance RPC</h2>
-            <p>
-                Connect to our robust Solana RPC endpoints to interact with the blockchain. Send transactions, query data, and build powerful applications with confidence.
-            </p>
-            <h3>Endpoint URL</h3>
-            <p>
-                Use the following base URL for all RPC requests. Replace \`YOUR_API_KEY\` with your actual API key.
-            </p>
-            <div className="bg-card border rounded-md p-4 font-mono text-sm not-prose">https://api.terminal3.me/v1/rpc/<span className='text-primary'>YOUR_API_KEY</span>/sol</div>
-            
-            <h3 className="mt-8">Examples</h3>
-            <h4>cURL Request</h4>
-            <p>Here's a simple example of how to fetch the current epoch info using cURL.</p>
-            <CustomCodeBlock code={curlExample} language="bash" />
+        {/* Header Content */}
+        <div className="relative z-10 text-center mb-12">
+            <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="flex items-center justify-center gap-4"
+            >
+                <Wind className="w-12 h-12 text-primary" />
+                <h1 className="text-5xl font-bold font-headline tracking-tight">Solana Holo-Deck</h1>
+            </motion.div>
+            <motion.p 
+                className="text-muted-foreground text-lg mt-4 max-w-2xl mx-auto"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+            >
+                Your command center for the Solana universe. Visualize the network, execute strategies, and build the future.
+            </motion.p>
+        </div>
 
-            <h4 className="mt-8">JavaScript Fetch</h4>
-            <p>Here's how you can fetch account information using JavaScript's \`fetch\` API.</p>
-            <CustomCodeBlock code={jsExample} language="javascript" />
-        </section>
+        {/* Live Stats */}
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 w-full max-w-5xl">
+            <motion.div variants={cardVariants} initial="initial" animate="animate" custom={0}>
+                <HoloCard title="Transactions / Sec" value={networkStats.tps.toLocaleString()} />
+            </motion.div>
+            <motion.div variants={cardVariants} initial="initial" animate="animate" custom={1}>
+                <HoloCard title="Slot Time (ms)" value={`${networkStats.slotTime}ms`} />
+            </motion.div>
+            <motion.div variants={cardVariants} initial="initial" animate="animate" custom={2}>
+                <HoloCard title="Current Epoch" value={networkStats.epoch.toString()} />
+            </motion.div>
+        </div>
 
-        <section>
-            <h2>Key RPC Methods</h2>
-            <p>Our Solana endpoints support a wide range of JSON-RPC methods. Here are some of the most commonly used ones:</p>
-            <ul className="list-disc pl-5 space-y-2">
-                <li><code>getAccountInfo</code>: Returns all information associated with the account of a given public key.</li>
-                <li><code>getTokenAccountsByOwner</code>: Returns all token accounts owned by a given public key.</li>
-                <li><code>getBalance</code>: Returns the balance of the account of a given public key.</li>
-                <li><code>sendTransaction</code>: Submits a signed transaction to the cluster for processing.</li>
-                <li><code>requestAirdrop</code>: Requests an airdrop of lamports to a public key (devnet/testnet only).</li>
-            </ul>
-        </section>
+        {/* Service Links */}
+         <div className="relative z-10 w-full max-w-5xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {services.map((service, i) => {
+                    const Icon = service.icon;
+                    return (
+                        <motion.div key={service.title} variants={cardVariants} initial="initial" animate="animate" custom={3 + i}>
+                            <Link href={service.href} className="block h-full">
+                                <Card className="h-full bg-card/60 backdrop-blur-sm border-primary/20 hover:border-primary/50 hover:bg-card/80 transition-colors duration-300 group flex flex-col justify-between">
+                                    <CardHeader>
+                                        <div className="flex items-center gap-4">
+                                            <Icon className="w-6 h-6 text-primary"/>
+                                            <CardTitle className="font-headline text-lg">{service.title}</CardTitle>
+                                        </div>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <p className="text-sm text-muted-foreground">{service.description}</p>
+                                    </CardContent>
+                                </Card>
+                            </Link>
+                        </motion.div>
+                    )
+                })}
+            </div>
+         </div>
     </div>
   );
 }
+
+
+const HoloCard = ({ title, value }: { title: string, value: string }) => {
+    return (
+        <div className="bg-card/60 backdrop-blur-sm border border-primary/20 p-6 rounded-lg text-center flex flex-col justify-center items-center h-full">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{title}</h3>
+            <p className="text-4xl font-bold font-mono text-primary mt-2">{value}</p>
+        </div>
+    )
+}
+
+
+    

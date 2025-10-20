@@ -28,7 +28,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 const menuItems = [
-    { href: "/solana", label: "Overview", icon: Home },
+    { href: "/solana", label: "Holo-Deck", icon: Home },
     { href: "/solana/terminal", label: "AI Terminal", icon: Terminal },
     { type: 'separator', label: 'Ecosystem' },
     { href: "/solana/tokens", label: "Tokens", icon: Gem },
@@ -91,13 +91,11 @@ export default function SolanaLayout({ children }: { children: ReactNode }) {
             </Button>
         </div>
       </aside>
-      <div className="flex-1 overflow-auto p-6 lg:p-10">
+      <main className="flex-1 overflow-auto bg-black">
         {children}
-      </div>
+      </main>
     </div>
   );
 }
-
-    
 
     
