@@ -244,5 +244,3 @@ export default function BotCreatorPage() {
         </div>
    </div>
   );
-
-    

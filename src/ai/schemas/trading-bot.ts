@@ -33,5 +33,3 @@ export const TradingBotSimulationOutputSchema = z.object({
     })),
 });
 export type TradingBotSimulationOutput = z.infer<typeof TradingBotSimulationOutputSchema>;
-
-    
