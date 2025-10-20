@@ -64,3 +64,5 @@ export async function runTradingBotSimulation(input: TradingBotInput): Promise<T
     }
     return output;
 }
+
+    

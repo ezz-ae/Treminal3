@@ -1,3 +1,4 @@
+
 'use server';
 
 import { runSecurityAudit as runAudit } from '@/ai/flows/security-audit';
@@ -43,3 +44,5 @@ export async function generateTokenContract(input: TokenGeneratorInput): Promise
     const result = await genTokenContract(input);
     return result;
 }
+
+    
