@@ -178,6 +178,13 @@ export default function SecurityAuditPage() {
                 </CardContent>
             </Card>
             
+            {isLoading && (
+                 <div className="flex flex-col items-center justify-center text-center h-full min-h-[400px]">
+                    <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+                    <h3 className="text-xl font-headline font-semibold">Running Security Analysis...</h3>
+                    <p className="text-muted-foreground">Our AI is meticulously scanning your contract for vulnerabilities.</p>
+                </div>
+            )}
             {result && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <Card>

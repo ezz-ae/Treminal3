@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Vote } from 'lucide-react';

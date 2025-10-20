@@ -110,7 +110,7 @@ export default function SolanaTerminalPage() {
           <div className="mt-4 flex items-center gap-2">
             <Input
               type="text"
-              placeholder="e.g., 'Airdrop 1 SOL to my wallet' or 'get balance for [address]'"
+              placeholder={wallet ? `e.g., 'Airdrop 1 SOL to my wallet' or 'get balance for ${wallet.address.slice(0,6)}...'` : "e.g., 'get balance for [address]'"}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
