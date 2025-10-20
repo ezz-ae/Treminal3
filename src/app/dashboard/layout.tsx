@@ -30,6 +30,7 @@ import {
   Wallet,
   BrainCircuit,
   Wind,
+  AppWindow,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -42,6 +43,7 @@ import { useWallet } from '@/hooks/use-wallet';
 
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
+    { href: '/dashboard/dapp-builder', label: 'dApp Builder', icon: AppWindow },
     { href: '/dashboard/solana', label: 'Solana', icon: Wind },
     { href: '/dashboard/bot-creator', label: 'Bot Creator', icon: BrainCircuit },
     { href: '/dashboard/security-audits', label: 'Security Audits', icon: ShieldCheck },
