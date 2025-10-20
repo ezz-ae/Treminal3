@@ -1,16 +1,32 @@
 
-import { Terminal, Menu } from 'lucide-react';
+import { Terminal, Menu, Wind } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from '../theme-toggle';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"
+
 
 const navItems = [
-  { href: '/dashboard', label: 'Services' },
+  { href: '/#features', label: 'Features' },
   { href: '/dashboard/docs', label: 'Developers' },
   { href: '/blog', label: 'Blog' },
   { href: '/#start', label: 'Start' },
 ];
+
+const serviceItems = [
+    { href: "/dashboard/dapp-builder", title: "AI Business Architect" },
+    { href: "/dashboard/token-launcher", title: "Token Launcher" },
+    { href: "/dashboard/bot-creator", title: "Bot Creator" },
+    { href: "/dashboard/solana", title: "Solana Command Center" },
+    { href: "/dashboard/security-audits", title: "Security Audits" },
+]
 
 /**
  * The main header component for the application.
@@ -27,6 +43,21 @@ export default function Header() {
             <span className="font-bold font-headline">Terminal3</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+             <DropdownMenu>
+                <DropdownMenuTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 text-sm font-medium">Services</DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    {serviceItems.map((item) => (
+                         <DropdownMenuItem key={item.title} asChild>
+                            <Link href={item.href}>{item.title}</Link>
+                        </DropdownMenuItem>
+                    ))}
+                    <DropdownMenuSeparator/>
+                     <DropdownMenuItem asChild>
+                        <Link href="/dashboard">View All Services</Link>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
             {navItems.map((item) => (
               <Link
                 key={item.label}

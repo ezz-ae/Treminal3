@@ -74,7 +74,7 @@ export default function BotCreatorPage() {
     }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="container mx-auto py-12 space-y-8">
         <div>
             <h1 className="text-4xl font-bold font-headline">AI Trading Bot Creator</h1>
             <p className="text-muted-foreground text-lg mt-2">
@@ -244,5 +244,3 @@ export default function BotCreatorPage() {
         </div>
    </div>
   );
-
-    

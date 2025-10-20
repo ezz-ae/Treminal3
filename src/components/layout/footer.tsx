@@ -4,25 +4,29 @@ import Link from 'next/link';
 import { StatusIndicator } from '../ui/status-indicator';
 
 const serviceLinks = [
-    { href: '/dashboard/dapp-builder', label: 'dApp Builder' },
+    { href: '/dashboard/dapp-builder', label: 'AI Business Architect' },
     { href: '/dashboard/token-launcher', label: 'Token Launcher' },
+    { href: '/dashboard/bot-creator', label: 'Bot Creator' },
+    { href: '/dashboard/solana', label: 'Solana Command Center' },
     { href: '/dashboard/security-audits', label: 'Security Audits' },
-    { href: '/dashboard/dao-governance', label: 'DAO Governance' },
     { href: '/dashboard/analytics', label: 'On-chain Analytics' },
     { href: '/dashboard/stake', label: 'Staking' },
+    { href: '/dashboard/tools', label: 'Developer Tools' },
 ];
 
 const resourceLinks = [
-    { href: '/dashboard/docs', label: 'Documentation' },
-    { href: '/#start', label: 'Interactive Guides' },
-    { href: '/blog', label: 'Blog' },
+    { href: '/dashboard/docs/getting-started', label: 'Getting Started' },
     { href: '/dashboard/docs/apis', label: 'Universal RPC' },
+    { href: '/blog', label: 'Blog & Guides' },
+    { href: '/dashboard/docs', label: 'Documentation' },
 ];
 
 const companyLinks = [
     { href: '#', label: 'About Us' },
     { href: '#', label: 'Careers' },
     { href: '#', label: 'Contact' },
+    { href: '#', label: 'Privacy Policy' },
+    { href: '#', label: 'Terms of Service' },
 ]
 
 const socialLinks = [
