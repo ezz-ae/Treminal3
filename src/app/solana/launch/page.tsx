@@ -56,6 +56,7 @@ async function createAndAddLiquidity() {
 
     console.log('Creating liquidity pool for', baseToken.symbol, 'and', quoteToken.symbol);
 
+    // Note: You must create a market on OpenBook first. This is a placeholder.
     const { transaction, signers } = await Liquidity.makeCreatePoolTransaction({
         connection,
         programId: Liquidity.getProgramId(4), // Or use the appropriate version
@@ -63,7 +64,7 @@ async function createAndAddLiquidity() {
         quoteMint: quoteToken.mint,
         baseDecimals: baseToken.decimals,
         quoteDecimals: quoteToken.decimals,
-        marketId: 'Associated Market ID', // You need to create this first on OpenBook/Serum
+        marketId: 'YOUR_OPENBOOK_MARKET_ID', // Replace with your market ID
         baseAmount: new BN(LP_AMOUNT_BASE * (10 ** baseToken.decimals)),
         quoteAmount: new BN(LP_AMOUNT_QUOTE * (10 ** quoteToken.decimals)),
         owner: wallet.publicKey,
@@ -403,3 +404,5 @@ const CopyableField = ({ fieldName, value }: { fieldName: string, value: string 
         </div>
     )
 }
+
+    

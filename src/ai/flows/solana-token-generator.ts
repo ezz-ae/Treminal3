@@ -62,7 +62,7 @@ Do not include any text or letters in the image.
 `,
     });
 
-    if (!media.url) {
+    if (!media?.url) {
         throw new Error('Failed to generate token image.');
     }
     
@@ -84,3 +84,5 @@ Do not include any text or letters in the image.
         signature: mockSignature,
     };
 }
+
+    
