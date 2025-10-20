@@ -10,43 +10,26 @@ import {
   Home,
   Rocket,
   CircleDollarSign,
-  GanttChartSquare,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useWallet } from '@/hooks/use-wallet';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 
 const menuItems = [
     { href: "/solana", label: "Holo-Deck", icon: Home },
     { href: "/solana/terminal", label: "AI Terminal", icon: Terminal },
     { type: 'separator', label: 'Ecosystem' },
-    { href: "/solana/tokens", label: "Tokens", icon: Gem },
-    { href: "/solana/trading", label: "Trading", icon: AreaChart },
+    { href: "/solana/tokens", label: "Token Hub", icon: Gem },
+    { href: "/solana/trading", label: "DEX Trading", icon: AreaChart },
     { href: "/solana/staking", label: "Staking", icon: Sprout },
     { type: 'separator', label: 'Launchpad' },
     { href: "/solana/launch", label: "Launch Token", icon: Rocket },
     { href: "/solana/marketing", label: "Token Marketing", icon: CircleDollarSign },
 ];
 
-function getInitials(address: string) {
-    return address.slice(0, 2).toUpperCase();
-}
-
-
 export default function SolanaLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const { wallet, disconnectWallet } = useWallet();
 
   return (
     <div className="flex h-screen bg-background">
@@ -97,5 +80,3 @@ export default function SolanaLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
-    

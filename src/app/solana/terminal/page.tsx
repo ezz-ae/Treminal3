@@ -1,8 +1,8 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Wind, CornerDownLeft, Loader2, Bot, CircleDollarSign, Zap, Clock, BotMessageSquare, Terminal } from 'lucide-react';
+import { useState } from 'react';
+import { CornerDownLeft, Loader2, Bot, Terminal } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,8 +10,6 @@ import { useWallet } from '@/hooks/use-wallet';
 import { runSolanaTool } from '@/ai/actions';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
-import { CustomCodeBlock } from '@/components/ui/code-block';
-import Link from 'next/link';
 
 type ChatMessage = {
   id: number;
@@ -20,9 +18,8 @@ type ChatMessage = {
 };
 
 /**
- * A comprehensive dashboard for interacting with and monitoring the Solana network.
- * Features live network stats and an AI-powered terminal for natural language commands.
- * @returns {JSX.Element} The Solana dashboard page component.
+ * A dedicated terminal page for interacting with the Solana network via an AI agent.
+ * @returns {JSX.Element} The Solana AI Terminal page component.
  */
 export default function SolanaTerminalPage() {
   const [inputValue, setInputValue] = useState('');
@@ -65,26 +62,26 @@ export default function SolanaTerminalPage() {
 
   return (
     <div className="container mx-auto py-12 space-y-8">
-      <header className="not-prose">
+      <header>
         <h1 className="text-4xl font-bold font-headline flex items-center gap-3">
           <Terminal className="w-10 h-10 text-primary" />
           AI Agent Terminal
         </h1>
-        <p className="text-muted-foreground text-lg">
-          Interact with the Solana network using natural language.
+        <p className="text-muted-foreground text-lg mt-2">
+          Interact with the Solana network using natural language. Check balances, airdrop tokens, and analyze transactions.
         </p>
       </header>
 
-       <Card className="not-prose">
+       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <Bot className="text-primary" /> AI Agent
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="border rounded-lg h-[400px] flex flex-col p-4 space-y-4 overflow-y-auto">
+          <div className="border rounded-lg h-[50vh] flex flex-col p-4 space-y-4 overflow-y-auto">
             <AnimatePresence>
-              {chatHistory.map((msg, index) => (
+              {chatHistory.map((msg) => (
                 <motion.div
                   key={msg.id}
                   layout
@@ -94,7 +91,7 @@ export default function SolanaTerminalPage() {
                   className={msg.type === 'user' ? 'self-end' : 'self-start'}
                 >
                   <div
-                    className={`max-w-md p-3 rounded-lg ${
+                    className={`max-w-xl p-3 rounded-lg ${
                       msg.type === 'user'
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-card-foreground/5'
@@ -103,7 +100,7 @@ export default function SolanaTerminalPage() {
                     {msg.type === 'loading' ? (
                       <Loader2 className="animate-spin w-5 h-5" />
                     ) : (
-                      <p className="text-sm">{msg.text}</p>
+                      <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
                     )}
                   </div>
                 </motion.div>
@@ -131,4 +128,3 @@ export default function SolanaTerminalPage() {
     </div>
   );
 }
-
