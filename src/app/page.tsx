@@ -1,11 +1,9 @@
 
 'use client';
 
-import Header from '@/components/layout/header';
 import Hero from '@/components/landing/hero';
 import CodingModes from '@/components/landing/coding-modes';
 import InteractiveGuides from '@/components/landing/interactive-guides';
-import Footer from '@/components/layout/footer';
 import GridPattern from '@/components/landing/grid-pattern';
 import React, { useState, useRef } from 'react';
 import { useScroll, useTransform, motion, useMotionValueEvent } from 'framer-motion';
@@ -102,7 +100,6 @@ export default function Home() {
         y={-1}
         className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_85%)]"
       />
-      <Header />
       <main className="flex-1">
         <Hero />
         <div ref={targetRef} className="relative z-10 container mx-auto px-4 py-24">
@@ -151,7 +148,6 @@ export default function Home() {
         <CodingModes />
         <InteractiveGuides />
       </main>
-      <Footer />
     </div>
   );
 }
