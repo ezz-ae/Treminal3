@@ -1,4 +1,3 @@
-
 'use client';
 import { ShieldCheck, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
