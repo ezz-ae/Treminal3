@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Sprout } from 'lucide-react';

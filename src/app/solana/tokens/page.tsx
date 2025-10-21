@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Gem, TrendingUp, TrendingDown, ArrowRight } from 'lucide-react';
