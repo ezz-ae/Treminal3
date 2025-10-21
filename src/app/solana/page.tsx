@@ -1,8 +1,9 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import { Wind, Rocket, Terminal, Sprout, Gem, AreaChart } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useMousePosition } from '@/hooks/use-mouse-position';
@@ -66,7 +67,10 @@ export default function SolanaHoloDeckPage() {
              />
              <motion.div 
                 className="absolute inset-0 bg-primary/10 [mask-image:radial-gradient(350px_at_50%_50%,white,transparent)]"
-                animate={{ x, y, background: 'radial-gradient(circle at center, hsl(var(--primary) / 0.05), transparent 60%)' }}
+                style={{
+                    left: x - 350,
+                    top: y - 350,
+                }}
                 transition={{ type: 'tween', ease: 'backOut', duration: 0 }}
              />
         </div>
@@ -128,7 +132,7 @@ export default function SolanaHoloDeckPage() {
 }
 
 
-const HoloCard = ({ title, string, value }: { title: string, value: string }) => {
+const HoloCard = ({ title, value }: { title: string, value: string }) => {
     return (
         <div className="bg-card/60 backdrop-blur-sm border border-primary/20 p-6 rounded-lg text-center flex flex-col justify-center items-center h-full">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{title}</h3>

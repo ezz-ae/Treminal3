@@ -1,5 +1,9 @@
 
 'use client';
+
+import Hero from '@/components/landing/hero';
+import InteractiveGuides from '@/components/landing/interactive-guides';
+import CodingModes from '@/components/landing/coding-modes';
 import {
   Card,
   CardContent,
@@ -21,12 +25,12 @@ import Link from 'next/link';
 
 
 /**
- * The main dashboard page, serving as a central hub for all Terminal3 services.
- * It welcomes the user and provides quick access to the various intelligent dashboards.
- * @returns {JSX.Element} The main dashboard component.
+ * The main landing page for Terminal3.
+ * It serves as an introduction to the platform's capabilities and directs users
+ * to the core services and interactive guides.
+ * @returns {JSX.Element} The main landing page component.
  */
-export default function DashboardPage() {
-
+export default function Home() {
     const services = [
         { href: "/dashboard/strategy-vault", title: "Strategy Vault", description: "Browse and execute pre-built investment flows.", icon: Library },
         { href: "/dashboard/dapp-builder", title: "AI Business Architect", description: "Get a strategic plan for your dApp.", icon: AppWindow },
@@ -36,24 +40,27 @@ export default function DashboardPage() {
         { href: "/dashboard/security-audits", title: "Security Audits", description: "Audit smart contracts for vulnerabilities.", icon: ShieldCheck },
         { href: "/dashboard/docs", title: "Docs & Academy", description: "Read guides, tutorials, and API references.", icon: BookOpen },
     ];
-
   return (
-    <div className="container mx-auto py-12 space-y-8">
-       <div className="mb-8">
-        <h1 className="text-3xl font-bold font-headline">Welcome to Terminal3</h1>
-        <p className="text-muted-foreground">Your AI-native command center for Web3 development. What will you build today?</p>
-      </div>
-
-       <div>
-        <h2 className="text-2xl font-bold font-headline mb-4">Core Services</h2>
-        <p className="text-muted-foreground mb-6">Explore the full suite of AI-powered tools to build, manage, and scale your projects.</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map(service => (
-                <ServiceCard key={service.title} href={service.href} title={service.title} description={service.description} icon={service.icon} />
-            ))}
+    <>
+      <Hero />
+      <div className="container mx-auto py-12 md:py-24 space-y-24">
+         <div>
+            <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold font-headline">A Unified Platform for Web3 Innovation</h2>
+                <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
+                    Explore the full suite of AI-powered tools to build, manage, and scale your projects. From idea to deployment, Terminal3 is your command center.
+                </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {services.map(service => (
+                    <ServiceCard key={service.title} href={service.href} title={service.title} description={service.description} icon={service.icon} />
+                ))}
+            </div>
         </div>
       </div>
-    </div>
+      <InteractiveGuides />
+      <CodingModes />
+    </>
   );
 }
 
