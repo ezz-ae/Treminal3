@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -50,17 +51,10 @@ export default function MarketScannerPage() {
                         </div>
                     </div>
                      <div className="space-y-2">
-                        <Label htmlFor="risk">Risk Appetite</Label>
-                         <Select defaultValue="medium">
-                            <SelectTrigger id="risk">
-                                <SelectValue placeholder="Select risk level" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="low">Low - Arbitrage & Scalping</SelectItem>
-                                <SelectItem value="medium">Medium - Trend Following</SelectItem>
-                                <SelectItem value="high">High - Volatility & Breakouts</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <Label>Risk Profile</Label>
+                        <div className="flex items-center justify-center h-10 px-3 py-2 text-sm text-muted-foreground bg-background/50 rounded-md border">
+                            AI will determine the optimal risk based on market conditions.
+                        </div>
                     </div>
                     <Button size="lg" className="w-full h-12 text-lg" onClick={handleScan} disabled={isLoading}>
                         {isLoading ? (
