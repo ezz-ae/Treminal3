@@ -8,9 +8,8 @@ import { cn } from '@/lib/utils';
 import GridPattern from '@/components/landing/grid-pattern';
 
 const tabs = [
-    { href: "/ai-trading", label: "Command Center" },
-    { href: "/ai-trading/opportunities", label: "Live Opportunities" },
-    { href: "/ai-trading/portfolio", label: "Portfolio" },
+    { href: "/ai-trading", label: "Market Scanner" },
+    { href: "/ai-trading/portfolio", label: "Active Portfolio" },
     { href: "/dashboard/bot-creator", label: "Bot Marketplace" },
 ];
 
@@ -31,10 +30,10 @@ export default function AiTradingLayout({ children }: { children: ReactNode }) {
             <div className="container mx-auto py-8 z-10 relative">
                 <h1 className="text-4xl md:text-5xl font-bold font-headline flex items-center gap-3">
                     <BrainCircuit className="w-12 h-12 text-primary" />
-                    AI Trading
+                    AI Trading Command Center
                 </h1>
                 <p className="text-muted-foreground text-lg max-w-3xl mt-4">
-                    Leverage our enterprise-grade AI to spot and execute high-probability trades across the crypto market in real-time.
+                    Leverage our enterprise-grade AI to scan the market, identify tailored opportunities, and execute high-probability trades.
                 </p>
             </div>
              <div className="container mx-auto border-t border-border/20 z-10 relative">

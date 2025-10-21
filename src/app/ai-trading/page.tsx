@@ -1,75 +1,76 @@
-
 'use client';
-import { TrendingUp, CheckCircle, Shield, BrainCircuit, BarChart, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import Link from 'next/link';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Loader2, Zap } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-const kpis = [
-    { title: 'AI Confidence', value: '99.9%', icon: CheckCircle, description: 'Based on 1.2M back-tested scenarios', color: 'text-green-400' },
-    { title: 'Live 24h PNL', value: '+$12,480.30', icon: TrendingUp, description: 'Across all automated strategies', color: 'text-green-400' },
-    { title: 'Trades Executed (24h)', value: '1,832', icon: Shield, description: 'All trades executed successfully', color: 'text-foreground' },
-];
+export default function MarketScannerPage() {
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
-const strategies = [
-    { name: 'Multi-DEX Arbitrage', description: 'Exploiting price differences across exchanges.', performance: '+18.2% APY' },
-    { name: 'Trend Following (BTC)', description: 'Capitalizing on major price movements.', performance: '+45.7% APY' },
-    { name: 'Mean Reversion (ETH)', description: 'Trading based on RSI indicators.', performance: '+22.9% APY' },
-]
+    const handleScan = () => {
+        setIsLoading(true);
+        // Simulate AI scanning process
+        setTimeout(() => {
+            setIsLoading(false);
+            router.push('/solana/trading');
+        }, 2500);
+    }
 
-export default function AiTradingPage() {
     return (
-        <div className="flex-1 flex flex-col p-4 md:p-8 space-y-8 container mx-auto">
-            <div className="grid gap-4 md:grid-cols-3">
-                {kpis.map(kpi => (
-                     <Card key={kpi.title} className="bg-card/60 backdrop-blur-sm">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
-                            <kpi.icon className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className={`text-2xl font-bold ${kpi.color}`}>{kpi.value}</div>
-                            <p className="text-xs text-muted-foreground">{kpi.description}</p>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="bg-card/60 backdrop-blur-sm">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><BrainCircuit className="text-primary"/> Active Strategy Types</CardTitle>
-                        <CardDescription>Our AI employs a diverse set of strategies to navigate different market conditions.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        {strategies.map(strategy => (
-                             <div key={strategy.name} className="flex justify-between items-center p-3 rounded-md bg-card-foreground/5">
-                                <div>
-                                    <p className="font-semibold">{strategy.name}</p>
-                                    <p className="text-sm text-muted-foreground">{strategy.description}</p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="font-mono text-green-400">{strategy.performance}</p>
-                                    <p className="text-xs text-muted-foreground">Simulated</p>
-                                </div>
-                            </div>
-                        ))}
-                    </CardContent>
-                </Card>
-                 <Card className="bg-card/60 backdrop-blur-sm flex flex-col">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><BarChart className="text-primary"/> Platform Performance</CardTitle>
-                        <CardDescription>An overview of the AI's performance over the last 30 days.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-1 flex items-center justify-center">
-                        <div className="text-center">
-                            <p className="text-muted-foreground">Detailed performance charts are being generated.</p>
-                             <Link href="/ai-trading/opportunities" className="text-primary font-semibold mt-4 inline-flex items-center gap-2">
-                                Explore Live Opportunities <ArrowRight className="w-4 h-4"/>
-                            </Link>
+        <div className="flex-1 flex items-center justify-center p-4 md:p-8 container mx-auto">
+            <Card className="w-full max-w-2xl bg-card/60 backdrop-blur-sm">
+                <CardHeader className="text-center">
+                    <CardTitle className="text-2xl font-headline">AI Market Scanner</CardTitle>
+                    <CardDescription>Configure your parameters and command the AI to find the optimal trade for you.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="trade-amount">Trade Amount (USDC)</Label>
+                            <Input id="trade-amount" type="number" placeholder="e.g., 5,000" defaultValue="5000" />
                         </div>
-                    </CardContent>
-                </Card>
-            </div>
+                        <div className="space-y-2">
+                             <Label htmlFor="duration">Trade Duration</Label>
+                             <Select defaultValue="1h">
+                                <SelectTrigger id="duration">
+                                    <SelectValue placeholder="Select duration" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="5m">5 Minutes</SelectItem>
+                                    <SelectItem value="1h">1 Hour</SelectItem>
+                                    <SelectItem value="24h">24 Hours</SelectItem>
+                                    <SelectItem value="7d">7 Days</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="risk">Risk Appetite</Label>
+                         <Select defaultValue="medium">
+                            <SelectTrigger id="risk">
+                                <SelectValue placeholder="Select risk level" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="low">Low - Arbitrage & Scalping</SelectItem>
+                                <SelectItem value="medium">Medium - Trend Following</SelectItem>
+                                <SelectItem value="high">High - Volatility & Breakouts</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <Button size="lg" className="w-full h-12 text-lg" onClick={handleScan} disabled={isLoading}>
+                        {isLoading ? (
+                            <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Scanning Market...</>
+                        ) : (
+                            <><Zap className="mr-2 h-5 w-5" />Scan for Opportunity</>
+                        )}
+                    </Button>
+                </CardContent>
+            </Card>
         </div>
     );
 }
