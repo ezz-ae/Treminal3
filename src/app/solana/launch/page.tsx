@@ -247,7 +247,7 @@ export default function SolanaLaunchPage() {
 
   return (
     <div className="container mx-auto py-12">
-        <header className="mb-8 text-center max-w-3xl mx-auto">
+        <header className="mb-12 text-center max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold font-headline flex items-center justify-center gap-3">
                 <Rocket className="w-10 h-10 text-primary" />
                 Solana Token Launchpad
@@ -257,8 +257,8 @@ export default function SolanaLaunchPage() {
             </p>
         </header>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <motion.div layout className="lg:sticky lg:top-6">
+        {!result && !isLoading && (
+             <motion.div layout className="max-w-2xl mx-auto">
                 <Card>
                     <CardHeader>
                         <CardTitle>Step {currentStep + 1}: {steps[currentStep].title}</CardTitle>
@@ -302,89 +302,114 @@ export default function SolanaLaunchPage() {
                     </CardContent>
                 </Card>
             </motion.div>
+        )}
 
-
-            <div className="space-y-8">
-                {isLoading && (
-                     <div className="flex flex-col items-center justify-center text-center rounded-lg border p-12 min-h-[400px]">
-                        <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-                        <h3 className="text-xl font-headline font-semibold">AI is Building Your Launch Kit...</h3>
-                        <p className="text-muted-foreground">Generating token image, crafting marketing copy, and simulating deployment. Please wait.</p>
-                    </div>
-                )}
-                {result && (
-                    <motion.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
-                       <Card>
-                         <CardHeader>
-                            <CardTitle className="flex items-center gap-3"><Bot className="w-6 h-6 text-primary"/>Step 4: Launch Kit Generated!</CardTitle>
-                            <CardDescription>Your token assets have been created and the launch has been simulated.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="flex flex-col items-center">
-                                <Image src={result.imageUrl} alt="Generated token image" width={128} height={128} className="rounded-full border-4 border-primary/50 shadow-lg mb-4" />
-                            </div>
-                            
-                            <CopyableField fieldName="Token Address" value={result.tokenAddress} />
-                            <CopyableField fieldName="Signature" value={result.signature} />
-                            
-                            <div>
-                                <h4 className="font-semibold mb-2 flex items-center gap-2"><Twitter className="w-4 h-4"/> Tweet</h4>
-                                <p className="text-sm bg-card/50 p-3 rounded-md border">{result.twitter}</p>
-                            </div>
-                            <div>
-                                <h4 className="font-semibold mb-2 flex items-center gap-2"><FileText className="w-4 h-4"/> Telegram Post</h4>
-                                <p className="text-sm bg-card/50 p-3 rounded-md border">{result.telegram}</p>
-                            </div>
-
-                             <Button size="lg" className="w-full" disabled>Deploy to Devnet (Coming Soon)</Button>
-                        </CardContent>
-                       </Card>
-
-                       <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-3"><PlayCircle className="w-6 h-6 text-primary"/>Step 5: Create Liquidity Pool</CardTitle>
-                                <CardDescription>
-                                    Execute this script to create a new liquidity pool on Raydium for your token, making it tradable.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div>
-                                    <h3 className="font-semibold mb-2">Script Code</h3>
-                                    <CustomCodeBlock 
-                                        code={createPoolScript.replace('YOUR_NEW_TOKEN_MINT_ADDRESS', result.tokenAddress)} 
-                                        language="typescript" 
-                                    />
+        {isLoading && (
+            <div className="flex flex-col items-center justify-center text-center rounded-lg border p-12 min-h-[400px] max-w-2xl mx-auto">
+                <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+                <h3 className="text-xl font-headline font-semibold">AI is Building Your Launch Kit...</h3>
+                <p className="text-muted-foreground">Generating token image, crafting marketing copy, and simulating deployment. Please wait.</p>
+            </div>
+        )}
+        
+        {result && (
+            <motion.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8 max-w-5xl mx-auto">
+                <div className="text-center">
+                    <h2 className="text-3xl font-bold font-headline">Your Launch Kit is Ready!</h2>
+                    <p className="text-muted-foreground mt-2">The AI has generated your token assets and the launch has been simulated.</p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="md:col-span-1 space-y-8">
+                         <Card>
+                             <CardHeader className="text-center">
+                                <CardTitle>Token Image</CardTitle>
+                             </CardHeader>
+                            <CardContent>
+                                <div className="flex flex-col items-center">
+                                    <Image src={result.imageUrl} alt="Generated token image" width={160} height={160} className="rounded-full border-4 border-primary/50 shadow-lg" />
                                 </div>
-                                <div>
-                                    <h3 className="font-semibold mb-2">Simulated Output</h3>
-                                    <div className="bg-black text-white p-4 rounded-lg font-mono text-xs h-[250px] overflow-y-auto flex flex-col-reverse border border-primary/20">
-                                        <div>
-                                            {scriptOutput.slice().reverse().map((line, index) => (
-                                                <motion.div 
-                                                    key={scriptOutput.length - index}
-                                                    initial={{ opacity: 0, x: -10 }}
-                                                    animate={{ opacity: 1, x: 0 }}
-                                                    transition={{ duration: 0.3 }}
-                                                    className="flex items-start gap-2"
-                                                >
-                                                    <span className="text-primary/50 shrink-0">$</span>
-                                                    <span className="text-muted-foreground whitespace-pre-wrap">{line}</span>
-                                                </motion.div>
-                                            ))}
-                                            {isRunningScript && <div className="w-2 h-4 bg-green-400 animate-pulse" />}
-                                        </div>
-                                    </div>
-                                </div>
-                                <Button className="w-full" onClick={handleRunScript} disabled={isRunningScript}>
-                                    {isRunningScript ? <Loader2 className="mr-2 animate-spin"/> : <PlayCircle className="mr-2"/>} 
-                                    {isRunningScript ? 'Running Script...' : 'Simulate Script Execution'}
-                                </Button>
                             </CardContent>
                         </Card>
-                    </motion.div>
-                )}
-            </div>
-        </div>
+                         <Card>
+                             <CardHeader>
+                                <CardTitle>On-Chain Details</CardTitle>
+                             </CardHeader>
+                            <CardContent className="space-y-4">
+                                <CopyableField fieldName="Token Address" value={result.tokenAddress} />
+                                <CopyableField fieldName="Signature" value={result.signature} />
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    <div className="md:col-span-2 space-y-8">
+                        <Card>
+                             <CardHeader>
+                                <CardTitle className="flex items-center gap-2"><Twitter className="w-5 h-5 text-primary"/>Tweet Announcement</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-sm bg-card/50 p-4 rounded-md border">{result.twitter}</p>
+                            </CardContent>
+                        </Card>
+                         <Card>
+                             <CardHeader>
+                                <CardTitle className="flex items-center gap-2"><FileText className="w-5 h-5 text-primary"/>Telegram Post</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-sm bg-card/50 p-4 rounded-md border">{result.telegram}</p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-3"><PlayCircle className="w-6 h-6 text-primary"/>Final Step: Create Liquidity Pool</CardTitle>
+                        <CardDescription>
+                            Execute this script in a Node.js environment to create a new liquidity pool on Raydium for your token, making it tradable.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        <div>
+                            <h3 className="font-semibold mb-2">Liquidity Pool Script</h3>
+                            <CustomCodeBlock 
+                                code={createPoolScript.replace('YOUR_NEW_TOKEN_MINT_ADDRESS', result.tokenAddress)} 
+                                language="typescript" 
+                            />
+                        </div>
+                        <div>
+                            <h3 className="font-semibold mb-2">Simulated Execution Output</h3>
+                            <div className="bg-black text-white p-4 rounded-lg font-mono text-xs h-[250px] overflow-y-auto flex flex-col-reverse border border-primary/20">
+                                <div>
+                                    {scriptOutput.slice().reverse().map((line, index) => (
+                                        <motion.div 
+                                            key={scriptOutput.length - index}
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="flex items-start gap-2"
+                                        >
+                                            <span className="text-primary/50 shrink-0">$</span>
+                                            <span className="text-white/80 whitespace-pre-wrap">{line}</span>
+                                        </motion.div>
+                                    ))}
+                                    {isRunningScript && <div className="w-2 h-4 bg-green-400 animate-pulse" />}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex gap-4">
+                            <Button className="w-full" size="lg" onClick={handleRunScript} disabled={isRunningScript}>
+                                {isRunningScript ? <Loader2 className="mr-2 animate-spin"/> : <PlayCircle className="mr-2"/>} 
+                                {isRunningScript ? 'Running Script...' : 'Simulate Script Execution'}
+                            </Button>
+                             <Button className="w-full" size="lg" variant="outline" disabled>
+                                Deploy to Production (Coming Soon)
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+            </motion.div>
+        )}
    </div>
   );
 }
@@ -412,5 +437,3 @@ const CopyableField = ({ fieldName, value }: { fieldName: string, value: string 
         </div>
     )
 }
-
-    
