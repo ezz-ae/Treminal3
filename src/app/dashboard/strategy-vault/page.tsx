@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Library, Zap, TrendingUp, ShieldAlert, ArrowRight } from 'lucide-react';
