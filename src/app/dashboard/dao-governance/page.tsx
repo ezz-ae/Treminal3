@@ -35,7 +35,7 @@ export default function DaoGovernancePage() {
                     <CardDescription>Draft and submit a new proposal for the community to vote on.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Button className="w-full mt-4" disabled>Create Proposal (Coming Soon)</Button>
+                    <Button className="w-full mt-4">Create Proposal</Button>
                 </CardContent>
             </Card>
             <Card className="bg-card/50">
@@ -44,7 +44,7 @@ export default function DaoGovernancePage() {
                     <CardDescription>View and participate in all active governance proposals.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                     <Button className="w-full mt-4" variant="outline" disabled>View Active Votes (Coming Soon)</Button>
+                     <Button className="w-full mt-4" variant="outline">View Active Votes</Button>
                 </CardContent>
             </Card>
              <Card className="bg-card/50 md:col-span-2 lg:col-span-1">
@@ -53,7 +53,7 @@ export default function DaoGovernancePage() {
                      <CardDescription>Monitor the DAO's treasury and propose funding initiatives.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                     <Button className="w-full mt-4" variant="outline" disabled>View Treasury (Coming Soon)</Button>
+                     <Button className="w-full mt-4" variant="outline">View Treasury</Button>
                 </CardContent>
             </Card>
         </div>

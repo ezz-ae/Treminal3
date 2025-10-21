@@ -88,7 +88,7 @@ export default function SolanaTokensPage() {
                         <TableRow key={token.symbol}>
                             <TableCell>
                                 <div className="flex items-center gap-3">
-                                    <Image src={`https://picsum.photos/seed/${token.symbol}/40/40`} width={40} height={40} className="rounded-full" alt={token.name} />
+                                    <Image data-ai-hint="logo abstract" src={`https://picsum.photos/seed/${token.symbol}/40/40`} width={40} height={40} className="rounded-full" alt={token.name} />
                                     <div>
                                         <p className="font-bold">{token.name}</p>
                                         <p className="text-xs text-muted-foreground">{token.symbol}</p>

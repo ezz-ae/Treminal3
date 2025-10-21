@@ -33,7 +33,7 @@ export default function SolanaMarketingPage() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <Button className="w-full" disabled>Create Airdrop (Coming Soon)</Button>
+                <Button className="w-full">Create Airdrop</Button>
             </CardContent>
         </Card>
          <Card className="bg-card/80 backdrop-blur-sm">
@@ -47,7 +47,7 @@ export default function SolanaMarketingPage() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <Button className="w-full" disabled>Manage Pools (Coming Soon)</Button>
+                <Button className="w-full">Manage Pools</Button>
             </CardContent>
         </Card>
          <Card className="bg-card/80 backdrop-blur-sm">
@@ -61,7 +61,7 @@ export default function SolanaMarketingPage() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <Button className="w-full" disabled>Deploy Bots (Coming Soon)</Button>
+                <Button className="w-full">Deploy Bots</Button>
             </CardContent>
         </Card>
       </div>

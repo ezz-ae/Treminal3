@@ -27,7 +27,6 @@ export default function DownloadPage() {
         <div className="p-6 bg-primary/10 rounded-full text-primary mb-6 border border-primary/20">
             <Terminal className="w-16 h-16" />
         </div>
-        <Badge className="text-base bg-blue-500/10 text-blue-300 border-blue-500/20 mb-4">Coming Soon</Badge>
         <h1 className="text-4xl font-bold font-headline">Terminal3 Desktop</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto mt-4">
             Access the full power of Terminal3 with our native desktop application for an integrated development experience, offline access, and enhanced security features.
@@ -35,7 +34,7 @@ export default function DownloadPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-4xl mt-12">
             {downloadLinks.map((linkInfo) => (
-                <Button key={linkInfo.os} size="lg" disabled asChild className="h-14 text-lg">
+                <Button key={linkInfo.os} size="lg" asChild className="h-14 text-lg">
                     <Link href={linkInfo.href}>
                         <Download className="mr-3 h-5 w-5"/> {linkInfo.os}
                     </Link>
@@ -49,8 +48,8 @@ export default function DownloadPage() {
             <CardContent>
                 <p className="text-muted-foreground">The desktop app is under active development. Sign up for our newsletter to be the first to know when it's available.</p>
                 <div className="flex w-full items-center space-x-2 mt-4">
-                    <Input type="email" placeholder="Email" disabled />
-                    <Button type="submit" disabled>Notify Me</Button>
+                    <Input type="email" placeholder="Email" />
+                    <Button type="submit">Notify Me</Button>
                 </div>
             </CardContent>
         </Card>

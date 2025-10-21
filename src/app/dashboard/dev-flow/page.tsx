@@ -93,7 +93,7 @@ export default function DevFlowPage() {
                     </div>
                 </div>
                  <div className="mt-8">
-                    <Button variant="outline" disabled={!isComplete}>View Deployment Results (Coming Soon)</Button>
+                    <Button variant="outline">View Deployment Results</Button>
                 </div>
             </CardContent>
         </Card>

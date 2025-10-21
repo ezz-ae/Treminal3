@@ -16,8 +16,8 @@ const mockPriceData = Array.from({ length: 30 }, (_, i) => ({
 }));
 
 const mockOrderBook = {
-    bids: Array.from({length: 5}, (_, i) => ({ price: (158.5 - i * 0.1).toFixed(2), size: (Math.random() * 10).toFixed(2) })),
-    asks: Array.from({length: 5}, (_, i) => ({ price: (158.6 + i * 0.1).toFixed(2), size: (Math.random() * 10).toFixed(2) }))
+    bids: Array.from({length: 8}, (_, i) => ({ price: (158.5 - i * 0.1).toFixed(2), size: (Math.random() * 10).toFixed(2) })),
+    asks: Array.from({length: 8}, (_, i) => ({ price: (158.6 + i * 0.1).toFixed(2), size: (Math.random() * 10).toFixed(2) }))
 }
 
 

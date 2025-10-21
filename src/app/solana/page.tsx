@@ -128,7 +128,7 @@ export default function SolanaHoloDeckPage() {
 }
 
 
-const HoloCard = ({ title, value }: { title: string, value: string }) => {
+const HoloCard = ({ title, string, value }: { title: string, value: string }) => {
     return (
         <div className="bg-card/60 backdrop-blur-sm border border-primary/20 p-6 rounded-lg text-center flex flex-col justify-center items-center h-full">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{title}</h3>
