@@ -1,4 +1,3 @@
-
 import {
     AppWindow,
     Bot,
@@ -44,6 +43,8 @@ import {
     AlertTriangle,
     TrendingUp,
     BarChartHorizontal,
+    CheckCircle,
+    Shield,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -96,4 +97,6 @@ import {
     AlertTriangle,
     TrendingUp,
     BarChartHorizontal,
+    CheckCircle,
+    Shield,
   };
