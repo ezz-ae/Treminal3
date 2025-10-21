@@ -9,6 +9,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { WalletProvider } from '@/hooks/use-wallet';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
+import { cn } from '@/lib/utils';
+
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
@@ -41,7 +43,10 @@ export default function RootLayout({
   
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-body antialiased flex flex-col min-h-screen`}>
+      <body className={cn(
+          `${inter.variable} ${spaceGrotesk.variable} font-body antialiased flex flex-col min-h-screen`,
+          "bg-background text-foreground"
+      )}>
         <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -50,7 +55,7 @@ export default function RootLayout({
         >
           <WalletProvider>
              <Header />
-             <main className="flex-1">
+             <main className="flex-1 flex flex-col">
               {children}
             </main>
              <Footer />
