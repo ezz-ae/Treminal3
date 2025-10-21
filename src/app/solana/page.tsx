@@ -4,10 +4,8 @@ import { useState, useEffect } from 'react';
 import { Wind, Rocket, Terminal, Sprout, Gem, AreaChart } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { useMousePosition } from '@/hooks/use-mouse-position';
-import { cn } from '@/lib/utils';
 import GridPattern from '@/components/landing/grid-pattern';
 
 
@@ -56,7 +54,7 @@ export default function SolanaHoloDeckPage() {
   };
 
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center p-4 overflow-hidden">
+    <div className="relative w-full h-full flex flex-col items-center justify-center p-4 py-24 overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0 z-0">
              <GridPattern
@@ -74,7 +72,7 @@ export default function SolanaHoloDeckPage() {
         </div>
       
         {/* Header Content */}
-        <div className="relative z-10 text-center mb-12">
+        <div className="relative z-10 text-center mb-16">
             <motion.div 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -94,37 +92,30 @@ export default function SolanaHoloDeckPage() {
             </motion.p>
         </div>
 
-        {/* Live Stats */}
-        <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 w-full max-w-5xl">
-            <motion.div variants={cardVariants} initial="initial" animate="animate" custom={0}>
-                <HoloCard title="Transactions / Sec" value={networkStats.tps.toLocaleString()} />
-            </motion.div>
-            <motion.div variants={cardVariants} initial="initial" animate="animate" custom={1}>
-                <HoloCard title="Slot Time (ms)" value={`${networkStats.slotTime}ms`} />
-            </motion.div>
-            <motion.div variants={cardVariants} initial="initial" animate="animate" custom={2}>
-                <HoloCard title="Current Epoch" value={networkStats.epoch.toString()} />
-            </motion.div>
-        </div>
+        {/* Live Stats & Service Links */}
+         <div className="relative z-10 w-full max-w-7xl mx-auto space-y-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <motion.div variants={cardVariants} initial="initial" animate="animate" custom={0}>
+                    <HoloCard title="Transactions / Sec" value={networkStats.tps.toLocaleString()} />
+                </motion.div>
+                <motion.div variants={cardVariants} initial="initial" animate="animate" custom={1}>
+                    <HoloCard title="Slot Time (ms)" value={`${networkStats.slotTime}ms`} />
+                </motion.div>
+                <motion.div variants={cardVariants} initial="initial" animate="animate" custom={2}>
+                    <HoloCard title="Current Epoch" value={networkStats.epoch.toString()} />
+                </motion.div>
+            </div>
 
-        {/* Service Links */}
-         <div className="relative z-10 w-full max-w-5xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                 {services.map((service, i) => {
                     const Icon = service.icon;
                     return (
                         <motion.div key={service.title} variants={cardVariants} initial="initial" animate="animate" custom={3 + i}>
                             <Link href={service.href} className="block h-full">
-                                <Card className="h-full bg-card/60 backdrop-blur-sm border-primary/20 hover:border-primary/50 hover:bg-card/80 transition-colors duration-300 group flex flex-col justify-between">
-                                    <CardHeader>
-                                        <div className="flex items-center gap-4">
-                                            <Icon className="w-6 h-6 text-primary"/>
-                                            <CardTitle className="font-headline text-lg">{service.title}</CardTitle>
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-muted-foreground">{service.description}</p>
-                                    </CardContent>
+                                <Card className="h-full bg-card/60 backdrop-blur-sm border-primary/20 hover:border-primary/50 hover:bg-card/80 transition-colors duration-300 group flex flex-col justify-between text-center items-center p-6">
+                                    <Icon className="w-10 h-10 text-primary mb-4"/>
+                                    <CardTitle className="font-headline text-lg mb-2">{service.title}</CardTitle>
+                                    <p className="text-sm text-muted-foreground flex-grow">{service.description}</p>
                                 </Card>
                             </Link>
                         </motion.div>
