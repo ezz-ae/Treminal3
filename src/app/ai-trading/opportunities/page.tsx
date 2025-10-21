@@ -15,7 +15,7 @@ import {
 
 const highYieldOpportunities = [
     { pair: 'ETH/USDC', strategy: 'Volatility Scalp', projectedRoi: '22.1%', risk: 'High', confidence: 94.8, href: '/dashboard/bot-creator/volatility-scalper-eth', minCapital: '2,500 USDC' },
-     { pair: 'BTC/USDC', strategy: 'Momentum Breakout', projectedRoi: '15.2%', risk: 'Medium', confidence: 98.2, href: '/dashboard/bot-creator/momentum-master-btc', minCapital: '5,000 USDC' },
+    { pair: 'BTC/USDC', strategy: 'Momentum Breakout', projectedRoi: '15.2%', risk: 'Medium', confidence: 98.2, href: '/dashboard/bot-creator/momentum-master-btc', minCapital: '5,000 USDC' },
 ];
 
 const arbitrageOpportunities = [
