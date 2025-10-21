@@ -35,7 +35,6 @@ const solanaServices = [
     { href: "/solana/tokens", title: "Token Hub", icon: Gem, description: "Explore and analyze tokens on the network." },
     { href: "/solana/trading", title: "DEX Terminal", icon: AreaChart, description: "Trade assets on Solana's decentralized exchanges." },
     { href: "/solana/staking", title: "Staking", icon: Sprout, description: "Stake SOL and other assets to earn rewards." },
-    { href: "/solana/marketing", title: "Marketing Suite", icon: CircleDollarSign, description: "Manage your token's market presence." },
 ]
 
 const resourcesItems = [
@@ -63,9 +62,9 @@ export default function Header() {
           <NavigationMenu>
             <NavigationMenuList>
                 <NavigationMenuItem>
-                    <Link href="/dashboard" legacyBehavior passHref>
+                    <Link href="/" legacyBehavior passHref>
                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                            Dashboard
+                            {wallet ? "Dashboard" : "Home"}
                         </NavigationMenuLink>
                     </Link>
                 </NavigationMenuItem>
@@ -154,7 +153,7 @@ export default function Header() {
           <ThemeToggle />
            {wallet ? (
                 <Button variant="outline" onClick={disconnectWallet}>
-                    Disconnect
+                    {`Disconnect ${wallet.address.slice(0, 4)}...${wallet.address.slice(-4)}`}
                 </Button>
             ) : (
                 <Button onClick={connectWallet}>

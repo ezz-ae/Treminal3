@@ -7,13 +7,10 @@ import {
   FileJson,
   ShieldCheck,
   BookOpenText,
-  Wind,
-  Home,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 
 const menuItems = [
     { href: "/dashboard/docs/getting-started", label: "Getting Started", icon: GraduationCap },
@@ -38,7 +35,7 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
                     </Link>
                 </div>
                 <nav className="flex-grow space-y-1">
-                    {menuItems.map((item, index) => {
+                    {menuItems.map((item) => {
                         const Icon = item.icon;
                         const isActive = pathname === item.href;
                         return (

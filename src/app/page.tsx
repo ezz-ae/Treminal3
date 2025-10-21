@@ -1,80 +1,81 @@
 'use client';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
-import {
-  ArrowRight,
-  AppWindow,
-  Gem,
-  ShieldCheck,
-  BookOpen,
-  BrainCircuit,
-  Wind,
-  Library,
-} from 'lucide-react';
+import { useRef } from 'react';
+import { useScroll, useTransform, motion } from 'framer-motion';
+import Hero from '@/components/landing/hero';
+import MotionTerminal from './dashboard/motion-terminal';
+import { articles } from '@/lib/articles';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { iconMap } from '@/lib/icon-map';
+import InteractiveGuides from '@/components/landing/interactive-guides';
+import CodingModes from '@/components/landing/coding-modes';
+import { useWallet } from '@/hooks/use-wallet';
+import { useRouter } from 'next/navigation';
+import DashboardPage from './dashboard/page';
 
 /**
- * The main dashboard page, serving as a central hub for all Terminal3 services.
- * It welcomes the user and provides quick access to the various intelligent dashboards.
- * @returns {JSX.Element} The main dashboard component.
+ * The main landing page for unauthenticated users.
+ * It combines a hero section, an interactive terminal, featured services,
+ * and calls to action to encourage users to start building.
+ * @returns {JSX.Element} The landing page component.
  */
-export default function DashboardPage() {
+export default function LandingPage() {
+    const { wallet } = useWallet();
+    const router = useRouter();
 
-    const services = [
-        { href: "/dashboard/strategy-vault", title: "Strategy Vault", description: "Browse and execute pre-built investment flows.", icon: Library },
-        { href: "/dashboard/dapp-builder", title: "AI Business Architect", description: "Get a strategic plan for your dApp.", icon: AppWindow },
-        { href: "/dashboard/token-launcher", title: "Token Launcher", description: "Generate custom ERC-20 tokens with AI.", icon: Gem },
-        { href: "/dashboard/bot-creator", title: "Bot Creator", description: "Design, simulate, and deploy trading bots.", icon: BrainCircuit },
-        { href: "/solana", title: "Solana Command Center", description: "Interact with the Solana network via AI.", icon: Wind },
-        { href: "/dashboard/security-audits", title: "Security Audits", description: "Audit smart contracts for vulnerabilities.", icon: ShieldCheck },
-        { href: "/dashboard/docs", title: "Docs & Academy", description: "Read guides, tutorials, and API references.", icon: BookOpen },
-    ];
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ['start start', 'end start'],
+    });
+
+    const terminalScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.85]);
+    const terminalY = useTransform(scrollYProgress, [0, 0.2], [0, -100]);
+
+    const activeServiceIndex = useTransform(scrollYProgress, [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], [0, 1, 2, 3, 7, 9, 10], {
+        clamp: false
+    });
+
+    if (wallet) {
+        return <DashboardPage />;
+    }
 
   return (
-    <div className="container mx-auto py-12 space-y-8">
-       <div className="mb-8">
-        <h1 className="text-3xl font-bold font-headline">Welcome to Terminal3</h1>
-        <p className="text-muted-foreground">Your AI-native command center for Web3 development. What will you build today?</p>
-      </div>
-
-       <div>
-        <h2 className="text-2xl font-bold font-headline mb-4">Core Services</h2>
-        <p className="text-muted-foreground mb-6">Explore the full suite of AI-powered tools to build, manage, and scale your projects.</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map(service => (
-                <ServiceCard key={service.title} href={service.href} title={service.title} description={service.description} icon={service.icon} />
-            ))}
+    <div ref={containerRef}>
+      <Hero />
+      <div className="h-[4000px] relative">
+        <div className="sticky top-[15vh] h-[70vh] px-4">
+            <motion.div 
+                className="w-full h-full max-w-4xl mx-auto"
+                style={{ scale: terminalScale, y: terminalY }}
+            >
+                <MotionTerminal scrollYProgress={scrollYProgress} activeServiceIndex={null} />
+            </motion.div>
         </div>
       </div>
+       <InteractiveGuides />
+       <CodingModes />
     </div>
   );
 }
 
-
-const ServiceCard = ({ href, title, description, icon: Icon }: { href: string, title: string, description: string, icon: React.ElementType }) => (
-    <Link href={href}>
-        <Card className="h-full bg-card/50 hover:border-primary/50 transition-colors group flex flex-col">
+const ServiceCard = ({ article }: { article: typeof articles[0] }) => {
+    const Icon = iconMap[article.icon];
+    return (
+        <Card className="bg-card/50">
             <CardHeader>
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-primary/10 rounded-lg text-primary">
+                     <div className="p-3 bg-primary/10 rounded-lg text-primary">
                         <Icon className="w-6 h-6" />
                     </div>
-                    <CardTitle className="text-lg font-bold group-hover:text-primary">{title}</CardTitle>
+                    <CardTitle>{article.title}</CardTitle>
                 </div>
             </CardHeader>
-            <CardContent className="flex-grow">
-                 <CardDescription>{description}</CardDescription>
+            <CardContent>
+                <CardDescription>{article.excerpt}</CardDescription>
             </CardContent>
-            <div className="p-6 pt-0">
-                 <p className="text-sm font-medium text-primary flex items-center gap-1">
-                    Open Dashboard <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </p>
-            </div>
         </Card>
-    </Link>
-)
+    )
+}
