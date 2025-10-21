@@ -1,6 +1,7 @@
+
 'use client';
 
-import { Library, Zap, TrendingUp, ShieldAlert, ArrowRight } from 'lucide-react';
+import { Library, Zap, TrendingUp, ShieldAlert, ArrowRight, Bot, AppWindow, Gem, FileJson } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -12,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 const strategies = [
     {
@@ -20,7 +22,8 @@ const strategies = [
         cost: '2 SOL + Liquidity',
         roi: '150-300% (Projected 7-day)',
         risk: 'High',
-        riskColor: 'text-red-400',
+        category: 'Solana',
+        icon: Gem,
         href: '/solana/launch'
     },
     {
@@ -29,7 +32,8 @@ const strategies = [
         cost: '0.5 ETH',
         roi: '5-12% APY (Simulated)',
         risk: 'Medium',
-        riskColor: 'text-orange-400',
+        category: 'DeFi',
+        icon: Bot,
         href: '/dashboard/bot-creator'
     },
      {
@@ -38,7 +42,8 @@ const strategies = [
         cost: 'Variable',
         roi: 'N/A (Influence-based)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'DAO',
+        icon: Library,
         href: '/dashboard/dao-governance'
     },
      {
@@ -47,7 +52,8 @@ const strategies = [
         cost: '0.2 SOL per collection',
         roi: 'N/A (Data product)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'Analytics',
+        icon: ShieldAlert,
         href: '/dashboard/analytics'
     },
     {
@@ -56,7 +62,8 @@ const strategies = [
         cost: '0.1 ETH + Mint Cost',
         roi: 'Variable',
         risk: 'High',
-        riskColor: 'text-red-400',
+        category: 'NFT',
+        icon: Bot,
         href: '/dashboard/dev-flow'
     },
     {
@@ -65,7 +72,8 @@ const strategies = [
         cost: 'Gas Fees',
         roi: '7-15% APY',
         risk: 'Medium',
-        riskColor: 'text-orange-400',
+        category: 'DeFi',
+        icon: TrendingUp,
         href: '/dashboard/dev-flow'
     },
     {
@@ -74,7 +82,8 @@ const strategies = [
         cost: 'Gas Fees',
         roi: 'Highly Variable',
         risk: 'Medium',
-        riskColor: 'text-orange-400',
+        category: 'DeFi',
+        icon: Bot,
         href: '/dashboard/dev-flow'
     },
     {
@@ -83,7 +92,8 @@ const strategies = [
         cost: '0.3 ETH + Gas',
         roi: '15-40% APY (Simulated)',
         risk: 'High',
-        riskColor: 'text-red-400',
+        category: 'DeFi',
+        icon: Bot,
         href: '/dashboard/dev-flow'
     },
     {
@@ -92,7 +102,8 @@ const strategies = [
         cost: 'Gas Fees',
         roi: 'N/A (Dev Tool)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'Dev Tool',
+        icon: FileJson,
         href: '/dashboard/tools'
     },
     {
@@ -101,7 +112,8 @@ const strategies = [
         cost: 'Variable',
         roi: 'Variable',
         risk: 'High',
-        riskColor: 'text-red-400',
+        category: 'NFT',
+        icon: Bot,
         href: '/dashboard/bot-creator'
     },
     {
@@ -110,7 +122,8 @@ const strategies = [
         cost: '0.05 ETH',
         roi: 'N/A (Reputation)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'Identity',
+        icon: AppWindow,
         href: '/dashboard/dev-flow'
     },
     {
@@ -119,7 +132,8 @@ const strategies = [
         cost: 'Low',
         roi: 'Gas Savings',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'DeFi',
+        icon: Zap,
         href: '/dashboard/dev-flow'
     },
     {
@@ -128,7 +142,8 @@ const strategies = [
         cost: '0.1 ETH (Testnet)',
         roi: 'N/A (Educational)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'Security',
+        icon: ShieldAlert,
         href: '/dashboard/security-audits'
     },
     {
@@ -137,7 +152,8 @@ const strategies = [
         cost: 'RPC Credits',
         roi: 'N/A (Data)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'Analytics',
+        icon: FileJson,
         href: '/dashboard/analytics'
     },
     {
@@ -146,7 +162,8 @@ const strategies = [
         cost: 'Gas Fees',
         roi: 'N/A (Governance)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'DAO',
+        icon: Library,
         href: '/dashboard/dao-governance'
     },
     {
@@ -155,7 +172,8 @@ const strategies = [
         cost: 'Storage Fees',
         roi: 'N/A (Security)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'NFT',
+        icon: AppWindow,
         href: '/dashboard/dev-flow'
     },
     {
@@ -164,7 +182,8 @@ const strategies = [
         cost: 'Testnet Gas',
         roi: 'N/A (Security)',
         risk: 'Medium',
-        riskColor: 'text-orange-400',
+        category: 'Security',
+        icon: ShieldAlert,
         href: '/dashboard/security-audits'
     },
     {
@@ -173,7 +192,8 @@ const strategies = [
         cost: 'Trading Fees',
         roi: 'Loss Mitigation',
         risk: 'High',
-        riskColor: 'text-red-400',
+        category: 'DeFi',
+        icon: TrendingUp,
         href: '/dashboard/bot-creator'
     },
     {
@@ -182,7 +202,8 @@ const strategies = [
         cost: 'Variable',
         roi: '0-10,000%',
         risk: 'Very High',
-        riskColor: 'text-red-600',
+        category: 'DeFi',
+        icon: Bot,
         href: '/dashboard/bot-creator'
     },
     {
@@ -191,7 +212,8 @@ const strategies = [
         cost: 'Gas Fees',
         roi: 'N/A (Research)',
         risk: 'Medium',
-        riskColor: 'text-orange-400',
+        category: 'Security',
+        icon: ShieldAlert,
         href: '/dashboard/security-audits'
     },
     {
@@ -200,7 +222,8 @@ const strategies = [
         cost: 'RPC Credits',
         roi: 'N/A (Dev Tool)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'Dev Tool',
+        icon: FileJson,
         href: '/dashboard/tools'
     },
     {
@@ -209,7 +232,8 @@ const strategies = [
         cost: 'Deployment Gas',
         roi: 'N/A (Security)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'DAO',
+        icon: Library,
         href: '/dashboard/dev-flow'
     },
     {
@@ -218,7 +242,8 @@ const strategies = [
         cost: 'Trading Fees',
         roi: 'Risk Management',
         risk: 'Medium',
-        riskColor: 'text-orange-400',
+        category: 'DeFi',
+        icon: Bot,
         href: '/dashboard/bot-creator'
     },
     {
@@ -227,7 +252,8 @@ const strategies = [
         cost: 'Free',
         roi: 'N/A (Dev Tool)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'Dev Tool',
+        icon: AppWindow,
         href: '/dashboard/dapp-builder'
     },
     {
@@ -236,7 +262,8 @@ const strategies = [
         cost: 'Gas Fees',
         roi: 'N/A (Convenience)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'Dev Tool',
+        icon: Zap,
         href: '/dashboard/dev-flow'
     },
     {
@@ -245,7 +272,8 @@ const strategies = [
         cost: 'Free',
         roi: 'N/A (Security)',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'Security',
+        icon: ShieldAlert,
         href: '/dashboard/security-audits'
     },
     {
@@ -254,7 +282,8 @@ const strategies = [
         cost: 'Deployment Gas',
         roi: 'N/A (Business)',
         risk: 'Medium',
-        riskColor: 'text-orange-400',
+        category: 'Dev Tool',
+        icon: AppWindow,
         href: '/dashboard/dapp-builder'
     },
     {
@@ -263,7 +292,8 @@ const strategies = [
         cost: 'Variable',
         roi: 'Variable',
         risk: 'High',
-        riskColor: 'text-red-400',
+        category: 'NFT',
+        icon: Bot,
         href: '/dashboard/bot-creator'
     },
     {
@@ -272,7 +302,8 @@ const strategies = [
         cost: 'LINK tokens + Gas',
         roi: 'N/A (Infrastructure)',
         risk: 'Medium',
-        riskColor: 'text-orange-400',
+        category: 'Dev Tool',
+        icon: AppWindow,
         href: '/dashboard/dev-flow'
     },
     {
@@ -281,10 +312,35 @@ const strategies = [
         cost: '0.1 ETH',
         roi: 'Time Saved',
         risk: 'Low',
-        riskColor: 'text-green-400',
+        category: 'Analytics',
+        icon: FileJson,
         href: '/dashboard/analytics'
     },
-]
+];
+
+const riskStyles: Record<string, { card: string; badge: string; text: string }> = {
+    'Low': {
+        card: 'border-green-500/30 hover:border-green-500/80',
+        badge: 'border-green-500/50 bg-green-500/10 text-green-400',
+        text: 'text-green-400'
+    },
+    'Medium': {
+        card: 'border-orange-500/30 hover:border-orange-500/80',
+        badge: 'border-orange-500/50 bg-orange-500/10 text-orange-400',
+        text: 'text-orange-400'
+    },
+    'High': {
+        card: 'border-red-500/30 hover:border-red-500/80',
+        badge: 'border-red-500/50 bg-red-500/10 text-red-400',
+        text: 'text-red-400'
+    },
+    'Very High': {
+        card: 'border-red-700/50 hover:border-red-700/80',
+        badge: 'border-red-700/50 bg-red-700/20 text-red-500',
+        text: 'text-red-500'
+    }
+}
+
 
 /**
  * A page that displays available "Crypto Flows" or investment strategies.
@@ -301,45 +357,53 @@ export default function StrategyVaultPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {strategies.map((strategy) => (
-            <Card key={strategy.name} className="flex flex-col bg-card/50 hover:border-primary/50 transition-colors group">
-                <CardHeader>
-                    <CardTitle className="text-xl font-bold font-headline group-hover:text-primary transition-colors">{strategy.name}</CardTitle>
-                    <CardDescription className="pt-2 text-sm">{strategy.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3 flex-grow">
-                     <div className="flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-primary" />
-                        <div>
-                            <p className="text-xs font-semibold">Execution Cost</p>
-                            <p className="text-xs text-muted-foreground">{strategy.cost}</p>
+        {strategies.map((strategy) => {
+            const riskStyle = riskStyles[strategy.risk] || riskStyles['Medium'];
+            const Icon = strategy.icon;
+            return (
+                <Card key={strategy.name} className={cn("flex flex-col bg-card/50 transition-colors group", riskStyle.card)}>
+                    <CardHeader>
+                        <div className="flex justify-between items-start">
+                             <CardTitle className="text-xl font-bold font-headline group-hover:text-primary transition-colors pr-4">{strategy.name}</CardTitle>
+                             <div className="p-2 bg-primary/10 rounded-lg text-primary w-fit h-fit">
+                                <Icon className="w-5 h-5 shrink-0"/>
+                            </div>
                         </div>
-                    </div>
-                     <div className="flex items-center gap-2">
-                        <TrendingUp className="w-4 h-4 text-green-400" />
-                        <div>
-                            <p className="text-xs font-semibold">Projected ROI</p>
-                            <p className="text-xs text-muted-foreground">{strategy.roi}</p>
+                        <CardDescription className="pt-2 text-sm">{strategy.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3 flex-grow">
+                         <div className="flex items-center gap-4">
+                            <Badge variant="outline" className="text-xs font-mono">{strategy.category}</Badge>
+                            <Badge variant="outline" className={cn('text-xs', riskStyle.badge)}>{strategy.risk} Risk</Badge>
                         </div>
-                    </div>
-                     <div className="flex items-center gap-2">
-                        <ShieldAlert className={`w-4 h-4 ${strategy.riskColor}`} />
-                        <div>
-                            <p className="text-xs font-semibold">Risk Level</p>
-                            <Badge variant="outline" className={`${strategy.riskColor} text-xs`}>{strategy.risk}</Badge>
+                         <div className="flex items-center gap-2 pt-2">
+                            <Zap className="w-4 h-4 text-primary" />
+                            <div>
+                                <p className="text-xs font-semibold">Execution Cost</p>
+                                <p className="text-xs text-muted-foreground">{strategy.cost}</p>
+                            </div>
                         </div>
-                    </div>
-                </CardContent>
-                 <CardFooter>
-                    <Button asChild className="w-full">
-                        <Link href={strategy.href}>
-                            View & Execute Strategy <ArrowRight className="ml-2 w-4 h-4"/>
-                        </Link>
-                    </Button>
-                </CardFooter>
-            </Card>
-        ))}
+                         <div className="flex items-center gap-2">
+                            <TrendingUp className="w-4 h-4 text-green-400" />
+                            <div>
+                                <p className="text-xs font-semibold">Projected ROI</p>
+                                <p className="text-xs text-muted-foreground">{strategy.roi}</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                     <CardFooter>
+                        <Button asChild className="w-full">
+                            <Link href={strategy.href}>
+                                View & Execute Strategy <ArrowRight className="ml-2 w-4 h-4"/>
+                            </Link>
+                        </Button>
+                    </CardFooter>
+                </Card>
+            )
+        })}
       </div>
     </div>
   );
 }
+
+    
