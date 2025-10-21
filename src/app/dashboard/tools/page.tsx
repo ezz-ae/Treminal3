@@ -69,13 +69,13 @@ const ABIConverter = () => {
                     if (!['function', 'event', 'constructor', 'error'].includes(item.type)) {
                         return null;
                     }
+
+                    const formatTuple = (components: any[]) => {
+                        return `(${components.map(c => c.type === 'tuple' ? formatTuple(c.components) : c.type).join(',')})`;
+                    };
                     
                     const inputs = item.inputs?.map((input: any) => {
-                        if (input.type === 'tuple') {
-                            const components = input.components.map((c: any) => c.type).join(',');
-                            return `(${components})`;
-                        }
-                        return input.type;
+                        return input.type === 'tuple' ? formatTuple(input.components) : input.type;
                     }).join(',');
 
                     if (item.type === 'constructor') {
@@ -90,7 +90,7 @@ const ABIConverter = () => {
                     
                     if (item.type === 'function') {
                         const mutability = item.stateMutability && item.stateMutability !== 'nonpayable' ? ` ${item.stateMutability}` : '';
-                        const outputs = item.outputs?.map((output: any) => output.type).join(', ');
+                        const outputs = item.outputs?.map((output: any) => output.type === 'tuple' ? formatTuple(output.components) : output.type).join(', ');
                         const returns = outputs ? ` returns (${outputs})` : '';
                         signature = `function ${item.name}(${inputs})${mutability}${returns}`.trim().replace(/\s+/g, ' ');
                     }
@@ -170,29 +170,37 @@ const EVMDisassembler = () => {
             return;
         }
         
-        const opcodeMap: { [key: number]: { name: string, pops: number, pushes: number, size: number } } = {
-            0x00: { name: 'STOP', pops: 0, pushes: 0, size: 1 }, 0x01: { name: 'ADD', pops: 2, pushes: 1, size: 1 }, 0x02: { name: 'MUL', pops: 2, pushes: 1, size: 1 },
-            0x10: { name: 'LT', pops: 2, pushes: 1, size: 1 }, 0x11: { name: 'GT', pops: 2, pushes: 1, size: 1 }, 0x14: { name: 'EQ', pops: 2, pushes: 1, size: 1 }, 0x15: { name: 'ISZERO', pops: 1, pushes: 1, size: 1 },
-            0x35: { name: 'CALLDATALOAD', pops: 1, pushes: 1, size: 1 }, 0x50: { name: 'POP', pops: 1, pushes: 0, size: 1 }, 0x52: { name: 'MSTORE', pops: 2, pushes: 0, size: 1 }, 0x56: { name: 'JUMP', pops: 1, pushes: 0, size: 1 }, 0x57: { name: 'JUMPI', pops: 2, pushes: 0, size: 1 }, 0x5b: { name: 'JUMPDEST', pops: 0, pushes: 0, size: 1 },
-            0x60: { name: 'PUSH1', pops: 0, pushes: 1, size: 2 }, 0x61: { name: 'PUSH2', pops: 0, pushes: 1, size: 3 }, 0x62: { name: 'PUSH3', pops: 0, pushes: 1, size: 4 }, 0x63: { name: 'PUSH4', pops: 0, pushes: 1, size: 5 },
-            0x64: { name: 'PUSH5', pops: 0, pushes: 1, size: 6 }, 0x65: { name: 'PUSH6', pops: 0, pushes: 1, size: 7 }, 0x66: { name: 'PUSH7', pops: 0, pushes: 1, size: 8 }, 0x67: { name: 'PUSH8', pops: 0, pushes: 1, size: 9 },
-            0x68: { name: 'PUSH9', pops: 0, pushes: 1, size: 10 }, 0x69: { name: 'PUSH10', pops: 0, pushes: 1, size: 11 }, 0x6a: { name: 'PUSH11', pops: 0, pushes: 1, size: 12 }, 0x6b: { name: 'PUSH12', pops: 0, pushes: 1, size: 13 },
-            0x6c: { name: 'PUSH13', pops: 0, pushes: 1, size: 14 }, 0x6d: { name: 'PUSH14', pops: 0, pushes: 1, size: 15 }, 0x6e: { name: 'PUSH15', pops: 0, pushes: 1, size: 16 }, 0x6f: { name: 'PUSH16', pops: 0, pushes: 1, size: 17 },
-            0x70: { name: 'PUSH17', pops: 0, pushes: 1, size: 18 }, 0x71: { name: 'PUSH18', pops: 0, pushes: 1, size: 19 }, 0x72: { name: 'PUSH19', pops: 0, pushes: 1, size: 20 }, 0x73: { name: 'PUSH20', pops: 0, pushes: 1, size: 21 },
-            0x74: { name: 'PUSH21', pops: 0, pushes: 1, size: 22 }, 0x75: { name: 'PUSH22', pops: 0, pushes: 1, size: 23 }, 0x76: { name: 'PUSH23', pops: 0, pushes: 1, size: 24 }, 0x77: { name: 'PUSH24', pops: 0, pushes: 1, size: 25 },
-            0x78: { name: 'PUSH25', pops: 0, pushes: 1, size: 26 }, 0x79: { name: 'PUSH26', pops: 0, pushes: 1, size: 27 }, 0x7a: { name: 'PUSH27', pops: 0, pushes: 1, size: 28 }, 0x7b: { name: 'PUSH28', pops: 0, pushes: 1, size: 29 },
-            0x7c: { name: 'PUSH29', pops: 0, pushes: 1, size: 30 }, 0x7d: { name: 'PUSH30', pops: 0, pushes: 1, size: 31 }, 0x7e: { name: 'PUSH31', pops: 0, pushes: 1, size: 32 }, 0x7f: { name: 'PUSH32', pops: 0, pushes: 1, size: 33 },
-            0x80: { name: 'DUP1', pops: 1, pushes: 2, size: 1 }, 0x81: { name: 'DUP2', pops: 2, pushes: 3, size: 1 }, 0x82: { name: 'DUP3', pops: 3, pushes: 4, size: 1 },
-            0x90: { name: 'SWAP1', pops: 2, pushes: 2, size: 1 }, 0x91: { name: 'SWAP2', pops: 3, pushes: 3, size: 1 },
-            0xf3: { name: 'RETURN', pops: 2, pushes: 0, size: 1 }, 0xfd: { name: 'REVERT', pops: 2, pushes: 0, size: 1 }, 0xfe: { name: 'INVALID', pops: 0, pushes: 0, size: 1 },
+        const opcodeMap: { [key: number]: { name: string, size: number } } = {
+            0x00: { name: 'STOP', size: 1 }, 0x01: { name: 'ADD', size: 1 }, 0x02: { name: 'MUL', size: 1 }, 0x03: { name: 'SUB', size: 1 }, 0x04: { name: 'DIV', size: 1 },
+            0x05: { name: 'SDIV', size: 1 }, 0x06: { name: 'MOD', size: 1 }, 0x07: { name: 'SMOD', size: 1 }, 0x08: { name: 'ADDMOD', size: 1 }, 0x09: { name: 'MULMOD', size: 1 },
+            0x0a: { name: 'EXP', size: 1 }, 0x0b: { name: 'SIGNEXTEND', size: 1 }, 0x10: { name: 'LT', size: 1 }, 0x11: { name: 'GT', size: 1 }, 0x12: { name: 'SLT', size: 1 },
+            0x13: { name: 'SGT', size: 1 }, 0x14: { name: 'EQ', size: 1 }, 0x15: { name: 'ISZERO', size: 1 }, 0x16: { name: 'AND', size: 1 }, 0x17: { name: 'OR', size: 1 },
+            0x18: { name: 'XOR', size: 1 }, 0x19: { name: 'NOT', size: 1 }, 0x1a: { name: 'BYTE', size: 1 }, 0x1b: { name: 'SHL', size: 1 }, 0x1c: { name: 'SHR', size: 1 }, 0x1d: { name: 'SAR', size: 1 },
+            0x20: { name: 'SHA3', size: 1 }, 0x30: { name: 'ADDRESS', size: 1 }, 0x31: { name: 'BALANCE', size: 1 }, 0x32: { name: 'ORIGIN', size: 1 }, 0x33: { name: 'CALLER', size: 1 },
+            0x34: { name: 'CALLVALUE', size: 1 }, 0x35: { name: 'CALLDATALOAD', size: 1 }, 0x36: { name: 'CALLDATASIZE', size: 1 }, 0x37: { name: 'CALLDATACOPY', size: 1 },
+            0x38: { name: 'CODESIZE', size: 1 }, 0x39: { name: 'CODECOPY', size: 1 }, 0x3a: { name: 'GASPRICE', size: 1 }, 0x3b: { name: 'EXTCODESIZE', size: 1 },
+            0x3c: { name: 'EXTCODECOPY', size: 1 }, 0x3d: { name: 'RETURNDATASIZE', size: 1 }, 0x3e: { name: 'RETURNDATACOPY', size: 1 }, 0x3f: { name: 'EXTCODEHASH', size: 1 },
+            0x40: { name: 'BLOCKHASH', size: 1 }, 0x41: { name: 'COINBASE', size: 1 }, 0x42: { name: 'TIMESTAMP', size: 1 }, 0x43: { name: 'NUMBER', size: 1 },
+            0x44: { name: 'DIFFICULTY', size: 1 }, 0x45: { name: 'GASLIMIT', size: 1 }, 0x46: { name: 'CHAINID', size: 1 }, 0x47: { name: 'SELFBALANCE', size: 1 }, 0x48: { name: 'BASEFEE', size: 1 },
+            0x50: { name: 'POP', size: 1 }, 0x51: { name: 'MLOAD', size: 1 }, 0x52: { name: 'MSTORE', size: 1 }, 0x53: { name: 'MSTORE8', size: 1 },
+            0x54: { name: 'SLOAD', size: 1 }, 0x55: { name: 'SSTORE', size: 1 }, 0x56: { name: 'JUMP', size: 1 }, 0x57: { name: 'JUMPI', size: 1 },
+            0x58: { name: 'PC', size: 1 }, 0x59: { name: 'MSIZE', size: 1 }, 0x5a: { name: 'GAS', size: 1 }, 0x5b: { name: 'JUMPDEST', size: 1 },
+            ...Object.fromEntries(Array.from({ length: 32 }, (_, i) => [0x60 + i, { name: `PUSH${i + 1}`, size: i + 2 }])),
+            ...Object.fromEntries(Array.from({ length: 16 }, (_, i) => [0x80 + i, { name: `DUP${i + 1}`, size: 1 }])),
+            ...Object.fromEntries(Array.from({ length: 16 }, (_, i) => [0x90 + i, { name: `SWAP${i + 1}`, size: 1 }])),
+            ...Object.fromEntries(Array.from({ length: 5 }, (_, i) => [0xa0 + i, { name: `LOG${i}`, size: 1 }])),
+            0xf0: { name: 'CREATE', size: 1 }, 0xf1: { name: 'CALL', size: 1 }, 0xf2: { name: 'CALLCODE', size: 1 },
+            0xf3: { name: 'RETURN', size: 1 }, 0xf4: { name: 'DELEGATECALL', size: 1 }, 0xf5: { name: 'CREATE2', size: 1 },
+            0xfa: { name: 'STATICCALL', size: 1 }, 0xfd: { name: 'REVERT', size: 1 }, 0xfe: { name: 'INVALID', size: 1 }, 0xff: { name: 'SELFDESTRUCT', size: 1 },
         };
         
         let result = '';
         let i = 0;
         while (i < sanitizedBytecode.length) {
+            const byteIndex = i / 2;
             const byte = parseInt(sanitizedBytecode.substring(i, i + 2), 16);
             const opcode = opcodeMap[byte];
-            result += `[${(i/2).toString().padStart(4, '0')}] `;
+            result += `[${byteIndex.toString().padStart(4, '0')}] `;
 
             if (opcode) {
                 result += `${opcode.name}`;
