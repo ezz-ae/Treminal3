@@ -14,6 +14,7 @@ import { AreaChart, Area, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { notFound, useRouter } from 'next/navigation';
+import { TrendingUp } from 'lucide-react';
 
 const botStrategies: Record<string, { name: string, strategy: string; tradingPair: string; initialCapital: number, icon: React.ElementType }> = {
     'momentum-master-btc': {
@@ -21,7 +22,7 @@ const botStrategies: Record<string, { name: string, strategy: string; tradingPai
         strategy: 'A trend-following bot for BTC/USDC that buys when the 50-day moving average crosses above the 200-day moving average (Golden Cross) and sells when it crosses below (Death Cross). It aims to capture long-term trends.',
         tradingPair: 'BTC/USDC',
         initialCapital: 10000,
-        icon: BrainCircuit,
+        icon: TrendingUp,
     },
     'volatility-scalper-eth': {
         name: 'Volatility Scalper (ETH)',
@@ -46,6 +47,7 @@ export default function BotDetailPage({ params }: { params: { slug: string } }) 
     const [simulation, setSimulation] = useState<TradingBotSimulationOutput | null>(null);
     const [isGenerating, setIsGenerating] = useState(true);
     const [isDeploying, setIsDeploying] = useState(false);
+    const [isDeployed, setIsDeployed] = useState(false);
     const [deploymentLog, setDeploymentLog] = useState<string[]>([]);
     
     const botData = botStrategies[params.slug];
@@ -77,6 +79,7 @@ export default function BotDetailPage({ params }: { params: { slug: string } }) 
     
     const handleDeploy = () => {
         setIsDeploying(true);
+        setIsDeployed(false);
         setDeploymentLog([]);
         const log = [
             'Attempting to connect to exchange...',
@@ -95,7 +98,8 @@ export default function BotDetailPage({ params }: { params: { slug: string } }) 
                 i++;
             } else {
                 clearInterval(interval);
-                // Keep 'deploying' state true to show log
+                setIsDeploying(false);
+                setIsDeployed(true);
             }
         }, 500);
     };
@@ -218,7 +222,7 @@ export default function BotDetailPage({ params }: { params: { slug: string } }) 
                         <CardDescription>Activate this bot on your connected exchange account.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                         {isDeploying ? (
+                         {(isDeploying || isDeployed) ? (
                              <div>
                                 <h3 className="font-semibold mb-2 flex items-center gap-2"><Terminal/>Deployment Log</h3>
                                 <div className="bg-black text-white p-4 rounded-lg font-mono text-xs h-[250px] overflow-y-auto flex flex-col-reverse border border-primary/20">
@@ -235,7 +239,7 @@ export default function BotDetailPage({ params }: { params: { slug: string } }) 
                                                 <span className="text-white/80 whitespace-pre-wrap">{line}</span>
                                             </motion.div>
                                         ))}
-                                         <div className="w-2 h-4 bg-green-400 animate-pulse" />
+                                         {isDeploying && <div className="w-2 h-4 bg-green-400 animate-pulse" />}
                                     </div>
                                 </div>
                                  <Button size="lg" className="w-full mt-4" disabled>Bot is Live</Button>

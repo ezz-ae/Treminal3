@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { BarChart2 } from 'lucide-react';
 
 const tradingBots = [
     {
@@ -34,7 +35,7 @@ const tradingBots = [
         tradingPair: 'SOL/USDC',
         complexity: 'Medium',
         idealFor: 'Traders in range-bound markets.',
-        icon: SlidersHorizontal,
+        icon: BarChart2,
     },
 ];
 
