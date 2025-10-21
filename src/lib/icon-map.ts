@@ -43,6 +43,7 @@ import {
     HardHat,
     AlertTriangle,
     TrendingUp,
+    BarChartHorizontal,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -94,4 +95,5 @@ import {
     HardHat,
     AlertTriangle,
     TrendingUp,
+    BarChartHorizontal,
   };

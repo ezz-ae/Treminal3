@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Loader2, Bot, SlidersHorizontal, BrainCircuit, BarChart2, ArrowLeft, Play, Terminal } from 'lucide-react';
+import { Loader2, Bot, SlidersHorizontal, BrainCircuit, BarChart2, ArrowLeft, Play, Terminal, BarChartHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateTradingBot, runTradingBotSimulation } from '@/ai/actions';
 import { Button } from '@/components/ui/button';
@@ -38,6 +38,13 @@ const botStrategies: Record<string, { name: string, strategy: string; tradingPai
         initialCapital: 10000,
         icon: BarChart2,
     },
+    'arbitrage-bot-sol': {
+        name: 'Arbitrageur (SOL)',
+        strategy: 'A low-latency bot that monitors price discrepancies for SOL pairs between Raydium and Orca, executing trades to capture risk-free profit.',
+        tradingPair: 'SOL/USDC',
+        initialCapital: 10000,
+        icon: BarChartHorizontal,
+    }
 };
 
 
@@ -73,7 +80,7 @@ export default function BotDetailPage({ params }: { params: { slug: string } }) 
         }
     }, [botData]);
     
-    if (!botData) {
+    if (!botData && !isGenerating) {
         return notFound();
     }
     

@@ -7,14 +7,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import GridPattern from '@/components/landing/grid-pattern';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 const liveOpportunities = [
-    { pair: 'WIF/SOL', strategy: 'Momentum Breakout', projectedRoi: '15.2%', risk: 'High', confidence: 98.2, changeType: 'up' },
-    { pair: 'JUP/USDC', strategy: 'Arbitrage (Raydium/Orca)', projectedRoi: '1.8%', risk: 'Low', confidence: 99.9, changeType: 'up' },
-    { pair: 'BONK/USDC', strategy: 'Mean Reversion', projectedRoi: '7.5%', risk: 'Medium', confidence: 96.5, changeType: 'up' },
-    { pair: 'PYTH/SOL', strategy: 'Sentiment Spike', projectedRoi: '22.1%', risk: 'High', confidence: 94.8, changeType: 'up' },
-    { pair: 'RENDER/USDC', strategy: 'Liquidity Pool Rebalance', projectedRoi: '4.3%', risk: 'Low', confidence: 99.5, changeType: 'up' },
-    { pair: 'HNT/USDC', strategy: 'Oracle Latency Arbitrage', projectedRoi: '3.1%', risk: 'Medium', confidence: 97.1, changeType: 'up' },
+    { pair: 'BTC/USDC', strategy: 'Momentum Breakout', projectedRoi: '15.2%', risk: 'Medium', confidence: 98.2, href: '/dashboard/bot-creator/momentum-master-btc' },
+    { pair: 'SOL/USDC', strategy: 'Arbitrage (Raydium/Orca)', projectedRoi: '1.8%', risk: 'Low', confidence: 99.9, href: '/dashboard/bot-creator/arbitrage-bot-sol' },
+    { pair: 'SOL/USDC', strategy: 'Mean Reversion', projectedRoi: '7.5%', risk: 'Medium', confidence: 96.5, href: '/dashboard/bot-creator/mean-reversion-sol' },
+    { pair: 'ETH/USDC', strategy: 'Volatility Scalp', projectedRoi: '22.1%', risk: 'High', confidence: 94.8, href: '/dashboard/bot-creator/volatility-scalper-eth' },
 ];
 
 const riskStyles: Record<string, string> = {
@@ -98,15 +97,17 @@ export default function AiTradingPage() {
                         </TableHeader>
                         <TableBody>
                             {liveOpportunities.map((trade) => (
-                                <TableRow key={trade.pair} className="hover:bg-primary/5">
+                                <TableRow key={trade.pair + trade.strategy} className="hover:bg-primary/5">
                                     <TableCell className="font-medium">{trade.pair}</TableCell>
                                     <TableCell>{trade.strategy}</TableCell>
                                     <TableCell className="text-green-400 font-semibold">{trade.projectedRoi}</TableCell>
                                     <TableCell><Badge variant="outline" className={cn(riskStyles[trade.risk])}>{trade.risk}</Badge></TableCell>
                                     <TableCell className="font-mono">{trade.confidence}%</TableCell>
                                     <TableCell className="text-right">
-                                        <Button variant="ghost" size="sm">
-                                            Execute <ArrowRight className="w-4 h-4 ml-2" />
+                                        <Button variant="ghost" size="sm" asChild>
+                                            <Link href={trade.href}>
+                                                Execute <ArrowRight className="w-4 h-4 ml-2" />
+                                            </Link>
                                         </Button>
                                     </TableCell>
                                 </TableRow>

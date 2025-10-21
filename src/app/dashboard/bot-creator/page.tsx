@@ -26,7 +26,7 @@ const tradingBots = [
         tradingPair: 'ETH/USDC',
         complexity: 'High',
         idealFor: 'Active traders in choppy markets.',
-        icon: BarChartHorizontal,
+        icon: SlidersHorizontal,
     },
      {
         slug: 'mean-reversion-sol',
@@ -36,6 +36,15 @@ const tradingBots = [
         complexity: 'Medium',
         idealFor: 'Traders in range-bound markets.',
         icon: BarChart2,
+    },
+    {
+        slug: 'arbitrage-bot-sol',
+        name: 'Arbitrageur (SOL)',
+        description: 'A low-latency bot that monitors price discrepancies for SOL pairs between Raydium and Orca, executing trades to capture risk-free profit.',
+        tradingPair: 'SOL/USDC',
+        complexity: 'Low',
+        idealFor: 'Capitalizing on market inefficiencies.',
+        icon: BarChartHorizontal,
     },
 ];
 
