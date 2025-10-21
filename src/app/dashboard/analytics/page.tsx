@@ -1,4 +1,3 @@
-
 'use client';
 
 import { BarChart as BarChartIcon, Wallet, Activity, CreditCard } from 'lucide-react';
@@ -18,6 +17,8 @@ import {
 } from '@/components/ui/chart';
 import { BarChart, Bar, Pie, Cell, PieChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { useEffect, useState } from 'react';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 const initialChartData = [
   { month: 'January', desktop: 186, mobile: 80 },
@@ -98,6 +99,8 @@ export default function AnalyticsPage() {
 
 
   return (
+    <>
+    <Header />
     <div className="container mx-auto py-12 space-y-6">
        <div>
         <h1 className="text-3xl font-bold font-headline">On-chain Analytics</h1>
@@ -204,5 +207,7 @@ export default function AnalyticsPage() {
         </Card>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }

@@ -7,8 +7,6 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from '@/components/theme-provider';
 import { WalletProvider } from '@/hooks/use-wallet';
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
@@ -38,6 +36,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-body antialiased flex flex-col min-h-screen`}>
@@ -48,11 +47,9 @@ export default function RootLayout({
             disableTransitionOnChange
         >
           <WalletProvider>
-            <Header />
-            <main className="flex-1">
+             <main className="flex-1">
               {children}
             </main>
-            <Footer />
           </WalletProvider>
           <Toaster />
           <Analytics />

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -20,6 +19,8 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/
 import { AreaChart, Area, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 const tradingPairs = ['BTC/USDC', 'ETH/USDC', 'SOL/USDC', 'DOGE/USDC'];
 const initialCapitals = [1000, 5000, 10000, 50000];
@@ -74,6 +75,8 @@ export default function BotCreatorPage() {
     }
 
   return (
+    <>
+    <Header />
     <div className="container mx-auto py-12 space-y-8">
         <div>
             <h1 className="text-4xl font-bold font-headline">AI Trading Bot Creator</h1>
@@ -203,7 +206,7 @@ export default function BotCreatorPage() {
                                             </defs>
                                             <CartesianGrid vertical={false} strokeDasharray="3 3" />
                                             <XAxis dataKey="date" tick={false} axisLine={false} />
-                                            <YAxis domain={['dataMin', 'dataMax']} allowDecimals={false} tickLine={false} axisLine={false} width={60} />
+                                            <YAxis domain={['dataMin', 'dataMax']} allowDecimals={false} tickLine={false} width={60} />
                                             <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
                                             <Area type="monotone" dataKey="equity" stroke="hsl(var(--primary))" fill="url(#fillEquity)" />
                                         </AreaChart>
@@ -243,5 +246,7 @@ export default function BotCreatorPage() {
             </div>
         </div>
    </div>
+   <Footer />
+   </>
   );
 }

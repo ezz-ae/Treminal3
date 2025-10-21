@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -17,6 +16,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useSearchParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 const FormSchema = z.object({
   solidityCode: z.string().min(50, {
@@ -152,7 +153,9 @@ export default function SecurityAuditPage() {
     }
 
   return (
-    <div className="space-y-8">
+    <>
+    <Header />
+    <div className="container mx-auto py-12 space-y-8">
         <div>
             <h1 className="text-4xl font-bold font-headline">AI Security Auditor</h1>
             <p className="text-muted-foreground text-lg mt-2">
@@ -239,5 +242,7 @@ export default function SecurityAuditPage() {
             )}
         </div>
    </div>
+   <Footer />
+   </>
   );
 }

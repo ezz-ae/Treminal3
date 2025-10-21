@@ -12,6 +12,8 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 const GasPriceTracker = () => {
     const networks = [
@@ -268,7 +270,9 @@ const EVMDisassembler = () => {
  */
 export default function ToolsPage() {
   return (
-    <div className="space-y-8">
+    <>
+    <Header />
+    <div className="container mx-auto py-12 space-y-8">
       <div>
         <h1 className="text-4xl font-bold font-headline tracking-tight">Developer Tools</h1>
         <p className="text-muted-foreground mt-2 text-lg">
@@ -283,5 +287,7 @@ export default function ToolsPage() {
         <EVMDisassembler />
       </div>
     </div>
+    <Footer />
+    </>
   );
 }

@@ -5,6 +5,8 @@ import { getArticles, type Article } from '@/lib/articles.server';
 import { ArrowRight, Newspaper } from 'lucide-react';
 import * as React from 'react';
 import { iconMap } from '@/lib/icon-map';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 export const metadata = {
   title: 'Blog | Terminal3',
@@ -45,7 +47,9 @@ export default function BlogIndexPage() {
   const otherArticles = articles.slice(1);
 
   return (
-    <div className="max-w-6xl mx-auto py-8">
+    <>
+    <Header />
+    <div className="max-w-6xl mx-auto py-8 px-4">
         <header className="mb-12 text-center">
             <Newspaper className="w-16 h-16 mx-auto text-primary mb-4" />
             <h1 className="text-5xl font-bold font-headline">T3 Blog</h1>
@@ -74,5 +78,7 @@ export default function BlogIndexPage() {
             </div>
         )}
     </div>
+    <Footer />
+    </>
   );
 }

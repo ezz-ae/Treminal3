@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Sprout, Wallet } from 'lucide-react';
@@ -13,6 +12,8 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 const stakingOptions = [
     {
@@ -72,7 +73,9 @@ export default function StakePage() {
     }
 
   return (
-    <div className="space-y-8">
+    <>
+    <Header />
+    <div className="container mx-auto py-12 space-y-8">
       <div>
         <h1 className="text-4xl font-bold font-headline tracking-tight">Staking</h1>
         <p className="text-muted-foreground mt-2 text-lg">
@@ -115,7 +118,7 @@ export default function StakePage() {
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent className="space-y-4 flex-grow">
+                <CardContent className="space-y-4 flex-grow flex flex-col justify-end">
                      <div>
                         <p className="text-sm text-muted-foreground">Estimated APY</p>
                         <p className="text-2xl font-semibold text-primary">{option.apr}</p>
@@ -136,5 +139,7 @@ export default function StakePage() {
         ))}
       </div>
     </div>
+    <Footer />
+    </>
   );
 }

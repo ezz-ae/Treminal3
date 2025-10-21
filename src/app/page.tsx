@@ -8,7 +8,8 @@ import React, { useState, useRef } from 'react';
 import { useScroll, useTransform, motion, useMotionValueEvent } from 'framer-motion';
 import MotionTerminal from '@/app/dashboard/motion-terminal';
 import { iconMap } from '@/lib/icon-map';
-
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 const services = [
     {
@@ -92,6 +93,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background relative">
+      <Header />
       <GridPattern
         width={40}
         height={40}
@@ -147,6 +149,7 @@ export default function Home() {
         <CodingModes />
         <InteractiveGuides />
       </main>
+      <Footer />
     </div>
   );
 }

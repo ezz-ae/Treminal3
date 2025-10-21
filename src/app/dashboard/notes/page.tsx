@@ -1,4 +1,3 @@
-
 'use client';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -6,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { BookPlus, ArrowRight, BookX } from 'lucide-react';
 import { useWallet } from '@/hooks/use-wallet';
 import { useLocalStorage } from '@/hooks/use-local-storage';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 type Note = {
   id: string;
@@ -36,7 +37,9 @@ export default function NotesPage() {
 
 
   return (
-    <div className="max-w-4xl mx-auto py-8">
+    <>
+    <Header />
+    <div className="max-w-4xl mx-auto py-8 px-4">
         <header className="mb-12 text-center">
             <BookPlus className="w-16 h-16 mx-auto text-primary mb-4" />
             <h1 className="text-5xl font-bold font-headline">My Notes</h1>
@@ -84,5 +87,7 @@ export default function NotesPage() {
              </div>
         )}
     </div>
+    <Footer />
+    </>
   );
 }

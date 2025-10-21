@@ -6,6 +6,8 @@ import { Progress } from '@/components/ui/progress';
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 const steps = [
     "Initializing AI Agent...",
@@ -44,6 +46,8 @@ export default function DevFlowPage() {
     }, [progress]);
 
   return (
+    <>
+    <Header />
     <div className="flex flex-col items-center justify-center h-full text-center p-4">
         <div className="relative mb-6">
             <div className="p-8 bg-primary/10 rounded-full text-primary border border-primary/20">
@@ -98,5 +102,7 @@ export default function DevFlowPage() {
             </CardContent>
         </Card>
     </div>
+    <Footer />
+    </>
   );
 }

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -17,6 +16,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { iconMap } from '@/lib/icon-map';
 import { Progress } from '@/components/ui/progress';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 const industries = ["DeFi", "Gaming", "NFTs", "Infrastructure", "Social", "Enterprise"];
 const stages = ["Idea", "Prototype", "MVP", "Growth", "Established"];
@@ -108,6 +109,8 @@ export default function DappBuilderPage() {
     const progressValue = ((currentStep + 1) / (steps.length)) * 100;
 
   return (
+    <>
+    <Header />
     <div className="container mx-auto py-12">
         <div className="text-center">
             <h1 className="text-4xl font-bold font-headline">AI Business Architect</h1>
@@ -187,6 +190,7 @@ export default function DappBuilderPage() {
                                                                 <Input {...field} placeholder={`e.g., Build a community`} disabled={isLoading} className="h-12 text-lg"/>
                                                             </FormControl>
                                                             {fields.length > 1 && <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}><X className="h-4 w-4" /></Button>}
+                                                            <FormMessage />
                                                         </FormItem>
                                                     )}
                                                 />
@@ -195,7 +199,7 @@ export default function DappBuilderPage() {
                                         <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => append({ value: "" })}>
                                             <Plus className="mr-2 h-4 w-4"/>Add Goal
                                         </Button>
-                                        <FormMessage>{form.formState.errors.goals?.message}</FormMessage>
+                                        <FormMessage>{form.formState.errors.goals?.message || form.formState.errors.goals?.[0]?.value?.message}</FormMessage>
                                     </div>
                                 )}
                                 
@@ -296,5 +300,7 @@ export default function DappBuilderPage() {
             </CardContent>
         </Card>
    </div>
+   <Footer />
+   </>
   );
 }
