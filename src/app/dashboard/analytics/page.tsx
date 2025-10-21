@@ -1,3 +1,4 @@
+
 'use client';
 
 import { BarChart as BarChartIcon, Wallet, Activity, CreditCard } from 'lucide-react';
@@ -15,7 +16,7 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from '@/components/ui/chart';
-import { BarChart, Bar, Pie, Cell, PieChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { BarChart, Bar, Pie, Cell, PieChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useEffect, useState } from 'react';
 
 const initialChartData = [

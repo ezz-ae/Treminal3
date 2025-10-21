@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Vote, Users, PieChart, ShieldCheck } from 'lucide-react';
