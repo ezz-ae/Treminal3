@@ -6,8 +6,6 @@ import { Wallet } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { useWallet } from '@/hooks/use-wallet';
 import { useEffect } from "react";
-import Header from "@/components/layout/header";
-import Footer from "@/components/layout/footer";
 
 /**
  * Authentication page for users to connect their wallet.
@@ -38,8 +36,6 @@ export default function AuthPage() {
     }
 
     return (
-        <>
-        <Header />
         <div className="flex items-center justify-center flex-1 bg-background">
             <Card className="w-full max-w-md mx-4 sm:mx-auto">
                 <CardHeader className="text-center">
@@ -59,7 +55,5 @@ export default function AuthPage() {
                 </CardContent>
             </Card>
         </div>
-        <Footer />
-        </>
     )
 }

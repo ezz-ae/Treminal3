@@ -6,8 +6,6 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
 
 const downloadLinks = [
     { os: 'macOS (Intel)', href: '#' },
@@ -25,9 +23,7 @@ const downloadLinks = [
  */
 export default function DownloadPage() {
   return (
-    <>
-    <Header />
-    <div className="flex flex-col items-center justify-center h-full text-center p-4">
+    <div className="flex flex-col items-center justify-center h-full text-center p-4 container mx-auto">
         <div className="p-6 bg-primary/10 rounded-full text-primary mb-6 border border-primary/20">
             <Terminal className="w-16 h-16" />
         </div>
@@ -59,7 +55,5 @@ export default function DownloadPage() {
             </CardContent>
         </Card>
     </div>
-    <Footer />
-    </>
   );
 }

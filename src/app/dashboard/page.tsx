@@ -17,8 +17,6 @@ import {
   Library,
 } from 'lucide-react';
 import Link from 'next/link';
-import Footer from '@/components/layout/footer';
-import Header from '@/components/layout/header';
 
 
 /**
@@ -39,8 +37,6 @@ export default function DashboardPage() {
     ];
 
   return (
-    <>
-    <Header />
     <div className="container mx-auto py-12 space-y-8">
        <div className="mb-8">
         <h1 className="text-3xl font-bold font-headline">Welcome to Terminal3</h1>
@@ -57,8 +53,6 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
-    <Footer/>
-    </>
   );
 }
 

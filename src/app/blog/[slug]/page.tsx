@@ -7,8 +7,6 @@ import { Badge } from '@/components/ui/badge';
 import { Metadata } from 'next';
 import * as React from 'react';
 import { iconMap } from '@/lib/icon-map';
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
   
 type Props = {
   params: { slug: string };
@@ -64,7 +62,6 @@ export default function ArticlePage({ params }: Props) {
 
   return (
     <>
-      <Header />
       <div className="max-w-4xl mx-auto py-8 px-4">
         <script
           type="application/ld+json"
@@ -91,7 +88,6 @@ export default function ArticlePage({ params }: Props) {
           <div className="text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: article.content }} />
         </article>
       </div>
-      <Footer />
     </>
   );
 }

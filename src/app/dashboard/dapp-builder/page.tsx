@@ -16,8 +16,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { iconMap } from '@/lib/icon-map';
 import { Progress } from '@/components/ui/progress';
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
 
 const industries = ["DeFi", "Gaming", "NFTs", "Infrastructure", "Social", "Enterprise"];
 const stages = ["Idea", "Prototype", "MVP", "Growth", "Established"];
@@ -109,8 +107,6 @@ export default function DappBuilderPage() {
     const progressValue = ((currentStep + 1) / (steps.length)) * 100;
 
   return (
-    <>
-    <Header />
     <div className="container mx-auto py-12">
         <div className="text-center">
             <h1 className="text-4xl font-bold font-headline">AI Business Architect</h1>
@@ -300,7 +296,5 @@ export default function DappBuilderPage() {
             </CardContent>
         </Card>
    </div>
-   <Footer />
-   </>
   );
 }

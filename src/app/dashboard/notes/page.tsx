@@ -5,8 +5,6 @@ import { Button } from '@/components/ui/button';
 import { BookPlus, ArrowRight, BookX } from 'lucide-react';
 import { useWallet } from '@/hooks/use-wallet';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
 
 type Note = {
   id: string;
@@ -37,8 +35,6 @@ export default function NotesPage() {
 
 
   return (
-    <>
-    <Header />
     <div className="max-w-4xl mx-auto py-8 px-4">
         <header className="mb-12 text-center">
             <BookPlus className="w-16 h-16 mx-auto text-primary mb-4" />
@@ -82,12 +78,10 @@ export default function NotesPage() {
                 <Button asChild>
                     <Link href="/blog">
                         Explore Articles <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                </Link>
+                    </Link>
+                </Button>
              </div>
         )}
     </div>
-    <Footer />
-    </>
   );
 }
