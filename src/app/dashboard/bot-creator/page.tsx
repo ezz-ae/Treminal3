@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Bot, BrainCircuit, SlidersHorizontal, ArrowRight, TrendingUp, BarChartHorizontal } from 'lucide-react';

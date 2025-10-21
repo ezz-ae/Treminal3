@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Sprout, Wallet } from 'lucide-react';
