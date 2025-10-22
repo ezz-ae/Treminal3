@@ -1,6 +1,7 @@
+
 'use client';
 
-import { Terminal, Menu, Wind, Gem, BrainCircuit, ShieldCheck, AppWindow, Library, BookOpen, Newspaper, Rocket, Sprout, Wrench, Users, Workflow, Landmark, FlaskConical, Leaf, AreaChart } from 'lucide-react';
+import { Terminal, Menu, Wind, Gem, BrainCircuit, ShieldCheck, AppWindow, Library, BookOpen, Newspaper, Rocket, Sprout, AreaChart, CircleDollarSign, Wrench, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -16,32 +17,30 @@ import {
 } from "@/components/ui/navigation-menu"
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { UserNav } from './user-nav';
+import { useWallet } from '@/hooks/use-wallet';
 
 
 const coreServices = [
-    { href: "/dashboard/dapp-builder", title: "AI Command Center", icon: Terminal, description: "Describe your goal and let our AI generate a strategic plan." },
-    { href: "/dashboard/execution-plan", title: "AI Execution Planner", icon: Workflow, description: "Manage, edit, and rearrange your AI workflows and jobs." },
+    { href: "/dashboard/strategy-vault", title: "Strategy Vault", icon: Library, description: "Browse and execute pre-built Web3 automation flows." },
+    { href: "/dashboard/dapp-builder", title: "AI Business Architect", icon: AppWindow, description: "Get a strategic plan and architecture for your new dApp." },
     { href: "/dashboard/token-launcher", title: "Token Launcher", icon: Gem, description: "Generate custom ERC-20 tokens on EVM chains." },
     { href: "/dashboard/bot-creator", title: "Trading Bot Creator", icon: BrainCircuit, description: "Design, simulate, and deploy trading bots." },
     { href: "/dashboard/security-audits", title: "Security Audits", icon: ShieldCheck, description: "Audit smart contracts for vulnerabilities." },
     { href: "/dashboard/tools", title: "Developer Tools", icon: Wrench, description: "A suite of utilities for Web3 developers." },
-    { href: "/dashboard/dao-governance", title: "DAO Governance", icon: Users, description: "Create proposals, manage voting, and execute on-chain actions." },
-    { href: "/dashboard/finance", title: "On-chain Analytics", icon: AreaChart, description: "A visually rich dashboard providing deep insights into on-chain data." },
 ]
 
 const solanaServices = [
-    { href: "/solana", title: "Solana Holo-Deck", icon: Wind, description: "The main command center for the Solana universe." },
-    { href: "/solana/launch", title: "SPL Token Launchpad", icon: Rocket, description: "Create and launch a new SPL token from scratch." },
-    { href: "/solana/staking", title: "Solana Staking", icon: Sprout, description: "Stake SOL and other assets to earn rewards." },
+    { href: "/solana", title: "Holo-Deck", icon: Wind, description: "The main command center for the Solana universe." },
+    { href: "/solana/launch", title: "Launchpad", icon: Rocket, description: "Create and launch a new SPL token from scratch." },
+    { href: "/solana/terminal", title: "AI Terminal", icon: Terminal, description: "Interact with the network using natural language." },
+    { href: "/solana/tokens", title: "Token Hub", icon: Gem, description: "Explore and analyze tokens on the network." },
+    { href: "/solana/trading", title: "DEX Terminal", icon: AreaChart, description: "Trade assets on Solana's decentralized exchanges." },
+    { href: "/solana/staking", title: "Staking", icon: Sprout, description: "Stake SOL and other assets to earn rewards." },
 ]
 
 const resourcesItems = [
     { href: "/dashboard/docs", title: "Documentation", icon: BookOpen, description: "Explore guides, API references, and tutorials." },
     { href: "/blog", title: "Blog", icon: Newspaper, description: "Read the latest articles, news, and updates from our team." },
-    { href: "/token", title: "The $T3 Token", icon: Gem, description: "Learn about the utility and tokenomics of the native platform token." },
-    { href: "/research", title: "R&D", icon: FlaskConical, description: "Our vision for the future of autonomous Web3." },
-    { href: "/carbon", title: "Carbon Analysis", icon: Leaf, description: "Our commitment to a sustainable and efficient Web3." },
 ]
 
 
@@ -51,6 +50,7 @@ const resourcesItems = [
  * @returns {JSX.Element} The Header component.
  */
 export default function Header() {
+  const { wallet, connectWallet, disconnectWallet } = useWallet();
 
   return (
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -70,6 +70,8 @@ export default function Header() {
                                 <span className="font-bold font-headline">Terminal3</span>
                             </Link>
                             <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6 space-y-4 overflow-y-auto">
+                                <Link href="/" className="text-foreground flex font-bold">Dashboard</Link>
+                                
                                 <p className="font-bold text-muted-foreground pt-4">AI Trading</p>
                                 <Link href="/ai-trading" className="text-foreground flex">Trading Command Center</Link>
 
@@ -114,11 +116,11 @@ export default function Header() {
                 <div className="hidden md:flex">
                     <NavigationMenu>
                         <NavigationMenuList>
-                             <NavigationMenuItem>
-                                <Link href="/ai-trading" legacyBehavior passHref>
-                                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                    AI Trading
-                                  </NavigationMenuLink>
+                            <NavigationMenuItem>
+                                <Link href="/ai-trading" passHref asChild>
+                                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                        AI Trading
+                                    </NavigationMenuLink>
                                 </Link>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
@@ -164,7 +166,15 @@ export default function Header() {
 
             <div className="flex items-center justify-end space-x-2">
               <ThemeToggle />
-              <UserNav />
+               {wallet ? (
+                    <Button variant="outline" onClick={disconnectWallet}>
+                        {`Disconnect ${wallet.address.slice(0, 4)}...${wallet.address.slice(-4)}`}
+                    </Button>
+                ) : (
+                    <Button onClick={connectWallet}>
+                        Connect Wallet
+                    </Button>
+               )}
             </div>
 
           </div>
@@ -174,18 +184,19 @@ export default function Header() {
 
 
 const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a"> & { icon: React.ElementType }
+  React.ElementRef<typeof NavigationMenuLink>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuLink> & { icon: React.ElementType }
 >(({ className, title, children, icon: Icon, ...props }, ref) => {
   return (
     <li>
-      <NavigationMenuLink asChild>
-        <Link href={props.href || ''} ref={ref} className={cn(
+      <NavigationMenuLink
+          ref={ref}
+          className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
           )}
           {...props}
-          >
+        >
           <div className="flex items-center gap-2 text-sm font-medium leading-none">
             <Icon className="h-5 w-5 text-primary"/>
             {title}
@@ -193,8 +204,7 @@ const ListItem = React.forwardRef<
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
-        </Link>
-      </NavigationMenuLink>
+        </NavigationMenuLink>
     </li>
   )
 })
