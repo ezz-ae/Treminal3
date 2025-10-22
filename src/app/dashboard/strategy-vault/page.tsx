@@ -370,118 +370,115 @@ export default function StrategyVaultPage() {
   });
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold font-headline tracking-tight flex items-center gap-3"><Library className="w-10 h-10 text-primary"/> Strategy Vault</h1>
-        <p className="text-muted-foreground mt-2 text-lg">
-          Browse, select, and execute pre-packaged intelligent flows designed to generate outcomes. This is your bank for Web3.
-        </p>
-      </div>
-
-       <Card className="p-6 bg-card/50">
-        <div className="flex flex-col md:flex-row gap-6">
-            <div className="flex-1">
-                <h3 className="font-semibold mb-2">Filter by Category</h3>
-                <div className="flex flex-wrap gap-2">
-                    {categories.map(category => (
-                        <Button
-                            key={category}
-                            variant={activeCategories.includes(category) ? 'default' : 'outline'}
-                            size="sm"
-                            onClick={() => toggleFilter(activeCategories, setActiveCategories, category)}
-                        >
-                            {category}
-                        </Button>
-                    ))}
-                </div>
-            </div>
-             <div className="flex-1">
-                <h3 className="font-semibold mb-2">Filter by Risk</h3>
-                 <div className="flex flex-wrap gap-2">
-                    {risks.map(risk => (
-                        <Button
-                            key={risk}
-                            variant={activeRisks.includes(risk) ? 'default' : 'outline'}
-                            size="sm"
-                            onClick={() => toggleFilter(activeRisks, setActiveRisks, risk)}
-                            className={cn(activeRisks.includes(risk) && riskStyles[risk]?.badge, 'border')}
-                        >
-                            {risk}
-                        </Button>
-                    ))}
-                </div>
-            </div>
-        </div>
-        {(activeCategories.length > 0 || activeRisks.length > 0) && (
-            <Button variant="ghost" size="sm" onClick={() => { setActiveCategories([]); setActiveRisks([]); }} className="mt-4">
-                Clear all filters
-            </Button>
-        )}
-      </Card>
-
-
-      <motion.div layout className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <AnimatePresence>
-        {filteredStrategies.map((strategy) => {
-            const riskStyle = riskStyles[strategy.risk] || riskStyles['Medium'];
-            const Icon = strategy.icon;
-            return (
-                <motion.div
-                    layout
-                    key={strategy.name}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3 }}
-                >
-                    <Card className={cn("flex flex-col bg-card/50 transition-colors group h-full", riskStyle.card)}>
-                        <CardHeader>
-                            <div className="flex justify-between items-start">
-                                <CardTitle className="text-xl font-bold font-headline group-hover:text-primary transition-colors pr-4">{strategy.name}</CardTitle>
-                                <div className="p-2 bg-primary/10 rounded-lg text-primary w-fit h-fit">
-                                    <Icon className="w-5 h-5 shrink-0"/>
-                                </div>
-                            </div>
-                            <CardDescription className="pt-2 text-sm">{strategy.description}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-3 flex-grow">
-                            <div className="flex items-center gap-4">
-                                <Badge variant="outline" className="text-xs font-mono">{strategy.category}</Badge>
-                                <Badge variant="outline" className={cn('text-xs', riskStyle.badge)}>{strategy.risk} Risk</Badge>
-                            </div>
-                            <div className="flex items-center gap-2 pt-2">
-                                <Zap className="w-4 h-4 text-primary" />
-                                <div>
-                                    <p className="text-xs font-semibold">Execution Cost</p>
-                                    <p className="text-xs text-muted-foreground">{strategy.cost}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <TrendingUp className="w-4 h-4 text-green-400" />
-                                <div>
-                                    <p className="text-xs font-semibold">Projected ROI</p>
-                                    <p className="text-xs text-muted-foreground">{strategy.roi}</p>
-                                </div>
-                            </div>
-                        </CardContent>
-                        <CardFooter>
-                            <Button asChild className="w-full">
-                                <Link href={strategy.href}>
-                                    View & Execute Strategy <ArrowRight className="ml-2 w-4 h-4"/>
-                                </Link>
-                            </Button>
-                        </CardFooter>
-                    </Card>
-                </motion.div>
-            )
-        })}
-        </AnimatePresence>
-      </motion.div>
-       {filteredStrategies.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-lg text-muted-foreground">No strategies match your current filters.</p>
+      <div className="space-y-8">
+          <div>
+            <h1 className="text-4xl font-bold font-headline tracking-tight flex items-center gap-3"><Library className="w-10 h-10 text-primary"/> Strategy Vault</h1>
+            <p className="text-muted-foreground mt-2 text-lg">
+              Browse, select, and execute pre-packaged intelligent flows designed to generate outcomes. This is your bank for Web3.
+            </p>
           </div>
-        )}
-    </div>
+          <Card className="p-6 bg-card/50">
+           <div className="flex flex-col md:flex-row gap-6">
+               <div className="flex-1">
+                   <h3 className="font-semibold mb-2">Filter by Category</h3>
+                   <div className="flex flex-wrap gap-2">
+                       {categories.map(category => (
+                           <Button
+                               key={category}
+                               variant={activeCategories.includes(category) ? 'default' : 'outline'}
+                               size="sm"
+                               onClick={() => toggleFilter(activeCategories, setActiveCategories, category)}
+                           >
+                               {category}
+                           </Button>
+                       ))}
+                   </div>
+               </div>
+                <div className="flex-1">
+                   <h3 className="font-semibold mb-2">Filter by Risk</h3>
+                    <div className="flex flex-wrap gap-2">
+                       {risks.map(risk => (
+                           <Button
+                               key={risk}
+                               variant={activeRisks.includes(risk) ? 'default' : 'outline'}
+                               size="sm"
+                               onClick={() => toggleFilter(activeRisks, setActiveRisks, risk)}
+                               className={cn(activeRisks.includes(risk) && riskStyles[risk]?.badge, 'border')}
+                           >
+                               {risk}
+                           </Button>
+                       ))}
+                   </div>
+               </div>
+           </div>
+           {(activeCategories.length > 0 || activeRisks.length > 0) && (
+               <Button variant="ghost" size="sm" onClick={() => { setActiveCategories([]); setActiveRisks([]); }} className="mt-4">
+                   Clear all filters
+               </Button>
+           )}
+         </Card>
+          <motion.div layout className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <AnimatePresence>
+            {filteredStrategies.map((strategy) => {
+                const riskStyle = riskStyles[strategy.risk] || riskStyles['Medium'];
+                const Icon = strategy.icon;
+                return (
+                    <motion.div
+                        layout
+                        key={strategy.name}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <Card className={cn("flex flex-col bg-card/50 transition-colors group h-full", riskStyle.card)}>
+                            <CardHeader>
+                                <div className="flex justify-between items-start">
+                                    <CardTitle className="text-xl font-bold font-headline group-hover:text-primary transition-colors pr-4">{strategy.name}</CardTitle>
+                                    <div className="p-2 bg-primary/10 rounded-lg text-primary w-fit h-fit">
+                                        <Icon className="w-5 h-5 shrink-0"/>
+                                    </div>
+                                </div>
+                                <CardDescription className="pt-2 text-sm">{strategy.description}</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-3 flex-grow">
+                                <div className="flex items-center gap-4">
+                                    <Badge variant="outline" className="text-xs font-mono">{strategy.category}</Badge>
+                                    <Badge variant="outline" className={cn('text-xs', riskStyle.badge)}>{strategy.risk} Risk</Badge>
+                                </div>
+                                <div className="flex items-center gap-2 pt-2">
+                                    <Zap className="w-4 h-4 text-primary" />
+                                    <div>
+                                        <p className="text-xs font-semibold">Execution Cost</p>
+                                        <p className="text-xs text-muted-foreground">{strategy.cost}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <TrendingUp className="w-4 h-4 text-green-400" />
+                                    <div>
+                                        <p className="text-xs font-semibold">Projected ROI</p>
+                                        <p className="text-xs text-muted-foreground">{strategy.roi}</p>
+                                    </div>
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button asChild className="w-full">
+                                    <Link href={strategy.href} legacyBehavior>
+                                        View & Execute Strategy <ArrowRight className="ml-2 w-4 h-4"/>
+                                    </Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </motion.div>
+                );
+            })}
+            </AnimatePresence>
+          </motion.div>
+          {filteredStrategies.length === 0 && (
+             <div className="text-center py-12">
+               <p className="text-lg text-muted-foreground">No strategies match your current filters.</p>
+             </div>
+           )}
+      </div>
   );
 }

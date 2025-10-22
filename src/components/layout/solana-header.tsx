@@ -28,20 +28,23 @@ export default function SolanaHeader() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-black/80 backdrop-blur supports-[backdrop-filter]:bg-black/60">
       <div className="container flex h-16 items-center">
         <div className="mr-4 flex">
-          <Link href="/solana" className="mr-6 flex items-center space-x-2">
+          <Link
+            href="/solana"
+            className="mr-6 flex items-center space-x-2"
+            legacyBehavior>
             <Wind className="h-6 w-6 text-primary" />
             <span className="font-bold font-headline">Solana Hub</span>
           </Link>
           <nav className="items-center space-x-6 text-sm font-medium hidden md:flex">
              {menuItems.map((item) => (
                 <Link
-                    key={item.label}
-                    href={item.href}
-                    className={cn(
-                        "transition-colors hover:text-primary",
-                        pathname === item.href ? "text-primary" : "text-muted-foreground"
-                    )}
-                    >
+                  key={item.label}
+                  href={item.href}
+                  className={cn(
+                      "transition-colors hover:text-primary",
+                      pathname === item.href ? "text-primary" : "text-muted-foreground"
+                  )}
+                  legacyBehavior>
                     {item.label}
                 </Link>
              ))}
@@ -51,7 +54,7 @@ export default function SolanaHeader() {
         <div className="flex flex-1 items-center justify-end space-x-4">
             <ThemeToggle />
             <Button variant="ghost" asChild>
-                <Link href="/dashboard">
+                <Link href="/dashboard" legacyBehavior>
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Main Hub
                 </Link>

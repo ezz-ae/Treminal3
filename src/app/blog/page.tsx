@@ -14,7 +14,7 @@ export const metadata = {
 const ArticleCard = ({ article, isFeatured = false }: { article: Article, isFeatured?: boolean }) => {
     const LucideIcon = iconMap[article.icon] || iconMap['BookOpen'];
     return (
-        <Link href={`/blog/${article.slug}`} className="block group">
+        <Link href={`/blog/${article.slug}`} className="block group" legacyBehavior>
             <Card className="h-full bg-card/50 hover:border-primary/50 transition-colors duration-300 flex flex-col">
                 <CardHeader>
                     <div className="flex items-center gap-4 mb-4">
@@ -35,7 +35,7 @@ const ArticleCard = ({ article, isFeatured = false }: { article: Article, isFeat
                 </div>
             </Card>
         </Link>
-    )
+    );
 }
 
 

@@ -57,45 +57,44 @@ const complexityStyles: Record<string, string> = {
 
 export default function BotMarketplacePage() {
   return (
-    <div className="container mx-auto py-12 space-y-8">
-        <div>
-            <h1 className="text-4xl font-bold font-headline flex items-center gap-3"><BrainCircuit className="w-10 h-10 text-primary"/> AI Bot Marketplace</h1>
-            <p className="text-muted-foreground text-lg mt-2">
-                Deploy institutional-grade, pre-built trading bots with a single click. Each bot is backtested and fully analyzed by our AI.
-            </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tradingBots.map((bot) => {
-                const Icon = bot.icon;
-                return (
-                     <Card key={bot.slug} className="flex flex-col group bg-card/50 hover:border-primary/50 transition-colors">
-                        <CardHeader>
-                            <div className="flex justify-between items-start">
-                                <CardTitle className="text-xl font-bold font-headline group-hover:text-primary transition-colors pr-4">{bot.name}</CardTitle>
-                                <div className="p-2 bg-primary/10 rounded-lg text-primary w-fit h-fit">
-                                    <Icon className="w-5 h-5 shrink-0"/>
-                                </div>
-                            </div>
-                             <div className="flex items-center gap-2 pt-2">
-                                <Badge variant="outline">{bot.tradingPair}</Badge>
-                                <Badge variant="outline" className={cn(complexityStyles[bot.complexity])}>{bot.complexity} Complexity</Badge>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="flex-grow">
-                            <CardDescription>{bot.description}</CardDescription>
-                        </CardContent>
-                        <CardFooter>
-                            <Button asChild className="w-full">
-                                <Link href={`/dashboard/bot-creator/${bot.slug}`}>
-                                    View Details & Deploy <ArrowRight className="ml-2 w-4 h-4"/>
-                                </Link>
-                            </Button>
-                        </CardFooter>
-                    </Card>
-                )
-            })}
-        </div>
-   </div>
+      <div className="container mx-auto py-12 space-y-8">
+          <div>
+              <h1 className="text-4xl font-bold font-headline flex items-center gap-3"><BrainCircuit className="w-10 h-10 text-primary"/> AI Bot Marketplace</h1>
+              <p className="text-muted-foreground text-lg mt-2">
+                  Deploy institutional-grade, pre-built trading bots with a single click. Each bot is backtested and fully analyzed by our AI.
+              </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {tradingBots.map((bot) => {
+                  const Icon = bot.icon;
+                  return (
+                      <Card key={bot.slug} className="flex flex-col group bg-card/50 hover:border-primary/50 transition-colors">
+                          <CardHeader>
+                              <div className="flex justify-between items-start">
+                                  <CardTitle className="text-xl font-bold font-headline group-hover:text-primary transition-colors pr-4">{bot.name}</CardTitle>
+                                  <div className="p-2 bg-primary/10 rounded-lg text-primary w-fit h-fit">
+                                      <Icon className="w-5 h-5 shrink-0"/>
+                                  </div>
+                              </div>
+                               <div className="flex items-center gap-2 pt-2">
+                                  <Badge variant="outline">{bot.tradingPair}</Badge>
+                                  <Badge variant="outline" className={cn(complexityStyles[bot.complexity])}>{bot.complexity} Complexity</Badge>
+                              </div>
+                          </CardHeader>
+                          <CardContent className="flex-grow">
+                              <CardDescription>{bot.description}</CardDescription>
+                          </CardContent>
+                          <CardFooter>
+                              <Button asChild className="w-full">
+                                  <Link href={`/dashboard/bot-creator/${bot.slug}`} legacyBehavior>
+                                      View Details & Deploy <ArrowRight className="ml-2 w-4 h-4"/>
+                                  </Link>
+                              </Button>
+                          </CardFooter>
+                      </Card>
+                  );
+              })}
+          </div>
+      </div>
   );
 }
