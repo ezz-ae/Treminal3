@@ -372,7 +372,7 @@ export default function StrategyVaultPage() {
   return (
       <div className="space-y-8">
           <div>
-            <h1 className="text-4xl font-bold font-headline tracking-tight flex items-center gap-3"><Library className="w-10 h-10 text-primary"/> Strategy Vault</h1>
+            <h1 className="text-3xl font-bold font-headline tracking-tight flex items-center gap-3"><Library className="w-8 h-8 text-primary"/> Strategy Vault</h1>
             <p className="text-muted-foreground mt-2 text-lg">
               Browse, select, and execute pre-packaged intelligent flows designed to generate outcomes. This is your bank for Web3.
             </p>
@@ -434,7 +434,7 @@ export default function StrategyVaultPage() {
                         <Card className={cn("flex flex-col bg-card/50 transition-colors group h-full", riskStyle.card)}>
                             <CardHeader>
                                 <div className="flex justify-between items-start">
-                                    <CardTitle className="text-xl font-bold font-headline group-hover:text-primary transition-colors pr-4">{strategy.name}</CardTitle>
+                                    <CardTitle className="text-lg font-bold font-headline group-hover:text-primary transition-colors pr-4">{strategy.name}</CardTitle>
                                     <div className="p-2 bg-primary/10 rounded-lg text-primary w-fit h-fit">
                                         <Icon className="w-5 h-5 shrink-0"/>
                                     </div>
