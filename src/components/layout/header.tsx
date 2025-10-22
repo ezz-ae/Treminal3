@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Terminal, Menu, Wind, Gem, BrainCircuit, ShieldCheck, AppWindow, Library, BookOpen, Newspaper, Rocket, Sprout, Wrench, Users } from 'lucide-react';
+import { Terminal, Menu, Wind, Gem, BrainCircuit, ShieldCheck, AppWindow, Library, BookOpen, Newspaper, Rocket, Sprout, Wrench, Users, Workflow } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -22,12 +22,12 @@ import { UserNav } from './user-nav';
 
 const coreServices = [
     { href: "/dapp-builder", title: "AI Business Architect", icon: AppWindow, description: "Get a strategic plan and architecture for your new dApp." },
+    { href: "/execution-plan", title: "AI Execution Planner", icon: Workflow, description: "Manage, edit, and rearrange your AI workflows and jobs." },
     { href: "/token-launcher", title: "Token Launcher", icon: Gem, description: "Generate custom ERC-20 tokens on EVM chains." },
     { href: "/bot-creator", title: "Trading Bot Creator", icon: BrainCircuit, description: "Design, simulate, and deploy trading bots." },
     { href: "/security-audits", title: "Security Audits", icon: ShieldCheck, description: "Audit smart contracts for vulnerabilities." },
     { href: "/tools", title: "Developer Tools", icon: Wrench, description: "A suite of utilities for Web3 developers." },
     { href: "/dao-governance", title: "DAO Governance", icon: Users, description: "Create proposals, manage voting, and execute on-chain actions." },
-
 ]
 
 const solanaServices = [
@@ -186,7 +186,7 @@ const ListItem = React.forwardRef<
   return (
     <li>
       <NavigationMenuLink asChild>
-        <a
+        <Link
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
@@ -201,7 +201,7 @@ const ListItem = React.forwardRef<
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
-        </a>
+        </Link>
       </NavigationMenuLink>
     </li>
   )

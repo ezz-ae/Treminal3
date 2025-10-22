@@ -45,6 +45,7 @@ import {
     BarChartHorizontal,
     CheckCircle,
     Shield,
+    Workflow,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -99,4 +100,5 @@ import {
     BarChartHorizontal,
     CheckCircle,
     Shield,
+    Workflow,
   };
