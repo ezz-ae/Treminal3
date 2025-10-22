@@ -70,7 +70,6 @@ export default function Header() {
                                 <span className="font-bold font-headline">Terminal3</span>
                             </Link>
                             <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6 space-y-4 overflow-y-auto">
-                                <Link href="/" className="text-foreground flex font-bold">Dashboard</Link>
                                 
                                 <p className="font-bold text-muted-foreground pt-4">AI Trading</p>
                                 <Link href="/ai-trading" className="text-foreground flex">Trading Command Center</Link>
@@ -117,7 +116,7 @@ export default function Header() {
                     <NavigationMenu>
                         <NavigationMenuList>
                             <NavigationMenuItem>
-                                <Link href="/ai-trading" passHref asChild>
+                                <Link href="/ai-trading" legacyBehavior passHref>
                                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                                         AI Trading
                                     </NavigationMenuLink>
@@ -184,12 +183,14 @@ export default function Header() {
 
 
 const ListItem = React.forwardRef<
-  React.ElementRef<typeof NavigationMenuLink>,
-  React.ComponentPropsWithoutRef<typeof NavigationMenuLink> & { icon: React.ElementType }
->(({ className, title, children, icon: Icon, ...props }, ref) => {
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a"> & { icon: React.ElementType }
+>(({ className, title, children, icon: Icon, href, ...props }, ref) => {
   return (
     <li>
-      <NavigationMenuLink
+      <NavigationMenuLink asChild>
+        <Link
+          href={href || '/'}
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
@@ -204,7 +205,8 @@ const ListItem = React.forwardRef<
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
-        </NavigationMenuLink>
+        </Link>
+      </NavigationMenuLink>
     </li>
   )
 })
