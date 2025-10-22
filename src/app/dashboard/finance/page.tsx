@@ -1,7 +1,7 @@
 
 'use client';
 
-import { BarChart as BarChartIcon, Wallet, Activity, CreditCard } from 'lucide-react';
+import { BarChart as BarChartIcon, Wallet, Activity, CreditCard, Bot } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/chart';
 import { BarChart, Bar, Pie, Cell, PieChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 const initialChartData = [
   { month: 'January', desktop: 186, mobile: 80 },
@@ -72,9 +73,18 @@ const initialStats = {
     contracts: 789,
 };
 
+const marketSentiments = [
+    "The market is showing healthy signs of growth, with a notable 5.2% increase in transaction volume over the last 24 hours.",
+    "A slight cooling period is observed; wallet growth has stabilized, but DeFi protocol engagement remains strong.",
+    "Volatility is increasing in the NFT sector. Recommend monitoring floor prices on major collections.",
+    "Gas prices are trending down, presenting a good opportunity for large-scale contract deployments or airdrops.",
+    "Significant capital rotation detected from L1s into L2 solutions. Arbitrum and Optimism are seeing major inflows."
+]
+
 export default function AnalyticsPage() {
   const [stats, setStats] = useState(initialStats);
   const [barData, setBarData] = useState(initialChartData);
+  const [sentimentIndex, setSentimentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -89,7 +99,9 @@ export default function AnalyticsPage() {
             ...d,
             desktop: Math.max(50, d.desktop + Math.floor(Math.random() * 20 - 10)),
             mobile: Math.max(30, d.mobile + Math.floor(Math.random() * 20 - 10)),
-        })))
+        })));
+
+        setSentimentIndex(prevIndex => (prevIndex + 1) % marketSentiments.length);
 
     }, 3000);
 
@@ -98,65 +110,41 @@ export default function AnalyticsPage() {
 
 
   return (
-    <div className="container mx-auto py-12 space-y-6">
+    <div className="container mx-auto py-12 space-y-8">
        <div>
-        <h1 className="text-3xl font-bold font-headline">On-chain Analytics</h1>
-        <p className="text-muted-foreground">
-          Get deep insights into on-chain data with our powerful analytics engine.
+        <h1 className="text-4xl font-bold font-headline">On-chain Analytics</h1>
+        <p className="text-muted-foreground text-lg mt-2">
+          An elegant, AI-driven overview of the entire Web3 market landscape.
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Transactions</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.transactions.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">+20.1% from last month</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Wallets</CardTitle>
-            <Wallet className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+{stats.wallets.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">+12.2% from last month</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Gas Fees (USD)</CardTitle>
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${stats.gas.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-            <p className="text-xs text-muted-foreground">-5.1% from last month</p>
-          </CardContent>
-        </Card>
-        <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Contracts Deployed</CardTitle>
-                <BarChartIcon className="h-4 w-4 text-muted-foreground" />
+        <Card className="bg-card/50">
+            <CardHeader>
+                <div className="flex justify-between items-center">
+                    <CardTitle className="flex items-center gap-3"><Bot className="w-6 h-6 text-primary"/> AI Market Analysis</CardTitle>
+                    <div className="text-xs text-muted-foreground">Updating in real-time...</div>
+                </div>
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">+{stats.contracts.toLocaleString()}</div>
-                <p className="text-xs text-muted-foreground">+3.2% from last month</p>
+                <motion.p 
+                    key={sentimentIndex}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-lg text-foreground/90 italic"
+                >
+                    "{marketSentiments[sentimentIndex]}"
+                </motion.p>
             </CardContent>
         </Card>
-      </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="lg:col-span-4">
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Transactions Over Time</CardTitle>
              <CardDescription>January - June 2024</CardDescription>
           </CardHeader>
           <CardContent className="pl-2">
-            <ChartContainer config={chartConfig} className="h-[350px] w-full">
+            <ChartContainer config={chartConfig} className="h-[250px] w-full">
               <BarChart accessibilityLayer data={barData}>
                 <CartesianGrid vertical={false} />
                 <XAxis
@@ -166,37 +154,43 @@ export default function AnalyticsPage() {
                   axisLine={false}
                   tickFormatter={(value) => value.slice(0, 3)}
                 />
+                 <YAxis
+                    tickLine={false}
+                    axisLine={false}
+                    stroke="#888888"
+                    fontSize={12}
+                    tickFormatter={(value) => `$${value}`}
+                />
                 <ChartTooltip
                   cursor={false}
                   content={<ChartTooltipContent indicator="dot" />}
                 />
-                 <ChartLegend content={<ChartLegendContent />} />
                 <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
                 <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
               </BarChart>
             </ChartContainer>
           </CardContent>
         </Card>
-        <Card className="lg:col-span-3 flex flex-col">
+        <Card className="col-span-1 flex flex-col">
           <CardHeader>
             <CardTitle>Transaction Volume by Type</CardTitle>
             <CardDescription>January - June 2024</CardDescription>
           </CardHeader>
-          <CardContent className="flex-1 flex pb-0">
-             <ChartContainer config={pieChartConfig} className="mx-auto aspect-square max-h-[300px]">
+          <CardContent className="flex-1 flex pb-0 items-center justify-center">
+             <ChartContainer config={pieChartConfig} className="mx-auto aspect-square h-full max-h-[250px]">
                 <PieChart>
                   <ChartTooltip
                     cursor={false}
                     content={<ChartTooltipContent hideLabel />}
                   />
-                  <Pie data={initialPieData} dataKey="value" nameKey="name" innerRadius={60} outerRadius={100}>
+                  <Pie data={initialPieData} dataKey="value" nameKey="name" innerRadius={50} outerRadius={80} strokeWidth={5}>
                      {initialPieData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                      ))}
                   </Pie>
                   <ChartLegend
                     content={<ChartLegendContent nameKey="name" />}
-                    className="-mt-4"
+                    className="text-xs"
                   />
                 </PieChart>
               </ChartContainer>
