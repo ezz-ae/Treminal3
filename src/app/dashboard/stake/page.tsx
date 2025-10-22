@@ -16,30 +16,12 @@ import { Input } from '@/components/ui/input';
 
 const stakingOptions = [
     {
-        name: 'Ethereum',
-        symbol: 'ETH',
-        apr: '4.5%',
-        description: 'Stake your ETH to help secure the network and earn rewards.'
-    },
-    {
-        name: 'Solana',
-        symbol: 'SOL',
-        apr: '7.2%',
-        description: 'Delegate your SOL to validators to earn rewards and participate in governance.'
-    },
-    {
-        name: 'Polygon',
-        symbol: 'MATIC',
-        apr: '5.8%',
-        description: 'Stake MATIC to participate in network security and earn rewards.'
-    },
-    {
         name: 'Terminal3 Token',
         symbol: 'T3',
         apr: '12.0%',
         description: 'Stake our native token to get a share of protocol revenue and other benefits.'
     }
-]
+];
 
 /**
  * A dashboard for staking various crypto assets.
