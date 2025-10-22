@@ -15,8 +15,9 @@ const serviceLinks = [
 ];
 
 const resourceLinks = [
-    { href: '/dashboard/docs/getting-started', label: 'Getting Started' },
-    { href: '/dashboard/docs/apis', label: 'Universal RPC' },
+    { href: '/token', label: 'The $T3 Token' },
+    { href: '/research', label: 'R&D' },
+    { href: '/carbon', label: 'Carbon Analysis' },
     { href: '/blog', label: 'Blog & Guides' },
     { href: '/dashboard/docs', label: 'Documentation' },
 ];

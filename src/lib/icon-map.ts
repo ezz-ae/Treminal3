@@ -47,6 +47,11 @@ import {
     Shield,
     Workflow,
     Landmark,
+    FlaskConical,
+    Leaf,
+    Atom,
+    Milestone,
+    BarChart3,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -103,4 +108,9 @@ import {
     Shield,
     Workflow,
     Landmark,
+    FlaskConical,
+    Leaf,
+    Atom,
+    Milestone,
+    BarChart3,
   };
