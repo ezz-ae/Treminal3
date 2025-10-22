@@ -113,7 +113,7 @@ export default function SolanaHoloDeckPage() {
                      const Icon = service.icon;
                      return (
                          <motion.div key={service.title} variants={cardVariants} initial="initial" animate="animate" custom={3 + i}>
-                             <Link href={service.href} className="block h-full" legacyBehavior>
+                             <Link href={service.href} className="block h-full">
                                  <Card className="h-full bg-card/60 backdrop-blur-sm border-primary/20 hover:border-primary/50 hover:bg-card/80 transition-colors duration-300 group flex flex-col justify-between text-center items-center p-6">
                                      <Icon className="w-10 h-10 text-primary mb-4"/>
                                      <CardTitle className="font-headline text-lg mb-2">{service.title}</CardTitle>

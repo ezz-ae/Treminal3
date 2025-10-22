@@ -1,3 +1,4 @@
+
 'use client';
 import { ReactNode } from 'react';
 import Link from 'next/link';
@@ -47,7 +48,7 @@ export default function AiTradingLayout({ children }: { children: ReactNode }) {
                                       "px-3 py-4 text-sm font-medium transition-colors",
                                       pathname === tab.href ? "text-primary border-b-2 border-primary" : "text-muted-foreground hover:text-primary"
                                   )}
-                                  legacyBehavior>
+                                  >
                                   {tab.label}
                               </Link>
                           ))}

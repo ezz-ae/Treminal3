@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Leaf, Zap, BarChart3, Atom } from 'lucide-react';

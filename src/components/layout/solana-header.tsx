@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Wind, Rocket, Terminal, Sprout, Gem, AreaChart, Home, CircleDollarSign, ArrowLeft } from 'lucide-react';
@@ -31,7 +32,7 @@ export default function SolanaHeader() {
           <Link
             href="/solana"
             className="mr-6 flex items-center space-x-2"
-            legacyBehavior>
+            >
             <Wind className="h-6 w-6 text-primary" />
             <span className="font-bold font-headline">Solana Hub</span>
           </Link>
@@ -44,7 +45,7 @@ export default function SolanaHeader() {
                       "transition-colors hover:text-primary",
                       pathname === item.href ? "text-primary" : "text-muted-foreground"
                   )}
-                  legacyBehavior>
+                  >
                     {item.label}
                 </Link>
              ))}
@@ -54,7 +55,7 @@ export default function SolanaHeader() {
         <div className="flex flex-1 items-center justify-end space-x-4">
             <ThemeToggle />
             <Button variant="ghost" asChild>
-                <Link href="/dashboard" legacyBehavior>
+                <Link href="/dashboard" >
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Main Hub
                 </Link>
