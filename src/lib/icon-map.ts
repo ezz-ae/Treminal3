@@ -46,6 +46,7 @@ import {
     CheckCircle,
     Shield,
     Workflow,
+    Landmark,
   } from 'lucide-react';
   import type { LucideIcon } from 'lucide-react';
 
@@ -101,4 +102,5 @@ import {
     CheckCircle,
     Shield,
     Workflow,
+    Landmark,
   };
