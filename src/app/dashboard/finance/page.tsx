@@ -1,7 +1,7 @@
 
 'use client';
 
-import { BarChart as BarChartIcon, Wallet, Activity, CreditCard, Bot } from 'lucide-react';
+import { BarChart as BarChartIcon, Wallet, Activity, CreditCard, Bot, Zap, Clock, CircleDollarSign } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -73,18 +73,11 @@ const initialStats = {
     contracts: 789,
 };
 
-const marketSentiments = [
-    "The market is showing healthy signs of growth, with a notable 5.2% increase in transaction volume over the last 24 hours.",
-    "A slight cooling period is observed; wallet growth has stabilized, but DeFi protocol engagement remains strong.",
-    "Volatility is increasing in the NFT sector. Recommend monitoring floor prices on major collections.",
-    "Gas prices are trending down, presenting a good opportunity for large-scale contract deployments or airdrops.",
-    "Significant capital rotation detected from L1s into L2 solutions. Arbitrum and Optimism are seeing major inflows."
-]
+const marketSentiment = "The market is showing healthy signs of growth, with a notable 5.2% increase in transaction volume over the last 24 hours.";
 
 export default function AnalyticsPage() {
   const [stats, setStats] = useState(initialStats);
   const [barData, setBarData] = useState(initialChartData);
-  const [sentimentIndex, setSentimentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -101,8 +94,6 @@ export default function AnalyticsPage() {
             mobile: Math.max(30, d.mobile + Math.floor(Math.random() * 20 - 10)),
         })));
 
-        setSentimentIndex(prevIndex => (prevIndex + 1) % marketSentiments.length);
-
     }, 3000);
 
     return () => clearInterval(interval);
@@ -118,32 +109,34 @@ export default function AnalyticsPage() {
         </p>
       </div>
 
+       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <StatCard title="Total Transactions" value={stats.transactions.toLocaleString()} icon={Zap}/>
+        <StatCard title="Active Wallets" value={stats.wallets.toLocaleString()} icon={Wallet}/>
+        <StatCard title="Total Gas Paid (ETH)" value={stats.gas.toFixed(2)} icon={CreditCard}/>
+        <StatCard title="New Contracts" value={stats.contracts.toLocaleString()} icon={Activity}/>
+      </div>
+
         <Card className="bg-card/50">
             <CardHeader>
                 <div className="flex justify-between items-center">
                     <CardTitle className="flex items-center gap-3"><Bot className="w-6 h-6 text-primary"/> AI Market Analysis</CardTitle>
-                    <div className="text-xs text-muted-foreground">Updating in real-time...</div>
+                    <div className="text-xs text-muted-foreground">Updated moments ago</div>
                 </div>
             </CardHeader>
             <CardContent>
-                <motion.p 
-                    key={sentimentIndex}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-lg text-foreground/90 italic"
-                >
-                    "{marketSentiments[sentimentIndex]}"
-                </motion.p>
+                <p className="text-lg text-foreground/90 italic">
+                    "{marketSentiment}"
+                </p>
             </CardContent>
         </Card>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle>Transactions Over Time</CardTitle>
-             <CardDescription>January - June 2024</CardDescription>
-          </CardHeader>
-          <CardContent className="pl-2">
+      <Card>
+        <CardHeader>
+            <CardTitle>Market Overview</CardTitle>
+            <CardDescription>A summary of transaction types and volumes over the past 6 months.</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-6 lg:grid-cols-2">
+          <div className="pl-2">
             <ChartContainer config={chartConfig} className="h-[250px] w-full">
               <BarChart accessibilityLayer data={barData}>
                 <CartesianGrid vertical={false} />
@@ -169,14 +162,8 @@ export default function AnalyticsPage() {
                 <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
               </BarChart>
             </ChartContainer>
-          </CardContent>
-        </Card>
-        <Card className="col-span-1 flex flex-col">
-          <CardHeader>
-            <CardTitle>Transaction Volume by Type</CardTitle>
-            <CardDescription>January - June 2024</CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 flex pb-0 items-center justify-center">
+          </div>
+          <div className="flex-1 flex pb-0 items-center justify-center">
              <ChartContainer config={pieChartConfig} className="mx-auto aspect-square h-full max-h-[250px]">
                 <PieChart>
                   <ChartTooltip
@@ -194,9 +181,22 @@ export default function AnalyticsPage() {
                   />
                 </PieChart>
               </ChartContainer>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
+
+
+const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, icon: React.ElementType }) => (
+    <Card className="bg-card/50">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{title}</CardTitle>
+            <Icon className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+            <div className="text-2xl font-bold">{value}</div>
+        </CardContent>
+    </Card>
+)
