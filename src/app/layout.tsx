@@ -8,6 +8,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from '@/components/theme-provider';
 import { WalletProvider } from '@/hooks/use-wallet';
 import { cn } from '@/lib/utils';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
