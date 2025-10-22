@@ -7,8 +7,6 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from '@/components/theme-provider';
 import { WalletProvider } from '@/hooks/use-wallet';
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
 import { cn } from '@/lib/utils';
 
 
@@ -65,11 +63,7 @@ export default function RootLayout({
             disableTransitionOnChange
         >
           <WalletProvider>
-             <Header />
-             <main className="flex-1 flex flex-col">
-              {children}
-            </main>
-             <Footer />
+             {children}
           </WalletProvider>
           <Toaster />
           <Analytics />
