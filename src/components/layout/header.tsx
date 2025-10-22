@@ -1,6 +1,6 @@
 'use client';
 
-import { Terminal, Menu, Wind, Gem, BrainCircuit, ShieldCheck, AppWindow, Library, BookOpen, Newspaper, Rocket, Sprout, Wrench, Users, Workflow, Landmark, FlaskConical, Leaf } from 'lucide-react';
+import { Terminal, Menu, Wind, Gem, BrainCircuit, ShieldCheck, AppWindow, Library, BookOpen, Newspaper, Rocket, Sprout, Wrench, Users, Workflow, Landmark, FlaskConical, Leaf, AreaChart } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -27,6 +27,7 @@ const coreServices = [
     { href: "/dashboard/security-audits", title: "Security Audits", icon: ShieldCheck, description: "Audit smart contracts for vulnerabilities." },
     { href: "/dashboard/tools", title: "Developer Tools", icon: Wrench, description: "A suite of utilities for Web3 developers." },
     { href: "/dashboard/dao-governance", title: "DAO Governance", icon: Users, description: "Create proposals, manage voting, and execute on-chain actions." },
+    { href: "/dashboard/finance", title: "On-chain Analytics", icon: AreaChart, description: "A visually rich dashboard providing deep insights into on-chain data." },
 ]
 
 const solanaServices = [
@@ -36,7 +37,7 @@ const solanaServices = [
 ]
 
 const resourcesItems = [
-    { href: "/docs", title: "Documentation", icon: BookOpen, description: "Explore guides, API references, and tutorials." },
+    { href: "/dashboard/docs", title: "Documentation", icon: BookOpen, description: "Explore guides, API references, and tutorials." },
     { href: "/blog", title: "Blog", icon: Newspaper, description: "Read the latest articles, news, and updates from our team." },
     { href: "/token", title: "The $T3 Token", icon: Gem, description: "Learn about the utility and tokenomics of the native platform token." },
     { href: "/research", title: "R&D", icon: FlaskConical, description: "Our vision for the future of autonomous Web3." },
@@ -143,13 +144,6 @@ export default function Header() {
                                         ))}
                                     </ul>
                                 </NavigationMenuContent>
-                            </NavigationMenuItem>
-                             <NavigationMenuItem>
-                                <Link href="/dashboard/finance" legacyBehavior passHref>
-                                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                    Finance
-                                  </NavigationMenuLink>
-                                </Link>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
