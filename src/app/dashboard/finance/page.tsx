@@ -1,6 +1,7 @@
+
 'use client';
 
-import { BarChart as BarChartIcon, Wallet, Activity, CreditCard, Bot, Zap, Clock, CircleDollarSign } from 'lucide-react';
+import { BarChart as BarChartIcon, Wallet, Activity, CreditCard, Bot } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -17,15 +18,14 @@ import {
 } from '@/components/ui/chart';
 import { BarChart, Bar, Pie, Cell, PieChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 
-const initialChartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
+const generateInitialBarData = () => [
+  { month: 'January', desktop: Math.floor(Math.random() * 200) + 50, mobile: Math.floor(Math.random() * 100) + 30 },
+  { month: 'February', desktop: Math.floor(Math.random() * 200) + 50, mobile: Math.floor(Math.random() * 100) + 30 },
+  { month: 'March', desktop: Math.floor(Math.random() * 200) + 50, mobile: Math.floor(Math.random() * 100) + 30 },
+  { month: 'April', desktop: Math.floor(Math.random() * 200) + 50, mobile: Math.floor(Math.random() * 100) + 30 },
+  { month: 'May', desktop: Math.floor(Math.random() * 200) + 50, mobile: Math.floor(Math.random() * 100) + 30 },
+  { month: 'June', desktop: Math.floor(Math.random() * 200) + 50, mobile: Math.floor(Math.random() * 100) + 30 },
 ];
 
 const chartConfig = {
@@ -65,20 +65,26 @@ const pieChartConfig = {
   }
 }
 
-const initialStats = {
-    transactions: 1234567,
-    wallets: 5231,
-    gas: 12234.56,
-    contracts: 789,
-};
-
 const marketSentiment = "The market is showing healthy signs of growth, with a notable 5.2% increase in transaction volume over the last 24 hours.";
 
 export default function AnalyticsPage() {
-  const [stats, setStats] = useState(initialStats);
-  const [barData, setBarData] = useState(initialChartData);
+  const [stats, setStats] = useState({
+    transactions: 0,
+    wallets: 0,
+    gas: 0,
+    contracts: 0,
+  });
+  const [barData, setBarData] = useState(generateInitialBarData());
 
   useEffect(() => {
+    // Initial dynamic data
+    setStats({
+        transactions: 1234567,
+        wallets: 5231,
+        gas: 12234.56,
+        contracts: 789,
+    });
+
     const interval = setInterval(() => {
         setStats(prevStats => ({
             transactions: prevStats.transactions + Math.floor(Math.random() * 100),
@@ -109,10 +115,10 @@ export default function AnalyticsPage() {
       </div>
 
        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Total Transactions" value={stats.transactions.toLocaleString()} icon={Zap}/>
+        <StatCard title="Total Transactions" value={stats.transactions.toLocaleString()} icon={Activity}/>
         <StatCard title="Active Wallets" value={stats.wallets.toLocaleString()} icon={Wallet}/>
         <StatCard title="Total Gas Paid (ETH)" value={stats.gas.toFixed(2)} icon={CreditCard}/>
-        <StatCard title="New Contracts" value={stats.contracts.toLocaleString()} icon={Activity}/>
+        <StatCard title="New Contracts" value={stats.contracts.toLocaleString()} icon={BarChartIcon}/>
       </div>
 
         <Card className="bg-card/50">

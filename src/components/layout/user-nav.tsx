@@ -42,38 +42,9 @@ import {
 import { Badge } from '../ui/badge';
 import { Input } from '../ui/input';
 
-const portfolio = [
-  { token: 'ETH', amount: 2.5, value: 8750 },
-  { token: 'SOL', amount: 120, value: 18000 },
-  { token: 'T3', amount: 5000, value: 500 },
-];
-
-const transactionHistory = [
-  {
-    type: 'Swap',
-    details: 'ETH to USDC',
-    amount: '-0.5 ETH',
-    status: 'Completed',
-  },
-  {
-    type: 'Stake',
-    details: '100 SOL',
-    amount: '+100 sSOL',
-    status: 'Completed',
-  },
-  {
-    type: 'Airdrop',
-    details: 'Claimed 1000 T3',
-    amount: '+1000 T3',
-    status: 'Completed',
-  },
-];
-
-const platformActivity = [
-  { action: 'Deployed Bot', details: 'Momentum Master (BTC)', time: '2h ago' },
-  { action: 'Ran Audit', details: 'SimpleAuction.sol', time: '1d ago' },
-  { action: 'Launched Token', details: 'Galaxy Dust (GLXY)', time: '3d ago' },
-];
+const portfolio: any[] = [];
+const transactionHistory: any[] = [];
+const platformActivity: any[] = [];
 
 function PortfolioTab() {
   const totalValue = portfolio.reduce((acc, item) => acc + item.value, 0);
@@ -95,7 +66,7 @@ function PortfolioTab() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {portfolio.map((item) => (
+            {portfolio.length > 0 ? portfolio.map((item) => (
               <TableRow key={item.token}>
                 <TableCell className="font-medium">{item.token}</TableCell>
                 <TableCell>{item.amount}</TableCell>
@@ -103,7 +74,13 @@ function PortfolioTab() {
                   ${item.value.toLocaleString('en-US')}
                 </TableCell>
               </TableRow>
-            ))}
+            )) : (
+              <TableRow>
+                <TableCell colSpan={3} className="h-24 text-center">
+                  No assets in your wallet.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </CardContent>
@@ -125,7 +102,7 @@ function HistoryTab() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactionHistory.map((tx, i) => (
+             {transactionHistory.length > 0 ? transactionHistory.map((tx, i) => (
               <TableRow key={i}>
                 <TableCell>
                   <Badge variant="outline">{tx.type}</Badge>
@@ -136,7 +113,13 @@ function HistoryTab() {
                   {tx.status}
                 </TableCell>
               </TableRow>
-            ))}
+            )) : (
+                <TableRow>
+                    <TableCell colSpan={4} className="h-24 text-center">
+                    No transaction history found.
+                    </TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </CardContent>
@@ -150,11 +133,11 @@ function SwapTab() {
       <CardContent className="pt-6 space-y-4">
         <div>
           <label className="text-sm font-medium">You sell</label>
-          <Input type="number" placeholder="0.1" className="mt-1" />
+          <Input type="number" placeholder="0.0" className="mt-1" />
         </div>
         <div>
           <label className="text-sm font-medium">You buy</label>
-          <Input type="number" placeholder="345.67" className="mt-1" />
+          <Input type="number" placeholder="0.0" className="mt-1" />
         </div>
         <Button className="w-full">Swap</Button>
       </CardContent>
@@ -175,7 +158,7 @@ function ActivityTab() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {platformActivity.map((act, i) => (
+            {platformActivity.length > 0 ? platformActivity.map((act, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium">{act.action}</TableCell>
                 <TableCell>{act.details}</TableCell>
@@ -183,7 +166,13 @@ function ActivityTab() {
                   {act.time}
                 </TableCell>
               </TableRow>
-            ))}
+            )) : (
+                 <TableRow>
+                    <TableCell colSpan={3} className="h-24 text-center">
+                        No platform activity yet.
+                    </TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </CardContent>

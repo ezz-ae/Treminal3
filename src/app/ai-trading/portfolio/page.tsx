@@ -9,12 +9,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 
-const activeStrategies = [
-    { name: 'Momentum Master (BTC)', status: 'Active', pnl: 450.75, pnlPercent: 9.01, risk: 'Medium' },
-    { name: 'Volatility Scalper (ETH)', status: 'Active', pnl: 120.30, pnlPercent: 4.81, risk: 'High' },
-    { name: 'DEX Arbitrage (SOL)', status: 'Active', pnl: 88.12, pnlPercent: 0.88, risk: 'Low' },
-    { name: 'Mean Reversion (SOL)', status: 'Monitoring', pnl: -15.50, pnlPercent: -0.31, risk: 'Medium' },
-];
+const activeStrategies: any[] = [];
 
 const riskStyles: Record<string, string> = {
     'Low': 'text-green-400 border-green-500/50 bg-green-500/10',
@@ -37,8 +32,8 @@ export default function PortfolioPage() {
                         <DollarSign className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">$27,625.67</div>
-                        <p className="text-xs text-muted-foreground">+2.2% in the last 24 hours</p>
+                        <div className="text-2xl font-bold">$0.00</div>
+                        <p className="text-xs text-muted-foreground">0.0% in the last 24 hours</p>
                     </CardContent>
                 </Card>
                  <Card className="bg-card/60 backdrop-blur-sm">
@@ -47,7 +42,7 @@ export default function PortfolioPage() {
                         <BarChart2 className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-green-400">+$603.67</div>
+                        <div className="text-2xl font-bold">$0.00</div>
                         <p className="text-xs text-muted-foreground">From all active strategies</p>
                     </CardContent>
                 </Card>
@@ -58,10 +53,10 @@ export default function PortfolioPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-xl font-bold flex items-center gap-2">
-                            Medium
-                            <Progress value={55} className="w-2/3 h-2" />
+                            Low
+                            <Progress value={0} className="w-2/3 h-2" />
                         </div>
-                        <p className="text-xs text-muted-foreground">Balanced across all strategies</p>
+                        <p className="text-xs text-muted-foreground">No active strategies</p>
                     </CardContent>
                 </Card>
             </div>
@@ -84,28 +79,36 @@ export default function PortfolioPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {activeStrategies.map((strategy) => (
-                                <TableRow key={strategy.name} className="hover:bg-primary/5">
-                                    <TableCell className="font-medium">{strategy.name}</TableCell>
-                                     <TableCell>
-                                        <span className={cn("font-semibold", statusStyles[strategy.status])}>
-                                            {strategy.status}
-                                        </span>
-                                    </TableCell>
-                                    <TableCell><Badge variant="outline" className={cn(riskStyles[strategy.risk])}>{strategy.risk}</Badge></TableCell>
-                                    <TableCell className={cn("font-mono", strategy.pnl >= 0 ? 'text-green-400' : 'text-red-400')}>
-                                        {strategy.pnl >= 0 ? '+' : ''}{strategy.pnl.toFixed(2)}
-                                    </TableCell>
-                                     <TableCell className={cn("font-mono", strategy.pnl >= 0 ? 'text-green-400' : 'text-red-400')}>
-                                         {strategy.pnlPercent.toFixed(2)}%
-                                     </TableCell>
-                                    <TableCell className="text-right">
-                                        <Button variant="ghost" size="sm">
-                                            View Details
-                                        </Button>
+                            {activeStrategies.length > 0 ? (
+                                activeStrategies.map((strategy) => (
+                                    <TableRow key={strategy.name} className="hover:bg-primary/5">
+                                        <TableCell className="font-medium">{strategy.name}</TableCell>
+                                         <TableCell>
+                                            <span className={cn("font-semibold", statusStyles[strategy.status])}>
+                                                {strategy.status}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell><Badge variant="outline" className={cn(riskStyles[strategy.risk])}>{strategy.risk}</Badge></TableCell>
+                                        <TableCell className={cn("font-mono", strategy.pnl >= 0 ? 'text-green-400' : 'text-red-400')}>
+                                            {strategy.pnl >= 0 ? '+' : ''}{strategy.pnl.toFixed(2)}
+                                        </TableCell>
+                                         <TableCell className={cn("font-mono", strategy.pnl >= 0 ? 'text-green-400' : 'text-red-400')}>
+                                             {strategy.pnlPercent.toFixed(2)}%
+                                         </TableCell>
+                                        <TableCell className="text-right">
+                                            <Button variant="ghost" size="sm">
+                                                View Details
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="h-24 text-center">
+                                        No active strategies. Deploy a bot from the marketplace to get started.
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            )}
                         </TableBody>
                     </Table>
                 </CardContent>

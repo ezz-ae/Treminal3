@@ -1,7 +1,7 @@
+
 'use client';
 
 import { BrainCircuit, ShieldCheck, Zap } from 'lucide-react';
-import Image from 'next/image';
 
 export default function TechnologyPage() {
   return (
@@ -40,10 +40,7 @@ export default function TechnologyPage() {
 
         <div className="text-center">
             <h2 className="text-3xl font-bold font-headline">A Google AI Partnership</h2>
-            <div className="flex justify-center my-6">
-                <Image data-ai-hint="Google logo" src="https://picsum.photos/seed/google/200/60" alt="Google AI Logo" width={200} height={60} className="rounded" />
-            </div>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mt-4">
                 Our deep integration with Google's Gemini models means we are always at the bleeding edge of AI capabilities. This partnership allows us to provide a level of intelligence, reliability, and scale that is unmatched in the Web3 space. When you build with Terminal3, you're building with the power of Google's best AI.
             </p>
         </div>
