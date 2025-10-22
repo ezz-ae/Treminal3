@@ -4,11 +4,11 @@ import SolanaHeader from '@/components/layout/solana-header';
 
 export default function SolanaLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col min-h-screen bg-black">
+    <>
       <SolanaHeader />
-      <main className="flex-1">
+      <main className="flex-1 bg-black">
         {children}
       </main>
-    </div>
+    </>
   );
 }

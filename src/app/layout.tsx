@@ -65,7 +65,11 @@ export default function RootLayout({
             disableTransitionOnChange
         >
           <WalletProvider>
-             {children}
+            <Header />
+            <main className="flex-1 flex flex-col">
+              {children}
+            </main>
+            <Footer />
           </WalletProvider>
           <Toaster />
           <Analytics />
