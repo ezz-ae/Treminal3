@@ -65,7 +65,7 @@ export default function InteractiveGuides() {
     if (userNotes.some(note => note.slug === activeArticle.slug)) {
       toast({
         title: 'Note Already Saved',
-        description: `You've already saved this article.`,
+        description: `You\'ve already saved this article.`,
       });
       return;
     }
