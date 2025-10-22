@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Wind, Rocket, Terminal, Sprout, Gem, AreaChart, Home, CircleDollarSign, ArrowLeft } from 'lucide-react';
@@ -55,7 +54,7 @@ export default function SolanaHeader() {
         <div className="flex flex-1 items-center justify-end space-x-4">
             <ThemeToggle />
             <Button variant="ghost" asChild>
-                <Link href="/dashboard" >
+                <Link href="/">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Main Hub
                 </Link>

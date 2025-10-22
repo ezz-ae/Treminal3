@@ -42,7 +42,7 @@ const toolLinks: Record<string, string> = {
     'Solana Command Center': '/dashboard/solana',
     'Security Audits': '/dashboard/security-audits',
     'Token Launcher': '/dashboard/token-launcher',
-    'On-chain Analytics': '/dashboard/analytics',
+    'On-chain Analytics': '/dashboard/finance',
     'Staking': '/dashboard/stake',
     'Developer Tools': '/dashboard/tools',
     'Documentation': '/dashboard/docs'

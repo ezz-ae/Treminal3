@@ -1,4 +1,3 @@
-
 'use client';
 
 import { BarChart as BarChartIcon, Wallet, Activity, CreditCard, Bot, Zap, Clock, CircleDollarSign } from 'lucide-react';

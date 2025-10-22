@@ -1,4 +1,3 @@
-
 'use client';
 import { ReactNode } from 'react';
 import SolanaHeader from '@/components/layout/solana-header';

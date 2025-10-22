@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Library, Zap, TrendingUp, ShieldAlert, ArrowRight, Bot, AppWindow, Gem, FileJson } from 'lucide-react';
@@ -56,7 +55,7 @@ const strategies = [
         risk: 'Low',
         category: 'Analytics',
         icon: ShieldAlert,
-        href: '/dashboard/analytics'
+        href: '/dashboard/finance'
     },
     {
         name: 'NFT Minting Bot',
@@ -66,7 +65,7 @@ const strategies = [
         risk: 'High',
         category: 'NFT',
         icon: Bot,
-        href: '/dashboard/dev-flow'
+        href: '/dashboard/bot-creator'
     },
     {
         name: 'Yield Farming Aggregator',
@@ -76,7 +75,7 @@ const strategies = [
         risk: 'Medium',
         category: 'DeFi',
         icon: TrendingUp,
-        href: '/dashboard/dev-flow'
+        href: '/dashboard/bot-creator'
     },
     {
         name: 'Airdrop Farming Assistant',
@@ -86,7 +85,7 @@ const strategies = [
         risk: 'Medium',
         category: 'DeFi',
         icon: Bot,
-        href: '/dashboard/dev-flow'
+        href: '/dashboard/bot-creator'
     },
     {
         name: 'Uniswap V3 LP Optimizer',
@@ -96,7 +95,7 @@ const strategies = [
         risk: 'High',
         category: 'DeFi',
         icon: Bot,
-        href: '/dashboard/dev-flow'
+        href: '/dashboard/bot-creator'
     },
     {
         name: 'Smart Contract Deployment Suite',
@@ -126,7 +125,7 @@ const strategies = [
         risk: 'Low',
         category: 'Identity',
         icon: AppWindow,
-        href: '/dashboard/dev-flow'
+        href: '/dashboard/dapp-builder'
     },
     {
         name: 'Gas Price Arbitrage',
@@ -136,7 +135,7 @@ const strategies = [
         risk: 'Low',
         category: 'DeFi',
         icon: Zap,
-        href: '/dashboard/dev-flow'
+        href: '/dashboard/bot-creator'
     },
     {
         name: 'MEV Sandwich Attack Simulator',
@@ -156,7 +155,7 @@ const strategies = [
         risk: 'Low',
         category: 'Analytics',
         icon: FileJson,
-        href: '/dashboard/analytics'
+        href: '/dashboard/finance'
     },
     {
         name: 'DAO Proposal Automation',
@@ -176,7 +175,7 @@ const strategies = [
         risk: 'Low',
         category: 'NFT',
         icon: AppWindow,
-        href: '/dashboard/dev-flow'
+        href: '/dashboard/dapp-builder'
     },
     {
         name: 'Flash Loan Exploit Tester',
@@ -236,7 +235,7 @@ const strategies = [
         risk: 'Low',
         category: 'DAO',
         icon: Library,
-        href: '/dashboard/dev-flow'
+        href: '/dashboard/dao-governance'
     },
     {
         name: 'Portfolio Rebalancer',
@@ -266,7 +265,7 @@ const strategies = [
         risk: 'Low',
         category: 'Dev Tool',
         icon: Zap,
-        href: '/dashboard/dev-flow'
+        href: '/dashboard/bot-creator'
     },
     {
         name: 'Rug Pull Detector',
@@ -306,7 +305,7 @@ const strategies = [
         risk: 'Medium',
         category: 'Dev Tool',
         icon: AppWindow,
-        href: '/dashboard/dev-flow'
+        href: '/dashboard/dapp-builder'
     },
     {
         name: 'Tax Calculation Reporter',
@@ -316,7 +315,7 @@ const strategies = [
         risk: 'Low',
         category: 'Analytics',
         icon: FileJson,
-        href: '/dashboard/analytics'
+        href: '/dashboard/finance'
     },
 ];
 

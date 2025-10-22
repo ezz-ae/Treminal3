@@ -1,4 +1,3 @@
-
 'use client';
 
 import { BrainCircuit, ShieldCheck, Zap } from 'lucide-react';
