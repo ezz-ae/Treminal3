@@ -22,11 +22,11 @@ const resourceLinks = [
 ];
 
 const companyLinks = [
-    { href: '#', label: 'About Us' },
-    { href: '#', label: 'Careers' },
-    { href: '#', label: 'Contact' },
-    { href: '#', label: 'Privacy Policy' },
-    { href: '#', label: 'Terms of Service' },
+    { href: '/blog', label: 'About Us' },
+    { href: '/blog', label: 'Careers' },
+    { href: '/blog', label: 'Contact' },
+    { href: '/dashboard/docs', label: 'Privacy Policy' },
+    { href: '/dashboard/docs', label: 'Terms of Service' },
 ]
 
 const socialLinks = [

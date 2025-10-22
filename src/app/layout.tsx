@@ -15,16 +15,27 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
 
-const title = 'Terminal3: AI-Native Code Editor for Web3';
+const title = 'Terminal3: The AI-Native Web3 Development Platform';
 const description = 'Go from idea to deployed dApp with an AI-powered terminal. Generate smart contracts, build front-ends, and manage your entire Web3 project with natural language.';
 
 export const metadata: Metadata = {
-  title,
+  metadataBase: new URL('https://terminal3.me'), // Use a placeholder URL
+  title: {
+    default: title,
+    template: `%s | Terminal3`,
+  },
   description,
   openGraph: {
     title,
     description,
     type: 'website',
+    url: '/',
+    siteName: 'Terminal3',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
   }
 };
 

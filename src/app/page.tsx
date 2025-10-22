@@ -3,7 +3,6 @@
 
 import Hero from '@/components/landing/hero';
 import InteractiveGuides from '@/components/landing/interactive-guides';
-import CodingModes from '@/components/landing/coding-modes';
 import {
   Card,
   CardContent,
@@ -48,7 +47,7 @@ export default function Home() {
             <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">A Unified Platform for Web3 Innovation</h2>
                 <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
-                    Explore the full suite of AI-powered tools to build, manage, and scale your projects. From idea to deployment, Terminal3 is your command center.
+                    Explore the full suite of AI-powered tools to build, manage, and scale your projects. From idea to deployment, Terminal3 is your command center for dApp development, DeFi strategy, and Solana integration.
                 </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -59,7 +58,6 @@ export default function Home() {
         </div>
       </div>
       <InteractiveGuides />
-      <CodingModes />
     </>
   );
 }
