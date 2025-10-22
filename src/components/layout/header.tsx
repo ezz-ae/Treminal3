@@ -66,8 +66,6 @@ export default function Header() {
                                 <span className="font-bold font-headline">Terminal3</span>
                             </Link>
                             <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6 space-y-4 overflow-y-auto">
-                                <Link href="/" className="text-foreground flex font-bold">Dashboard</Link>
-                                
                                 <p className="font-bold text-muted-foreground pt-4">AI Trading</p>
                                 <Link href="/ai-trading" className="text-foreground flex">Trading Command Center</Link>
 

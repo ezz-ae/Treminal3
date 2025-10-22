@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
-import { PlusCircle, Edit2, Trash2, MoreVertical, RefreshCw, Zap, Clock, Shield } from 'lucide-react';
+import { PlusCircle, Edit2, Trash2, MoreVertical, RefreshCw, Zap, Clock, Shield, CheckCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -24,7 +24,7 @@ const initialFlows: Flow[] = [
   { id: 'flow-3', title: 'NFT Collection Floor Sweeper', description: 'Automatically buy the cheapest NFTs in a collection when the floor price drops.', status: 'inProgress', trigger: 'Price Alert', tags: ['NFT', 'Trading', 'High Risk'] },
   { id: 'flow-4', title: 'Portfolio Rebalancer', description: 'Maintain a desired portfolio allocation (e.g., 50% BTC, 30% ETH, 20% SOL).', status: 'inProgress', trigger: 'Hourly', tags: ['DeFi', 'Portfolio'] },
   { id: 'flow-5', title: 'DAO Proposal Automation', description: 'Automatically create and submit a recurring DAO treasury request proposal.', status: 'done', trigger: 'Monthly', tags: ['DAO', 'Governance'] },
-  { id 'flow-6', title: 'Gas Price Arbitrage', description: 'Execute non-urgent transactions only when network gas fees fall below a threshold.', status: 'done', trigger: 'Gas Price', tags: ['DeFi', 'Utility'] },
+  { id: 'flow-6', title: 'Gas Price Arbitrage', description: 'Execute non-urgent transactions only when network gas fees fall below a threshold.', status: 'done', trigger: 'Gas Price', tags: ['DeFi', 'Utility'] },
 ];
 
 const statusConfig = {
