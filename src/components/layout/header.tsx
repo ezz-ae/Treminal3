@@ -116,7 +116,7 @@ export default function Header() {
                     <NavigationMenu>
                         <NavigationMenuList>
                             <NavigationMenuItem>
-                                <Link href="/ai-trading" legacyBehavior passHref>
+                                <Link href="/ai-trading" passHref>
                                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                                         AI Trading
                                     </NavigationMenuLink>

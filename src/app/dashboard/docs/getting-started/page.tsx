@@ -40,7 +40,7 @@ const features = [
     icon: AreaChart,
     title: 'On-chain Analytics',
     description: 'A visually rich dashboard providing deep insights into on-chain data.',
-    href: '/dashboard/analytics'
+    href: '/dashboard/finance'
   },
   {
     icon: Bot,
@@ -76,7 +76,7 @@ export default function GettingStartedPage() {
               <h2 className="mb-8">Core Features Overview</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 not-prose">
                   {features.map((feature) => (
-                      <Link key={feature.title} href={feature.href} legacyBehavior>
+                      <Link key={feature.title} href={feature.href}>
                           <div className="bg-card/50 p-6 rounded-lg border border-transparent hover:border-primary hover:bg-primary/5 cursor-pointer transition-all duration-300 h-full">
                               <div className="flex items-center gap-4 mb-4">
                                   <feature.icon className="w-8 h-8 text-primary" />
@@ -98,7 +98,7 @@ export default function GettingStartedPage() {
                    <strong>Use the AI dApp Builder:</strong> The fastest way to build is to ask. Go to the <Link href="/dashboard/dapp-builder">dApp Builder</Link> and try a prompt like: <em className="text-primary/80">"Create a plan for a dApp that lets users mint a profile NFT."</em>
                  </li>
                  <li>
-                   <strong>Check the Analytics:</strong> Visit the <Link href="/dashboard/analytics">Analytics</Link> page to see a demo of our on-chain data visualization capabilities.
+                   <strong>Check the Analytics:</strong> Visit the <Link href="/dashboard/finance">Analytics</Link> page to see a demo of our on-chain data visualization capabilities.
                  </li>
                   <li>
                    <strong>Read the Docs:</strong> Whenever you need more detail, this <Link href="/dashboard/docs">documentation</Link> section is here to help with in-depth guides and recipes.

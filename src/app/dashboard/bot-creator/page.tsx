@@ -86,7 +86,7 @@ export default function BotMarketplacePage() {
                           </CardContent>
                           <CardFooter>
                               <Button asChild className="w-full">
-                                  <Link href={`/dashboard/bot-creator/${bot.slug}`} legacyBehavior>
+                                  <Link href={`/dashboard/bot-creator/${bot.slug}`}>
                                       View Details & Deploy <ArrowRight className="ml-2 w-4 h-4"/>
                                   </Link>
                               </Button>

@@ -35,7 +35,7 @@ export default function DownloadPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-4xl mt-12">
               {downloadLinks.map((linkInfo) => (
                   <Button key={linkInfo.os} size="lg" asChild className="h-14 text-lg">
-                      <Link href={linkInfo.href} legacyBehavior>
+                      <Link href={linkInfo.href}>
                           <Download className="mr-3 h-5 w-5"/> {linkInfo.os}
                       </Link>
                   </Button>

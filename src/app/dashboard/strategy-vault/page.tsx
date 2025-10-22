@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Library, Zap, TrendingUp, ShieldAlert, ArrowRight, Bot, AppWindow, Gem, FileJson } from 'lucide-react';
@@ -462,7 +463,7 @@ export default function StrategyVaultPage() {
                             </CardContent>
                             <CardFooter>
                                 <Button asChild className="w-full">
-                                    <Link href={strategy.href} legacyBehavior>
+                                    <Link href={strategy.href}>
                                         View & Execute Strategy <ArrowRight className="ml-2 w-4 h-4"/>
                                     </Link>
                                 </Button>

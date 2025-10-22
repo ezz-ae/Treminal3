@@ -86,7 +86,7 @@ export default function DocsPage() {
         <h2 className="text-2xl font-bold font-headline mb-6">Platform Documentation</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {docSections.map((section) => (
-            <Link key={section.title} href={section.href} legacyBehavior>
+            <Link key={section.title} href={section.href}>
               <Card className="flex flex-col group bg-card/50 hover:border-primary/50 transition-colors duration-300 h-full">
                   <CardHeader>
                       <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">

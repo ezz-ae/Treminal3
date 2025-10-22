@@ -9,7 +9,7 @@ const serviceLinks = [
     { href: '/dashboard/bot-creator', label: 'Bot Creator' },
     { href: '/solana', label: 'Solana Command Center' },
     { href: '/dashboard/security-audits', label: 'Security Audits' },
-    { href: '/dashboard/analytics', label: 'On-chain Analytics' },
+    { href: '/dashboard/finance', label: 'On-chain Analytics' },
     { href: '/dashboard/stake', label: 'Staking' },
     { href: '/dashboard/tools', label: 'Developer Tools' },
 ];

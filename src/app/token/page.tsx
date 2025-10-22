@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Gem, Shield, Vote, Zap } from 'lucide-react';

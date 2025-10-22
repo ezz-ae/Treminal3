@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Gem, TrendingUp, TrendingDown, ArrowRight } from 'lucide-react';
@@ -102,7 +103,7 @@ export default function SolanaTokensPage() {
                                 <TableCell className="font-mono">{token.volume}</TableCell>
                                  <TableCell className="text-right">
                                     <Button variant="ghost" size="sm" asChild>
-                                        <Link href="/solana/trading" legacyBehavior>
+                                        <Link href="/solana/trading">
                                             Trade <ArrowRight className="w-4 h-4 ml-2" />
                                         </Link>
                                     </Button>
