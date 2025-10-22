@@ -22,12 +22,11 @@ const resourceLinks = [
 ];
 
 const companyLinks = [
-    { href: '/blog', label: 'About Us' },
-    { href: '/blog', label: 'Careers' },
-    { href: '/blog', label: 'Contact' },
-    { href: '/dashboard/docs', label: 'Privacy Policy' },
-    { href: '/dashboard/docs', label: 'Terms of Service' },
-]
+    { href: '/technology', label: 'Technology' },
+    { href: '/careers', label: 'Careers' },
+    { href: '/support', label: 'Support' },
+    { href: '/faqs', label: 'FAQs' },
+];
 
 const socialLinks = [
   { icon: Twitter, href: '#', 'aria-label': 'Twitter' },
@@ -117,7 +116,7 @@ export default function Footer() {
             
             <div className="mt-8 pt-8 border-t flex flex-col md:flex-row justify-between items-center">
                 <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-                    &copy; {new Date().getFullYear()} Terminal3, Inc. All rights reserved.
+                    &copy; {new Date().getFullYear()} Terminal3, Inc. A Google AI Partnership. All rights reserved.
                 </p>
                 <div className="flex items-center space-x-4">
                     {socialLinks.map((social, index) => (

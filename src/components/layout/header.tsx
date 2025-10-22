@@ -111,17 +111,17 @@ export default function Header() {
                     <NavigationMenu>
                         <NavigationMenuList>
                             <NavigationMenuItem>
-                                <Link href="/" legacyBehavior passHref>
-                                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                        Dashboard
-                                    </NavigationMenuLink>
+                                <Link href="/dashboard" legacyBehavior passHref>
+                                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                    Dashboard
+                                  </NavigationMenuLink>
                                 </Link>
                             </NavigationMenuItem>
                              <NavigationMenuItem>
                                 <Link href="/ai-trading" legacyBehavior passHref>
-                                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                        AI Trading
-                                    </NavigationMenuLink>
+                                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                    AI Trading
+                                  </NavigationMenuLink>
                                 </Link>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
@@ -150,9 +150,9 @@ export default function Header() {
                             </NavigationMenuItem>
                              <NavigationMenuItem>
                                 <Link href="/dashboard/finance" legacyBehavior passHref>
-                                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                        Finance
-                                    </NavigationMenuLink>
+                                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                    Finance
+                                  </NavigationMenuLink>
                                 </Link>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
@@ -190,7 +190,7 @@ const ListItem = React.forwardRef<
   return (
     <li>
       <NavigationMenuLink asChild>
-        <Link
+        <a
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
@@ -205,7 +205,7 @@ const ListItem = React.forwardRef<
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
-        </Link>
+        </a>
       </NavigationMenuLink>
     </li>
   )
