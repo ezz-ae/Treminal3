@@ -1,3 +1,4 @@
+
 'use client';
 
 import { FlaskConical, BrainCircuit, Atom, ShieldCheck, Milestone } from 'lucide-react';
@@ -40,9 +41,9 @@ export default function ResearchPage() {
   return (
     <div className="container mx-auto py-12 px-4">
       <header className="mb-12 text-center">
-        <FlaskConical className="w-16 h-16 mx-auto text-primary mb-4" />
-        <h1 className="text-5xl font-bold font-headline">Research & Development</h1>
-        <p className="text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
+        <FlaskConical className="w-12 h-12 mx-auto text-primary mb-4" />
+        <h1 className="text-4xl font-bold font-headline">Research & Development</h1>
+        <p className="text-lg text-muted-foreground mt-4 max-w-3xl mx-auto">
           Building the future of autonomous Web3. A look into the core research initiatives that drive our innovation.
         </p>
       </header>
@@ -56,13 +57,13 @@ export default function ResearchPage() {
                     <topic.icon className="w-6 h-6 shrink-0"/>
                 </div>
                 <div>
-                    <CardTitle className="text-2xl">{topic.title}</CardTitle>
+                    <CardTitle className="text-xl">{topic.title}</CardTitle>
                     <CardDescription>{topic.status}</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">{topic.description}</p>
+              <p className="text-muted-foreground text-sm">{topic.description}</p>
             </CardContent>
           </Card>
         ))}

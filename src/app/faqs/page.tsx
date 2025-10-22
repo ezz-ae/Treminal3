@@ -1,3 +1,4 @@
+
 'use client';
 
 import { HelpCircle } from 'lucide-react';
@@ -39,9 +40,9 @@ export default function FaqsPage() {
   return (
     <div className="container mx-auto py-12 px-4">
         <header className="mb-12 text-center">
-            <HelpCircle className="w-16 h-16 mx-auto text-primary mb-4" />
-            <h1 className="text-5xl font-bold font-headline">Frequently Asked Questions</h1>
-            <p className="text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
+            <HelpCircle className="w-12 h-12 mx-auto text-primary mb-4" />
+            <h1 className="text-4xl font-bold font-headline">Frequently Asked Questions</h1>
+            <p className="text-lg text-muted-foreground mt-4 max-w-3xl mx-auto">
                 Have questions? We have answers. Here are some of the most common things we get asked.
             </p>
         </header>
@@ -50,8 +51,8 @@ export default function FaqsPage() {
              <Accordion type="single" collapsible className="w-full">
                 {faqItems.map((item, index) => (
                     <AccordionItem value={`item-${index}`} key={index}>
-                        <AccordionTrigger className="text-xl text-left">{item.question}</AccordionTrigger>
-                        <AccordionContent className="text-lg text-muted-foreground">
+                        <AccordionTrigger className="text-lg text-left">{item.question}</AccordionTrigger>
+                        <AccordionContent className="text-base text-muted-foreground">
                         {item.answer}
                         </AccordionContent>
                     </AccordionItem>

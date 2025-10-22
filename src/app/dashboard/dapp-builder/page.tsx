@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -123,7 +124,7 @@ export default function DappBuilderPage() {
   return (
     <div className="container mx-auto py-12">
         <div className="text-center">
-            <h1 className="text-4xl font-bold font-headline flex items-center justify-center gap-3"><Terminal className="w-10 h-10 text-primary" /> AI Command Center</h1>
+            <h1 className="text-3xl font-bold font-headline flex items-center justify-center gap-3"><Terminal className="w-8 h-8 text-primary" /> AI Command Center</h1>
             <p className="text-muted-foreground text-lg mt-2">
                 Describe your goal, and our AI will generate a strategic plan, recommend tools, and guide you through execution.
             </p>
@@ -147,7 +148,7 @@ export default function DappBuilderPage() {
                             </CardHeader>
                             <CardContent className="flex-grow flex flex-col">
                                 <Form {...form}>
-                                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 h-full flex flex-col">
+                                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 h-full flex flex-col">
                                         <div className="flex-grow">
                                             {currentStep === 0 && (
                                                 <FormField
@@ -155,11 +156,11 @@ export default function DappBuilderPage() {
                                                     name="industry"
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel className="text-xl">What industry does your project operate in?</FormLabel>
+                                                            <FormLabel>What industry does your project operate in?</FormLabel>
                                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                                <FormControl><SelectTrigger className="h-12 text-lg"><SelectValue placeholder="Select an industry..." /></SelectTrigger></FormControl>
+                                                                <FormControl><SelectTrigger className="h-11"><SelectValue placeholder="Select an industry..." /></SelectTrigger></FormControl>
                                                                 <SelectContent>
-                                                                    {industries.map(item => <SelectItem key={item} value={item} className="text-lg">{item}</SelectItem>)}
+                                                                    {industries.map(item => <SelectItem key={item} value={item}>{item}</SelectItem>)}
                                                                 </SelectContent>
                                                             </Select>
                                                             <FormMessage />
@@ -174,11 +175,11 @@ export default function DappBuilderPage() {
                                                     name="stage"
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel className="text-xl">What is the current stage of your business?</FormLabel>
+                                                            <FormLabel>What is the current stage of your business?</FormLabel>
                                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                                <FormControl><SelectTrigger className="h-12 text-lg"><SelectValue placeholder="Select a stage..." /></SelectTrigger></FormControl>
+                                                                <FormControl><SelectTrigger className="h-11"><SelectValue placeholder="Select a stage..." /></SelectTrigger></FormControl>
                                                                 <SelectContent>
-                                                                    {stages.map(item => <SelectItem key={item} value={item} className="text-lg">{item}</SelectItem>)}
+                                                                    {stages.map(item => <SelectItem key={item} value={item}>{item}</SelectItem>)}
                                                                 </SelectContent>
                                                             </Select>
                                                             <FormMessage />
@@ -189,7 +190,7 @@ export default function DappBuilderPage() {
                                             
                                             {currentStep === 2 && (
                                                 <div>
-                                                    <FormLabel className="text-xl">What are your primary goals?</FormLabel>
+                                                    <FormLabel>What are your primary goals?</FormLabel>
                                                     <div className="mt-4 space-y-2">
                                                         {fields.map((field, index) => (
                                                             <FormField
@@ -199,7 +200,7 @@ export default function DappBuilderPage() {
                                                                 render={({ field }) => (
                                                                     <FormItem className='flex items-center gap-2'>
                                                                         <FormControl>
-                                                                            <Input {...field} placeholder={`e.g., Build a community`} className="h-12 text-lg"/>
+                                                                            <Input {...field} placeholder={`e.g., Build a community`} className="h-11"/>
                                                                         </FormControl>
                                                                         {fields.length > 1 && <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}><X className="h-4 w-4" /></Button>}
                                                                         <FormMessage />
@@ -221,12 +222,12 @@ export default function DappBuilderPage() {
                                                     name="description"
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel className="text-xl">Briefly describe your project.</FormLabel>
+                                                            <FormLabel>Briefly describe your project.</FormLabel>
                                                             <FormControl>
                                                                 <Textarea
                                                                     {...field}
                                                                     placeholder="e.g., A decentralized platform for musicians to sell their music as NFTs directly to fans."
-                                                                    className="min-h-[150px] text-lg mt-2"
+                                                                    className="min-h-[150px] mt-2"
                                                                 />
                                                             </FormControl>
                                                             <FormMessage />
@@ -237,10 +238,10 @@ export default function DappBuilderPage() {
 
                                             {currentStep === 4 && (
                                                 <div>
-                                                    <h3 className="text-2xl font-headline font-bold">Ready to Generate Your Plan?</h3>
+                                                    <h3 className="text-xl font-headline font-bold">Ready to Generate Your Plan?</h3>
                                                     <p className="text-muted-foreground mt-2 mb-6">Review your inputs below. Once you're ready, click the button to have our AI Business Architect generate a customized strategic plan for your project.</p>
                                                     <Card className="bg-background">
-                                                        <CardContent className="p-6 space-y-4">
+                                                        <CardContent className="p-6 space-y-4 text-sm">
                                                             <div><strong className="text-muted-foreground">Industry:</strong> {form.getValues('industry')}</div>
                                                             <div><strong className="text-muted-foreground">Stage:</strong> {form.getValues('stage')}</div>
                                                             <div><strong className="text-muted-foreground">Goals:</strong> {form.getValues('goals').map(g => g.value).join(', ')}</div>
@@ -283,7 +284,7 @@ export default function DappBuilderPage() {
                     {recommendations && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex-grow flex flex-col">
                             <CardHeader>
-                                <CardTitle className="text-2xl flex items-center gap-3"><Bot className="w-8 h-8 text-primary"/>Your Strategic Plan</CardTitle>
+                                <CardTitle className="text-xl flex items-center gap-3"><Bot className="w-6 h-6 text-primary"/>Your Strategic Plan</CardTitle>
                                 <CardDescription>Based on your profile, here are the recommended tools and a plan to get started.</CardDescription>
                             </CardHeader>
                             <CardContent className="flex-grow">
@@ -296,7 +297,7 @@ export default function DappBuilderPage() {
                                             <div key={index} className="border-l-4 border-primary pl-4 py-4 bg-card-foreground/5 rounded-r-lg">
                                                 <div className="flex justify-between items-start">
                                                     <div>
-                                                         <h3 className="font-bold text-lg flex items-center gap-2"><LucideIcon className="w-5 h-5"/> {rec.name}</h3>
+                                                         <h3 className="font-bold text-base flex items-center gap-2"><LucideIcon className="w-5 h-5"/> {rec.name}</h3>
                                                         <p className="text-sm text-muted-foreground mt-1 mb-4">{rec.description}</p>
                                                     </div>
                                                     <Button asChild variant="secondary" size="sm">

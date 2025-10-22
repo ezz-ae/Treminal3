@@ -41,15 +41,15 @@ const terms = {
 
 export default function GlossaryPage() {
   return (
-    <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
+    <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight prose-p:text-muted-foreground prose-a:text-primary">
         <header className="mb-12">
             <div className="flex items-center gap-4 mb-4">
                 <div className="p-4 bg-primary/10 rounded-lg text-primary">
                     <BookOpen className="w-8 h-8" />
                 </div>
                 <div>
-                    <h1 className="text-5xl font-bold !mb-0">Glossary</h1>
-                    <p className="text-xl text-muted-foreground mt-2">
+                    <h1 className="text-4xl font-bold !mb-0">Glossary</h1>
+                    <p className="text-lg text-muted-foreground mt-2">
                         A comprehensive dictionary of Web3 and blockchain terms used throughout the platform.
                     </p>
                 </div>
@@ -58,11 +58,11 @@ export default function GlossaryPage() {
         
         {Object.entries(terms).map(([letter, definitions]) => (
             <section key={letter} className="mb-12">
-                <h2 className="text-4xl font-bold text-primary border-b border-border pb-2">{letter}</h2>
+                <h2 className="text-3xl font-bold text-primary border-b border-border pb-2">{letter}</h2>
                 <dl className="mt-6 space-y-8">
                     {definitions.map(item => (
                         <div key={item.term}>
-                            <dt className="text-xl font-bold font-headline">{item.term}</dt>
+                            <dt className="text-lg font-bold font-headline">{item.term}</dt>
                             <dd className="mt-2 text-muted-foreground">{item.definition}</dd>
                         </div>
                     ))}

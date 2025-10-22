@@ -59,7 +59,7 @@ export default function BotMarketplacePage() {
   return (
       <div className="container mx-auto py-12 space-y-8">
           <div>
-              <h1 className="text-4xl font-bold font-headline flex items-center gap-3"><BrainCircuit className="w-10 h-10 text-primary"/> AI Bot Marketplace</h1>
+              <h1 className="text-3xl font-bold font-headline flex items-center gap-3"><BrainCircuit className="w-8 h-8 text-primary"/> AI Bot Marketplace</h1>
               <p className="text-muted-foreground text-lg mt-2">
                   Deploy institutional-grade, pre-built trading bots with a single click. Each bot is backtested and fully analyzed by our AI.
               </p>
@@ -71,7 +71,7 @@ export default function BotMarketplacePage() {
                       <Card key={bot.slug} className="flex flex-col group bg-card/50 hover:border-primary/50 transition-colors">
                           <CardHeader>
                               <div className="flex justify-between items-start">
-                                  <CardTitle className="text-xl font-bold font-headline group-hover:text-primary transition-colors pr-4">{bot.name}</CardTitle>
+                                  <CardTitle className="text-lg font-bold font-headline group-hover:text-primary transition-colors pr-4">{bot.name}</CardTitle>
                                   <div className="p-2 bg-primary/10 rounded-lg text-primary w-fit h-fit">
                                       <Icon className="w-5 h-5 shrink-0"/>
                                   </div>
@@ -82,7 +82,7 @@ export default function BotMarketplacePage() {
                               </div>
                           </CardHeader>
                           <CardContent className="flex-grow">
-                              <CardDescription>{bot.description}</CardDescription>
+                              <CardDescription className="text-sm">{bot.description}</CardDescription>
                           </CardContent>
                           <CardFooter>
                               <Button asChild className="w-full">

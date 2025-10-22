@@ -38,15 +38,15 @@ const templates = [
 
 export default function SmartContractsPage() {
   return (
-    <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
+    <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight prose-p:text-muted-foreground prose-a:text-primary">
         <header className="mb-12">
              <div className="flex items-center gap-4 mb-4">
                 <div className="p-4 bg-primary/10 rounded-lg text-primary">
                     <FileJson className="w-8 h-8" />
                 </div>
                 <div>
-                    <h1 className="text-5xl font-bold !mb-0">Smart Contract Templates</h1>
-                    <p className="text-xl text-muted-foreground mt-2">
+                    <h1 className="text-4xl font-bold !mb-0">Smart Contract Templates</h1>
+                    <p className="text-lg text-muted-foreground mt-2">
                         Explore our library of audited smart contract templates and learn how to customize them securely with the help of AI.
                     </p>
                 </div>
@@ -66,8 +66,8 @@ export default function SmartContractsPage() {
                 {templates.map((template) => (
                     <div key={template.name} className="bg-card/50 p-6 rounded-lg border h-full">
                         <div className="flex items-center gap-4 mb-4">
-                            <template.icon className="w-8 h-8 text-primary" />
-                            <h3 className="font-headline text-xl font-bold">{template.name}</h3>
+                            <template.icon className="w-6 h-6 text-primary" />
+                            <h3 className="font-headline text-lg font-bold">{template.name}</h3>
                         </div>
                         <p className="text-muted-foreground text-sm">{template.description}</p>
                     </div>
@@ -76,7 +76,7 @@ export default function SmartContractsPage() {
         </section>
         
          <section className="mt-12 p-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center gap-8">
-            <ShieldCheck className="w-24 h-24 text-primary hidden md:block" />
+            <ShieldCheck className="w-20 h-20 text-primary hidden md:block" />
             <div>
                 <h2 className="!mt-0">Audited and Secure</h2>
                 <p>
@@ -86,7 +86,7 @@ export default function SmartContractsPage() {
         </section>
 
          <section className="mt-12 p-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center gap-8">
-             <Zap className="w-24 h-24 text-primary hidden md:block" />
+             <Zap className="w-20 h-20 text-primary hidden md:block" />
             <div>
                 <h2 className="!mt-0">AI-Powered Customization</h2>
                 <p>

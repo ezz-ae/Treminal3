@@ -228,9 +228,9 @@ export default function SolanaLaunchPage() {
                 const formData = form.getValues();
                 return (
                      <div className="text-center">
-                        <h3 className="text-2xl font-bold font-headline mb-4">Review Your Token</h3>
+                        <h3 className="text-xl font-bold font-headline mb-4">Review Your Token</h3>
                         <Card className="text-left bg-card/50">
-                            <CardContent className="p-6 space-y-2">
+                            <CardContent className="p-6 space-y-2 text-sm">
                                 <p><strong>Name:</strong> {formData.name}</p>
                                 <p><strong>Symbol:</strong> {formData.symbol}</p>
                                 <p><strong>Supply:</strong> {formData.supply.toLocaleString()}</p>
@@ -248,8 +248,8 @@ export default function SolanaLaunchPage() {
   return (
     <div className="container mx-auto py-12">
         <header className="mb-12 text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl font-bold font-headline flex items-center justify-center gap-3">
-                <Rocket className="w-10 h-10 text-primary" />
+            <h1 className="text-3xl font-bold font-headline flex items-center justify-center gap-3">
+                <Rocket className="w-8 h-8 text-primary" />
                 Solana Token Launchpad
             </h1>
             <p className="text-muted-foreground text-lg mt-2">
@@ -315,7 +315,7 @@ export default function SolanaLaunchPage() {
         {result && (
             <motion.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8 max-w-5xl mx-auto">
                 <div className="text-center">
-                    <h2 className="text-3xl font-bold font-headline">Your Launch Kit is Ready!</h2>
+                    <h2 className="text-2xl font-bold font-headline">Your Launch Kit is Ready!</h2>
                     <p className="text-muted-foreground mt-2">The AI has generated your token assets and the launch has been simulated.</p>
                 </div>
                 

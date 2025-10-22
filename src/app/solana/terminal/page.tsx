@@ -63,8 +63,8 @@ export default function SolanaTerminalPage() {
   return (
     <div className="container mx-auto py-12 space-y-8">
       <header>
-        <h1 className="text-4xl font-bold font-headline flex items-center gap-3">
-          <Terminal className="w-10 h-10 text-primary" />
+        <h1 className="text-3xl font-bold font-headline flex items-center gap-3">
+          <Terminal className="w-8 h-8 text-primary" />
           AI Agent Terminal
         </h1>
         <p className="text-muted-foreground text-lg mt-2">
@@ -74,7 +74,7 @@ export default function SolanaTerminalPage() {
 
        <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
+          <CardTitle className="flex items-center gap-2 text-xl">
             <Bot className="text-primary" /> AI Agent
           </CardTitle>
         </CardHeader>
@@ -128,5 +128,3 @@ export default function SolanaTerminalPage() {
     </div>
   );
 }
-
-    

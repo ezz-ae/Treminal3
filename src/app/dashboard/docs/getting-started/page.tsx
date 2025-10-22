@@ -52,15 +52,15 @@ const features = [
 
 export default function GettingStartedPage() {
   return (
-      <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
+      <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight prose-p:text-muted-foreground prose-a:text-primary">
           <header className="mb-12">
               <div className="flex items-center gap-4 mb-4">
                   <div className="p-4 bg-primary/10 rounded-lg text-primary">
                       <GraduationCap className="w-8 h-8" />
                   </div>
                   <div>
-                      <h1 className="text-5xl font-bold !mb-0">Getting Started</h1>
-                      <p className="text-xl text-muted-foreground mt-2">
+                      <h1 className="text-4xl font-bold !mb-0">Getting Started</h1>
+                      <p className="text-lg text-muted-foreground mt-2">
                           Welcome to Terminal3. Here’s everything you need to know to get started.
                       </p>
                   </div>
@@ -79,8 +79,8 @@ export default function GettingStartedPage() {
                       <Link key={feature.title} href={feature.href}>
                           <div className="bg-card/50 p-6 rounded-lg border border-transparent hover:border-primary hover:bg-primary/5 cursor-pointer transition-all duration-300 h-full">
                               <div className="flex items-center gap-4 mb-4">
-                                  <feature.icon className="w-8 h-8 text-primary" />
-                                  <h3 className="font-headline text-xl font-bold">{feature.title}</h3>
+                                  <feature.icon className="w-6 h-6 text-primary" />
+                                  <h3 className="font-headline text-lg font-bold">{feature.title}</h3>
                               </div>
                               <p className="text-muted-foreground text-sm">{feature.description}</p>
                           </div>

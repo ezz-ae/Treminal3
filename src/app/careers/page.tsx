@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Building, MapPin, Briefcase } from 'lucide-react';
@@ -54,9 +55,9 @@ export default function CareersPage() {
   return (
     <div className="container mx-auto py-12 px-4">
         <header className="mb-12 text-center">
-            <Building className="w-16 h-16 mx-auto text-primary mb-4" />
-            <h1 className="text-5xl font-bold font-headline">Join Our Mission</h1>
-            <p className="text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
+            <Building className="w-12 h-12 mx-auto text-primary mb-4" />
+            <h1 className="text-4xl font-bold font-headline">Join Our Mission</h1>
+            <p className="text-lg text-muted-foreground mt-4 max-w-3xl mx-auto">
                 We are building the future of decentralized development, powered by AI. We're a small, dedicated team of innovators and are looking for passionate individuals to join us.
             </p>
         </header>
@@ -65,14 +66,14 @@ export default function CareersPage() {
             {jobOpenings.map((job) => (
                  <Card key={job.title} className="bg-card/50 hover:border-primary/50 transition-colors">
                     <CardHeader>
-                        <CardTitle className="text-2xl">{job.title}</CardTitle>
-                        <CardDescription className="flex items-center gap-4 pt-2">
+                        <CardTitle className="text-xl">{job.title}</CardTitle>
+                        <CardDescription className="flex items-center gap-4 pt-2 text-sm">
                              <span className="flex items-center gap-2"><MapPin className="w-4 h-4" /> {job.location}</span>
                              <span className="flex items-center gap-2"><Briefcase className="w-4 h-4" /> {job.department}</span>
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-muted-foreground">{job.description}</p>
+                        <p className="text-muted-foreground text-sm">{job.description}</p>
                     </CardContent>
                     <CardFooter className="flex justify-between items-center">
                         <div className="flex gap-2">

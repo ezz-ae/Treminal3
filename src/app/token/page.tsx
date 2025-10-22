@@ -20,36 +20,36 @@ export default function TokenPage() {
   return (
     <div className="container mx-auto py-12 px-4">
         <header className="mb-12 text-center">
-            <Gem className="w-16 h-16 mx-auto text-primary mb-4" />
-            <h1 className="text-5xl font-bold font-headline">The $T3 Token</h1>
-            <p className="text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
+            <Gem className="w-12 h-12 mx-auto text-primary mb-4" />
+            <h1 className="text-4xl font-bold font-headline">The $T3 Token</h1>
+            <p className="text-lg text-muted-foreground mt-4 max-w-3xl mx-auto">
                 The native utility and governance token that powers the Terminal3 ecosystem.
             </p>
         </header>
 
         <Card className="mb-12 bg-primary/5 border-primary/20">
             <CardHeader>
-                <CardTitle className="text-center">Mission & Utility</CardTitle>
+                <CardTitle className="text-center text-2xl">Mission & Utility</CardTitle>
             </CardHeader>
             <CardContent className="grid md:grid-cols-3 gap-8 text-center">
                 <div className="flex flex-col items-center">
-                    <Vote className="w-12 h-12 text-primary mb-4"/>
-                    <h3 className="text-xl font-bold font-headline">Govern the Future</h3>
-                    <p className="text-muted-foreground mt-2">
+                    <Vote className="w-10 h-10 text-primary mb-4"/>
+                    <h3 className="text-lg font-bold font-headline">Govern the Future</h3>
+                    <p className="text-muted-foreground mt-2 text-sm">
                         $T3 holders can create and vote on proposals to guide the future development of the Terminal3 platform.
                     </p>
                 </div>
                 <div className="flex flex-col items-center">
-                    <Zap className="w-12 h-12 text-primary mb-4"/>
-                    <h3 className="text-xl font-bold font-headline">Access & Discounts</h3>
-                    <p className="text-muted-foreground mt-2">
+                    <Zap className="w-10 h-10 text-primary mb-4"/>
+                    <h3 className="text-lg font-bold font-headline">Access & Discounts</h3>
+                    <p className="text-muted-foreground mt-2 text-sm">
                         Stake $T3 to receive reduced fees on premium services like AI trading bots and advanced API access.
                     </p>
                 </div>
                 <div className="flex flex-col items-center">
-                    <Shield className="w-12 h-12 text-primary mb-4"/>
-                    <h3 className="text-xl font-bold font-headline">Secure & Earn</h3>
-                    <p className="text-muted-foreground mt-2">
+                    <Shield className="w-10 h-10 text-primary mb-4"/>
+                    <h3 className="text-lg font-bold font-headline">Secure & Earn</h3>
+                    <p className="text-muted-foreground mt-2 text-sm">
                         Help secure the platform and earn a share of protocol revenue by staking your $T3 tokens in our vault.
                     </p>
                 </div>

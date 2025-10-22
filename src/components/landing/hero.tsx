@@ -14,7 +14,7 @@ export default function Hero() {
       <section className="bg-background text-foreground">
           <div className="container mx-auto px-4 py-24 sm:py-32 flex flex-col justify-center items-center text-center">
             <motion.h1 
-                className="text-4xl md:text-6xl font-bold tracking-tight font-headline mb-10"
+                className="text-4xl md:text-5xl font-bold tracking-tight font-headline mb-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}

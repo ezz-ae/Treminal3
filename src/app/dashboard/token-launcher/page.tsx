@@ -79,7 +79,7 @@ export default function TokenLauncherPage() {
   return (
       <div className="container mx-auto py-12 space-y-8">
           <div>
-              <h1 className="text-4xl font-bold font-headline">AI Token Launcher</h1>
+              <h1 className="text-3xl font-bold font-headline">AI Token Launcher</h1>
               <p className="text-muted-foreground text-lg mt-2">
                   Define the properties of your ERC-20 token, and our AI will generate a secure, gas-efficient smart contract for you.
               </p>
@@ -139,7 +139,7 @@ export default function TokenLauncherPage() {
                                   render={() => (
                                       <FormItem>
                                           <div className="mb-4">
-                                              <FormLabel className="text-base">Token Features</FormLabel>
+                                              <FormLabel>Token Features</FormLabel>
                                           </div>
                                           <div className="space-y-3">
                                           {features.map((item) => (

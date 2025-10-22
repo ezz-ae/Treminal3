@@ -1,3 +1,4 @@
+
 'use client';
 import { ReactNode } from 'react';
 import Link from 'next/link';
@@ -28,8 +29,8 @@ export default function AiTradingLayout({ children }: { children: ReactNode }) {
                />
                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background z-0"></div>
               <div className="container mx-auto py-8 z-10 relative">
-                  <h1 className="text-4xl md:text-5xl font-bold font-headline flex items-center gap-3">
-                      <BrainCircuit className="w-12 h-12 text-primary" />
+                  <h1 className="text-3xl md:text-4xl font-bold font-headline flex items-center gap-3">
+                      <BrainCircuit className="w-10 h-10 text-primary" />
                       AI Trading Command Center
                   </h1>
                   <p className="text-muted-foreground text-lg max-w-3xl mt-4">

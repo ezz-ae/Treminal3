@@ -155,7 +155,7 @@ export default function SecurityAuditPage() {
   return (
     <div className="container mx-auto py-12 space-y-8">
         <div>
-            <h1 className="text-4xl font-bold font-headline">AI Security Auditor</h1>
+            <h1 className="text-3xl font-bold font-headline">AI Security Auditor</h1>
             <p className="text-muted-foreground text-lg mt-2">
                 Paste your Solidity smart contract code below to run our AI-powered security audit and identify potential vulnerabilities.
             </p>
@@ -210,7 +210,7 @@ export default function SecurityAuditPage() {
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-primary mb-2 flex items-center gap-3 text-2xl"><ShieldCheck className="w-8 h-8"/> Security Audit Report</CardTitle>
+                        <CardTitle className="text-primary mb-2 flex items-center gap-3 text-xl"><ShieldCheck className="w-6 h-6"/> Security Audit Report</CardTitle>
                         <CardDescription className="text-base italic">{result.summary}</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -218,7 +218,7 @@ export default function SecurityAuditPage() {
                             {result.vulnerabilities.length > 0 ? result.vulnerabilities.map((vuln, i) => (
                                 <div key={i} className={cn("border rounded-lg p-4", severityConfig[vuln.severity])}>
                                     <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-bold text-lg flex items-center gap-2"><AlertTriangle className="w-5 h-5"/> {vuln.name}</h4>
+                                        <h4 className="font-bold text-base flex items-center gap-2"><AlertTriangle className="w-5 h-5"/> {vuln.name}</h4>
                                         <Badge variant="secondary" className={cn("text-sm", severityConfig[vuln.severity])}>{vuln.severity}</Badge>
                                     </div>
                                     <p className="text-sm mb-3 prose prose-invert max-w-none prose-p:text-inherit">{vuln.description}</p>

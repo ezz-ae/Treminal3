@@ -107,13 +107,13 @@ export default function InteractiveGuides() {
         >
             <div className="grid md:grid-cols-3 gap-8 items-center">
                 <div className="md:col-span-2">
-                    <h3 className="font-headline text-3xl font-bold mb-2">{activeArticle.title}</h3>
-                    <p className="text-muted-foreground text-lg mb-6">{activeArticle.excerpt}</p>
+                    <h3 className="font-headline text-2xl font-bold mb-2">{activeArticle.title}</h3>
+                    <p className="text-muted-foreground text-base mb-6">{activeArticle.excerpt}</p>
                     <Button onClick={() => setIsDialogOpen(true)}>Read Quick Guide &rarr;</Button>
                 </div>
                 <div className="w-full">
                     <Select onValueChange={handleSelectChange} defaultValue={activeArticle.slug}>
-                        <SelectTrigger className="text-base h-12">
+                        <SelectTrigger className="text-sm h-11">
                             <SelectValue placeholder="Select a guide..." />
                         </SelectTrigger>
                         <SelectContent>
@@ -129,7 +129,7 @@ export default function InteractiveGuides() {
        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent className="max-w-2xl w-full bg-background/80 shadow-2xl shadow-primary/20 backdrop-blur-sm p-8 border">
             <DialogHeader>
-              <DialogTitle className="font-headline text-3xl text-foreground mb-4">{activeArticle?.title}</DialogTitle>
+              <DialogTitle className="font-headline text-2xl text-foreground mb-4">{activeArticle?.title}</DialogTitle>
               <DialogDescription className="text-muted-foreground font-sans prose prose-invert prose-p:text-muted-foreground max-h-[60vh] overflow-y-auto pr-4">
                 <div dangerouslySetInnerHTML={{ __html: activeArticle?.content }} />
               </DialogDescription>

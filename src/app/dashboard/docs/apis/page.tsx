@@ -31,15 +31,15 @@ console.log(blockNumber);
     `;
 
   return (
-    <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
+    <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight prose-p:text-muted-foreground prose-a:text-primary">
         <header className="mb-12">
             <div className="flex items-center gap-4 mb-4">
                 <div className="p-4 bg-primary/10 rounded-lg text-primary">
                     <Puzzle className="w-8 h-8" />
                 </div>
                 <div>
-                    <h1 className="text-5xl font-bold !mb-0">APIs & Integration</h1>
-                    <p className="text-xl text-muted-foreground mt-2">
+                    <h1 className="text-4xl font-bold !mb-0">APIs & Integration</h1>
+                    <p className="text-lg text-muted-foreground mt-2">
                         Full reference documentation for all our developer APIs, including examples and use cases for our Universal RPC.
                     </p>
                 </div>

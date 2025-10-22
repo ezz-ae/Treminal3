@@ -32,15 +32,15 @@ const bestPractices = [
 
 export default function SecurityPage() {
   return (
-    <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
+    <div className="prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight prose-p:text-muted-foreground prose-a:text-primary">
         <header className="mb-12">
              <div className="flex items-center gap-4 mb-4">
                 <div className="p-4 bg-primary/10 rounded-lg text-primary">
                     <ShieldCheck className="w-8 h-8" />
                 </div>
                 <div>
-                    <h1 className="text-5xl font-bold !mb-0">Security Best Practices</h1>
-                    <p className="text-xl text-muted-foreground mt-2">
+                    <h1 className="text-4xl font-bold !mb-0">Security Best Practices</h1>
+                    <p className="text-lg text-muted-foreground mt-2">
                         Learn how to secure your applications and smart contracts on the Terminal3 platform.
                     </p>
                 </div>
@@ -59,7 +59,7 @@ export default function SecurityPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose">
                 {bestPractices.map((practice) => (
                     <div key={practice.title} className="bg-card/50 p-6 rounded-lg border h-full">
-                        <h3 className="font-headline text-xl font-bold mb-2">{practice.title}</h3>
+                        <h3 className="font-headline text-lg font-bold mb-2">{practice.title}</h3>
                         <p className="text-muted-foreground text-sm">{practice.description}</p>
                     </div>
                 ))}
@@ -68,10 +68,10 @@ export default function SecurityPage() {
         
          <section className="mt-12 p-8 rounded-lg bg-red-500/10 border border-red-500/20">
              <div className='flex items-center gap-4'>
-                <AlertTriangle className="w-12 h-12 text-red-400" />
+                <AlertTriangle className="w-10 h-10 text-red-400" />
                 <div>
                     <h2 className="!mt-0 text-red-400">Security is a Process, Not a Destination</h2>
-                    <p className="text-red-400/80">
+                    <p className="text-red-400/80 text-sm">
                         No application is ever 100% secure. Security is an ongoing process of vigilance, testing, and auditing. While Terminal3 provides powerful tools like our <Link href="/dashboard/security-audits" className='text-red-300 hover:text-red-200'>AI Security Auditor</Link>, they are aids, not substitutes for a comprehensive security strategy. For high-value contracts, always consider a full manual audit from a reputable third-party firm.
                     </p>
                 </div>

@@ -83,7 +83,7 @@ export default function SolanaHoloDeckPage() {
                   className="flex items-center justify-center gap-4"
               >
                   <Wind className="w-12 h-12 text-primary" />
-                  <h1 className="text-5xl font-bold font-headline tracking-tight">Solana Holo-Deck</h1>
+                  <h1 className="text-4xl font-bold font-headline tracking-tight">Solana Holo-Deck</h1>
               </motion.div>
               <motion.p 
                   className="text-muted-foreground text-lg mt-4 max-w-2xl mx-auto"
@@ -115,9 +115,9 @@ export default function SolanaHoloDeckPage() {
                          <motion.div key={service.title} variants={cardVariants} initial="initial" animate="animate" custom={3 + i}>
                              <Link href={service.href} className="block h-full">
                                  <Card className="h-full bg-card/60 backdrop-blur-sm border-primary/20 hover:border-primary/50 hover:bg-card/80 transition-colors duration-300 group flex flex-col justify-between text-center items-center p-6">
-                                     <Icon className="w-10 h-10 text-primary mb-4"/>
-                                     <CardTitle className="font-headline text-lg mb-2">{service.title}</CardTitle>
-                                     <p className="text-sm text-muted-foreground flex-grow">{service.description}</p>
+                                     <Icon className="w-8 h-8 text-primary mb-4"/>
+                                     <CardTitle className="font-headline text-base mb-2">{service.title}</CardTitle>
+                                     <p className="text-xs text-muted-foreground flex-grow">{service.description}</p>
                                  </Card>
                              </Link>
                          </motion.div>
@@ -134,7 +134,7 @@ const HoloCard = ({ title, value }: { title: string, value: string }) => {
     return (
         <div className="bg-card/60 backdrop-blur-sm border border-primary/20 p-6 rounded-lg text-center flex flex-col justify-center items-center h-full">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{title}</h3>
-            <p className="text-4xl font-bold font-mono text-primary mt-2">{value}</p>
+            <p className="text-3xl font-bold font-mono text-primary mt-2">{value}</p>
         </div>
     )
 }

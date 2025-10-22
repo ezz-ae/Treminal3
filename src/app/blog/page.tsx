@@ -23,7 +23,7 @@ const ArticleCard = ({ article, isFeatured = false }: { article: Article, isFeat
                         </div>
                          <p className="text-sm text-muted-foreground">{article.date}</p>
                     </div>
-                    <CardTitle className={isFeatured ? "text-3xl" : "text-2xl"}>{article.title}</CardTitle>
+                    <CardTitle className={isFeatured ? "text-2xl" : "text-xl"}>{article.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow">
                     <CardDescription className="text-base">{article.excerpt}</CardDescription>
@@ -47,16 +47,16 @@ export default function BlogIndexPage() {
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
         <header className="mb-12 text-center">
-            <Newspaper className="w-16 h-16 mx-auto text-primary mb-4" />
-            <h1 className="text-5xl font-bold font-headline">T3 Blog</h1>
-            <p className="text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
+            <Newspaper className="w-12 h-12 mx-auto text-primary mb-4" />
+            <h1 className="text-4xl font-bold font-headline">T3 Blog</h1>
+            <p className="text-lg text-muted-foreground mt-4 max-w-3xl mx-auto">
                 Explore articles, guides, and updates on Web3 development, AI, and the Terminal3 platform.
             </p>
         </header>
 
         {featuredArticle && (
             <div className="mb-12">
-                 <h2 className="text-3xl font-bold font-headline mb-6 text-center">Featured Article</h2>
+                 <h2 className="text-2xl font-bold font-headline mb-6 text-center">Featured Article</h2>
                 <div className="max-w-4xl mx-auto">
                     <ArticleCard article={featuredArticle} isFeatured={true}/>
                 </div>
@@ -65,7 +65,7 @@ export default function BlogIndexPage() {
 
         {otherArticles.length > 0 && (
             <div>
-                 <h2 className="text-3xl font-bold font-headline mb-6 text-center">More Articles</h2>
+                 <h2 className="text-2xl font-bold font-headline mb-6 text-center">More Articles</h2>
                 <div className="grid gap-8 md:grid-cols-2">
                     {otherArticles.map((article: Article) => (
                         <ArticleCard article={article} key={article.slug} />

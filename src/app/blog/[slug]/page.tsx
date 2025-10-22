@@ -80,12 +80,12 @@ export default function ArticlePage({ params }: Props) {
                               <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                           </div>
                       </div>
-                      <h1 className="text-4xl md:text-5xl font-bold !mb-0 text-foreground">{article.title}</h1>
+                      <h1 className="text-3xl md:text-4xl font-bold !mb-0 text-foreground">{article.title}</h1>
                   </div>
               </div>
           </header>
 
-          <div className="text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: article.content }} />
+          <div className="text-base leading-relaxed" dangerouslySetInnerHTML={{ __html: article.content }} />
         </article>
       </div>
     </>
