@@ -58,7 +58,7 @@ export default function NotesPage() {
                            </CardContent>
                            <CardFooter className="flex justify-between">
                               <Button asChild>
-                                  <Link href={`/blog/${note.slug}`} legacyBehavior>
+                                  <Link href={`/blog/${note.slug}`}>
                                       Read Full Article <ArrowRight className="ml-2 h-4 w-4" />
                                   </Link>
                               </Button>
@@ -76,7 +76,7 @@ export default function NotesPage() {
                       Connect your wallet and save notes from articles in our blog to start building your personal knowledge base.
                   </p>
                   <Button asChild>
-                      <Link href="/blog" legacyBehavior>
+                      <Link href="/blog">
                           Explore Articles <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                   </Button>

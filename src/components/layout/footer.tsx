@@ -55,7 +55,7 @@ export default function Footer() {
           <div className="container mx-auto px-4 relative z-10">
             <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
                 <div className="col-span-2 md:col-span-2">
-                    <Link href="/" className="flex items-center space-x-2 mb-4" legacyBehavior>
+                    <Link href="/" className="flex items-center space-x-2 mb-4">
                       <Terminal className="h-6 w-6 text-primary" />
                       <span className="font-bold text-lg font-headline">Terminal3</span>
                     </Link>
@@ -75,7 +75,7 @@ export default function Footer() {
                                 <Link
                                     href={link.href}
                                     className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                                    legacyBehavior>
+                                    >
                                     {link.label}
                                 </Link>
                             </li>
@@ -91,7 +91,7 @@ export default function Footer() {
                                 <Link
                                     href={link.href}
                                     className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                                    legacyBehavior>
+                                    >
                                     {link.label}
                                 </Link>
                             </li>
@@ -106,7 +106,7 @@ export default function Footer() {
                                 <Link
                                     href={link.href}
                                     className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                                    legacyBehavior>
+                                    >
                                     {link.label}
                                 </Link>
                             </li>
@@ -126,7 +126,7 @@ export default function Footer() {
                           href={social.href}
                           aria-label={social['aria-label']}
                           className="text-muted-foreground hover:text-primary transition-colors"
-                          legacyBehavior>
+                          >
                         <social.icon className="h-5 w-5" />
                       </Link>
                     ))}

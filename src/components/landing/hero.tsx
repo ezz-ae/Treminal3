@@ -51,7 +51,7 @@ export default function Hero() {
                     }}
                     className="rounded-md"
                 >
-                <Link href="/auth" passHref legacyBehavior>
+                <Link href="/auth" passHref>
                     <Button size="lg" asChild>
                       <a>Start Building for Free <ArrowRight className="ml-2 h-5 w-5" /></a>
                     </Button>

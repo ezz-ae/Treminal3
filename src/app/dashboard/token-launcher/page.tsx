@@ -205,7 +205,7 @@ export default function TokenLauncherPage() {
                                       <Button size="lg" className="w-full" asChild>
                                           <Link
                                               href={{ pathname: '/dashboard/security-audits', query: { code: result.solidityCode } }}
-                                              legacyBehavior>
+                                              >
                                               <ShieldCheck className="mr-2 h-4 w-4" />
                                               Run Security Audit
                                           </Link>
