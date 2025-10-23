@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  wallets     Wallet[]
+  credits     Credits?
+  plan        String   @default("free")
+  proUntil    DateTime?
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  address   String
+  chainId   Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  @@unique([address, chainId])
+}
+
+model Credits {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique
+  balance   Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  chainId   Int
+  txHash    String   @unique
+  usageTag  String
+  token     String?
+  amount    String
+  credited  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
