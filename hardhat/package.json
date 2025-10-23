@@ -1,0 +1,9 @@
+{
+  "name": "t3-hardhat",
+  "private": true,
+  "devDependencies": {
+    "hardhat": "^2.22.5",
+    "@nomicfoundation/hardhat-viem": "^1.0.2",
+    "dotenv": "^16.4.5"
+  }
+}
