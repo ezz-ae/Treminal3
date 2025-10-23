@@ -430,45 +430,47 @@ export default function StrategyVaultPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
                         transition={{ duration: 0.3 }}
+                        className="h-full"
                     >
-                        <Card className={cn("flex flex-col bg-card/50 transition-colors group h-full", riskStyle.card)}>
-                            <CardHeader>
-                                <div className="flex justify-between items-start">
-                                    <CardTitle className="text-lg font-bold font-headline group-hover:text-primary transition-colors pr-4">{strategy.name}</CardTitle>
-                                    <div className="p-2 bg-primary/10 rounded-lg text-primary w-fit h-fit">
-                                        <Icon className="w-5 h-5 shrink-0"/>
+                        <div className={cn("flex flex-col bg-card/50 rounded-lg border-2 transition-colors group h-full", riskStyle.card)}>
+                            <div className="p-6 flex items-start gap-4 bg-card/50 rounded-t-md">
+                                <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit h-fit mt-1">
+                                    <Icon className="w-6 h-6 shrink-0"/>
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-bold font-headline group-hover:text-primary transition-colors">{strategy.name}</h3>
+                                    <Badge variant="outline" className="text-xs font-mono mt-2">{strategy.category}</Badge>
+                                </div>
+                            </div>
+                            
+                            <div className="p-6 flex-grow flex flex-col">
+                                <p className="text-sm text-muted-foreground mb-6 flex-grow">{strategy.description}</p>
+                                
+                                <div className="space-y-4">
+                                     <div className="flex items-center justify-between">
+                                        <p className="text-xs font-semibold text-muted-foreground flex items-center gap-2"><Zap className="w-4 h-4"/>Execution Cost</p>
+                                        <p className="text-xs font-mono font-bold">{strategy.cost}</p>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-xs font-semibold text-muted-foreground flex items-center gap-2"><TrendingUp className="w-4 h-4"/>Projected ROI</p>
+                                        <p className="text-xs font-mono font-bold">{strategy.roi}</p>
+                                    </div>
+                                     <div className="flex items-center justify-between">
+                                        <p className="text-xs font-semibold text-muted-foreground flex items-center gap-2"><ShieldAlert className="w-4 h-4"/>Risk Level</p>
+                                        <p className={cn("text-xs font-mono font-bold", riskStyle.text)}>{strategy.risk}</p>
                                     </div>
                                 </div>
-                                <CardDescription className="pt-2 text-sm">{strategy.description}</CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-3 flex-grow">
-                                <div className="flex items-center gap-4">
-                                    <Badge variant="outline" className="text-xs font-mono">{strategy.category}</Badge>
-                                    <Badge variant="outline" className={cn('text-xs', riskStyle.badge)}>{strategy.risk} Risk</Badge>
-                                </div>
-                                <div className="flex items-center gap-2 pt-2">
-                                    <Zap className="w-4 h-4 text-primary" />
-                                    <div>
-                                        <p className="text-xs font-semibold">Execution Cost</p>
-                                        <p className="text-xs text-muted-foreground">{strategy.cost}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <TrendingUp className="w-4 h-4 text-green-400" />
-                                    <div>
-                                        <p className="text-xs font-semibold">Projected ROI</p>
-                                        <p className="text-xs text-muted-foreground">{strategy.roi}</p>
-                                    </div>
-                                </div>
-                            </CardContent>
-                            <CardFooter>
-                                <Button asChild className="w-full">
+
+                            </div>
+                            
+                            <div className="p-6 pt-0">
+                                <Button asChild className="w-full mt-4">
                                     <Link href={strategy.href}>
                                         View & Execute Strategy <ArrowRight className="ml-2 w-4 h-4"/>
                                     </Link>
                                 </Button>
-                            </CardFooter>
-                        </Card>
+                            </div>
+                        </div>
                     </motion.div>
                 );
             })}
