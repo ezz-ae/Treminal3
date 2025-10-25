@@ -1,33 +1,25 @@
 
 'use client';
 
-import { Library, Zap, TrendingUp, ShieldAlert, ArrowRight, Bot, AppWindow, Gem, FileJson } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Library, Zap, TrendingUp, ShieldAlert, ArrowRight, Bot, AppWindow, Gem, FileJson, X, Megaphone, BrainCircuit, Wind, Rocket, AreaChart, Sprout } from 'lucide-react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardFooter
+  CardDescription
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { StrategyCard } from '@/components/dashboard/strategy-card';
+import { useCommandMenu } from '@/contexts/command-menu-context';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
-const strategies = [
-    {
-        name: 'Solana "First Mover" Token Launch',
-        description: 'Launch a new SPL token, generate professional marketing assets, and create the initial liquidity pool on Raydium. A complete A-to-Z flow for new token launches.',
-        cost: '2 SOL + Liquidity',
-        roi: '150-300% (Projected 7-day)',
-        risk: 'High',
-        category: 'Solana',
-        icon: Gem,
-        href: '/solana/launch'
-    },
+const allStrategies = [
+    // DeFi
     {
         name: 'ETH/Stablecoin Arbitrage Bot',
         description: 'Deploy an automated trading bot that capitalizes on small price differences for ETH between Uniswap and Sushiswap. Operates within a defined budget.',
@@ -35,36 +27,6 @@ const strategies = [
         roi: '5-12% APY (Simulated)',
         risk: 'Medium',
         category: 'DeFi',
-        icon: Bot,
-        href: '/dashboard/bot-creator'
-    },
-     {
-        name: 'Cross-Chain Governance Play',
-        description: 'Identify and participate in key governance proposals across multiple protocols. This flow automatically acquires the necessary tokens to vote on high-impact proposals.',
-        cost: 'Variable',
-        roi: 'N/A (Influence-based)',
-        risk: 'Low',
-        category: 'DAO',
-        icon: Library,
-        href: '/dashboard/dao-governance'
-    },
-     {
-        name: 'NFT Wash Trade Detection',
-        description: 'Analyze NFT marketplace transactions to identify and report on potential wash trading activity. A flow for on-chain analysts and security researchers.',
-        cost: '0.2 SOL per collection',
-        roi: 'N/A (Data product)',
-        risk: 'Low',
-        category: 'Analytics',
-        icon: ShieldAlert,
-        href: '/dashboard/finance'
-    },
-    {
-        name: 'NFT Minting Bot',
-        description: 'Automatically mint NFTs from a specified collection the moment it drops. This flow includes gas optimization and multiple transaction attempts.',
-        cost: '0.1 ETH + Mint Cost',
-        roi: 'Variable',
-        risk: 'High',
-        category: 'NFT',
         icon: Bot,
         href: '/dashboard/bot-creator'
     },
@@ -79,16 +41,6 @@ const strategies = [
         href: '/dashboard/bot-creator'
     },
     {
-        name: 'Airdrop Farming Assistant',
-        description: 'Identifies potential upcoming airdrops and guides you through the required on-chain interactions to maximize eligibility.',
-        cost: 'Gas Fees',
-        roi: 'Highly Variable',
-        risk: 'Medium',
-        category: 'DeFi',
-        icon: Bot,
-        href: '/dashboard/bot-creator'
-    },
-    {
         name: 'Uniswap V3 LP Optimizer',
         description: 'Monitors your Uniswap V3 positions and automatically rebalances liquidity to keep it in range, maximizing fee collection.',
         cost: '0.3 ETH + Gas',
@@ -99,36 +51,6 @@ const strategies = [
         href: '/dashboard/bot-creator'
     },
     {
-        name: 'Smart Contract Deployment Suite',
-        description: 'A complete CI/CD pipeline for smart contracts. Compile, test, and deploy your contracts to a testnet, then mainnet, with a single command.',
-        cost: 'Gas Fees',
-        roi: 'N/A (Dev Tool)',
-        risk: 'Low',
-        category: 'Dev Tool',
-        icon: FileJson,
-        href: '/dashboard/tools'
-    },
-    {
-        name: 'NFT Collection Floor Sweeper',
-        description: 'An automated bot that "sweeps the floor" by buying the cheapest NFTs in a collection when the floor price drops below a set threshold.',
-        cost: 'Variable',
-        roi: 'Variable',
-        risk: 'High',
-        category: 'NFT',
-        icon: Bot,
-        href: '/dashboard/bot-creator'
-    },
-    {
-        name: 'Decentralized Identity Setup',
-        description: 'Create a comprehensive decentralized identity using ENS/SNS, Ceramic, and other DID protocols. Consolidate your Web3 presence.',
-        cost: '0.05 ETH',
-        roi: 'N/A (Reputation)',
-        risk: 'Low',
-        category: 'Identity',
-        icon: AppWindow,
-        href: '/dashboard/dapp-builder'
-    },
-    {
         name: 'Gas Price Arbitrage',
         description: 'Execute large, non-urgent transactions (e.g., portfolio rebalancing) only when gas prices on the target network fall below a specified Gwei threshold.',
         cost: 'Low',
@@ -137,56 +59,6 @@ const strategies = [
         category: 'DeFi',
         icon: Zap,
         href: '/dashboard/bot-creator'
-    },
-    {
-        name: 'MEV Sandwich Attack Simulator',
-        description: 'An educational flow for security researchers that simulates how a Maximal Extractable Value (MEV) sandwich attack works on a target transaction.',
-        cost: '0.1 ETH (Testnet)',
-        roi: 'N/A (Educational)',
-        risk: 'Low',
-        category: 'Security',
-        icon: ShieldAlert,
-        href: '/dashboard/security-audits'
-    },
-    {
-        name: 'On-chain Data Exporter',
-        description: 'A script that scrapes specific smart contract event logs (e.g., all "Transfer" events for an NFT) and exports them to a CSV file for off-chain analysis.',
-        cost: 'RPC Credits',
-        roi: 'N/A (Data)',
-        risk: 'Low',
-        category: 'Analytics',
-        icon: FileJson,
-        href: '/dashboard/finance'
-    },
-    {
-        name: 'DAO Proposal Automation',
-        description: 'Automatically create and submit a DAO proposal using a template. Ideal for recurring treasury requests or community grants.',
-        cost: 'Gas Fees',
-        roi: 'N/A (Governance)',
-        risk: 'Low',
-        category: 'DAO',
-        icon: Library,
-        href: '/dashboard/dao-governance'
-    },
-    {
-        name: 'NFT Metadata Backup',
-        description: 'Finds all NFTs in your wallet, downloads their metadata and images, and backs them up to decentralized storage like Arweave.',
-        cost: 'Storage Fees',
-        roi: 'N/A (Security)',
-        risk: 'Low',
-        category: 'NFT',
-        icon: AppWindow,
-        href: '/dashboard/dapp-builder'
-    },
-    {
-        name: 'Flash Loan Exploit Tester',
-        description: 'For developers: a flow that attempts to use a flash loan to exploit a vulnerability in a smart contract deployed on a testnet.',
-        cost: 'Testnet Gas',
-        roi: 'N/A (Security)',
-        risk: 'Medium',
-        category: 'Security',
-        icon: ShieldAlert,
-        href: '/dashboard/security-audits'
     },
     {
         name: 'Impermanent Loss Hedger',
@@ -209,36 +81,6 @@ const strategies = [
         href: '/dashboard/bot-creator'
     },
     {
-        name: 'Wallet Drainer Honeypot',
-        description: 'Deploy a smart contract that appears vulnerable to a wallet draining attack to study and trap malicious bots. For security researchers only.',
-        cost: 'Gas Fees',
-        roi: 'N/A (Research)',
-        risk: 'Medium',
-        category: 'Security',
-        icon: ShieldAlert,
-        href: '/dashboard/security-audits'
-    },
-    {
-        name: 'EVM State Change Visualizer',
-        description: 'Enter a transaction hash and this flow will provide a visual step-by-step breakdown of every state change that occurred in the EVM.',
-        cost: 'RPC Credits',
-        roi: 'N/A (Dev Tool)',
-        risk: 'Low',
-        category: 'Dev Tool',
-        icon: FileJson,
-        href: '/dashboard/tools'
-    },
-    {
-        name: 'Multi-Sig Wallet Manager',
-        description: 'A complete UI and backend flow for creating and managing a Gnosis Safe multi-signature wallet for teams or DAOs.',
-        cost: 'Deployment Gas',
-        roi: 'N/A (Security)',
-        risk: 'Low',
-        category: 'DAO',
-        icon: Library,
-        href: '/dashboard/dao-governance'
-    },
-    {
         name: 'Portfolio Rebalancer',
         description: 'Automatically rebalances your portfolio across a set of tokens to maintain a desired allocation (e.g., 50% BTC, 30% ETH, 20% SOL).',
         cost: 'Trading Fees',
@@ -248,45 +90,59 @@ const strategies = [
         icon: Bot,
         href: '/dashboard/bot-creator'
     },
+
+    // Solana
     {
-        name: 'Front-End dApp Generator',
-        description: 'Provide a smart contract address and ABI, and the AI will generate a complete React/Next.js front-end to interact with it.',
-        cost: 'Free',
-        roi: 'N/A (Dev Tool)',
-        risk: 'Low',
-        category: 'Dev Tool',
-        icon: AppWindow,
-        href: '/dashboard/dapp-builder'
+        name: 'Solana "First Mover" Token Launch',
+        description: 'Launch a new SPL token, generate professional marketing assets, and create the initial liquidity pool on Raydium. A complete A-to-Z flow for new token launches.',
+        cost: '2 SOL + Liquidity',
+        roi: '150-300% (Projected 7-day)',
+        risk: 'High',
+        category: 'Solana',
+        icon: Rocket,
+        href: '/solana/launch'
     },
     {
-        name: 'Gas Token Top-Up',
-        description: 'Monitors the native token (e.g., ETH, MATIC) balance of your wallets and automatically sends a small amount from a master wallet if it falls below a threshold.',
-        cost: 'Gas Fees',
-        roi: 'N/A (Convenience)',
+        name: 'Solana DEX Trading Bot',
+        description: 'Deploy a trading bot on a Solana DEX like Jupiter or Orca to execute a specific strategy (e.g., grid trading, DCA).',
+        cost: '0.5 SOL',
+        roi: 'Variable',
+        risk: 'High',
+        category: 'Solana',
+        icon: Bot,
+        href: '/solana/trading'
+    },
+    {
+        name: 'Solana Staking Optimizer',
+        description: 'Automatically delegate your SOL to a basket of top-performing validators, rebalancing periodically to maximize staking rewards.',
+        cost: '0.1 SOL',
+        roi: '~7% APY',
         risk: 'Low',
-        category: 'Dev Tool',
-        icon: Zap,
+        category: 'Solana',
+        icon: Sprout,
+        href: '/solana/staking'
+    },
+
+    // NFT
+    {
+        name: 'NFT Minting Bot',
+        description: 'Automatically mint NFTs from a specified collection the moment it drops. This flow includes gas optimization and multiple transaction attempts.',
+        cost: '0.1 ETH + Mint Cost',
+        roi: 'Variable',
+        risk: 'High',
+        category: 'NFT',
+        icon: Bot,
         href: '/dashboard/bot-creator'
     },
     {
-        name: 'Rug Pull Detector',
-        description: 'Analyze a token\'s contract for common signs of a "rug pull", such as locked liquidity, ownership renouncement, and honeypot functions.',
-        cost: 'Free',
-        roi: 'N/A (Security)',
-        risk: 'Low',
-        category: 'Security',
-        icon: ShieldAlert,
-        href: '/dashboard/security-audits'
-    },
-    {
-        name: 'Subscription Service Deployer',
-        description: 'Deploy a set of smart contracts that allow you to charge users a recurring fee (e.g., monthly) for access to a service.',
-        cost: 'Deployment Gas',
-        roi: 'N/A (Business)',
-        risk: 'Medium',
-        category: 'Dev Tool',
-        icon: AppWindow,
-        href: '/dashboard/dapp-builder'
+        name: 'NFT Collection Floor Sweeper',
+        description: 'An automated bot that "sweeps the floor" by buying the cheapest NFTs in a collection when the floor price drops below a set threshold.',
+        cost: 'Variable',
+        roi: 'Variable',
+        risk: 'High',
+        category: 'NFT',
+        icon: Bot,
+        href: '/dashboard/bot-creator'
     },
     {
         name: 'NFT Trait Sniper',
@@ -299,26 +155,102 @@ const strategies = [
         href: '/dashboard/bot-creator'
     },
     {
+        name: 'NFT Metadata Backup',
+        description: 'Finds all NFTs in your wallet, downloads their metadata and images, and backs them up to decentralized storage like Arweave.',
+        cost: 'Storage Fees',
+        roi: 'N/A (Security)',
+        risk: 'Low',
+        category: 'NFT',
+        icon: AppWindow,
+        href: '/dashboard/dapp-builder'
+    },
+
+    // Development
+    {
+        name: 'Smart Contract Deployment Suite',
+        description: 'A complete CI/CD pipeline for smart contracts. Compile, test, and deploy your contracts to a testnet, then mainnet, with a single command.',
+        cost: 'Gas Fees',
+        roi: 'N/A (Dev Tool)',
+        risk: 'Low',
+        category: 'Development',
+        icon: FileJson,
+        href: '/dashboard/tools'
+    },
+    {
+        name: 'Front-End dApp Generator',
+        description: 'Provide a smart contract address and ABI, and the AI will generate a complete React/Next.js front-end to interact with it.',
+        cost: 'Free',
+        roi: 'N/A (Dev Tool)',
+        risk: 'Low',
+        category: 'Development',
+        icon: AppWindow,
+        href: '/dashboard/dapp-builder'
+    },
+    {
+        name: 'Gas Token Top-Up',
+        description: 'Monitors the native token (e.g., ETH, MATIC) balance of your wallets and automatically sends a small amount from a master wallet if it falls below a threshold.',
+        cost: 'Gas Fees',
+        roi: 'N/A (Convenience)',
+        risk: 'Low',
+        category: 'Development',
+        icon: Zap,
+        href: '/dashboard/bot-creator'
+    },
+    {
+        name: 'Subscription Service Deployer',
+        description: 'Deploy a set of smart contracts that allow you to charge users a recurring fee (e.g., monthly) for access to a service.',
+        cost: 'Deployment Gas',
+        roi: 'N/A (Business)',
+        risk: 'Medium',
+        category: 'Development',
+        icon: AppWindow,
+        href: '/dashboard/dapp-builder'
+    },
+    {
         name: 'On-chain Oracle Deployer',
         description: 'Deploy and configure your own Chainlink oracle contract to bring off-chain data into your smart contracts securely.',
         cost: 'LINK tokens + Gas',
         roi: 'N/A (Infrastructure)',
         risk: 'Medium',
-        category: 'Dev Tool',
+        category: 'Development',
         icon: AppWindow,
         href: '/dashboard/dapp-builder'
     },
+
+    // Security
     {
-        name: 'Tax Calculation Reporter',
-        description: 'Analyzes your transaction history across multiple wallets and generates a CSV report of capital gains and losses for tax purposes.',
-        cost: '0.1 ETH',
-        roi: 'Time Saved',
+        name: 'MEV Sandwich Attack Simulator',
+        description: 'An educational flow for security researchers that simulates how a Maximal Extractable Value (MEV) sandwich attack works on a target transaction.',
+        cost: '0.1 ETH (Testnet)',
+        roi: 'N/A (Educational)',
         risk: 'Low',
-        category: 'Analytics',
-        icon: FileJson,
-        href: '/dashboard/finance'
+        category: 'Security',
+        icon: ShieldAlert,
+        href: '/dashboard/security-audits'
+    },
+    {
+        name: 'Flash Loan Exploit Tester',
+        description: 'For developers: a flow that attempts to use a flash loan to exploit a vulnerability in a smart contract deployed on a testnet.',
+        cost: 'Testnet Gas',
+        roi: 'N/A (Security)',
+        risk: 'Medium',
+        category: 'Security',
+        icon: ShieldAlert,
+        href: '/dashboard/security-audits'
+    },
+    {
+        name: 'Rug Pull Detector',
+        description: 'Analyze a token\'s contract for common signs of a "rug pull", such as locked liquidity, ownership renouncement, and honeypot functions.',
+        cost: 'Free',
+        roi: 'N/A (Security)',
+        risk: 'Low',
+        category: 'Security',
+        icon: ShieldAlert,
+        href: '/dashboard/security-audits'
     },
 ];
+
+const categories = ['DeFi', 'Solana', 'NFT', 'Development', 'Security'];
 
 const riskStyles: Record<string, { card: string; badge: string; text: string }> = {
     'Low': {
@@ -343,144 +275,110 @@ const riskStyles: Record<string, { card: string; badge: string; text: string }> 
     }
 }
 
-const categories = [...new Set(strategies.map(s => s.category))];
-const risks = ['Low', 'Medium', 'High', 'Very High'];
-
-
-/**
- * A page that displays available "Crypto Flows" or investment strategies.
- * @returns {JSX.Element} The Strategy Vault page component.
- */
 export default function StrategyVaultPage() {
-  const [activeCategories, setActiveCategories] = useState<string[]>([]);
-  const [activeRisks, setActiveRisks] = useState<string[]>([]);
+    const [selectedStrategy, setSelectedStrategy] = useState<any>(null);
+    const { setOpen } = useCommandMenu();
 
-  const toggleFilter = (filterList: string[], setFilterList: Function, item: string) => {
-    if (filterList.includes(item)) {
-        setFilterList(filterList.filter(i => i !== item));
-    } else {
-        setFilterList([...filterList, item]);
-    }
-  }
+    const handleExecute = () => {
+        if (selectedStrategy.cost.toLowerCase() !== 'free') {
+            setOpen(true);
+        } else {
+            // Handle free strategy execution
+        }
+    };
 
-  const filteredStrategies = strategies.filter(strategy => {
-    const categoryMatch = activeCategories.length === 0 || activeCategories.includes(strategy.category);
-    const riskMatch = activeRisks.length === 0 || activeRisks.includes(strategy.risk);
-    return categoryMatch && riskMatch;
-  });
+    return (
+        <div className="container mx-auto py-12">
+            <div className="text-center mb-12">
+                <h1 className="text-4xl font-bold font-headline tracking-tight flex items-center justify-center gap-3"><Library className="w-10 h-10 text-primary"/> Strategy Vault</h1>
+                <p className="text-muted-foreground mt-4 text-xl max-w-3xl mx-auto">
+                    Your command center for Web3 automation. Discover, customize, and execute powerful strategies across DeFi, Solana, NFTs, and more.
+                </p>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <div className="lg:col-span-2">
+                    <Tabs defaultValue="DeFi" className="w-full">
+                        <TabsList className="grid w-full grid-cols-5 mb-6">
+                            {categories.map(category => (
+                                <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
+                            ))}
+                        </TabsList>
+                        {categories.map(category => (
+                            <TabsContent key={category} value={category}>
+                                <motion.div layout className="grid gap-6 md:grid-cols-2">
+                                    {allStrategies.filter(s => s.category === category).map(strategy => (
+                                        <StrategyCard 
+                                            key={strategy.name} 
+                                            strategy={strategy} 
+                                            onSelect={setSelectedStrategy} 
+                                            isSelected={selectedStrategy?.name === strategy.name}
+                                        />
+                                    ))}
+                                </motion.div>
+                            </TabsContent>
+                        ))}
+                    </Tabs>
+                </div>
 
-  return (
-      <div className="space-y-8">
-          <div>
-            <h1 className="text-3xl font-bold font-headline tracking-tight flex items-center gap-3"><Library className="w-8 h-8 text-primary"/> Strategy Vault</h1>
-            <p className="text-muted-foreground mt-2 text-lg">
-              Browse, select, and execute pre-packaged intelligent flows designed to generate outcomes. This is your bank for Web3.
-            </p>
-          </div>
-          <Card className="p-6 bg-card/50">
-           <div className="flex flex-col md:flex-row gap-6">
-               <div className="flex-1">
-                   <h3 className="font-semibold mb-2">Filter by Category</h3>
-                   <div className="flex flex-wrap gap-2">
-                       {categories.map(category => (
-                           <Button
-                               key={category}
-                               variant={activeCategories.includes(category) ? 'default' : 'outline'}
-                               size="sm"
-                               onClick={() => toggleFilter(activeCategories, setActiveCategories, category)}
-                           >
-                               {category}
-                           </Button>
-                       ))}
-                   </div>
-               </div>
-                <div className="flex-1">
-                   <h3 className="font-semibold mb-2">Filter by Risk</h3>
-                    <div className="flex flex-wrap gap-2">
-                       {risks.map(risk => (
-                           <Button
-                               key={risk}
-                               variant={activeRisks.includes(risk) ? 'default' : 'outline'}
-                               size="sm"
-                               onClick={() => toggleFilter(activeRisks, setActiveRisks, risk)}
-                               className={cn(activeRisks.includes(risk) && riskStyles[risk]?.badge, 'border')}
-                           >
-                               {risk}
-                           </Button>
-                       ))}
-                   </div>
-               </div>
-           </div>
-           {(activeCategories.length > 0 || activeRisks.length > 0) && (
-               <Button variant="ghost" size="sm" onClick={() => { setActiveCategories([]); setActiveRisks([]); }} className="mt-4">
-                   Clear all filters
-               </Button>
-           )}
-         </Card>
-          <motion.div layout className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <AnimatePresence>
-            {filteredStrategies.map((strategy) => {
-                const riskStyle = riskStyles[strategy.risk] || riskStyles['Medium'];
-                const Icon = strategy.icon;
-                return (
-                    <motion.div
-                        layout
-                        key={strategy.name}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ duration: 0.3 }}
-                        className="h-full"
-                    >
-                        <div className={cn("flex flex-col bg-card/50 rounded-lg border-2 transition-colors group h-full", riskStyle.card)}>
-                            <div className="p-6 flex items-start gap-4 bg-card/50 rounded-t-md">
-                                <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit h-fit mt-1">
-                                    <Icon className="w-6 h-6 shrink-0"/>
-                                </div>
-                                <div>
-                                    <h3 className="text-base font-bold font-headline group-hover:text-primary transition-colors">{strategy.name}</h3>
-                                    <Badge variant="outline" className="text-xs font-mono mt-2">{strategy.category}</Badge>
-                                </div>
-                            </div>
-                            
-                            <div className="p-6 flex-grow flex flex-col">
-                                <p className="text-sm text-muted-foreground mb-6 flex-grow">{strategy.description}</p>
-                                
-                                <div className="space-y-4">
-                                     <div className="flex items-center justify-between">
-                                        <p className="text-xs font-semibold text-muted-foreground flex items-center gap-2"><Zap className="w-4 h-4"/>Execution Cost</p>
-                                        <p className="text-xs font-mono font-bold">{strategy.cost}</p>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <p className="text-xs font-semibold text-muted-foreground flex items-center gap-2"><TrendingUp className="w-4 h-4"/>Projected ROI</p>
-                                        <p className="text-xs font-mono font-bold">{strategy.roi}</p>
-                                    </div>
-                                     <div className="flex items-center justify-between">
-                                        <p className="text-xs font-semibold text-muted-foreground flex items-center gap-2"><ShieldAlert className="w-4 h-4"/>Risk Level</p>
-                                        <p className={cn("text-xs font-mono font-bold", riskStyle.text)}>{strategy.risk}</p>
-                                    </div>
-                                </div>
-
-                            </div>
-                            
-                            <div className="p-6 pt-0">
-                                <Button asChild className="w-full mt-4">
-                                    <Link href={strategy.href}>
-                                        View & Execute Strategy <ArrowRight className="ml-2 w-4 h-4"/>
-                                    </Link>
-                                </Button>
-                            </div>
-                        </div>
-                    </motion.div>
-                );
-            })}
-            </AnimatePresence>
-          </motion.div>
-          {filteredStrategies.length === 0 && (
-             <div className="text-center py-12">
-               <p className="text-lg text-muted-foreground">No strategies match your current filters.</p>
-             </div>
-           )}
-      </div>
-  );
+                <div className="lg:sticky lg:top-24">
+                     <AnimatePresence>
+                        {selectedStrategy ? (
+                             <motion.div 
+                                layoutId={`card-${selectedStrategy.name}`}
+                                key={selectedStrategy.name}
+                                className="h-full"
+                             >
+                                <Card className={cn("border-2", riskStyles[selectedStrategy.risk]?.card)}>
+                                    <CardHeader className="flex-row items-start gap-4 space-y-0">
+                                        <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit h-fit mt-1">
+                                            <selectedStrategy.icon className="w-8 h-8 shrink-0"/>
+                                        </div>
+                                        <div>
+                                            <CardTitle className="text-lg font-bold font-headline">{selectedStrategy.name}</CardTitle>
+                                            <CardDescription className="mt-1 text-sm">{selectedStrategy.description}</CardDescription>
+                                        </div>
+                                        <Button variant="ghost" size="icon" onClick={() => setSelectedStrategy(null)} className="ml-auto !mt-0">
+                                            <X className="w-4 h-4" />
+                                        </Button>
+                                    </CardHeader>
+                                    <CardContent className="space-y-6 text-sm">
+                                         <div className="space-y-4 p-4 rounded-lg bg-card-foreground/5">
+                                             <h4 className="font-bold">Strategy Details</h4>
+                                            <div className="flex items-center justify-between">
+                                                <p className="text-muted-foreground flex items-center gap-2"><Zap className="w-4 h-4"/>Execution Cost</p>
+                                                <p className="font-mono font-bold">{selectedStrategy.cost}</p>
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <p className="text-muted-foreground flex items-center gap-2"><TrendingUp className="w-4 h-4"/>Projected ROI</p>
+                                                <p className="font-mono font-bold">{selectedStrategy.roi}</p>
+                                            </div>
+                                                <div className="flex items-center justify-between">
+                                                <p className="text-muted-foreground flex items-center gap-2"><ShieldAlert className="w-4 h-4"/>Risk Level</p>
+                                                <p className={cn("font-mono font-bold", riskStyles[selectedStrategy.risk]?.text)}>{selectedStrategy.risk}</p>
+                                            </div>
+                                        </div>
+                                        <Button size="lg" className="w-full" onClick={handleExecute}>
+                                            Execute Strategy <ArrowRight className="ml-2 w-4 h-4"/>
+                                        </Button>
+                                         <Button size="lg" variant="outline" className="w-full" asChild>
+                                            <Link href={selectedStrategy.href}>Go to Full Page</Link>
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            </motion.div>
+                        ) : (
+                             <Card className="flex flex-col items-center justify-center text-center p-12 h-full min-h-[400px]">
+                                <Library className="w-12 h-12 text-muted-foreground/50" />
+                                <p className="mt-4 text-lg font-medium text-muted-foreground">
+                                    Select a strategy to view its details.
+                                </p>
+                                <p className="text-sm text-muted-foreground/80">Choose a flow from the left to see more information and execution options.</p>
+                            </Card>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </div>
+        </div>
+    );
 }

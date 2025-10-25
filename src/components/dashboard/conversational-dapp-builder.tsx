@@ -1,11 +1,12 @@
 
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, User, Loader2, Wand2, ArrowRight } from 'lucide-react';
+import { Bot, User, Loader2, ArrowRight, ArrowLeft, Wand2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { recommendBusinessTools } from '@/ai/actions';
 import type { BusinessToolRecommendationOutput } from '@/ai/schemas/business-tool-recommendation';
 import { iconMap } from '@/lib/icon-map';
@@ -24,140 +25,204 @@ const toolLinks: Record<string, string> = {
     'Web3 Actions': '/dashboard/actions'
 }
 
-type Message = {
-  type: 'bot' | 'user';
-  text: string;
-};
-
 const questions = [
-  "What industry does your project operate in? (e.g., DeFi, Gaming, NFTs)",
-  "What is the current stage of your business? (e.g., Idea, Prototype, MVP)",
-  "What are your primary goals for this project?",
-  "Can you briefly describe your project?",
+  {
+    id: 'description',
+    text: "Let's start with your vision. What does your Web3 project do?",
+    placeholder: "e.g., A decentralized lending protocol for NFTs..."
+  },
+  {
+    id: 'industry',
+    text: "Which sector of Web3 does this fall into?",
+    placeholder: "e.g., DeFi, GameFi, ReFi, DePIN...",
+    suggestions: ["DeFi", "GameFi", "NFTs", "SocialFi", "ReFi", "DePIN"]
+  },
+  {
+    id: 'stage',
+    text: "What's the current stage of your project?",
+    placeholder: "e.g., Back-of-the-napkin idea...",
+    suggestions: ["Idea", "Prototype", "MVP", "Pre-seed", "Post-launch"]
+  },
+  {
+    id: 'goals',
+    text: "What are your primary goals right now?",
+    placeholder: "e.g., Acquire first 1000 users...",
+    suggestions: ["Launch MVP", "Secure funding", "Build community", "Generate revenue"]
+
+  },
 ];
 
+const StepHeader = ({ currentStep }: { currentStep: number }) => (
+    <div className="mb-8 flex items-center justify-center space-x-4">
+        {questions.map((q, index) => (
+            <div key={q.id} className="flex items-center">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep > index ? 'bg-primary text-primary-foreground' : currentStep === index ? 'border-2 border-primary text-primary' : 'bg-card-foreground/10 text-muted-foreground'}`}>
+                    {currentStep > index ? <Check className="w-5 h-5" /> : index + 1}
+                </div>
+                {index < questions.length - 1 && <div className="w-16 h-0.5 bg-card-foreground/10" />} 
+            </div>
+        ))}
+    </div>
+);
+
 export function ConversationalDappBuilder() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [userInput, setUserInput] = useState('');
-  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
   const [recommendations, setRecommendations] = useState<BusinessToolRecommendationOutput | null>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setMessages([{ type: 'bot', text: questions[0] }]);
-  }, []);
+      inputRef.current?.focus();
+  }, [currentStep]);
 
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-    }
-  }, [messages]);
-
-  const handleSendMessage = async () => {
-    if (!userInput.trim()) return;
-
-    const newMessages: Message[] = [...messages, { type: 'user', text: userInput }];
-    setMessages(newMessages);
+  const handleNext = () => {
+    if (userInput.trim() === '') return;
+    setAnswers(prev => ({ ...prev, [questions[currentStep].id]: userInput }));
     setUserInput('');
-
-    if (currentQuestion < questions.length - 1) {
-      setTimeout(() => {
-        setMessages(prev => [...prev, { type: 'bot', text: questions[currentQuestion + 1] }]);
-        setCurrentQuestion(prev => prev + 1);
-      }, 500);
+    if (currentStep < questions.length - 1) {
+      setCurrentStep(prev => prev + 1);
     } else {
-      setIsGenerating(true);
-      const userResponses = newMessages.filter(m => m.type === 'user').map(m => m.text);
-      const formattedData = {
-        industry: userResponses[0],
-        stage: userResponses[1],
-        goals: userResponses[2].split(','),
-        description: userResponses[3],
-      };
+      handleSubmit();
+    }
+  };
 
-      try {
+  const handleBack = () => {
+      if (currentStep > 0) {
+          setCurrentStep(prev => prev - 1);
+          setUserInput(answers[questions[currentStep - 1].id] || '');
+      }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+      setUserInput(suggestion);
+  }
+
+  const handleSubmit = async () => {
+    setIsGenerating(true);
+    const finalAnswers = { ...answers, [questions[currentStep].id]: userInput };
+    const formattedData = {
+        industry: finalAnswers.industry,
+        stage: finalAnswers.stage,
+        goals: finalAnswers.goals.split(','),
+        description: finalAnswers.description,
+    };
+    
+    try {
         const result = await recommendBusinessTools(formattedData);
         setRecommendations(result);
       } catch (error) {
         console.error("Failed to get recommendations", error);
-        setMessages(prev => [...prev, { type: 'bot', text: "I'm sorry, I was unable to generate recommendations. Please try again later." }]);
       } finally {
         setIsGenerating(false);
       }
-    }
-  };
+  }
 
-  return (
-    <div className="h-full flex flex-col">
-      <div ref={chatContainerRef} className="flex-1 space-y-4 p-4 overflow-y-auto">
-        <AnimatePresence>
-          {messages.map((msg, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex items-start gap-3 max-w-lg ${msg.type === 'user' ? 'ml-auto flex-row-reverse' : ''}`}>
-              {msg.type === 'bot' ? <Bot className="w-6 h-6 text-primary flex-shrink-0" /> : <User className="w-6 h-6 flex-shrink-0" />}
-              <div className={`p-3 rounded-lg ${msg.type === 'bot' ? 'bg-card-foreground/5' : 'bg-primary text-primary-foreground'}`}>
-                <p className="text-sm">{msg.text}</p>
-              </div>
+  if (isGenerating) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full text-center p-8">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3 p-4 bg-card-foreground/5 rounded-lg">
+                <Bot className="w-8 h-8 text-primary flex-shrink-0" />
+                <Loader2 className="animate-spin w-6 h-6 mr-2" />
+                <p className="text-lg">Our AI is analyzing your project and crafting a personalized strategic plan to help you succeed...</p>
             </motion.div>
-          ))}
-          {isGenerating && (
-             <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-3">
-                <Bot className="w-6 h-6 text-primary flex-shrink-0" />
-                <div className="p-3 rounded-lg bg-card-foreground/5 flex items-center gap-2">
-                    <Loader2 className="animate-spin w-5 h-5" />
-                    <p className="text-sm">Generating your strategic plan...</p>
-                </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-      
-      {recommendations ? (
-        <div className="p-4 border-t">
-            <h3 className="text-lg font-bold font-headline mb-4">Your Strategic Plan</h3>
-            <div className="space-y-4 max-h-64 overflow-y-auto">
+        </div>
+      )
+  }
+
+  if (recommendations) {
+      return (
+        <div className="p-8 h-full overflow-y-auto">
+             <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold font-headline">Your AI-Generated Strategic Plan</h2>
+                <p className="text-muted-foreground">Based on your input, here are the recommended tools and next steps.</p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {recommendations.recommendations.map((rec, index) => {
                     const LucideIcon = iconMap[rec.icon] || iconMap['AppWindow'];
                     const toolLink = toolLinks[rec.name] || '/dashboard';
                     return (
-                        <div key={index} className="border-l-4 border-primary pl-4 py-2 bg-card-foreground/5 rounded-r-lg">
-                            <div className="flex justify-between items-center">
-                                <div>
-                                    <h4 className="font-bold text-base flex items-center gap-2"><LucideIcon className="w-5 h-5"/> {rec.name}</h4>
-                                    <p className="text-sm text-muted-foreground mt-1">{rec.description}</p>
-                                </div>
-                                <Button asChild variant="secondary" size="sm">
-                                    <Link href={toolLink}>Go to Tool <ArrowRight className="w-4 h-4 ml-2" /></Link>
-                                </Button>
+                        <motion.div 
+                            key={index} 
+                            className="border-l-4 border-primary pl-4 py-4 pr-4 bg-card-foreground/5 rounded-r-lg flex flex-col justify-between"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                        >
+                            <div>
+                                <h3 className="font-bold text-lg flex items-center gap-3 mb-2"><LucideIcon className="w-6 h-6 text-primary"/> {rec.name}</h3>
+                                <p className="text-sm text-muted-foreground mb-4">{rec.description}</p>
                             </div>
-                        </div>
+                            <Button asChild variant="secondary" className="mt-auto w-full">
+                                <Link href={toolLink}>Go to Tool <ArrowRight className="w-4 h-4 ml-2" /></Link>
+                            </Button>
+                        </motion.div>
                     )
                 })}
             </div>
+            <div className="text-center mt-8">
+                <Button onClick={() => { setRecommendations(null); setCurrentStep(0); setAnswers({}); }}>Start Over</Button>
+            </div>
         </div>
-      ) : (
-        <div className="p-4 border-t flex items-center gap-2">
+      )
+  }
+
+  return (
+    <div className="h-full flex flex-col justify-center items-center p-8">
+      <StepHeader currentStep={currentStep} />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentStep}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -50 }}
+          transition={{ duration: 0.3 }}
+          className="w-full max-w-xl text-center"
+        >
+          <div className="flex items-start gap-3">
+            <Bot className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
+            <div className="p-4 rounded-lg bg-card-foreground/5 text-left">
+                <p className="text-lg font-medium">{questions[currentStep].text}</p>
+            </div>
+          </div>
+        
+          <div className="mt-6 flex items-center gap-2">
+            <User className="w-6 h-6 flex-shrink-0 text-muted-foreground" />
             <Input
-            type="text"
-            placeholder="Type your answer..."
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-            disabled={isGenerating}
-            className="h-11"
+              ref={inputRef}
+              type="text"
+              placeholder={questions[currentStep].placeholder}
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleNext()}
+              className="h-12 text-base flex-1"
             />
-            <Button size="lg" onClick={handleSendMessage} disabled={isGenerating}>
-                <Wand2 className="h-4 w-4" />
-            </Button>
-        </div>
-      )}
+          </div>
+          
+          {questions[currentStep].suggestions && (
+              <div className="mt-4 flex flex-wrap gap-2 justify-center">
+                  {questions[currentStep].suggestions?.map(s => (
+                      <Badge key={s} variant="outline" onClick={() => handleSuggestionClick(s)} className="cursor-pointer hover:bg-primary/10">
+                          {s}
+                      </Badge>
+                  ))}
+              </div>
+          )}
+
+        </motion.div>
+      </AnimatePresence>
+
+      <div className="mt-8 flex gap-4 w-full max-w-xl">
+        <Button variant="outline" onClick={handleBack} disabled={currentStep === 0} className="w-32">
+            <ArrowLeft className="w-4 h-4 mr-2"/>
+            Back
+        </Button>
+        <Button onClick={handleNext} className="w-full">
+            {currentStep === questions.length - 1 ? 'Generate Plan' : 'Next'}
+            <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
+      </div>
     </div>
   );
 }

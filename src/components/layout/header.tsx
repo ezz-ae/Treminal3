@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Terminal, Menu, Wind, Gem, BrainCircuit, ShieldCheck, AppWindow, Library, BookOpen, Newspaper, Rocket, Sprout, AreaChart, CircleDollarSign, Wrench, TrendingUp } from 'lucide-react';
+import { Terminal, Menu, Wind, Gem, BrainCircuit, ShieldCheck, AppWindow, Library, BookOpen, Newspaper, Rocket, Sprout, AreaChart } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -17,9 +17,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { useWallet } from '@/hooks/use-wallet';
-import { CreditBalance } from '@/components/credit-balance';
-
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 const coreServices = [
     { href: "/dashboard/strategy-vault", title: "Strategy Vault", icon: Library, description: "Browse and execute pre-built Web3 automation flows." },
@@ -27,7 +25,6 @@ const coreServices = [
     { href: "/dashboard/token-launcher", title: "Token Launcher", icon: Gem, description: "Generate custom ERC-20 tokens on EVM chains." },
     { href: "/dashboard/bot-creator", title: "Trading Bot Creator", icon: BrainCircuit, description: "Design, simulate, and deploy trading bots." },
     { href: "/dashboard/security-audits", title: "Security Audits", icon: ShieldCheck, description: "Audit smart contracts for vulnerabilities." },
-    { href: "/dashboard/tools", title: "Developer Tools", icon: Wrench, description: "A suite of utilities for Web3 developers." },
 ]
 
 const solanaServices = [
@@ -51,8 +48,6 @@ const resourcesItems = [
  * @returns {JSX.Element} The Header component.
  */
 export default function Header() {
-  const { wallet, connectWallet, disconnectWallet } = useWallet();
-
   return (
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="container flex h-16 items-center">
@@ -164,18 +159,9 @@ export default function Header() {
                 </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-4">
-                <CreditBalance />
+            <div className="flex items-center justify-end space-x-2">
                 <ThemeToggle />
-                {wallet ? (
-                    <Button variant="outline" onClick={disconnectWallet}>
-                        {`Disconnect ${wallet.address.slice(0, 4)}...${wallet.address.slice(-4)}`}
-                    </Button>
-                ) : (
-                    <Button onClick={connectWallet}>
-                        Connect Wallet
-                    </Button>
-                )}
+                <WalletMultiButton />
             </div>
 
           </div>

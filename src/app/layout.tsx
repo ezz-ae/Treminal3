@@ -3,6 +3,7 @@
 import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
+import '@solana/wallet-adapter-react-ui/styles.css';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -13,7 +14,8 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { Web3Provider } from '@/providers/Web3Provider';
 import { ClerkProvider } from '@clerk/nextjs';
-import { PayModalProvider } from '@/contexts/pay-modal-context';
+import { CommandMenuProvider } from '@/contexts/command-menu-context';
+import { SolanaWalletProvider } from '@/providers/solana-wallet-provider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
@@ -54,15 +56,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-            <Web3Provider>
-              <WalletProvider>
-                <PayModalProvider>
-                  <Header />
-                  <main className="flex-1 flex flex-col">{children}</main>
-                  <Footer />
-                </PayModalProvider>
-              </WalletProvider>
-            </Web3Provider>
+            <SolanaWalletProvider>
+              <Web3Provider>
+                <WalletProvider>
+                  <CommandMenuProvider>
+                    <Header />
+                    <main className="flex-1 flex flex-col">{children}</main>
+                    <Footer />
+                  </CommandMenuProvider>
+                </WalletProvider>
+              </Web3Provider>
+            </SolanaWalletProvider>
 
             <Toaster />
             <Analytics />
