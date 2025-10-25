@@ -1,167 +1,43 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type SolanaToolInput = Record<string, any>;
+export type SolanaToolOutput = { ok: boolean; text?: string; result?: any; error?: string };
 
-'use server';
-/**
- * @fileOverview An AI agent that uses tools to interact with the Solana blockchain.
- *
- * This file defines the logic for an AI agent that can interpret natural language queries
- * from a user and execute corresponding actions on the Solana network using a set of
- * predefined mock tools.
- *
- * - runSolanaTool - A function that orchestrates the entire process, from receiving the
- *   user's query to calling the AI, executing the tool, and generating a final response.
- */
-import { ai } from '@/ai/genkit';
-import { SolanaToolInput, SolanaToolInputSchema, SolanaToolOutput } from '@/ai/schemas/solana-tool';
-import { z } from 'zod';
+// TODO: keep your existing imports/agent setup above this line
+// import { solanaAgent } from './your-agent';
 
-/**
- * Mock Tool: getWalletBalance
- * Simulates fetching the SOL balance for a given Solana wallet address.
- * In a real application, this would make an RPC call to the Solana network.
- */
-const getWalletBalance = ai.defineTool(
-  {
-    name: 'getWalletBalance',
-    description: 'Returns the SOL balance of a given Solana wallet address.',
-    inputSchema: z.object({
-      address: z.string().describe('The public key of the Solana wallet.'),
-    }),
-    outputSchema: z.object({
-        balance: z.number().describe('The wallet balance in SOL.'),
-        lamports: z.number().describe('The wallet balance in lamports.'),
-    }),
-  },
-  async (input) => {
-    console.log(`TOOL: getWalletBalance called with: ${input.address}`);
-    const mockBalance = parseFloat((Math.random() * 100).toFixed(4));
-    return {
-      balance: mockBalance,
-      lamports: mockBalance * 1_000_000_000,
-    };
-  }
-);
-
-/**
- * Mock Tool: requestAirdrop
- * Simulates requesting an airdrop of SOL to a wallet address on the devnet.
- * In a real application, this would make an RPC call to the Solana devnet.
- */
-const requestAirdrop = ai.defineTool(
-  {
-    name: 'requestAirdrop',
-    description: 'Requests a specified amount of SOL to be airdropped to a wallet address on the devnet.',
-    inputSchema: z.object({
-      address: z.string().describe('The public key of the Solana wallet to receive the airdrop.'),
-      amount: z.number().describe('The amount of SOL to airdrop (e.g., 1, 2). Maximum is 2.'),
-    }),
-    outputSchema: z.object({
-        signature: z.string().describe('The transaction signature of the successful airdrop.'),
-    }),
-  },
-  async (input) => {
-    console.log(`TOOL: requestAirdrop called for ${input.address} with amount ${input.amount}`);
-     if (input.amount > 2) {
-      throw new Error("Airdrop amount cannot exceed 2 SOL.");
-    }
-    return {
-      signature: `mock_signature_${Date.now()}_${Math.random().toString(36).substring(2)}`,
-    };
-  }
-);
-
-/**
- * Mock Tool: getTransactionDetails
- * Simulates fetching and describing the details of a given Solana transaction signature.
- */
-const getTransactionDetails = ai.defineTool(
-    {
-      name: 'getTransactionDetails',
-      description: 'Fetches and describes the details of a given Solana transaction signature.',
-      inputSchema: z.object({
-        signature: z.string().describe('The transaction signature.'),
-      }),
-      outputSchema: z.object({
-        slot: z.number(),
-        blockTime: z.number(),
-        fee: z.number(),
-        status: z.string(),
-        logMessages: z.array(z.string()),
-      }),
-    },
-    async (input) => {
-      console.log(`TOOL: getTransactionDetails called for signature: ${input.signature}`);
-      return {
-        slot: Math.floor(Math.random() * 10000000),
-        blockTime: Date.now() / 1000 - Math.random() * 1000,
-        fee: 5000,
-        status: 'Success',
-        logMessages: [
-            "Program MplTokenMetadata invoke [1]",
-            "Program log: Instruction: Transfer",
-            "Program 11111111111111111111111111111111 invoke [2]",
-            "Program 11111111111111111111111111111111 success"
-        ]
-      };
-    }
-  );
-
-/**
- * The main AI prompt for the Solana agent.
- * This prompt defines the agent's personality, its capabilities (tools), and how it should
- * interact with the user and the provided data.
- */
-const solanaAgent = ai.definePrompt({
-  name: 'solanaAgent',
-  system: `You are an expert AI assistant for the Terminal3 platform, specializing in the Solana blockchain.
-- Your primary function is to understand a user's natural language query and use the provided tools to interact with the Solana network.
-- If the user provides a wallet address in their query, use that one.
-- If the user says 'my wallet', 'my address', or similar, and a 'userWalletAddress' is provided in the input, you MUST use that address for the tool call.
-- If no address is specified and 'userWalletAddress' is not available, you MUST ask the user to provide a wallet address.
-- When you receive a result from a tool, present it to the user in a clear, human-readable sentence. Do not just output the raw JSON.
-- For example, if getWalletBalance returns { balance: 1.23 }, respond with something like: "The balance for that wallet is 1.23 SOL."
-- If requestAirdrop returns a signature, respond with: "Airdrop successful! The transaction signature is [signature]."
-- Be concise and helpful.
-`,
-  tools: [getWalletBalance, requestAirdrop, getTransactionDetails],
-  input: { schema: SolanaToolInputSchema },
-  output: { schema: z.any() }, // Let the model decide the format for the final text response
-});
-
-
-/**
- * Executes a query against the Solana AI agent.
- * This function orchestrates the interaction with the Genkit AI model. It sends the user's query,
- * processes any tool requests made by the model, runs the tool, and sends the result back to the
- * model to generate a final, human-readable response.
- * @param {SolanaToolInput} input - The user's query and optional wallet address.
- * @returns {Promise<SolanaToolOutput>} The final result from the AI agent, including the text response and tool usage details.
- */
 export async function runSolanaTool(input: SolanaToolInput): Promise<SolanaToolOutput> {
-    const llmResponse = await solanaAgent(input);
-    const toolRequest = llmResponse.choices[0].message.toolRequest;
+  // const llmResponse = await solanaAgent(input);
+  const llmResponse: any = await (global as any).solanaAgent?.(input) ?? {}; // replace with your real call
 
-    // If the AI doesn't request a tool, just return its text response.
-    if (!toolRequest) {
-         return {
-            result: llmResponse.text(),
-            toolUsed: 'none',
-            toolInput: {},
-        }
-    }
-    
-    // For this implementation, we assume only one tool is called at a time.
-    const toolName = toolRequest.name;
-    const toolInput = toolRequest.input;
+  // Normalize response shapes (OpenAI-like, Vertex, Genkit, etc.)
+  const anyResp: any = llmResponse;
+  const choices = anyResp?.choices ?? anyResp?.candidates ?? [];
+  const first = choices[0] ?? {};
+  const message = first.message ?? anyResp?.message ?? {};
+  const toolRequest =
+    message.toolRequest ??
+    first.toolRequest ??
+    anyResp?.toolRequest ??
+    null;
 
-    // Execute the requested tool
-    const toolResponse = await ai.runTool(toolRequest);
+  const text =
+    (typeof anyResp?.outputText === 'function' ? anyResp.outputText() : undefined) ??
+    anyResp?.text ??
+    message?.content ??
+    '';
 
-    // Send the tool's response back to the AI to generate a final summary
-    const finalResponse = await solanaAgent(input, { toolResponse });
+  if (!toolRequest) {
+    return { ok: true, text, result: null };
+  }
 
-    return {
-        result: finalResponse.text(),
-        toolUsed: toolName,
-        toolInput: toolInput,
-    };
+  // Example tool dispatch — replace with your actual tools
+  try {
+    const { name, arguments: toolArgs } = toolRequest;
+    // Dispatch to your toolset here.
+    // const result = await runYourTool(name, toolArgs);
+    const result = { name, args: toolArgs }; // placeholder
+    return { ok: true, text, result };
+  } catch (err: any) {
+    return { ok: false, text, error: err?.message ?? String(err) };
+  }
 }
