@@ -17,6 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useSearchParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+import { usePayModal } from '@/contexts/pay-modal-context';
 import Link from 'next/link';
 
 const FormSchema = z.object({
@@ -102,6 +103,7 @@ const severityConfig = {
 export default function SecurityAuditPage() {
     const [result, setResult] = useState<SecurityAuditOutput | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const { showPayModal } = usePayModal();
     const searchParams = useSearchParams();
     const { toast } = useToast();
 
@@ -133,13 +135,17 @@ export default function SecurityAuditPage() {
                 title: "Audit Complete!",
                 description: `Found ${auditResult.vulnerabilities.length} potential issues.`,
             });
-        } catch (error) {
-            console.error("Failed to run security audit", error);
-            toast({
-              variant: "destructive",
-              title: "Audit Failed",
-              description: "The AI auditor encountered an error. Please try again.",
-            });
+        } catch (error: any) {
+            if (error.message === 'INSUFFICIENT_CREDITS') {
+                showPayModal('SEC_AUDIT');
+            } else {
+                console.error("Failed to run security audit", error);
+                toast({
+                  variant: "destructive",
+                  title: "Audit Failed",
+                  description: "The AI auditor encountered an error. Please try again.",
+                });
+            }
         } finally {
             setIsLoading(false);
         }

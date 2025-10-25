@@ -1,9 +1,17 @@
-import { config } from 'dotenv'
-config()
 
-// Import only flows that exist in your repo; extend as you add
-import '@/ai/flows/security-audit'
-import '@/ai/flows/trading-bot'
-import '@/ai/flows/token-generator'
-import '@/ai/flows/solana-token-generator'
-import '@/ai/flows/solana-tool'
+import { runSecurityAudit } from './flows/security-audit';
+import { generateTradingBot, runTradingBotSimulation } from './flows/trading-bot';
+import { runSolanaTool } from './flows/solana-tool';
+import { recommendBusinessTools } from './flows/business-tool-recommendation';
+import { generateTokenContract } from './flows/token-generator';
+import { generateSolanaToken } from './flows/solana-token-generator';
+
+export {
+    runSecurityAudit,
+    generateTradingBot,
+    runTradingBotSimulation,
+    runSolanaTool,
+    recommendBusinessTools,
+    generateTokenContract,
+    generateSolanaToken
+};

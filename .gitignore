@@ -38,3 +38,6 @@ next-env.d.ts
 
 # genkit
 src/ai/dev.ts
+
+# clerk configuration (can include secrets)
+/.clerk/

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 
-export function PayModalV2({ usageTag }: { usageTag: 'SEC_AUDIT' | 'TOKEN_LAUNCH' }) {
+export function PayModalV2({ usageTag }: { usageTag: 'SEC_AUDIT' | 'TOKEN_LAUNCH' | 'SOLANA_TOOL' | 'SOLANA_CLOSE_ACCOUNT' }) {
   const [txHash, setTxHash] = useState('')
   const [status, setStatus] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)

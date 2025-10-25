@@ -18,6 +18,7 @@ import {
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useWallet } from '@/hooks/use-wallet';
+import { CreditBalance } from '@/components/credit-balance';
 
 
 const coreServices = [
@@ -116,11 +117,11 @@ export default function Header() {
                     <NavigationMenu>
                         <NavigationMenuList>
                             <NavigationMenuItem>
-                                <Link href="/ai-trading" passHref>
-                                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                <NavigationMenuLink asChild>
+                                    <Link href="/ai-trading" className={navigationMenuTriggerStyle()}>
                                         AI Trading
-                                    </NavigationMenuLink>
-                                </Link>
+                                    </Link>
+                                </NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger>Core Services</NavigationMenuTrigger>
@@ -163,9 +164,10 @@ export default function Header() {
                 </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-2">
-              <ThemeToggle />
-               {wallet ? (
+            <div className="flex items-center justify-end space-x-4">
+                <CreditBalance />
+                <ThemeToggle />
+                {wallet ? (
                     <Button variant="outline" onClick={disconnectWallet}>
                         {`Disconnect ${wallet.address.slice(0, 4)}...${wallet.address.slice(-4)}`}
                     </Button>
@@ -173,7 +175,7 @@ export default function Header() {
                     <Button onClick={connectWallet}>
                         Connect Wallet
                     </Button>
-               )}
+                )}
             </div>
 
           </div>

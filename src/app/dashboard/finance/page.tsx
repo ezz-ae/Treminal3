@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/chart';
 import { BarChart, Bar, Pie, Cell, PieChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useEffect, useState } from 'react';
+import { recommendBusinessTools } from '@/ai/actions';
+import { useToast } from '@/hooks/use-toast';
 
 const generateInitialBarData = () => [
   { month: 'January', desktop: Math.floor(Math.random() * 200) + 50, mobile: Math.floor(Math.random() * 100) + 30 },
@@ -65,8 +67,6 @@ const pieChartConfig = {
   }
 }
 
-const marketSentiment = "The market is showing healthy signs of growth, with a notable 5.2% increase in transaction volume over the last 24 hours.";
-
 export default function AnalyticsPage() {
   const [stats, setStats] = useState({
     transactions: 0,
@@ -75,6 +75,27 @@ export default function AnalyticsPage() {
     contracts: 0,
   });
   const [barData, setBarData] = useState(generateInitialBarData());
+  const [marketSentiment, setMarketSentiment] = useState("Analyzing market sentiment...");
+  const { toast } = useToast();
+
+  async function fetchMarketSentiment() {
+    try {
+      const sentiment = await recommendBusinessTools({
+        industry: "DeFi",
+        stage: "Growth",
+        goals: ["Increase user adoption"],
+        description: "A decentralized exchange for trading digital assets."
+      });
+      setMarketSentiment(sentiment.recommendations[0].description);
+    } catch (error) {
+      console.error("Failed to get market sentiment", error);
+      toast({
+        variant: "destructive",
+        title: "AI Analysis Failed",
+        description: "The AI failed to analyze the market. Please try again later.",
+      });
+    }
+  }
 
   useEffect(() => {
     // Initial dynamic data
@@ -84,6 +105,7 @@ export default function AnalyticsPage() {
         gas: 12234.56,
         contracts: 789,
     });
+    fetchMarketSentiment();
 
     const interval = setInterval(() => {
         setStats(prevStats => ({
@@ -98,8 +120,9 @@ export default function AnalyticsPage() {
             desktop: Math.max(50, d.desktop + Math.floor(Math.random() * 20 - 10)),
             mobile: Math.max(30, d.mobile + Math.floor(Math.random() * 20 - 10)),
         })));
+        fetchMarketSentiment();
 
-    }, 3000);
+    }, 15000);
 
     return () => clearInterval(interval);
   }, [])

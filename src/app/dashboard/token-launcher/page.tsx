@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Gem, CheckCircle2, ShieldCheck, FileText } from 'lucide-react';
+import { Loader2, Gem, CheckCircle2, ShieldCheck, FileText, Rocket } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { generateTokenContract } from '@/ai/actions';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
@@ -18,6 +18,7 @@ import { CustomCodeBlock } from '@/components/ui/code-block';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { usePayModal } from '@/contexts/pay-modal-context';
 
 const features = [
   { id: 'Mintable', label: 'Mintable - Allow creating more tokens after initial supply.' },
@@ -35,6 +36,41 @@ const FormSchema = z.object({
   features: z.array(z.string()),
 });
 
+const NextSteps = () => (
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-xl flex items-center gap-3">
+                    <Rocket className="w-6 h-6 text-primary"/>Next Steps
+                </CardTitle>
+                <CardDescription>
+                    Congratulations on launching your token! Here are some things you can do next to grow your project.
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-4 rounded-lg bg-card-foreground/5">
+                    <div>
+                        <h4 className="font-bold">Create a Liquidity Pool</h4>
+                        <p className="text-sm text-muted-foreground">Enable trading of your token on a decentralized exchange.</p>
+                    </div>
+                    <Button asChild>
+                        <Link href="/dashboard/tools">Go to Tools</Link>
+                    </Button>
+                </div>
+                <div className="flex items-center justify-between p-4 rounded-lg bg-card-foreground/5">
+                    <div>
+                        <h4 className="font-bold">Airdrop Tokens</h4>
+                        <p className="text-sm text-muted-foreground">Distribute your token to a wide audience to build a community.</p>
+                    </div>
+                    <Button asChild>
+                        <Link href="/dashboard/marketing">Start Airdrop</Link>
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    </motion.div>
+);
+
 /**
  * A dashboard for creating and generating ERC-20 token smart contracts using AI.
  * @returns {JSX.Element} The Token Launcher page component.
@@ -43,6 +79,7 @@ export default function TokenLauncherPage() {
     const [result, setResult] = useState<TokenGeneratorOutput | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
+    const { showPayModal } = usePayModal();
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -64,13 +101,17 @@ export default function TokenLauncherPage() {
               title: "Contract Generated!",
               description: "Your ERC-20 smart contract is ready.",
             });
-        } catch (error) {
-            console.error("Failed to generate token contract", error);
-            toast({
-              variant: "destructive",
-              title: "Generation Failed",
-              description: "The AI failed to generate the contract. Please try again.",
-            });
+        } catch (error: any) {
+            if (error.message === 'INSUFFICIENT_CREDITS') {
+                showPayModal();
+            } else {
+                console.error("Failed to generate token contract", error);
+                toast({
+                  variant: "destructive",
+                  title: "Generation Failed",
+                  description: "The AI failed to generate the contract. Please try again.",
+                });
+            }
         } finally {
             setIsLoading(false);
         }
@@ -193,7 +234,7 @@ export default function TokenLauncherPage() {
                       </div>
                   )}
                   {result && (
-                      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
                           <Card>
                                <CardHeader>
                                   <CardTitle className="text-xl flex items-center gap-3"><FileText className="w-6 h-6 text-primary"/>Generated Smart Contract</CardTitle>
@@ -216,6 +257,7 @@ export default function TokenLauncherPage() {
                                   </div>
                               </CardContent>
                           </Card>
+                          <NextSteps />
                       </motion.div>
                   )}
               </div>

@@ -8,6 +8,11 @@ export type Article = {
 }
 
 export const articles: Article[] = [
-  // Example:
-  // { slug: 'hello-world', title: 'Hello World', date: '2025-10-25', excerpt: 'First post', icon: 'BookOpen' },
+  {
+    slug: 'hello-world',
+    title: 'Hello World',
+    date: '2025-10-25',
+    excerpt: 'This is the first post on our new blog.',
+    icon: 'BookOpen'
+  }
 ]

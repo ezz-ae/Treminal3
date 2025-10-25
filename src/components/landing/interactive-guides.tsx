@@ -131,7 +131,7 @@ export default function InteractiveGuides() {
             <DialogHeader>
               <DialogTitle className="font-headline text-2xl text-foreground mb-4">{activeArticle?.title}</DialogTitle>
               <DialogDescription className="text-muted-foreground font-sans prose prose-invert prose-p:text-muted-foreground max-h-[60vh] overflow-y-auto pr-4">
-                <div dangerouslySetInnerHTML={{ __html: activeArticle?.content }} />
+                <div dangerouslySetInnerHTML={{ __html: activeArticle?.excerpt || '' }} />
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="mt-4">

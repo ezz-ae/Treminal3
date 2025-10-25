@@ -4,9 +4,10 @@
 import { Download, Terminal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 const downloadLinks = [
     { os: 'macOS (Intel)', href: '#' },
@@ -23,6 +24,25 @@ const downloadLinks = [
  * @returns {JSX.Element} The Download page component.
  */
 export default function DownloadPage() {
+  const [email, setEmail] = useState('');
+  const { toast } = useToast();
+
+  const handleNotifyMe = () => {
+    if (email && email.includes('@')) {
+      toast({
+        title: 'Subscription Successful',
+        description: `We will notify you at ${email} when the app is available.`,
+      });
+      setEmail('');
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Invalid Email',
+        description: 'Please enter a valid email address.',
+      });
+    }
+  };
+
   return (
       <div className="flex flex-col items-center justify-center h-full text-center p-4 container mx-auto">
           <div className="p-4 bg-primary/10 rounded-full text-primary mb-6 border border-primary/20">
@@ -34,7 +54,7 @@ export default function DownloadPage() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-4xl mt-12">
               {downloadLinks.map((linkInfo) => (
-                  <Button key={linkInfo.os} size="lg" asChild className="h-12 text-base">
+                  <Button key={linkInfo.os} size="lg" asChild className="h-12 text-base" disabled>
                       <Link href={linkInfo.href}>
                           <Download className="mr-3 h-5 w-5"/> {linkInfo.os}
                       </Link>
@@ -48,8 +68,12 @@ export default function DownloadPage() {
               <CardContent>
                   <p className="text-muted-foreground text-sm">The desktop app is under active development. Sign up for our newsletter to be the first to know when it's available.</p>
                   <div className="flex w-full items-center space-x-2 mt-4">
-                      <Input type="email" placeholder="Email" />
-                      <Button type="submit">Notify Me</Button>
+                      <Input 
+                        type="email" 
+                        placeholder="Email" 
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)} />
+                      <Button type="submit" onClick={handleNotifyMe}>Notify Me</Button>
                   </div>
               </CardContent>
           </Card>

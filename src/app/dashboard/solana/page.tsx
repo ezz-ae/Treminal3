@@ -2,16 +2,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Wind, CornerDownLeft, Loader2, Bot, CircleDollarSign, Zap, Clock, BotMessageSquare } from 'lucide-react';
+import { Wind, CornerDownLeft, Loader2, Bot, CircleDollarSign, Zap, Clock, BotMessageSquare, XCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useWallet } from '@/hooks/use-wallet';
-import { runSolanaTool } from '@/ai/actions';
+import { runSolanaTool, runSolanaCloseAccount } from '@/ai/actions';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import { CustomCodeBlock } from '@/components/ui/code-block';
 import Link from 'next/link';
+import { usePayModal } from '@/contexts/pay-modal-context';
+import { Textarea } from '@/components/ui/textarea';
 
 type ChatMessage = {
   id: number;
@@ -66,8 +68,12 @@ fetch(url, {
 export default function SolanaPage() {
   const [inputValue, setInputValue] = useState('');
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [closeAccountAddress, setCloseAccountAddress] = useState('');
+  const [closeAccountResult, setCloseAccountResult] = useState('');
+  const [isClosingAccount, setIsClosingAccount] = useState(false);
   const { wallet } = useWallet();
   const { toast } = useToast();
+  const { showPayModal } = usePayModal();
 
   const [networkStats, setNetworkStats] = useState({
     tps: 0,
@@ -110,13 +116,46 @@ export default function SolanaPage() {
       );
 
     } catch (error: any) {
-      console.error("Failed to run Solana tool", error);
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: error.message || "The AI agent failed to process your request.",
-      });
+        if (error.message === 'INSUFFICIENT_CREDITS') {
+            showPayModal('SOLANA_TOOL');
+        } else {
+            console.error("Failed to run Solana tool", error);
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: error.message || "The AI agent failed to process your request.",
+            });
+        }
        setChatHistory(prev => prev.filter(m => m.type !== 'loading'));
+    }
+  };
+
+  const handleCloseAccount = async () => {
+    if (!closeAccountAddress.trim()) return;
+
+    setIsClosingAccount(true);
+    setCloseAccountResult('');
+
+    try {
+      const result = await runSolanaCloseAccount({ tokenAccountAddress: closeAccountAddress });
+      setCloseAccountResult(result.result);
+      toast({
+        title: "Account Closed",
+        description: "The token account has been successfully closed.",
+      });
+    } catch (error: any) {
+      if (error.message === 'INSUFFICIENT_CREDITS') {
+        showPayModal('SOLANA_CLOSE_ACCOUNT');
+      } else {
+        console.error("Failed to close account", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message || "Failed to close the token account.",
+        });
+      }
+    } finally {
+      setIsClosingAccount(false);
     }
   };
 
@@ -216,6 +255,37 @@ export default function SolanaPage() {
            <p className="text-xs text-muted-foreground mt-2">
             Try: `airdrop 1 SOL to my wallet`, `get balance for {wallet?.address || 'YOUR_WALLET_ADDRESS'}`, `get transaction details for 5som...`
           </p>
+        </CardContent>
+      </Card>
+
+      <Card className="not-prose">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <XCircle className="text-primary" /> Close Token Account
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            Close an empty token account to recover the SOL used for its rent-exempt reserve. The account must have a zero balance.
+          </p>
+          <div className="flex items-center gap-2">
+            <Input
+              type="text"
+              placeholder="Enter Token Account Address to Close"
+              value={closeAccountAddress}
+              onChange={(e) => setCloseAccountAddress(e.target.value)}
+              className="h-11"
+            />
+            <Button size="lg" onClick={handleCloseAccount} disabled={isClosingAccount}>
+              {isClosingAccount ? <Loader2 className="animate-spin h-4 w-4" /> : "Close Account"}
+            </Button>
+          </div>
+          {closeAccountResult && (
+            <div className="mt-4">
+              <h4 className="font-semibold">Result:</h4>
+              <Textarea value={closeAccountResult} readOnly className="mt-2 font-mono text-xs" rows={4} />
+            </div>
+          )}
         </CardContent>
       </Card>
       

@@ -14,6 +14,11 @@ model User {
   credits     Credits?
   plan        String   @default("free")
   proUntil    DateTime?
+  payments    Payment[]
+  questCompletions QuestCompletion[]
+  launches    Launch[]
+  questSubmissions QuestSubmission[]
+  runs        Run[]
 }
 
 model Wallet {
@@ -45,4 +50,87 @@ model Payment {
   amount    String
   credited  Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+model Quest {
+    id             String @id @default(cuid())
+    key            String @unique
+    title          String
+    points         Int
+    completions    QuestCompletion[]
+    active         Boolean @default(true)
+    submissions    QuestSubmission[]
+}
+
+model QuestCompletion {
+    id        String   @id @default(cuid())
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    quest     Quest    @relation(fields: [questId], references: [id])
+    questId   String
+    completedAt DateTime @default(now())
+
+    @@unique([userId, questId])
+}
+
+model QuestSubmission {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  quest     Quest    @relation(fields: [questId], references: [id])
+  questId   String
+
+  launch    Launch   @relation(fields: [launchId], references: [id])
+  launchId  String
+
+  proofUrl  String?
+  points    Int
+}
+
+model Launch {
+  id      String  @id @default(cuid())
+  slug    String  @unique
+  name    String
+  symbol  String
+  views   Int     @default(0)
+  trust   Trust?
+  chainId Int
+  creator   User?    @relation(fields: [creatorId], references: [id])
+  creatorId String?
+  submissions QuestSubmission[]
+  referrals   Referral[]
+}
+
+model Trust {
+  id          String  @id @default(cuid())
+  launch      Launch  @relation(fields: [launchId], references: [id])
+  launchId    String  @unique
+  lpLocked    Boolean @default(false)
+  renounced   Boolean @default(false)
+  buyTaxBps   Int     @default(0)
+  sellTaxBps  Int     @default(0)
+}
+
+model Referral {
+  id        String   @id @default(cuid())
+  launch    Launch   @relation(fields: [launchId], references: [id])
+  launchId  String
+  referrer  String
+  count     Int
+
+  @@unique([launchId, referrer])
+}
+
+model Run {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       String
+  usageTag     String
+  inputSize    Int
+  outputTokens Int
+  durationMs   Int
 }

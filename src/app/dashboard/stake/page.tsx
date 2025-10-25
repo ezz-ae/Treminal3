@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Sprout, Wallet } from 'lucide-react';
+import { Sprout, Wallet, Loader2 } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
+import { useWallet } from '@/hooks/use-wallet';
 
 const stakingOptions = [
     {
@@ -20,6 +21,18 @@ const stakingOptions = [
         symbol: 'T3',
         apr: '12.0%',
         description: 'Stake our native token to get a share of protocol revenue and other benefits.'
+    },
+    {
+        name: 'Ethereum',
+        symbol: 'ETH',
+        apr: '4.5%',
+        description: 'Stake ETH to help secure the network and earn rewards through liquid staking providers.'
+    },
+    {
+        name: 'Solana',
+        symbol: 'SOL',
+        apr: '7.2%',
+        description: 'Delegate your SOL to validators to secure the network and earn a share of the rewards.'
     }
 ];
 
@@ -30,13 +43,24 @@ const stakingOptions = [
  */
 export default function StakePage() {
     const { toast } = useToast();
+    const { wallet } = useWallet();
     const [stakeAmounts, setStakeAmounts] = useState<Record<string, string>>({});
+    const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
 
     const handleAmountChange = (symbol: string, amount: string) => {
         setStakeAmounts(prev => ({ ...prev, [symbol]: amount }));
     }
 
-    const handleStake = (tokenSymbol: string, tokenName: string) => {
+    const handleStake = (tokenSymbol: string) => {
+        if (!wallet) {
+            toast({
+                variant: 'destructive',
+                title: 'Wallet Not Connected',
+                description: 'Please connect your wallet to stake tokens.',
+            });
+            return;
+        }
+
         const amount = stakeAmounts[tokenSymbol];
         if (!amount || parseFloat(amount) <= 0) {
             toast({
@@ -46,11 +70,18 @@ export default function StakePage() {
             });
             return;
         }
-        toast({
-            title: 'Staking Successful!',
-            description: `You have successfully staked ${amount} ${tokenSymbol}.`,
-        });
-        handleAmountChange(tokenSymbol, ''); // Clear input after staking
+
+        setIsLoading(prev => ({ ...prev, [tokenSymbol]: true }));
+
+        // Simulate transaction
+        setTimeout(() => {
+            setIsLoading(prev => ({ ...prev, [tokenSymbol]: false }));
+            toast({
+                title: 'Staking Successful!',
+                description: `You have successfully staked ${amount} ${tokenSymbol}.`,
+            });
+            handleAmountChange(tokenSymbol, ''); // Clear input after staking
+        }, 2000);
     }
 
   return (
@@ -69,21 +100,21 @@ export default function StakePage() {
         <CardContent className="grid md:grid-cols-3 gap-6">
             <div>
                 <p className="text-sm text-muted-foreground">Total Value Staked</p>
-                <p className="text-3xl font-bold">$3,120.89</p>
+                <p className="text-3xl font-bold">{wallet ? '$3,120.89' : '$0.00'}</p>
             </div>
             <div>
                 <p className="text-sm text-muted-foreground">Average APY</p>
-                <p className="text-3xl font-bold">5.8%</p>
+                <p className="text-3xl font-bold">{wallet ? '5.8%' : '0.0%'}</p>
             </div>
              <div>
                 <p className="text-sm text-muted-foreground">Lifetime Rewards</p>
-                <p className="text-3xl font-bold">$182.45</p>
+                <p className="text-3xl font-bold">{wallet ? '$182.45' : '$0.00'}</p>
             </div>
         </CardContent>
       </Card>
 
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {stakingOptions.map((option) => (
             <Card key={option.name} className="flex flex-col">
                 <CardHeader>
@@ -108,9 +139,14 @@ export default function StakePage() {
                             placeholder={`Amount of ${option.symbol} to Stake`}
                             value={stakeAmounts[option.symbol] || ''}
                             onChange={(e) => handleAmountChange(option.symbol, e.target.value)}
+                            disabled={isLoading[option.symbol]}
                         />
-                         <Button className="w-full" onClick={() => handleStake(option.symbol, option.name)}>
-                            Stake {option.symbol}
+                         <Button 
+                            className="w-full" 
+                            onClick={() => handleStake(option.symbol)} 
+                            disabled={isLoading[option.symbol]}>
+                            {isLoading[option.symbol] ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                            {isLoading[option.symbol] ? 'Staking...' : `Stake ${option.symbol}`}
                         </Button>
                     </div>
                 </CardContent>

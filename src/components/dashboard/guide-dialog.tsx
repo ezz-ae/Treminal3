@@ -101,7 +101,7 @@ export function GuideDialog({ article, isOpen, onOpenChange }: GuideDialogProps)
                 <DialogTitle className="font-headline text-2xl text-foreground">{article.title}</DialogTitle>
             </div>
           <DialogDescription className="text-muted-foreground text-base leading-relaxed prose prose-invert prose-p:text-muted-foreground">
-            <div dangerouslySetInnerHTML={{ __html: article.content }} />
+            <div dangerouslySetInnerHTML={{ __html: article.excerpt || '' }} />
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-4">
