@@ -1,38 +1,44 @@
 
-import { Terminal, Twitter, Github, Linkedin } from 'lucide-react';
+'use client';
+
 import Link from 'next/link';
-import { StatusIndicator } from '../ui/status-indicator';
+import { Github, Twitter, Linkedin, Activity, Zap, ShieldCheck, Newspaper, Terminal } from 'lucide-react';
 
 const serviceLinks = [
-    { href: '/dashboard/dapp-builder', label: 'AI Business Architect' },
-    { href: '/dashboard/token-launcher', label: 'Token Launcher' },
-    { href: '/dashboard/bot-creator', label: 'Bot Creator' },
-    { href: '/solana', label: 'Solana Command Center' },
-    { href: '/dashboard/security-audits', label: 'Security Audits' },
-    { href: '/dashboard/finance', label: 'On-chain Analytics' },
-    { href: '/dashboard/stake', label: 'Staking' },
-    { href: '/dashboard/tools', label: 'Developer Tools' },
+    { name: 'AI Business Architect', href: '/dashboard/dapp-builder' },
+    { name: 'Token Launcher', href: '/dashboard/token-launcher' },
+    { name: 'Trading Bot Creator', href: '/dashboard/bot-creator' },
+    { name: 'Security Audits', href: '/dashboard/security-audits' },
+    { name: 'Solana Toolkit', href: '/solana' },
+    { name: 'Strategy Vault', href: '/dashboard/strategy-vault' },
+];
+
+const cashFlows = [
+    { name: 'SolCash', href: '/solcash' },
+    { name: 'CashBOT 03', href: '/cashbot-03' },
+    { name: 'T03 AirCash', href: '/t03-aircash' },
+    { name: 'Sniper 03', href: '/sniper-03' },
 ];
 
 const resourceLinks = [
-    { href: '/token', label: 'The $T3 Token' },
-    { href: '/research', label: 'R&D' },
-    { href: '/carbon', label: 'Carbon Analysis' },
-    { href: '/blog', label: 'Blog & Guides' },
-    { href: '/dashboard/docs', label: 'Documentation' },
+    { name: 'Documentation', href: '/docs' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'T03 by Terminal3', href: '/t03' },
+    { name: 'FAQs', href: '/faqs' },
+    { name: 'Support', href: '/support' },
 ];
 
 const companyLinks = [
-    { href: '/technology', label: 'Technology' },
-    { href: '/careers', label: 'Careers' },
-    { href: '/support', label: 'Support' },
-    { href: '/faqs', label: 'FAQs' },
+    { name: 'About Us', href: '#' },
+    { name: 'Careers', href: '#' },
+    { name: 'Terms of Service', href: '#' },
+    { name: 'Privacy Policy', href: '#' },
 ];
 
 const socialLinks = [
-  { icon: Twitter, href: '#', 'aria-label': 'Twitter' },
-  { icon: Github, href: '#', 'aria-label': 'Github' },
-  { icon: Linkedin, href: '#', 'aria-label': 'LinkedIn' },
+    { icon: Github, href: '#' },
+    { icon: Twitter, href: '#' },
+    { icon: Linkedin, href: '#' },
 ];
 
 /**
@@ -44,95 +50,78 @@ const socialLinks = [
 export default function Footer() {
   return (
       <footer className="border-t py-12 bg-background relative overflow-hidden">
-          <div 
-              className="absolute -bottom-1/2 -left-1/4 w-1/2 h-[200%] bg-primary/5 rounded-full blur-3xl dark:bg-primary/10"
-              style={{ animation: 'aurora 20s linear infinite' }}
-          ></div>
-          <div 
-             className="absolute -top-1/2 -right-1/4 w-1/2 h-[200%] bg-blue-500/5 rounded-full blur-3xl dark:bg-blue-500/10"
-             style={{ animation: 'aurora 25s linear infinite reverse' }}
-         ></div>
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
-                <div className="col-span-2 md:col-span-2">
-                    <Link href="/" className="flex items-center space-x-2 mb-4">
-                      <Terminal className="h-6 w-6 text-primary" />
-                      <span className="font-bold text-lg font-headline">Terminal3</span>
-                    </Link>
-                    <p className="text-muted-foreground text-sm max-w-xs">
-                        The AI-powered Web3 Development and Services Platform.
-                    </p>
-                     <div className="mt-4">
-                        <StatusIndicator />
-                    </div>
-                </div>
+                <div 
+                    className="absolute -bottom-1/2 -left-1/4 w-1/2 h-[200%] bg-primary/5 rounded-full blur-2xl dark:bg-primary/10"
+                    style={{ animation: 'aurora 20s linear infinite' }}
+                ></div>
+                <div 
+                   className="absolute -top-1/2 -right-1/4 w-1/2 h-[200%] bg-primary/5 rounded-full blur-2xl dark:bg-primary/10"
+                   style={{ animation: 'aurora 25s linear infinite reverse' }}
+               ></div>
+                <div className="container mx-auto px-4 relative z-10">
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
+                      <div className="col-span-2 md:col-span-2">
+                          <Link href="/" className="flex items-center space-x-2 mb-4">
+                              <Terminal className="h-6 w-6 text-primary" />
+                              <span className="font-bold font-headline text-xl">Terminal3</span>
+                          </Link>
+                          <p className="text-muted-foreground text-sm max-w-xs">
+                              The AI-Native Web3 Development Platform. Build, manage, and grow your dApps faster.
+                          </p>
+                          <div className="flex space-x-4 mt-6">
+                              {socialLinks.map((link, index) => (
+                                  <Link href={link.href} key={index} className="text-muted-foreground hover:text-primary transition-colors">
+                                      <link.icon className="h-5 w-5" />
+                                  </Link>
+                              ))}
+                          </div>
+                      </div>
 
-                 <div>
-                    <h4 className="font-headline font-semibold mb-4">Services</h4>
-                    <ul className="space-y-2">
-                        {serviceLinks.map((link) => (
-                            <li key={link.label}>
-                                <Link
-                                    href={link.href}
-                                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                                    >
-                                    {link.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 className="font-headline font-semibold mb-4">Resources</h4>
-                    <ul className="space-y-2">
-                        {resourceLinks.map((link) => (
-                            <li key={link.label}>
-                                <Link
-                                    href={link.href}
-                                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                                    >
-                                    {link.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                 <div>
-                    <h4 className="font-headline font-semibold mb-4">Company</h4>
-                    <ul className="space-y-2">
-                        {companyLinks.map((link) => (
-                            <li key={link.label}>
-                                <Link
-                                    href={link.href}
-                                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                                    >
-                                    {link.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-            
-            <div className="mt-8 pt-8 border-t flex flex-col md:flex-row justify-between items-center">
-                <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-                    &copy; {new Date().getFullYear()} Terminal3, Inc. A Google AI Partnership. All rights reserved.
-                </p>
-                <div className="flex items-center space-x-4">
-                    {socialLinks.map((social, index) => (
-                      <Link
-                          key={index}
-                          href={social.href}
-                          aria-label={social['aria-label']}
-                          className="text-muted-foreground hover:text-primary transition-colors"
-                          >
-                        <social.icon className="h-5 w-5" />
-                      </Link>
-                    ))}
+                      <div>
+                          <h3 className="font-semibold mb-4">Core Services</h3>
+                          <ul className="space-y-2">
+                              {serviceLinks.map((link, index) => (
+                                  <li key={index}>
+                                      <Link href={link.href} className="text-muted-foreground hover:text-primary text-sm transition-colors">
+                                          {link.name}
+                                      </Link>
+                                  </li>
+                              ))}
+                          </ul>
+                      </div>
+
+                       <div>
+                          <h3 className="font-semibold mb-4">Cash Flows</h3>
+                          <ul className="space-y-2">
+                              {cashFlows.map((link, index) => (
+                                  <li key={index}>
+                                      <Link href={link.href} className="text-muted-foreground hover:text-primary text-sm transition-colors">
+                                          {link.name}
+                                      </Link>
+                                  </li>
+                              ))}
+                          </ul>
+                      </div>
+
+                      <div>
+                          <h3 className="font-semibold mb-4">Resources</h3>
+                          <ul className="space-y-2">
+                              {resourceLinks.map((link, index) => (
+                                  <li key={index}>
+                                      <Link href={link.href} className="text-muted-foreground hover:text-primary text-sm transition-colors">
+                                          {link.name}
+                                      </Link>
+                                  </li>
+                              ))}
+                          </ul>
+                      </div>
+                  </div>
+
+                  <div className="border-t pt-8 mt-8 flex flex-col md:flex-row items-center justify-between text-sm text-muted-foreground">
+                      <p>&copy; {new Date().getFullYear()} Terminal3. All rights reserved.</p>
+                      {/* REMOVED STATUS INDICATOR */}
+                  </div>
               </div>
-            </div>
-          </div>
       </footer>
   );
 }

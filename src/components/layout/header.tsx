@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Terminal, Menu, Wind, Gem, BrainCircuit, ShieldCheck, AppWindow, Library, BookOpen, Newspaper, Rocket, Sprout, AreaChart } from 'lucide-react';
+import { Terminal, Menu, Wind, Gem, BrainCircuit, ShieldCheck, AppWindow, Library, BookOpen, Newspaper, Bot, DollarSign, Gift, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -17,27 +17,26 @@ import {
 } from "@/components/ui/navigation-menu"
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
-const coreServices = [
-    { href: "/dashboard/strategy-vault", title: "Strategy Vault", icon: Library, description: "Browse and execute pre-built Web3 automation flows." },
+const features = [
     { href: "/dashboard/dapp-builder", title: "AI Business Architect", icon: AppWindow, description: "Get a strategic plan and architecture for your new dApp." },
     { href: "/dashboard/token-launcher", title: "Token Launcher", icon: Gem, description: "Generate custom ERC-20 tokens on EVM chains." },
     { href: "/dashboard/bot-creator", title: "Trading Bot Creator", icon: BrainCircuit, description: "Design, simulate, and deploy trading bots." },
     { href: "/dashboard/security-audits", title: "Security Audits", icon: ShieldCheck, description: "Audit smart contracts for vulnerabilities." },
+    { href: "/solana", title: "Solana Toolkit", icon: Wind, description: "A suite of tools for building on the Solana network." },
+    { href: "/dashboard/strategy-vault", title: "Strategy Vault", icon: Library, description: "Browse and execute pre-built Web3 automation flows." },
 ]
 
-const solanaServices = [
-    { href: "/solana", title: "Holo-Deck", icon: Wind, description: "The main command center for the Solana universe." },
-    { href: "/solana/launch", title: "Launchpad", icon: Rocket, description: "Create and launch a new SPL token from scratch." },
-    { href: "/solana/terminal", title: "AI Terminal", icon: Terminal, description: "Interact with the network using natural language." },
-    { href: "/solana/tokens", title: "Token Hub", icon: Gem, description: "Explore and analyze tokens on the network." },
-    { href: "/solana/trading", title: "DEX Terminal", icon: AreaChart, description: "Trade assets on Solana's decentralized exchanges." },
-    { href: "/solana/staking", title: "Staking", icon: Sprout, description: "Stake SOL and other assets to earn rewards." },
+const cashFlows = [
+    { href: "/solcash", title: "SolCash", icon: DollarSign, description: "Create a token, manage liquidity, and generate daily returns on Solana." },
+    { href: "/cashbot-03", title: "CashBOT 03", icon: Bot, description: "Automate your trading strategies with our AI-powered trading bot." },
+    { href: "/t03-aircash", title: "T03 AirCash", icon: Gift, description: "Participate in airdrops and staking programs for the T03 token." },
+    { href: "/sniper-03", title: "Sniper 03", icon: Zap, description: "Utilize our high-performance sniper scripts for a competitive edge." },
 ]
 
 const resourcesItems = [
-    { href: "/dashboard/docs", title: "Documentation", icon: BookOpen, description: "Explore guides, API references, and tutorials." },
+    { href: "/docs", title: "Documentation", icon: BookOpen, description: "Explore guides, API references, and tutorials." },
     { href: "/blog", title: "Blog", icon: Newspaper, description: "Read the latest articles, news, and updates from our team." },
 ]
 
@@ -67,11 +66,8 @@ export default function Header() {
                             </Link>
                             <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6 space-y-4 overflow-y-auto">
                                 
-                                <p className="font-bold text-muted-foreground pt-4">AI Trading</p>
-                                <Link href="/ai-trading" className="text-foreground flex">Trading Command Center</Link>
-
-                                <p className="font-bold text-muted-foreground pt-4">Core Services</p>
-                                {coreServices.map((item) => (
+                                <p className="font-bold text-muted-foreground pt-4">Features</p>
+                                {features.map((item) => (
                                 <Link
                                     key={item.title}
                                     href={item.href}
@@ -79,8 +75,8 @@ export default function Header() {
                                     >{item.title}</Link>
                                 ))}
 
-                                <p className="font-bold text-muted-foreground pt-4">Solana Hub</p>
-                                {solanaServices.map((item) => (
+                                <p className="font-bold text-muted-foreground pt-4">Cash Flows</p>
+                                {cashFlows.map((item) => (
                                 <Link
                                     key={item.title}
                                     href={item.href}
@@ -111,18 +107,11 @@ export default function Header() {
                 <div className="hidden md:flex">
                     <NavigationMenu>
                         <NavigationMenuList>
-                            <NavigationMenuItem>
-                                <NavigationMenuLink asChild>
-                                    <Link href="/ai-trading" className={navigationMenuTriggerStyle()}>
-                                        AI Trading
-                                    </Link>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <NavigationMenuTrigger>Core Services</NavigationMenuTrigger>
+                             <NavigationMenuItem>
+                                <NavigationMenuTrigger>Features</NavigationMenuTrigger>
                                 <NavigationMenuContent>
                                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                                        {coreServices.map((item) => (
+                                        {features.map((item) => (
                                             <ListItem key={item.title} href={item.href} title={item.title} icon={item.icon}>
                                                 {item.description}
                                             </ListItem>
@@ -131,10 +120,10 @@ export default function Header() {
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <NavigationMenuTrigger>Solana Hub</NavigationMenuTrigger>
+                                <NavigationMenuTrigger>Cash Flows</NavigationMenuTrigger>
                                 <NavigationMenuContent>
-                                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                                        {solanaServices.map((item) => (
+                                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px]">
+                                        {cashFlows.map((item) => (
                                             <ListItem key={item.title} href={item.href} title={item.title} icon={item.icon}>
                                                 {item.description}
                                             </ListItem>
@@ -145,7 +134,7 @@ export default function Header() {
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
                                 <NavigationMenuContent>
-                                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
+                                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px]">
                                         {resourcesItems.map((item) => (
                                             <ListItem key={item.title} href={item.href} title={item.title} icon={item.icon}>
                                                 {item.description}
@@ -154,6 +143,13 @@ export default function Header() {
                                     </ul>
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <Link href="/t03" legacyBehavior passHref>
+                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                    T03
+                                </NavigationMenuLink>
+                                </Link>
+                            </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
@@ -161,7 +157,17 @@ export default function Header() {
 
             <div className="flex items-center justify-end space-x-2">
                 <ThemeToggle />
-                <WalletMultiButton />
+                <SignedIn>
+                    <UserButton afterSignOutUrl="/" />
+                </SignedIn>
+                <SignedOut>
+                    <Button asChild variant='ghost'>
+                        <Link href="/sign-in">Sign In</Link>
+                    </Button>
+                    <Button asChild>
+                        <Link href="/sign-up">Sign Up</Link>
+                    </Button>
+                </SignedOut>
             </div>
 
           </div>

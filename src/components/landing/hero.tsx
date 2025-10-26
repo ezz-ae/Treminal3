@@ -9,12 +9,12 @@ import Link from 'next/link';
 
 export default function Hero() {
   const animatedWords = ["dApps", "tokens", "wallets", "DAOs", "marketplaces"];
-  
+
   return (
       <section className="bg-background text-foreground">
           <div className="container mx-auto px-4 py-24 sm:py-32 flex flex-col justify-center items-center text-center">
             <motion.h1 
-                className="text-4xl md:text-5xl font-bold tracking-tight font-headline mb-10"
+                className="text-4xl md:text-5xl font-bold tracking-tight font-headline mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -35,28 +35,19 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex flex-col sm:flex-row items-center gap-4"
             >
-                <motion.div
-                    animate={{
-                        boxShadow: [
-                            '0 0 0 0px hsl(var(--primary) / 0)',
-                            '0 0 0 4px hsl(var(--primary) / 0.3)',
-                            '0 0 0 0px hsl(var(--primary) / 0)',
-                        ],
-                    }}
-                    transition={{
-                        duration: 2.5,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                    }}
-                    className="rounded-md"
-                >
-                <Link href="/auth" passHref>
-                    <Button size="lg" asChild>
-                      <a>Start Building for Free <ArrowRight className="ml-2 h-5 w-5" /></a>
-                    </Button>
-                </Link>
-                </motion.div>
+                <Button asChild size="lg" className="w-full sm:w-auto">
+                    <Link href="/dashboard">
+                        Get Started For Free
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
+                    <Link href="/docs">
+                        Learn More
+                    </Link>
+                </Button>
             </motion.div>
           </div>
       </section>

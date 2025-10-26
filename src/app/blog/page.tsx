@@ -1,81 +1,36 @@
+
 // src/app/blog/page.tsx
-import Link from 'next/link'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
-import { getArticles, type Article } from '@/lib/articles.server'
-import { ArrowRight, Newspaper } from 'lucide-react'
-import * as React from 'react'
-import { iconMap } from '@/lib/icon-map'
-import type { Metadata } from 'next'
+import { articles } from '@/lib/articles';
+import Link from 'next/link';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { BookOpen } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Blog | Terminal3',
-  description: 'Explore articles, guides, and updates on Web3 development, AI, and the Terminal3 platform.',
-}
-
-function ArticleCard({ article, isFeatured = false }: { article: Article; isFeatured?: boolean }) {
-  // icon is optional; default to BookOpen
-  const key = ((article as any).icon ?? 'BookOpen') as keyof typeof iconMap
-  const LucideIcon = iconMap[key] ?? iconMap.BookOpen
-
+export default function BlogPage() {
   return (
-    <Link href={`/blog/${article.slug}`} className="block group">
-      <Card className="h-full bg-card/50 hover:border-primary/50 transition-colors duration-300 flex flex-col">
-        <CardHeader>
-          <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 bg-primary/10 rounded-lg text-primary">
-              <LucideIcon className="w-6 h-6" />
-            </div>
-            <p className="text-sm text-muted-foreground">{article.date}</p>
-          </div>
-          <CardTitle className={isFeatured ? 'text-2xl' : 'text-xl'}>{article.title}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex-grow">
-          <CardDescription className="text-base">{article.excerpt}</CardDescription>
-        </CardContent>
-        <div className="p-6 pt-0">
-          <div className="text-sm font-medium text-primary flex items-center gap-2">
-            Read Article <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </div>
-        </div>
-      </Card>
-    </Link>
-  )
-}
-
-export default async function BlogIndexPage() {
-  const articles = await getArticles()
-  const featuredArticle = articles[0]
-  const otherArticles = articles.slice(1)
-
-  return (
-    <div className="max-w-6xl mx-auto py-8 px-4">
-      <header className="mb-12 text-center">
-        <Newspaper className="w-12 h-12 mx-auto text-primary mb-4" />
-        <h1 className="text-4xl font-bold font-headline">T3 Blog</h1>
-        <p className="text-lg text-muted-foreground mt-4 max-w-3xl mx-auto">
-          Explore articles, guides, and updates on Web3 development, AI, and the Terminal3 platform.
-        </p>
+    <div className="container mx-auto px-4 md:px-6 py-12">
+      <header className="text-center mb-12">
+        <h1 className="text-4xl font-bold font-headline">The Terminal3 Blog</h1>
+        <p className="text-lg text-muted-foreground mt-2">Insights, tutorials, and announcements from the Terminal3 team.</p>
       </header>
-
-      {featuredArticle && (
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold font-headline mb-6 text-center">Featured Article</h2>
-          <div className="max-w-4xl mx-auto">
-            <ArticleCard article={featuredArticle} isFeatured />
-          </div>
-        </div>
-      )}
-
-      {otherArticles.length > 0 && (
-        <div>
-          <h2 className="text-2xl font-bold font-headline mb-6 text-center">More Articles</h2>
-          <div className="grid gap-8 md:grid-cols-2">
-            {otherArticles.map((article) => (
-              <ArticleCard article={article} key={article.slug} />
-            ))}
-          </div>
-        </div>
-      )}
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {articles.map((article) => (
+          <Link href={`/blog/${article.slug}`} key={article.slug}>
+            <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <div className="flex items-center gap-4">
+                  <div className="bg-primary/10 p-3 rounded-full">
+                    <BookOpen className="w-6 h-6 text-primary" />
+                  </div>
+                  <CardTitle>{article.title}</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>{article.excerpt}</CardDescription>
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
+      </div>
     </div>
-  )
+  );
 }

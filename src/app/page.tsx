@@ -1,4 +1,3 @@
-
 'use client';
 
 import { MainContent } from '@/components/layout/main-content';

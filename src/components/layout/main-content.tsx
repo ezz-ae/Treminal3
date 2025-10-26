@@ -1,16 +1,15 @@
-
 'use client';
 
-import { useWallet } from '@/hooks/use-wallet';
+import { useWallet } from '@solana/wallet-adapter-react';
 import DashboardPage from '@/app/dashboard/page';
-import Home from '@/app/page';
+import { LandingPage } from '@/components/landing-page';
 
 export function MainContent() {
-  const { wallet } = useWallet();
+  const { connected } = useWallet();
 
-  if (wallet) {
+  if (connected) {
     return <DashboardPage />;
   }
 
-  return <Home />;
+  return <LandingPage />;
 }

@@ -1,7 +1,6 @@
-
-// src/app/layout.tsx
+ 
 import type { Metadata } from 'next';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from 'sonner';
 import './globals.css';
 import '@solana/wallet-adapter-react-ui/styles.css';
 import { Inter, Space_Grotesk } from 'next/font/google';
@@ -16,6 +15,7 @@ import { Web3Provider } from '@/providers/Web3Provider';
 import { ClerkProvider } from '@clerk/nextjs';
 import { CommandMenuProvider } from '@/contexts/command-menu-context';
 import { SolanaWalletProvider } from '@/providers/solana-wallet-provider';
+import { Provider as BalancerProvider } from 'react-wrap-balancer';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
@@ -60,15 +60,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Web3Provider>
                 <WalletProvider>
                   <CommandMenuProvider>
-                    <Header />
-                    <main className="flex-1 flex flex-col">{children}</main>
-                    <Footer />
+                    <BalancerProvider>
+                      <Header />
+                      <main className="flex-1 flex flex-col">{children}</main>
+                      <Footer />
+                    </BalancerProvider>
                   </CommandMenuProvider>
                 </WalletProvider>
               </Web3Provider>
             </SolanaWalletProvider>
 
-            <Toaster />
+            <Toaster richColors />
             <Analytics />
             <SpeedInsights />
           </ThemeProvider>
