@@ -2,139 +2,161 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Wind, Rocket, Terminal, Sprout, Gem, AreaChart } from 'lucide-react';
-import { Card, CardTitle } from '@/components/ui/card';
+import { ArrowRight, Bot } from 'lucide-react'; // Keeping Bot for explicit AI mention, and ArrowRight for navigation
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useMousePosition } from '@/hooks/use-mouse-position';
 import GridPattern from '@/components/landing/grid-pattern';
+import { Button } from '@/components/ui/button';
 
+const solanaServices = [
+    { href: "/solana/trading", title: "AI Trading Orchestration", description: "Unleash autonomous AI agents for precision trading and adaptive strategies on Solana. Maximize your market advantage with intelligent automation." },
+    { href: "/solana/tokens", title: "AI Token Intelligence", description: "Discover high-potential Solana tokens with unparalleled AI insights. Our intelligence engine proactively identifies opportunities and analyzes market dynamics for you." },
+    { href: "/solana/liquidity-pools", title: "AI Liquidity Optimization", description: "Maximize capital efficiency and generate consistent returns by deploying AI-driven liquidity strategies. Intelligent management for Solana pools." },
+    { href: "/solana/terminal", title: "AI Command Terminal", description: "Interact, monitor, and manage the Solana blockchain with unprecedented AI precision and natural language commands. Your intuitive gateway to decentralized operations." },
+];
 
-const services = [
-    { href: "/solana/launch", title: "Launchpad", description: "Create and launch a new SPL token from scratch.", icon: Rocket },
-    { href: "/solana/terminal", title: "AI Terminal", description: "Interact with the network using natural language.", icon: Terminal },
-    { href: "/solana/tokens", title: "Token Hub", description: "Explore and analyze tokens on the network.", icon: Gem },
-    { href: "/solana/trading", title: "DEX Terminal", description: "Trade assets on Solana's decentralized exchanges.", icon: AreaChart },
-    { href: "/solana/staking", title: "Staking", description: "Stake SOL and other assets to earn rewards.", icon: Sprout },
-]
+const getAiNetworkSummary = (tps: number, slotTime: number) => {
+    if (tps > 3500 && slotTime < 450) {
+        return "AI notes exceptionally robust network performance. Solana is operating at peak efficiency, ready for high-volume AI operations.";
+    } else if (tps < 3000 && slotTime > 500) {
+        return "AI observes moderate network activity. Performance is stable, providing reliable conditions for AI agent deployment.";
+    }
+    return "AI detects balanced network conditions. Consistent performance, ideal for optimizing diverse Web3 strategies.";
+};
 
-/**
- * A futuristic, interactive "Holo-Deck" for the Solana ecosystem.
- * Visualizes live network stats and provides access to key services through animated,
- * interactive cards that react to the user's mouse position.
- * @returns {JSX.Element} The Solana Holo-Deck page component.
- */
-export default function SolanaHoloDeckPage() {
-  const [networkStats, setNetworkStats] = useState({ tps: 0, slotTime: 0, epoch: 0 });
-  const { x, y } = useMousePosition();
+export default function SolanaPage() {
+  const [networkStats, setNetworkStats] = useState({ tps: 0, slotTime: 0, epoch: 0, aiSummary: "AI is analyzing Solana network data..." });
 
   useEffect(() => {
-    // Mock real-time data fetching
+    // Mock real-time data fetching with AI insights
     const interval = setInterval(() => {
+      const newTps = Math.floor(2500 + Math.random() * 1500);
+      const newSlotTime = Math.floor(400 + Math.random() * 100);
+      const newEpoch = 512; // Static for mock
       setNetworkStats({
-        tps: Math.floor(2500 + Math.random() * 1500),
-        slotTime: Math.floor(400 + Math.random() * 100),
-        epoch: 512,
+        tps: newTps,
+        slotTime: newSlotTime,
+        epoch: newEpoch,
+        aiSummary: getAiNetworkSummary(newTps, newSlotTime),
       });
-    }, 2000);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
-  const cardVariants = {
-    initial: { opacity: 0, scale: 0.9, y: 20 },
-    animate: (i: number) => ({
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.5,
-        ease: 'easeOut',
-      },
-    }),
-  };
-
   return (
-      <div className="relative w-full h-full flex flex-col items-center justify-center p-4 py-24 overflow-hidden">
-          {/* Background Effects */}
-          <div className="absolute inset-0 z-0">
-               <GridPattern
-                  width={60}
-                  height={60}
-                  x={-1}
-                  y={-1}
-                  className="[mask-image:radial-gradient(ellipse_at_center,white_30%,transparent_100%)] opacity-30 animate-pulse"
-               />
-               <motion.div 
-                  className="absolute inset-0 bg-primary/10 [mask-image:radial-gradient(350px_at_50%_50%,white,transparent)]"
-                  style={{
-                      left: x - 350,
-                      top: y - 350,
-                  }}
-                  transition={{ type: 'tween', ease: 'backOut', duration: 0 }}
-               />
-          </div>
-          {/* Header Content */}
-          <div className="relative z-10 text-center mb-16">
-              <motion.div 
-                  initial={{ opacity: 0, y: -20 }}
+      <div className="bg-background text-foreground overflow-hidden font-body">
+          {/* Hero Section: Solana Command Center */}
+          <div className="container mx-auto px-4 md:px-6 py-20 text-center relative overflow-hidden max-w-7xl">
+               <GridPattern className="absolute inset-0 -z-10 h-full w-full opacity-10 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]" />
+              <motion.h1
+                  initial={{ opacity: 0, y: -15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="flex items-center justify-center gap-4"
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="text-5xl lg:text-7xl font-extrabold font-headline mb-4 bg-gradient-to-r from-primary to-blue-400 text-transparent bg-clip-text leading-tight"
               >
-                  <Wind className="w-12 h-12 text-primary" />
-                  <h1 className="text-4xl font-bold font-headline tracking-tight">Solana Holo-Deck</h1>
-              </motion.div>
-              <motion.p 
-                  className="text-muted-foreground text-lg mt-4 max-w-2xl mx-auto"
-                  initial={{ opacity: 0, y: -20 }}
+                  Solana Command Center: AI-Powered Navigation
+              </motion.h1>
+              <motion.p
+                  initial={{ opacity: 0, y: -15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="text-lg lg:text-xl text-muted-foreground max-w-4xl mx-auto mb-12 tracking-wide"
               >
-                  Your command center for the Solana universe. Visualize the network, execute strategies, and build the future.
+                  Your intuitive gateway to the Solana ecosystem, enhanced by autonomous AI intelligence for unmatched control, insight, and execution.
               </motion.p>
+              <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+              >
+                  <Button asChild size="lg" className="text-base py-6 px-9 group">
+                      Explore AI-Native Solana
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+              </motion.div>
           </div>
-          {/* Live Stats & Service Links */}
-          <div className="relative z-10 w-full max-w-7xl mx-auto space-y-16">
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                 <motion.div variants={cardVariants} initial="initial" animate="animate" custom={0}>
-                     <HoloCard title="Transactions / Sec" value={networkStats.tps.toLocaleString()} />
-                 </motion.div>
-                 <motion.div variants={cardVariants} initial="initial" animate="animate" custom={1}>
-                     <HoloCard title="Slot Time (ms)" value={`${networkStats.slotTime}ms`} />
-                 </motion.div>
-                 <motion.div variants={cardVariants} initial="initial" animate="animate" custom={2}>
-                     <HoloCard title="Current Epoch" value={networkStats.epoch.toString()} />
-                 </motion.div>
-             </div>
 
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-                 {services.map((service, i) => {
-                     const Icon = service.icon;
-                     return (
-                         <motion.div key={service.title} variants={cardVariants} initial="initial" animate="animate" custom={3 + i}>
-                             <Link href={service.href} className="block h-full">
-                                 <Card className="h-full bg-card/60 backdrop-blur-sm border-primary/20 hover:border-primary/50 hover:bg-card/80 transition-colors duration-300 group flex flex-col justify-between text-center items-center p-6">
-                                     <Icon className="w-8 h-8 text-primary mb-4"/>
-                                     <CardTitle className="font-headline text-base mb-2">{service.title}</CardTitle>
-                                     <p className="text-xs text-muted-foreground flex-grow">{service.description}</p>
-                                 </Card>
-                             </Link>
-                         </motion.div>
-                     );
-                 })}
-             </div>
+          {/* AI-Analyzed Solana Network Pulse */}
+          <section className="container mx-auto px-4 md:px-6 py-16 max-w-6xl">
+            <h2 className="text-4xl lg:text-5xl font-bold text-center font-headline mb-16 bg-gradient-to-r from-green-400 to-primary text-transparent bg-clip-text">
+              AI-Analyzed Solana Network Pulse
+            </h2>
+            <div className="grid md:grid-cols-3 gap-10 text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                className="p-8 rounded-xl bg-card/60 backdrop-blur-sm border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <h3 className="text-xl font-bold text-foreground mb-3 font-headline">Transactions per Second (TPS)</h3>
+                <p className="text-5xl font-extrabold text-primary leading-tight">{networkStats.tps.toLocaleString()}</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                className="p-8 rounded-xl bg-card/60 backdrop-blur-sm border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <h3 className="text-xl font-bold text-foreground mb-3 font-headline">Slot Time Latency</h3>
+                <p className="text-5xl font-extrabold text-blue-400 leading-tight">{networkStats.slotTime}ms</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+                className="p-8 rounded-xl bg-card/60 backdrop-blur-sm border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <h3 className="text-xl font-bold text-foreground mb-3 font-headline">Current Epoch Cycle</h3>
+                <p className="text-5xl font-extrabold text-purple-400 leading-tight">{networkStats.epoch}</p>
+              </motion.div>
+            </div>
+            <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.7, delay: 0.4 }}
+                className="text-lg text-primary mt-12 text-center max-w-4xl mx-auto"
+            >
+                <Bot className="inline-block w-5 h-5 mr-2 align-middle" /> {networkStats.aiSummary}
+            </motion.p>
+          </section>
+
+          {/* AI-Driven Solana Ecosystem Overview */}
+          <section className="container mx-auto px-4 md:px-6 py-16 max-w-7xl">
+            <h2 className="text-4xl lg:text-5xl font-bold text-center font-headline mb-16 bg-gradient-to-r from-blue-400 to-green-400 text-transparent bg-clip-text">
+              AI-Powered Solana Services: Your Autonomous Toolkit
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+              {solanaServices.map((service, index) => (
+                <Link href={service.href} key={service.title} className="group block">
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.7, delay: index * 0.1 }}
+                    whileHover={{ scale: 1.03, boxShadow: "0 15px 30px rgba(0,0,0,0.3)" }}
+                    className="h-full rounded-xl border border-primary/10 bg-gradient-to-br from-card to-background/50 shadow-xl p-8 flex flex-col items-center text-center transition-all"
+                  >
+                    <h3 className="text-xl font-bold font-headline mb-3 text-foreground group-hover:text-blue-300 transition-colors">{service.title}</h3>
+                    <p className="text-muted-foreground text-sm flex-grow mb-6 leading-relaxed">{service.description}</p>
+                    <Button variant="link" className="text-primary group-hover:text-blue-300">
+                      Access Service <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          {/* Disclaimer Section - Subtle & Professional */}
+          <div className="container mx-auto px-4 md:px-6 py-8 text-center">
+            <p className="text-sm text-muted-foreground max-w-4xl mx-auto opacity-70 leading-relaxed">
+              <strong className="text-destructive-foreground">Disclaimer:</strong> Interacting with blockchain networks and utilizing AI-powered tools carries inherent technical and market risks. Terminal3 provides advanced intelligence and execution capabilities; however, users are responsible for their strategic decisions, managing digital assets securely, and ensuring compliance with all applicable regulations. Engage with the Solana ecosystem responsibly.
+            </p>
           </div>
       </div>
   );
-}
-
-
-const HoloCard = ({ title, value }: { title: string, value: string }) => {
-    return (
-        <div className="bg-card/60 backdrop-blur-sm border border-primary/20 p-6 rounded-lg text-center flex flex-col justify-center items-center h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{title}</h3>
-            <p className="text-3xl font-bold font-mono text-primary mt-2">{value}</p>
-        </div>
-    )
 }

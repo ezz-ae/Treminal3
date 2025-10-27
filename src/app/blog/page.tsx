@@ -1,33 +1,24 @@
 
-// src/app/blog/page.tsx
 import { articles } from '@/lib/articles';
 import Link from 'next/link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export default function BlogPage() {
   return (
-    <div className="container mx-auto px-4 md:px-6 py-12">
-      <header className="text-center mb-12">
-        <h1 className="text-4xl font-bold font-headline">The Terminal3 Blog</h1>
-        <p className="text-lg text-muted-foreground mt-2">Insights, tutorials, and announcements from the Terminal3 team.</p>
-      </header>
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {articles.map((article) => (
-          <Link href={`/blog/${article.slug}`} key={article.slug}>
-            <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
-                <div className="flex items-center gap-4">
-                  <div className="bg-primary/10 p-3 rounded-full">
-                    <BookOpen className="w-6 h-6 text-primary" />
-                  </div>
-                  <CardTitle>{article.title}</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>{article.excerpt}</CardDescription>
-              </CardContent>
-            </Card>
+    <div className="container mx-auto px-4 md:px-6 py-12 max-w-4xl">
+      <h1 className="text-4xl font-bold font-headline mb-8">The Terminal3 Blog</h1>
+      <div className="space-y-8">
+        {articles.map(article => (
+          <Link href={`/blog/${article.slug}`} key={article.slug} className="block group">
+            <div className="p-6 rounded-lg border bg-card/50 hover:bg-card/80 transition-colors">
+              <h2 className="text-2xl font-bold font-headline mb-2 group-hover:text-primary transition-colors">{article.title}</h2>
+              <p className="text-muted-foreground mb-4">{article.excerpt}</p>
+              <div className="flex items-center text-sm text-muted-foreground">
+                <span>{article.date}</span>
+                <span className="mx-2">•</span>
+                <span className="flex items-center">Read More <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" /></span>
+              </div>
+            </div>
           </Link>
         ))}
       </div>

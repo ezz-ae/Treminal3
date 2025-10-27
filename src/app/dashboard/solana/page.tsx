@@ -2,8 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Wind, CornerDownLeft, Loader2, Bot, CircleDollarSign, Zap, Clock, BotMessageSquare, XCircle } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CornerDownLeft, Loader2, Bot, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useWallet } from '@/hooks/use-wallet';
@@ -12,7 +11,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import { CustomCodeBlock } from '@/components/ui/code-block';
 import Link from 'next/link';
-import { usePayModal } from '@/contexts/pay-modal-context';
 import { Textarea } from '@/components/ui/textarea';
 
 type ChatMessage = {
@@ -59,12 +57,16 @@ fetch(url, {
 .catch(error => console.error('Error:', error));
     `;
 
+// Mock AI Network Insights
+const getAiNetworkInsights = (tps: number, slotTime: number, epoch: number) => {
+    if (tps > 3500 && slotTime < 450) {
+        return "AI confirms exceptionally robust network performance. High throughput ensures your transactions execute with maximum speed.";
+    } else if (tps < 3000 && slotTime > 500) {
+        return "AI observes stable network activity. Performance is reliable, providing a solid foundation for your on-chain operations.";
+    }
+    return "AI notes balanced network conditions. A consistent and efficient environment for executing your Web3 strategies.";
+};
 
-/**
- * A comprehensive dashboard for interacting with and monitoring the Solana network.
- * Features live network stats and an AI-powered terminal for natural language commands.
- * @returns {JSX.Element} The Solana dashboard page component.
- */
 export default function SolanaPage() {
   const [inputValue, setInputValue] = useState('');
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -73,23 +75,26 @@ export default function SolanaPage() {
   const [isClosingAccount, setIsClosingAccount] = useState(false);
   const { wallet } = useWallet();
   const { toast } = useToast();
-  const { showPayModal } = usePayModal();
 
   const [networkStats, setNetworkStats] = useState({
     tps: 0,
     slotTime: 0,
     epoch: 0,
+    aiInsight: "Your AI partner is analyzing Solana network data...",
   });
 
   useEffect(() => {
-    // Mock real-time data fetching
     const interval = setInterval(() => {
+      const newTps = Math.floor(2500 + Math.random() * 1500);
+      const newSlotTime = Math.floor(400 + Math.random() * 100);
+      const newEpoch = 512;
       setNetworkStats({
-        tps: Math.floor(2500 + Math.random() * 1500),
-        slotTime: Math.floor(400 + Math.random() * 100),
-        epoch: 512, // Usually static for a while
+        tps: newTps,
+        slotTime: newSlotTime,
+        epoch: newEpoch,
+        aiInsight: getAiNetworkInsights(newTps, newSlotTime, newEpoch),
       });
-    }, 2000);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -97,7 +102,7 @@ export default function SolanaPage() {
     if (!inputValue.trim()) return;
 
     const userMessage: ChatMessage = { id: Date.now(), type: 'user', text: inputValue };
-    const loadingMessage: ChatMessage = { id: Date.now() + 1, type: 'loading', text: '...' };
+    const loadingMessage: ChatMessage = { id: Date.now() + 1, type: 'loading', text: 'AI Agent Processing... ' };
 
     setChatHistory(prev => [...prev, userMessage, loadingMessage]);
     const currentInput = inputValue;
@@ -106,7 +111,7 @@ export default function SolanaPage() {
     try {
       const result = await runSolanaTool({
         query: currentInput,
-        userWalletAddress: wallet?.address,
+        userWalletAddress: wallet?.ethereum?.address || wallet?.solana?.address,
       });
 
       const botMessage: ChatMessage = { id: Date.now() + 2, type: 'bot', text: result.result };
@@ -116,22 +121,25 @@ export default function SolanaPage() {
       );
 
     } catch (error: any) {
-        if (error.message === 'INSUFFICIENT_CREDITS') {
-            showPayModal('SOLANA_TOOL');
-        } else {
-            console.error("Failed to run Solana tool", error);
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: error.message || "The AI agent failed to process your request.",
-            });
-        }
+        console.error("Failed to run Solana tool", error);
+        toast({
+            variant: 'destructive',
+            title: 'AI Command Error',
+            description: error.message || "Your AI partner encountered an issue. Please try again.",
+        });
        setChatHistory(prev => prev.filter(m => m.type !== 'loading'));
     }
   };
 
   const handleCloseAccount = async () => {
-    if (!closeAccountAddress.trim()) return;
+    if (!closeAccountAddress.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Address Required",
+        description: "Please provide a token account address for your AI to close.",
+      });
+      return;
+    }
 
     setIsClosingAccount(true);
     setCloseAccountResult('');
@@ -140,189 +148,233 @@ export default function SolanaPage() {
       const result = await runSolanaCloseAccount({ tokenAccountAddress: closeAccountAddress });
       setCloseAccountResult(result.result);
       toast({
-        title: "Account Closed",
-        description: "The token account has been successfully closed.",
+        title: "Account Closure Initiated by AI",
+        description: "Your AI partner has successfully processed the closure request.",
       });
     } catch (error: any) {
-      if (error.message === 'INSUFFICIENT_CREDITS') {
-        showPayModal('SOLANA_CLOSE_ACCOUNT');
-      } else {
         console.error("Failed to close account", error);
         toast({
           variant: "destructive",
-          title: "Error",
-          description: error.message || "Failed to close the token account.",
+          title: "AI Execution Error",
+          description: error.message || "Your AI partner failed to close the token account.",
         });
-      }
     } finally {
       setIsClosingAccount(false);
     }
   };
 
   return (
-    <div className="space-y-8 prose prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tight">
-      <header className="not-prose">
-        <h1 className="text-4xl font-bold font-headline flex items-center gap-3">
-          <Wind className="w-10 h-10 text-primary" />
-          Solana Command Center
-        </h1>
-        <p className="text-muted-foreground text-lg">
-          Your complete hub to interact with the Solana network using natural language, monitor live stats, and access high-performance RPC endpoints.
-        </p>
-      </header>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 not-prose">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Transactions per Second</CardTitle>
-            <Zap className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{networkStats.tps.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Live network throughput</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Slot Time (ms)</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{networkStats.slotTime}ms</div>
-            <p className="text-xs text-muted-foreground">Block confirmation speed</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Current Epoch</CardTitle>
-            <CircleDollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{networkStats.epoch}</div>
-            <p className="text-xs text-muted-foreground">Next epoch in ~2 days</p>
-          </CardContent>
-        </Card>
+    <div className="bg-background text-foreground overflow-hidden font-body">
+      {/* Hero Section: Solana Intelligence */}
+      <div className="container mx-auto px-4 md:px-6 py-20 text-center relative overflow-hidden max-w-7xl">
+        <motion.h1
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-5xl lg:text-7xl font-extrabold font-headline mb-4 bg-gradient-to-r from-primary to-blue-400 text-transparent bg-clip-text leading-tight"
+        >
+          Command Solana with AI-Powered Intelligence
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="text-lg lg:text-xl text-muted-foreground max-w-4xl mx-auto mb-12 tracking-wide"
+        >
+          Your AI partner for interacting with, monitoring, and managing the Solana blockchain. Execute with unparalleled precision and intuitive natural language commands.
+        </motion.p>
       </div>
 
-       <Card className="not-prose">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <Bot className="text-primary" /> AI Agent Terminal
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="border rounded-lg h-[400px] flex flex-col p-4 space-y-4 overflow-y-auto">
-            <AnimatePresence>
-              {chatHistory.map((msg, index) => (
-                <motion.div
-                  key={msg.id}
-                  layout
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className={msg.type === 'user' ? 'self-end' : 'self-start'}
-                >
-                  <div
-                    className={`max-w-md p-3 rounded-lg ${
-                      msg.type === 'user'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-card-foreground/5'
-                    }`}
-                  >
-                    {msg.type === 'loading' ? (
-                      <Loader2 className="animate-spin w-5 h-5" />
-                    ) : (
-                      <p className="text-sm">{msg.text}</p>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-          <div className="mt-4 flex items-center gap-2">
-            <Input
-              type="text"
-              placeholder="e.g., 'Airdrop 1 SOL to my wallet' or 'get balance for [address]'"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              className="h-11"
-            />
-            <Button size="lg" onClick={handleSendMessage}>
-              <CornerDownLeft className="h-4 w-4" />
-            </Button>
-          </div>
-           <p className="text-xs text-muted-foreground mt-2">
-            Try: `airdrop 1 SOL to my wallet`, `get balance for {wallet?.address || 'YOUR_WALLET_ADDRESS'}`, `get transaction details for 5som...`
-          </p>
-        </CardContent>
-      </Card>
+      {/* AI-Analyzed Network Pulse */}
+      <section className="container mx-auto px-4 md:px-6 py-16 max-w-6xl">
+        <h2 className="text-4xl lg:text-5xl font-bold text-center font-headline mb-16 bg-gradient-to-r from-green-400 to-primary text-transparent bg-clip-text">
+          AI-Analyzed Solana Network Pulse
+        </h2>
+        <div className="grid md:grid-cols-3 gap-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="p-8 rounded-xl bg-card/60 backdrop-blur-sm border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <h3 className="text-xl font-bold text-foreground mb-3 font-headline">Live Throughput (TPS)</h3>
+            <p className="text-5xl font-extrabold text-primary leading-tight">{networkStats.tps.toLocaleString()}</p>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">AI confirms live network efficiency.</p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="p-8 rounded-xl bg-card/60 backdrop-blur-sm border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <h3 className="text-xl font-bold text-foreground mb-3 font-headline">Block Finality (Slot Time)</h3>
+            <p className="text-5xl font-extrabold text-blue-400 leading-tight">{networkStats.slotTime}ms</p>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">AI confirms rapid transaction speed.</p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="p-8 rounded-xl bg-card/60 backdrop-blur-sm border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <h3 className="text-xl font-bold text-foreground mb-3 font-headline">Network Cycle (Epoch)</h3>
+            <p className="text-5xl font-extrabold text-purple-400 leading-tight">{networkStats.epoch}</p>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">AI is tracking the next epoch transition.</p>
+          </motion.div>
+        </div>
+        <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="text-lg text-primary mt-12 text-center max-w-4xl mx-auto"
+        >
+            <Bot className="inline-block w-5 h-5 mr-2 align-middle" /> {networkStats.aiInsight}
+        </motion.p>
+      </section>
 
-      <Card className="not-prose">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <XCircle className="text-primary" /> Close Token Account
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            Close an empty token account to recover the SOL used for its rent-exempt reserve. The account must have a zero balance.
-          </p>
-          <div className="flex items-center gap-2">
-            <Input
-              type="text"
-              placeholder="Enter Token Account Address to Close"
-              value={closeAccountAddress}
-              onChange={(e) => setCloseAccountAddress(e.target.value)}
-              className="h-11"
-            />
-            <Button size="lg" onClick={handleCloseAccount} disabled={isClosingAccount}>
-              {isClosingAccount ? <Loader2 className="animate-spin h-4 w-4" /> : "Close Account"}
-            </Button>
-          </div>
-          {closeAccountResult && (
-            <div className="mt-4">
-              <h4 className="font-semibold">Result:</h4>
-              <Textarea value={closeAccountResult} readOnly className="mt-2 font-mono text-xs" rows={4} />
+      {/* AI Agent Terminal */}
+      <section className="container mx-auto px-4 md:px-6 py-16 max-w-6xl">
+        <h2 className="text-4xl lg:text-5xl font-bold text-center font-headline mb-16 bg-gradient-to-r from-red-400 to-yellow-400 text-transparent bg-clip-text">
+          Your AI Command Terminal for Solana
+        </h2>
+        <div className="p-8 rounded-xl bg-card/60 backdrop-blur-sm border border-primary/10 shadow-lg">
+            <div className="border rounded-lg h-[400px] flex flex-col p-4 space-y-4 overflow-y-auto bg-background/50">
+                <AnimatePresence>
+                {chatHistory.map((msg) => (
+                    <motion.div
+                    key={msg.id}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className={msg.type === 'user' ? 'self-end text-right' : 'self-start text-left'}
+                    >
+                    <div
+                        className={`max-w-md p-3 rounded-lg text-sm leading-relaxed ${
+                        msg.type === 'user'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted/20 text-foreground'
+                        }`}
+                    >
+                        {msg.type === 'loading' ? (
+                        <Loader2 className="animate-spin w-5 h-5 inline-block mr-2" />
+                        ) : null}
+                        {msg.text}
+                    </div>
+                    </motion.div>
+                ))}
+                </AnimatePresence>
             </div>
-          )}
-        </CardContent>
-      </Card>
+            <div className="mt-6 flex items-center gap-4">
+                <Input
+                type="text"
+                placeholder="Ask your AI to... e.g., 'Airdrop 1 SOL' or 'find and close all my empty token accounts'"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                className="h-12 text-base"
+                />
+                <Button size="lg" onClick={handleSendMessage} className="h-12 text-base px-6 group">
+                    Command AI <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+            </div>
+            <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
+                <strong className="text-primary">AI Suggestions:</strong> `get balance for YOUR_WALLET_ADDRESS`, `get transaction details for 5som...`
+            </p>
+        </div>
+      </section>
+
+      {/* Integrated Execution Tools */}
+      <section className="container mx-auto px-4 md:px-6 py-16 max-w-6xl">
+        <h2 className="text-4xl lg:text-5xl font-bold text-center font-headline mb-16 bg-gradient-to-r from-blue-400 to-green-400 text-transparent bg-clip-text">
+          AI-Powered Execution Tools
+        </h2>
+
+        {/* Close Token Account */}
+        <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7 }}
+            className="p-8 rounded-xl bg-card/60 backdrop-blur-sm border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 mb-10"
+        >
+            <h3 className="text-2xl font-bold font-headline text-foreground mb-4">Automated Token Account Cleanup</h3>
+            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                Let your AI partner recover SOL from empty token accounts. It will verify zero-balances and securely execute the closure, returning the rent-exempt reserve to you.
+            </p>
+            <div className="flex items-center gap-4">
+                <Input
+                type="text"
+                placeholder="Enter Token Account Address for AI Closure"
+                value={closeAccountAddress}
+                onChange={(e) => setCloseAccountAddress(e.target.value)}
+                className="h-12 text-base"
+                />
+                <Button size="lg" onClick={handleCloseAccount} disabled={isClosingAccount} className="h-12 text-base px-6 group">
+                    {isClosingAccount ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" /> AI Closing...</>) : (<>Let AI Close Account<ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" /></>)}
+                </Button>
+            </div>
+            <AnimatePresence>
+            {closeAccountResult && (
+                <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="mt-6 p-4 bg-primary/10 text-primary-foreground rounded-md text-sm leading-relaxed"
+                >
+                    <h4 className="font-semibold mb-2">AI Closure Result:</h4>
+                    <CustomCodeBlock code={closeAccountResult} language="json" />
+                </motion.div>
+            )}
+            </AnimatePresence>
+        </motion.div>
       
-      <section>
-            <h2>High-Performance RPC</h2>
-            <p>
-                Connect to our robust Solana RPC endpoints to interact with the blockchain. Send transactions, query data, and build powerful applications with confidence.
+        {/* High-Performance RPC Documentation */}
+        <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="p-8 rounded-xl bg-card/60 backdrop-blur-sm border border-purple-500/10 shadow-lg hover:shadow-xl transition-all duration-300"
+        >
+            <h3 className="text-2xl font-bold font-headline text-foreground mb-4">High-Performance RPC for Your AI Agents</h3>
+            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                Power your AI agents and custom scripts with our robust, AI-optimized Solana RPC endpoints. Ensure lightning-fast, reliable network access for all your on-chain operations.
             </p>
-            <h3>Endpoint URL</h3>
-            <p>
-                Use the following base URL for all RPC requests. Replace \`YOUR_API_KEY\` with your actual API key.
-            </p>
-            <div className="bg-card border rounded-md p-4 font-mono text-sm not-prose">https://api.terminal3.me/v1/rpc/<span className='text-primary'>YOUR_API_KEY</span>/sol</div>
+            <p className="text-base text-muted-foreground mb-4"><strong>Your Endpoint URL:</strong> Replace <code className='text-primary font-mono'>YOUR_API_KEY</code> with your personal API key.</p>
+            <CustomCodeBlock code={`https://api.terminal3.me/v1/rpc/YOUR_API_KEY/sol`} language="text" className="mb-8"/>
             
-            <h3 className="mt-8">Examples</h3>
-            <h4>cURL Request</h4>
-            <p>Here's a simple example of how to fetch the current epoch info using cURL.</p>
-            <CustomCodeBlock code={curlExample} language="bash" />
+            <h4 className="text-xl font-bold text-foreground mb-4">AI-Assisted RPC Interaction Examples:</h4>
+            <p className="text-base text-muted-foreground mb-4">Your AI partner is ready to help formulate complex RPC calls and interpret responses. Here are some examples to get you started:</p>
+            <p className="text-sm text-muted-foreground mb-2"><strong>cURL Request (Get Epoch Info):</strong></p>
+            <CustomCodeBlock code={curlExample} language="bash" className="mb-6"/>
 
-            <h4 className="mt-8">JavaScript Fetch</h4>
-            <p>Here's how you can fetch account information using JavaScript's \`fetch\` API.</p>
-            <CustomCodeBlock code={jsExample} language="javascript" />
-        </section>
+            <p className="text-sm text-muted-foreground mb-2"><strong>JavaScript Fetch (Get Account Info):</strong></p>
+            <CustomCodeBlock code={jsExample} language="javascript" className="mb-6"/>
 
-        <section>
-            <h2>Key RPC Methods</h2>
-            <p>Our Solana endpoints support a wide range of JSON-RPC methods. Here are some of the most commonly used ones:</p>
-            <ul className="list-disc pl-5 space-y-2">
-                <li><code>getAccountInfo</code>: Returns all information associated with the account of a given public key.</li>
-                <li><code>getTokenAccountsByOwner</code>: Returns all token accounts owned by a given public key.</li>
-                <li><code>getBalance</code>: Returns the balance of the account of a given public key.</li>
-                <li><code>sendTransaction</code>: Submits a signed transaction to the cluster for processing.</li>
-                <li><code>requestAirdrop</code>: Requests an airdrop of lamports to a public key (devnet/testnet only).</li>
+            <p className="text-base text-muted-foreground mt-8 leading-relaxed">
+                <strong>Key AI-Enabled RPC Methods:</strong> Let your AI partner handle the complexities:
+            </p>
+            <ul className="list-disc pl-8 space-y-2 text-base text-muted-foreground leading-relaxed">
+                <li><code>getAccountInfo</code>: Let AI parse and interpret complex account data for you.</li>
+                <li><code>getTokenAccountsByOwner</code>: Let AI identify and summarize all token accounts for a given wallet.</li>
+                <li><code>getBalance</code>: Let AI provide real-time balance checks and forecast changes.</li>
+                <li><code>sendTransaction</code>: Let AI construct transactions and select optimal fees for you.</li>
+                <li><code>requestAirdrop</code>: (Devnet/Testnet) Let AI streamline airdrop requests for seamless testing.</li>
             </ul>
-        </section>
+        </motion.div>
+      </section>
+
+      {/* Disclaimer Section - Subtle & Professional */}
+      <div className="container mx-auto px-4 md:px-6 py-8 text-center">
+        <p className="text-sm text-muted-foreground max-w-4xl mx-auto opacity-70 leading-relaxed">
+          <strong className="text-destructive-foreground">Engage Responsibly:</strong> Interacting with the Solana blockchain involves inherent risks. Terminal3 provides AI-powered tools to enhance your capabilities, but you are responsible for validating all commands, managing your private keys, and ensuring compliance. Your AI partner is a tool to augment your own judgment.
+        </p>
+      </div>
     </div>
   );
 }
-
-    

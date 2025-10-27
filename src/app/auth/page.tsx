@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -21,13 +22,13 @@ export default function AuthPage() {
     }
 
     useEffect(() => {
-        if (wallet) {
+        if (wallet?.ethereum || wallet?.solana) {
             router.push('/dashboard');
         }
     }, [wallet, router]);
 
 
-    if (wallet) {
+    if (wallet?.ethereum || wallet?.solana) {
          return (
             <div className="flex items-center justify-center min-h-screen bg-background">
                 <p>Connecting and redirecting...</p>

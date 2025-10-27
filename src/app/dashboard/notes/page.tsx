@@ -41,7 +41,7 @@ export default function NotesPage() {
               <BookPlus className="w-16 h-16 mx-auto text-primary mb-4" />
               <h1 className="text-5xl font-bold font-headline">My Notes</h1>
               <p className="text-xl text-muted-foreground mt-4">
-                  Your personal collection of saved articles and notes from the T3 Academy.
+                  Your personal collection of saved articles and notes from the Terminal3 Blog.
               </p>
           </header>
           {userNotes.length > 0 ? (
