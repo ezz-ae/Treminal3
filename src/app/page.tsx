@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     siteName: 'Terminal3',
     images: [
       {
-        url: 'https://www.terminal3.me/og-image.png', // Replace with your actual OG image URL
+        url: 'https://www.terminal3.me/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Terminal3 - AI-Powered Web3 Development',
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Terminal3 | Your AI Partner for Web3 Mastery',
-    description: 'Build, automate, and master the decentralized future with Terminal3's autonomous AI agents.',
-    images: ['https://www.terminal3.me/twitter-image.png'], // Replace with your actual Twitter image URL
+    description: 'Build, automate, and master the decentralized future with Terminal3\'s autonomous AI agents.',
+    images: ['https://www.terminal3.me/twitter-image.png'],
   },
   keywords: ['AI', 'Web3', 'Crypto', 'Blockchain', 'Development', 'Automation', 'Smart Contracts', 'Solana', 'Ethereum', 'dApps'],
   authors: [{ name: 'Terminal3', url: 'https://www.terminal3.me' }],
